@@ -1,0 +1,118 @@
+<div class="gtco-container">
+  <div class="row">
+    <div class="col-md-12 col-md-offset-0">
+      <!-- Context of 'About us' Section -->
+      <div class="table-layout">
+        <div class="row is-table-row">
+          <!-- Content left -->
+          <div class="col-md-2 table-cell">
+            <table class="side_bar_table">
+              <tbody>
+                <tr>
+                  <td>
+                    <a routerLink="/professor/professor" class="button cyan">
+                      Professor</a>
+                    <a routerLink="/professor/industrial-professor"
+                      class="button cyan">Industrial Professor</a>
+                    <a routerLink="/professor/collaboration-professor"
+                      class="button cyan">Collaboration Professor</a>
+                    <a routerLink="/professor/visiting-professor"
+                      class="button cyan">Visiting professor</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- //////////////////////////////// -->
+          <div class="col-md-8 table-cell" style="background: #fff">
+            <!-- //////////////////////////////////////////////////////////// -->
+            <div class="row">
+              <div class="img col-md-3 text-center">
+                <img [src]="professor.image" class="img-responsive" />
+              </div>
+              <div class="col-md-9">
+                <h1>{{ professor.nameRole }}</h1>
+
+                <div class="prof_detail"><b>Experience</b><br /></div>
+                <div class="col-md-12">
+                  <ng-container *ngFor="let every of Experience">
+                    <tr class="dotted">
+                      <td class="contact_info-main">{{ every.year }}</td>
+                      <td class="contact_info-mainn">{{ every.title }}</td>
+                      <td class="contact_info">{{ every.description }}</td>
+                    </tr>
+                  </ng-container>
+                </div>
+
+            <!-- //////////////////////////////////////////////// -->
+
+            <h4 >Contact Informations</h4>
+            <table class="contact-information">
+              <tr>
+                <th class="color">Period</th>
+                <th>2017 ~ Current</th>
+              </tr>
+              <tr>
+                <td class="color">E-mail</td>
+                <td>jake0011&#64;gmail.com</td>
+              </tr>
+            </table>
+            <!-- /////////////////////////////////////////////// -->
+              </div>
+            </div>
+
+            <!-- ////////////////////// -->
+
+            <div class="row1">
+              <div class="img col-md-3 text-center">
+                <img [src]="professor.image" class="img-responsive" />
+              </div>
+              <div class="col-md-9">
+                <h1>{{ professor.nameRole }}</h1>
+
+                <div class="prof_detail"><b>Experience</b><br /></div>
+                <div class="col-md-12">
+                  <ng-container *ngFor="let every of Experience">
+                    <tr class="dotted">
+                      <td class="contact_info-main">{{ every.year }}</td>
+                      <td class="contact_info-mainn">{{ every.title }}</td>
+                      <td class="contact_info">{{ every.description }}</td>
+                    </tr>
+                  </ng-container>
+                </div>
+
+            <!-- //////////////////////////////////////////////// -->
+
+            <h4 >Contact Informations</h4>
+            <table class="contact-information">
+              <tr>
+                <th class="color">Period</th>
+                <th>2017 ~ Current</th>
+              </tr>
+              <tr>
+                <td class="color">E-mail</td>
+                <td>jake0011&#64;gmail.com</td>
+              </tr>
+            </table>
+            <!-- /////////////////////////////////////////////// -->
+              </div>
+            </div>
+            <!-- /////////////////// -->
+          </div>
+          <!-- ///////////////////////// -->
+
+          <!-- /////////////////////////////////////////// -->
+
+
+
+          <td valign="top">
+            <div class="col-md-2 table-cell" style="background: #fff">
+              <h2>Lorem ipsum dolor sit amet consectetur.
+              </h2>
+            </div>
+          </td>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+{
+  "menuItems": [
+    { "title": "About Us", "link": "#", "children": [
+        { "title": "Overview", "link": "/about/overview" },
+        { "title": "contact-us", "link": "/contact-us" }
+      ]
+    },
+    { "title": "Professor", "link": "#", "children": [
+        { "title": "Professor", "link": "professor/professor" },
+        { "title": "Industrial Professor", "link": "professor/industrial-professor" },
+        { "title": "Collaboration Professor", "link": "professor/collaboration-professor" },
+        { "title": "Visiting Professor", "link": "professor/visiting-professor" }
+      ]
+    },
+    { "title": "Members", "link": "#", "children": [
+        { "title": "Post Doc.", "link": "members/post-doc" },
+        { "title": "Ph.D Candidate", "link": "members/phd-candidate" },
+        { "title": "Master Candidate", "link": "members/master-candidate" },
+        { "title": "Undergraduate", "link": "members/undergraduate" },
+        { "title": "Alumni", "link": "members/alumni" }
+      ]
+    },
+    { "title": "Research", "link": "#", "children": [
+        { "title": "Introduction", "link": "research/introduction" },
+        { "title": "Ph.D Thesis", "link": "research/phd-thesis" },
+        { "title": "Technical Report", "link": "research/technical-report" },
+        { "title": "Colloquiums", "link": "research/colloquiums" },
+        { "title": "On-going Projects", "link": "research/ongoing-projects" },
+        { "title": "Past Projects", "link": "research/past-projects" }
+      ]
+    },
+    { "title": "Publications", "link": "#", "children": [
+        { "title": "2024", "link": "/publications/2024" },
+        { "title": "2023", "link": "/publications/2023" },
+        { "title": "2022", "link": "/publications/2022" },
+        { "title": "2021", "link": "/publications/2021" },
+        { "title": "2020", "link": "/publications/2020" },
+        { "title": "2019", "link": "/publications/2019" },
+        { "title": "2018", "link": "/publications/2018" },
+        { "title": "2017", "link": "/publications/2017" },
+        { "title": "2016", "link": "/publications/2016" },
+        { "title": "2015", "link": "/publications/2015" },
+        { "title": "2014", "link": "/publications/2014" },
+        { "title": "2013", "link": "/publications/2013" },
+        { "title": "2012", "link": "/publications/2012" },
+        { "title": "2011", "link": "/publications/2011" },
+        { "title": "2010", "link": "/publications/2010" },
+        { "title": "2009", "link": "/publications/2009" },
+        { "title": "2008", "link": "/publications/2008" },
+        { "title": "All Publications", "link": "/publications/all" }
+      ]
+    },
+    { "title": "Lecture", "link": "#", "children": [
+        { "title": "2020", "link": "/lecture/2020" },
+        { "title": "2019", "link": "/lecture/2019" },
+        { "title": "2018", "link": "/lecture/2018" },
+        { "title": "2017", "link": "/lecture/2017" },
+        { "title": "2016", "link": "/lecture/2016" },
+        { "title": "2015", "link": "/lecture/2015" },
+        { "title": "2014", "link": "/lecture/2014" },
+        { "title": "2013", "link": "/lecture/2013" },
+        { "title": "2012", "link": "/lecture/2012" },
+        { "title": "2011", "link": "/lecture/2011" },
+        { "title": "2010", "link": "/lecture/2010" },
+        { "title": "2009", "link": "/lecture/2009" },
+        { "title": "2008", "link": "/lecture/2008" },
+        { "title": "2007", "link": "/lecture/2007" },
+        { "title": "2006", "link": "/lecture/2006" },
+        { "title": "Until 2005", "link": "/lecture/until-2005" }
+      ]
+    },
+    { "title": "Links", "link": "#", "children": [
+        { "title": "Software", "link": "/links/software" },
+        { "title": "Useful Links", "link": "/links/useful-links" },
+        { "title": "Gov. & Institutes", "link": "/links/gov-institutes" },
+        { "title": "Miscellaneous", "link": "/links/miscellaneous" },
+        { "title": "Workshop", "link": "/links/workshop" }
+      ]
+    }
+  ]
+}
