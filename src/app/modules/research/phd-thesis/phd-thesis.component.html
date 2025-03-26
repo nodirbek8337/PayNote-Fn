@@ -1,1 +1,32 @@
-<p>phd-thesis works!</p>
+<div class="gtco-container">
+    <div class="row">
+      <!-- Content Left (Sidebar) -->
+      <div class="col-md-2 sidebar">
+        <a routerLink="/research/introduction" class="button cyan">Introduction</a>
+        <a routerLink="/research/phd-thesis" class="button cyan">Ph.D Thesis</a>
+        <a routerLink="/research/technical-report" class="button cyan">Technical Report</a>
+        <a routerLink="/research/colloquiums" class="button cyan">Colloquiums</a>
+        <a routerLink="/research/ongoing-projects" class="button cyan">On-going Projects</a>
+        <a routerLink="/research/past-projects" class="button cyan">Past Projects</a>
+      </div>
+  
+      <!-- Content Center -->
+      <div class="col-md-8 content">
+        <div *ngFor="let prof of professors" class="row mb-5">
+          <h4 class="h54"><b>{{ prof.theme }}</b></h4>
+          <a href="../assets/pdf/Amaliy_ish_3.pdf" class="title" target="_blank">
+            <b>Introduction to Ubiquitous Computing Laboratory (Korean) - [Click to View]</b>
+          </a>
+          <a href="../assets/pdf/Amaliy_ish_6.pdf" class="title" target="_blank">
+            Introduction to Ubiquitous Computing Laboratory (Korean) - [Click to View]
+          </a>
+        </div>
+      </div>
+  
+      <!-- Content Right (Bo‘sh joy yoki boshqa content) -->
+      <div class="col-md-2 right-content">
+        <h2></h2>
+      </div>
+    </div>
+  </div>
+  

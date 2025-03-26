@@ -6,17 +6,14 @@
     padding-right: 15px;
   }
 
-  .row {
+  .row, .row1 {
+    display: flex;
+    flex-wrap: wrap;
     margin-left: -15px;
     margin-right: -15px;
-    margin-bottom: 40px;
-    // padding-top: 40px;
   }
 
   .row1 {
-    margin-left: -15px;
-    margin-right: -15px;
-    margin-bottom: 40px;
     padding-top: 40px;
   }
   .row:before, .row:after, .row1:before, .row1:after  {
@@ -34,13 +31,12 @@
     float: none;
     display: table-cell;
     vertical-align: top;
-    margin-top: 20px;
+    // margin-top: 20px;
 }
 
 .table-cell{
     padding-top: 60px;
     background-color: #ccc;
-    // margin-bottom: 20px;
 }
 
 .side_bar_table{
@@ -102,10 +98,6 @@ td{
     margin-top: 10px;
  }
 
-//  .contact_info {
-//     border-top: 1px dotted black;
-//   border-bottom: 1px dotted black;
-//  }
 
 .dotted{
     border-top: 1px dotted black;
@@ -152,11 +144,8 @@ td{
 h4{
   margin-top: 20px;
   padding: 10px;
-  // background-color: #ccc;
-  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
 }
-
-
 
 .educational-information{
   width: 100%;
@@ -171,7 +160,8 @@ h4{
 
  .contact-information{
   table, td, th {
-    border: 1px dotted;
+  border: 1px dotted;
+  
   }
   
   .color {
@@ -183,4 +173,4 @@ h4{
     width: 100%;
     border-collapse: collapse;
   }
- }
+                      }

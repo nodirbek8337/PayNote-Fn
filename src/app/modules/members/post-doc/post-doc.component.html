@@ -1,60 +1,56 @@
 <div class="gtco-container">
-    <div class="row">
-      <div class="col-md-12 col-md-offset-0">
-        <!-- Context of 'About us' Section -->
-        <div class="table-layout">
-          <div class="row is-table-row">
-            <!-- Content left -->
-            <div class="col-md-2 table-cel">
-              <table class="side_bar_table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <a
-                        routerLink="/members/post-doc"
-                        class="button cyan"
-                      >
+  <div class="row">
+          <!-- Content left -->
+          <div class="col-md-2 sidebar">
+                    <a routerLink="/members/post-doc" class="button cyan">
                       Post Doc.</a>
-                      <a
-                       routerLink="/members/phd-candidate"
-                        class="button cyan"
-                        >
-                        Ph.D Candidate</a>
-                        <a
-                        routerLink="/members/master-candidate"
-                        class="button cyan"
-                      >
-                      Master Candidate</a>
-                      <a
-                       routerLink="/members/undergraduate"
-                        class="button cyan"
-                        >
-                        Undergraduate</a>
-                        <a
-                        routerLink="/members/alumni"
-                         class="button cyan"
-                         >
-                         Alumni</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-md-8 table-cell" >
-  
-    <!-- //////////////////////////////////////////////////////////// -->
+                    <a routerLink="/members/phd-candidate"
+                      class="button cyan">Ph.D Candidate</a>
+                    <a routerLink="/members/master-candidate"
+                      class="button cyan">Master Candidate</a>
+                    <a routerLink="/members/undergraduate"
+                      class="button cyan">Undergraduate</a>
+                      <a routerLink="/members/alumni"
+                      class="button cyan">Alumni</a>
+          </div>
+          <!-- //////////////////////////////// -->
+          <div class="col-md-8 content">
+            <h4><b>[ Post Doc. / 1 persons ]</b></h4>
+            <!-- //////////////////////////////////////////////////////////// -->
+            <div *ngFor="let prof of professors" class="row mb-5">
+              <div class="img col-md-3 text-center">
+                <img [src]="prof.image" class="img-responsive" />
+              </div>
+              <div class="col-md-9">
+                <h3>{{ prof.nameRole }}</h3>
 
-     <!-- /////////////////////////////////////////////// -->
-             
+                <h4>Contact Informations</h4>
+                <table class="contact-information">
+                  <tr>
+                    <td>Nationality</td>
+                    <td class="color">{{prof.Nationality}}</td>
+                  </tr>
+                  <tr>
+                      <td>Research Group</td>
+                      <td class="color research-area">{{prof.researchGroup}}</td>
+                  </tr>
+                  <tr>
+                    <td>Research Area</td>
+                    <td class="color">{{prof.researchArea}}</td>
+                </tr>
+                  <tr>
+                    <td>E-mail</td>
+                    <td class="color">{{prof.workMail}}</td>
+                  </tr>
+                </table>
+              </div>
             </div>
-  
-            <td valign="top"> 
-            <div class="col-md-2 table-cell">
-            </div>
-             </td>
+          </div>
+
+          <!--  -->
+
+          <div class="col-md-2 right-content">
+            <h2></h2>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  

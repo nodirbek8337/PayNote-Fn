@@ -8,32 +8,20 @@ import { Component } from '@angular/core';
 })
 export class PostDocComponent {
 
+  professors = [
+    {
+      image: './assets/img/1.jpg',
+      nameRole: 'Prof.Young Shin Kim',
+      Nationality: 'Vietnam',
+      researchGroup: 'Cloud and Bigdata System',
+      researchArea: 'Cloud Computing, Internet of Things, Machine Learning',
+        workMail: 'jake0011@gmail.com',
+        desc: [
+        'Dr Byeong Ho Kang, computer scientist, is a Professor in School of Engineering and ICT, University of Tasmania, Australia. He leads the Smart Services and Systems research group of postdoctoral scientists which has carried out fundamental and applied research in research areas, expert systems, Web Services, SNS analysis and smart industry areas. He has served as a chair and steering committee member in many international organizations and during conferences.' 
+      ]
+    },
+  ]
 
 
 
-  professor = {
-    image: './assets/img/1.jpg',
-    nameRole: 'Prof.Sungyoung Lee',
-    position: 'Director of Ubiquitous Computing Laboratory',
-    department: 'Department of Computer Science and Engineering,  College of Software',
-    university: 'Kyung Hee University, Korea',
-    universityUrl: 'http://www.kyunghee.edu',
-    researchAreas: [
-      'Ubiquitous Computing',
-      'Context-aware Middleware',
-      'Wireless Sensor Network',
-      'Security Systems',
-      'Real-time Embedded Systems',
-      'Distributed Systems',
-      'Intelligent Computing'
-    ],
-    contact: {
-      address: `446-701, Room 313, Dept. of Computer Engineering,
-      Kyung Hee University, Seocheon-dong, Giheung-gu,
-      Yongin-si, Gyeonggi-do, Korea`,
-      email: 'sylee@oslab.khu.ac.kr',
-      office: '+82-31-201-2514 (Phone), +82-31-202-2520 (Fax)',
-      cell: '+82-10-7345-1441'
-    }
-  };
 }

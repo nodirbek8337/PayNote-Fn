@@ -1,6 +1,12 @@
-.containerr{
+.containerr {
   z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
+
+
 
 .custom-header {
   background-color: #800000;

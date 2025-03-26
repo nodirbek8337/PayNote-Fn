@@ -1,1 +1,79 @@
-<p>visiting-professor works!</p>
+<div class="gtco-container">
+    <div class="row">
+      <div class="col-md-12 col-md-offset-0">
+        <!-- Context of 'About us' Section -->
+        <div class="table-layout">
+          <div class="row is-table-row">
+            <!-- Content left -->
+            <div class="col-md-2 table-cell">
+              <table class="side_bar_table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <a routerLink="/professor/professor" class="button cyan">
+                        Professor</a>
+                      <a routerLink="/professor/industrial-professor"
+                        class="button cyan">Industrial Professor</a>
+                      <a routerLink="/professor/collaboration-professor"
+                        class="button cyan">Collaboration Professor</a>
+                      <a routerLink="/professor/visiting-professor"
+                        class="button cyan">Visiting professor</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- //////////////////////////////// -->
+            <div class="col-md-8 table-cell" style="background: #fff">
+              <!-- //////////////////////////////////////////////////////////// -->
+              <div *ngFor="let prof of professors" class="row mb-5">
+                <div class="img col-md-3 text-center">
+                  <img [src]="prof.image" class="img-responsive" />
+                </div>
+                <div class="col-md-9">
+                  <h3>{{ prof.nameRole }}</h3>
+              
+                  <!-- <div class="prof_detail"><b>Experience</b><br/></div> -->
+                  <div class="col-md-12">
+                        <p class="contact_info">{{ prof.desc }}</p>
+                  </div>
+
+                  <h3>{{prof.area}}</h3>
+                  <p class="research-area">{{ prof.Research}}</p>
+              <!-- 
+              Qo'shib bo'lsa table bo'lmasa garakmidi!!!    
+              -->
+                  <h4>Contact Informations</h4>
+                  <table class="contact-information">
+                    <tr>
+                      <td class="color">Period</td>
+                      <td>{{prof.workYear}}</td>
+                    </tr>
+                    <tr>
+                        <td class="color">Website</td>
+                        <td>{{prof.Website}}</td>
+                    </tr>
+                    <tr>
+                      <td class="color">E-mail</td>
+                      <td>{{prof.workMail}}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              
+              <!-- class="col-md-8 table-cell" pastda -->
+            </div>
+  
+            <!--  -->
+  
+            <td valign="top">
+              <div class="col-md-2 table-cell" style="background: #fff">
+                <h2></h2>
+              </div>
+            </td>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import dbJSON from "../../assets/db.json";
 
 @Component({
@@ -12,23 +11,10 @@ import dbJSON from "../../assets/db.json";
 export class NavbarComponent implements OnInit {
   menuItems: any[] = [];
 
-  // constructor() {}
 
   ngOnInit(): void {
     this.menuItems = dbJSON.menuItems;   
 }
-
-
-// isVisible = false;
-
-//   @HostListener('window:scroll', [])
-//   onWindowScroll() {
-//     this.isVisible = window.pageYOffset > 50;
-//   }
-
-//   scrollToTop() {
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   }
 
 
 constructor(private renderer: Renderer2, private el: ElementRef) {}
