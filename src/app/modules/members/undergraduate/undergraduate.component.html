@@ -1,41 +1,29 @@
 <div class="gtco-container">
-    <div class="row">
-      <div class="col-md-12 col-md-offset-0">
-        <!-- Context of 'About us' Section -->
-        <div class="table-layout">
-          <div class="row is-table-row">
-            <!-- Content left -->
-            <div class="col-md-2 table-cell">
-              <table class="side_bar_table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <a routerLink="/members/post-doc" class="button cyan">
-                        Post Doc.</a>
-                      <a routerLink="/members/phd-candidate"
-                        class="button cyan">Ph.D Candidate</a>
-                      <a routerLink="/members/master-candidate"
-                        class="button cyan">Master Candidate</a>
-                      <a routerLink="/members/undergraduate"
-                        class="button cyan">Undergraduate</a>
-                        <a routerLink="/members/alumni"
-                        class="button cyan">Alumni</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  <div class="row">
+          <!-- Content left -->
+          <div class="col-md-2 sidebar">
+                    <a routerLink="/members/post-doc" class="button cyan">
+                      Post Doc.</a>
+                    <a routerLink="/members/phd-candidate"
+                      class="button cyan">Ph.D Candidate</a>
+                    <a routerLink="/members/master-candidate"
+                      class="button cyan">Master Candidate</a>
+                    <a routerLink="/members/undergraduate"
+                      class="button cyan">Undergraduate</a>
+                      <a routerLink="/members/alumni"
+                      class="button cyan">Alumni</a>
+          </div>
             <!-- //////////////////////////////// -->
-            <div class="col-md-8 table-cell" style="background: #fff">
+            <div class="col-md-8 content">
               <h4><b>[ Undergraduate / 0 students ]</b></h4>
               <!-- //////////////////////////////////////////////////////////// -->
-              <div *ngFor="let prof of professors" class="row mb-5">
+              <!-- <div *ngFor="let prof of professors" class="row mb-5">
                 <h5 class="text-center research-area">No members found !!</h5>
                 <div class="" style="color: #fff;">
                     
                   <img [src]="prof.image" class="img-responsive" style="visibility: hidden;" />
-                </div>
-                <div class="col-md-9">
+                </div> -->
+                <!-- <div class="col-md-9"> -->
                   <!-- <h3>{{ prof.nameRole }}</h3> -->
   
                   <!-- <h4>Contact Informations</h4> -->
@@ -53,55 +41,12 @@
                       <td class="color">{{prof.workMail}}</td>
                     </tr>
                   </table> -->
-                </div>
+                <!-- </div> -->
               </div>
-              
   
-  
-  
-              <!--  -->
-  
-              <div *ngFor="let prof of professors" class="row mb-5">
-                <div class=" col-md-3 text-center">
-                  <img  class="img-responsive" />
-                </div>
-                <div class="col-md-9">
-                  <h3 style="color: #fff;">Helomaleykum</h3>
-  
-                  <h4 style="color: #fff;">Contact Informations</h4>
-                  <table>
-                    <tr>
-                      <td style="color: #fff;">Lorem ipsum dolor sit amet.</td>
-                      <td style="color: #fff;">Lorem ipsum dolor sit amet.</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                  </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <!-- class="col-md-8 table-cell" pastda -->
+            <div class="col-md-2 right-content">
+              <h2></h2>
             </div>
-  
-            <!--  -->
-  
-            <td valign="top">
-              <div class="col-md-2 table-cell" style="background: #fff">
-                <h2></h2>
-              </div>
-            </td>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
   

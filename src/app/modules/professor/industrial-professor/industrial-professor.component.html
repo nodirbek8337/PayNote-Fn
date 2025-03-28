@@ -1,30 +1,18 @@
 <div class="gtco-container">
   <div class="row">
-    <div class="col-md-12 col-md-offset-0">
-      <!-- Context of 'About us' Section -->
-      <div class="table-layout">
-        <div class="row is-table-row">
-          <!-- Content left -->
-          <div class="col-md-2 table-cell">
-            <table class="side_bar_table">
-              <tbody>
-                <tr>
-                  <td>
+    <!-- Content left -->
+    <div class="col-md-2 sidebar">
                     <a routerLink="/professor/professor" class="button cyan">
                       Professor</a>
                     <a routerLink="/professor/industrial-professor"
                       class="button cyan">Industrial Professor</a>
                     <a routerLink="/professor/collaboration-professor"
-                      class="button cyan">Collaboration Professor</a>
+                      class="button">Collaboration professor</a>
                     <a routerLink="/professor/visiting-professor"
                       class="button cyan">Visiting professor</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      </div>
           <!-- //////////////////////////////// -->
-          <div class="col-md-8 table-cell" style="background: #fff">
+          <div class="col-md-8 content">
             <!-- //////////////////////////////////////////////////////////// -->
             <div *ngFor="let prof of professors" class="row mb-5">
               <div class="img col-md-3 text-center">
@@ -63,14 +51,8 @@
 
           <!--  -->
 
-          <td valign="top">
-            <div class="col-md-2 table-cell" style="background: #fff">
-              <h2>Lorem ipsum dolor sit amet consectetur.
-              </h2>
-            </div>
-          </td>
+          <div class="col-md-2 right-content">
+            <h2></h2>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>

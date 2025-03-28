@@ -5,7 +5,7 @@
 
 .row {
   display: flex;
-  align-items: flex-start;
+  // align-items: flex-start;
 }
 
 .sidebar {
@@ -17,7 +17,7 @@
 
 .content {
   padding: 100px 40px;
-  background: #f9f9f9;
+  // background: #f9f9f9;
 }
 
 .right-content {
@@ -29,17 +29,10 @@
   display: block;
   background: rgb(52, 103, 134);
   color: #fff;
-  margin: 2px 0px 0px 20px;
+  margin: 5px 0;
   text-align: center;
+  border-radius: 3px;
   text-decoration: none;
-}
-
-tr {
-  width: 160px;
-}
-
-td {
-  margin-right: 10px;
 }
 
 .research-area {

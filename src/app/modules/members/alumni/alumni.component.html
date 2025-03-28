@@ -1,42 +1,23 @@
 <div class="gtco-container">
   <div class="row">
-    <div class="col-md-12 col-md-offset-0">
-      <!-- Context of 'About us' Section -->
-      <div class="table-layout">
-        <div class="row is-table-row">
           <!-- Content left -->
-          <div class="col-md-2 h-100 table-cell">
-            <table class="side_bar_table">
-              <tbody>
-                <tr>
-                  <td>
+          <div class="col-md-2 sidebar">
                     <a routerLink="/members/post-doc" class="button cyan">
-                      Post Doc.</a
-                    >
-                    <a routerLink="/members/phd-candidate" class="button cyan"
-                      >Ph.D Candidate</a
-                    >
-                    <a
-                      routerLink="/members/master-candidate"
-                      class="button cyan"
-                      >Master Candidate</a
-                    >
-                    <a routerLink="/members/undergraduate" class="button cyan"
-                      >Undergraduate</a
-                    >
-                    <a routerLink="/members/alumni" class="button cyan"
-                      >Alumni</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                      Post Doc.</a>
+                    <a routerLink="/members/phd-candidate"
+                      class="button cyan">Ph.D Candidate</a>
+                    <a routerLink="/members/master-candidate"
+                      class="button cyan">Master Candidate</a>
+                    <a routerLink="/members/undergraduate"
+                      class="button cyan">Undergraduate</a>
+                      <a routerLink="/members/alumni"
+                      class="button cyan">Alumni</a>
           </div>
           <!-- //////////////////////////////// -->
-          <div class="col-md-8 table-cel" >
-            <h4 class="title"><b>[ [Post Doc. Alumni 24 /  {{ professors.length }} persons ]</b></h4>
+          <div class="col-md-8 content" >
+            <h4 class="title"><b>[Post Doc. Alumni 24 /  {{ professors.length }} persons ]</b></h4>
           
-            <div *ngFor="let prof of professors" class="row mb-5">
+            <div *ngFor="let prof of professors" class="row">
                 <h5 class="h54" >{{ prof.nameRole }}</h5>
 
               <div class="img col-md-3 text-center">
@@ -67,7 +48,7 @@
 
             <h4 class="title"><b>[ Ph.D Alumni  31/ {{ professors.length }} persons ]</b></h4>
           
-            <div *ngFor="let prof of professors" class="row mb-5">
+            <div *ngFor="let prof of professors" class="row">
                 <h5 class="h54" >{{ prof.nameRole }}</h5>
 
               <div class="img col-md-3 text-center">
@@ -99,7 +80,7 @@
 
             <h4 class="title"><b>[ Ph.D Students Alumni 20 / {{ professors.length }} persons ]</b></h4>
           
-            <div *ngFor="let prof of professors" class="row mb-5">
+            <div *ngFor="let prof of professors" class="row">
                 <h5 class="h54" >{{ prof.nameRole }}</h5>
 
               <div class="img col-md-3 text-center">
@@ -130,7 +111,7 @@
 
             <h4 class="title"><b>[ Master Alumni 101 / {{ professors.length }} persons ]</b></h4>
           
-            <div *ngFor="let prof of professors" class="row mb-5">
+            <div *ngFor="let prof of professors" class="row">
                 <h5 class="h54" >{{ prof.nameRole }}</h5>
 
               <div class="img col-md-3 text-center">
@@ -163,13 +144,8 @@
           
           
 
-          <td valign="top" style="background-color: #ccc;">
-            <div class="col-md-2 table-cell">
-              <h2></h2>
-            </div>
-          </td>
+          <div class="col-md-2 right-content">
+            <h2></h2>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>

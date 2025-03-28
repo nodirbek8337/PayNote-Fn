@@ -1,223 +1,229 @@
 <div class="gtco-container">
-    <div class="row">
-      <div class="col-md-12 col-md-offset-0">
-        <!-- Context of 'About us' Section -->
-        <div class="table-layout">
-          <div class="row is-table-row">
-            <!-- Content left -->
-            <div class="col-md-2 table-cell">
-              <table class="side_bar_table">
-                <tbody>
-                  <tr>
-                    <td>
-                      <a
-                        routerLink="/professor/professor"
-                        class="button cyan"
-                      >
-                        Professor</a>
-                      <a
-                       routerLink="/professor/industrial-professor"
-                        class="button cyan"
-                        >
-                        Industrial Professor</a>
-                        <a
-                        routerLink="/professor/collaboration-professor"
-                        class="button cyan"
-                      >
-                      Collaboration Professor</a>
-                      <a
-                       routerLink="/professor/visiting-professor"
-                        class="button cyan"
-                        >
-                        Visiting professor</a>
-                      
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-md-8 table-cell" style="background: #fff">
-  
-              <!-- //////////////////////////////////////////////////////////// -->
-              <div class="row">
-                <div class="img col-md-3 text-center">
-                  <img [src]="professor.image" class="img-responsive">
-                  <!-- <br><br> -->
-                </div>
-                
-                <div class="col-md-9">  
-                  <table>
+  <div class="row">
+    <!-- Content left -->
+    <div class="col-md-2 sidebar">
+      <a routerLink="/members/post-doc" class="button cyan"> Post Doc.</a>
+      <a routerLink="/members/phd-candidate" class="button cyan"
+        >Ph.D Candidate</a
+      >
+      <a routerLink="/members/master-candidate" class="button cyan"
+        >Master Candidate</a
+      >
+      <a routerLink="/members/undergraduate" class="button cyan"
+        >Undergraduate</a
+      >
+      <a routerLink="/members/alumni" class="button cyan">Alumni</a>
+    </div>
+    <div class="col-md-8 content">
+      <!-- //////////////////////////////////////////////////////////// -->
+      <div class="row">
+        <div class="img col-md-3 text-center">
+          <img [src]="professor.image" class="img-responsive" />
+          <!-- <br><br> -->
+        </div>
+
+        <div class="col-md-9">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <h1>{{ professor.nameRole }}</h1>
+
+                  <div class="prof_detail">
+                    <p>{{ professor.position }},</p>
+                    <p>{{ professor.department }}</p>
+                    <p>{{ professor.university }}</p>
+                    <br />
+
+                    <b>Research Area:</b><br />
+                    <span
+                      class="research-area"
+                      *ngFor="let area of professor.researchAreas"
+                    >
+                      - {{ area }} <br />
+                    </span>
+                    <!-- <br> -->
+                  </div>
+
+                  <b size="4">Contact Informations</b><br />
+                  <table class="col-md-12 table-tabs">
                     <tbody>
                       <tr>
-                        <td > <h1>{{professor.nameRole}}</h1>
-                          
-                          <div class="prof_detail">
-                            <p>{{ professor.position }},</p>
-                            <p>{{ professor.department }}</p>
-                            <p>{{ professor.university }}</p><br>
-                            
-                            <b>Research Area:</b><br>
-                            <span class="research-area" *ngFor="let area of professor.researchAreas">
-                              - {{ area }} <br>
-                            </span>
-                            <!-- <br> -->
-                          </div>
-              
-                          <font size="4">Contact Informations</font><br>
-                          <table class="col-md-12 table-tabs">
-                            <tbody>
-                              <tr>
-                                <td class="contact_info-main">Address</td>
-                                <td class="contact_info col-md-10">{{ professor.contact.address }}</td>
-                              </tr>
-                              <tr>
-                                <td class="contact_info-main">E-mail</td>
-                                <td class="contact_info">{{  professor.contact.email }}</td>
-                              </tr>
-                              <tr>
-                                <td class="contact_info-main">Office</td>
-                                <td class="contact_info">{{ professor.contact.office }}</td>
-                              </tr>
-                              <tr>
-                                <td class="contact_info-main">Cell</td>
-                                <td class="contact_info">{{ professor.contact.cell }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                        <td class="contact_info-main">Address</td>
+                        <td class="contact_info col-md-10">
+                          {{ professor.contact.address }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="contact_info-main">E-mail</td>
+                        <td class="contact_info">
+                          {{ professor.contact.email }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="contact_info-main">Office</td>
+                        <td class="contact_info">
+                          {{ professor.contact.office }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="contact_info-main">Cell</td>
+                        <td class="contact_info">
+                          {{ professor.contact.cell }}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                </div>
-              </div>
-              
- <!-- //////////////////////////////////////////////// -->
-
-<h3> *Educational Information</h3>
-
- <table class="educational-information">								
-    <tbody>
-    <tr>
-        <th class="th1 table-h"><b>Year</b></th>
-        <th class="th2 table-h"><b>University</b></th>
-        <th class="th3 table-h"><b>Major</b></th>
-        <th class="th3 table-h1"><b>Degree</b></th>
-    </tr>
-
-    <tr>
-        <td class="th1">1974.3 - 1978.2</td>
-        <td class="th2">Korea University</td>
-        <td class="th3 table-h">Material Science</td>
-        <td class="th3 table-h1">Bachelor</td>
-    </tr>
-    
-    
-    
-
-    <tr>
-        <td class="th1">1984.8 - 1985.12</td>
-        <td class="th2">Fairleigh Dickinson University, New Jersey, U.S.A.</td>
-        <td class="th3 table-h">Computer Science</td>
-        <td class="th3 table-h1">Master</td>
-    </tr>
-
-    <tr>
-        <td class="th1">1986.1 - 1987.12</td>
-        <td class="th2">Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.</td>
-        <td class="th3 table-h">Computer Science</td>
-        <td class="th3 table-h1">Master</td>
-    </tr>
-
-    <tr>
-        <td class="th1">1987.12 - 1991.12</td>
-        <td class="th2">
-            Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.</td>
-        <td class="th3 table-h">Computer Science</td>
-        <td class="th3 table-h1">Ph.D</td>
-    </tr>
-    </tbody>
-    </table>
-
-  <!-- /*/*/*/*/************************** -->
-  <h3> *Career Information</h3>
-
-  <table class="educational-information">								
-     <tbody>
-     <tr>
-         <th class="th4"><b>Year</b></th>
-         <th class="th4"><b>career</b></th>
-         <th class="th5"><b>University</b></th>
-     </tr>
- 
-     <tr>
-         <td class="th4">1990.9 - 1992.8</td>
-         <td class="th4">	Full-Time Lecturer</td>
-         <td class="th5">Dept. of Computer Science, Governors State University, University Park, Illinois, U.S.A.</td>
-     </tr>
-
-     <tr>
-         <td class="th4">1992.9 - 1993.8</td>
-         <td class="th4">Assistant Professor</td>
-         <td class="th5">Dept. of Computer Science, Governors State University, University Park, Illinois, U.S.A.</td>
-     </tr>
- 
-     <tr>
-         <td class="th4">1993.9 - 1996.9</td>
-         <td class="th4">Assistant Professor</td>
-         <td class="th5">Dept. of Computer Engineering, College of Eletronics and Information, Kyung Hee University, Korea</td>
-     </tr>
- 
-     <tr>
-         <td class="th4">1996.10 - 2001.9</td>
-         <td class="th4">Associate Professor</td>
-         <td class="th5">Dept. of Computer Engineering, College of Eletronics and Information, Kyung Hee University, Korea</td>
-     </tr>
-     <tr>
-      <td class="th4">2001.10 - Current</td>
-      <td class="th4">Professor</td>
-      <td class="th5">Dept. of Computer Engineering, College of Eletronics and Information, Kyung Hee University, Korea</td>
-  </tr>
-     </tbody>
-     </table>
-     <!-- /*///////////////////////////////////////// -->
-
-     <h3> *Career Information</h3>
-
-     <table class="educational-information">								
-        <tbody>
-        <tr>
-            <th class="th4"><b>Year</b></th>
-            <th class="th5"><b>Award Title</b></th>
-        </tr>
-    
-        <tr>
-            <td class="th4">2016</td>
-            <td class="th5">Kyung Hee Fellow</td>
-        </tr>
-   
-        <tr>
-            <td class="th4">2015</td>
-            <td class="th5">	Korean Institute of Information Scientists and Engineers (KIISE) Gaheon Academic Award</td>
-        </tr>
-    
-        <tr>
-            <td class="th4">2006</td>
-            <td class="th5">	Korea Information Processing Society (KIPS) Academic Award</td>
-        </tr>
-        </tbody>
-        </table>
-
-     <!-- /////////////////////////////////////////////// -->
-             
-            </div>
-  
-            <td valign="top"> 
-            <div class="col-md-2 table-cell" style="background: #fff">
-            </div>
-             </td>
-          </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <!-- //////////////////////////////////////////////// -->
+
+      <h3>*Educational Information</h3>
+
+      <table class="educational-information">
+        <tbody>
+          <tr>
+            <th class="th1 table-h"><b>Year</b></th>
+            <th class="th2 table-h"><b>University</b></th>
+            <th class="th3 table-h"><b>Major</b></th>
+            <th class="th3 table-h1"><b>Degree</b></th>
+          </tr>
+
+          <tr>
+            <td class="th1">{{professor.educationalInformation.year}}</td>
+            <td class="th2">{{professor.educationalInformation.university}}</td>
+            <td class="th3 table-h"> {{professor.educationalInformation.major}} </td>
+            <td class="th3 table-h1"> {{professor.educationalInformation.degree}} </td>
+          </tr>
+
+          <tr>
+            <td class="th1">1984.8 - 1985.12</td>
+            <td class="th2">
+              Fairleigh Dickinson University, New Jersey, U.S.A.
+            </td>
+            <td class="th3 table-h">Computer Science</td>
+            <td class="th3 table-h1">Master</td>
+          </tr>
+
+          <tr>
+            <td class="th1">1986.1 - 1987.12</td>
+            <td class="th2">
+              Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.
+            </td>
+            <td class="th3 table-h">Computer Science</td>
+            <td class="th3 table-h1">Master</td>
+          </tr>
+
+          <tr>
+            <td class="th1">1987.12 - 1991.12</td>
+            <td class="th2">
+              Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.
+            </td>
+            <td class="th3 table-h">Computer Science</td>
+            <td class="th3 table-h1">Ph.D</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- /*/*/*/*/************************** -->
+      <h3>*Career Information</h3>
+
+      <table class="educational-information">
+        <tbody>
+          <tr>
+            <th class="th4"><b>Year</b></th>
+            <th class="th4"><b>career</b></th>
+            <th class="th5"><b>University</b></th>
+          </tr>
+
+          <tr>
+            <td class="th4">1990.9 - 1992.8</td>
+            <td class="th4">Full-Time Lecturer</td>
+            <td class="th5">
+              Dept. of Computer Science, Governors State University, University
+              Park, Illinois, U.S.A.
+            </td>
+          </tr>
+
+          <tr>
+            <td class="th4">1992.9 - 1993.8</td>
+            <td class="th4">Assistant Professor</td>
+            <td class="th5">
+              Dept. of Computer Science, Governors State University, University
+              Park, Illinois, U.S.A.
+            </td>
+          </tr>
+
+          <tr>
+            <td class="th4">1993.9 - 1996.9</td>
+            <td class="th4">Assistant Professor</td>
+            <td class="th5">
+              Dept. of Computer Engineering, College of Eletronics and
+              Information, Kyung Hee University, Korea
+            </td>
+          </tr>
+
+          <tr>
+            <td class="th4">1996.10 - 2001.9</td>
+            <td class="th4">Associate Professor</td>
+            <td class="th5">
+              Dept. of Computer Engineering, College of Eletronics and
+              Information, Kyung Hee University, Korea
+            </td>
+          </tr>
+          <tr>
+            <td class="th4">2001.10 - Current</td>
+            <td class="th4">Professor</td>
+            <td class="th5">
+              Dept. of Computer Engineering, College of Eletronics and
+              Information, Kyung Hee University, Korea
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- /*///////////////////////////////////////// -->
+
+      <h3>*Awards</h3>
+
+      <table class="educational-information">
+        <tbody>
+          <tr>
+            <th class="th4"><b>Year</b></th>
+            <th class="th5"><b>Award Title</b></th>
+          </tr>
+
+          <tr>
+            <td class="th4">2016</td>
+            <td class="th5">Kyung Hee Fellow</td>
+          </tr>
+
+          <tr>
+            <td class="th4">2015</td>
+            <td class="th5">
+              Korean Institute of Information Scientists and Engineers (KIISE)
+              Gaheon Academic Award
+            </td>
+          </tr>
+
+          <tr>
+            <td class="th4">2006</td>
+            <td class="th5">
+              Korea Information Processing Society (KIPS) Academic Award
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- /////////////////////////////////////////////// -->
+    </div>
+
+    <div class="col-md-2 right-content">
+      <h2></h2>
     </div>
   </div>
-  
+</div>

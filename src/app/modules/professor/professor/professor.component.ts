@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ProfessorComponent {
 
-
-
   
   professor = {
     image: './assets/img/1.jpg',
@@ -34,6 +32,13 @@ export class ProfessorComponent {
       email: 'sylee@oslab.khu.ac.kr',
       office: '+82-31-201-2514 (Phone), +82-31-202-2520 (Fax)',
       cell: '+82-10-7345-1441'
+    },
+    educationalInformation:
+    {
+     year: '1974.3 - 1978.2',
+     university: 'Korea University',
+     major:'Material Science',
+     degree: 'Bachelor'
     }
   };
 }
