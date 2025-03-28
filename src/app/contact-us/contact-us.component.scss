@@ -1,265 +1,36 @@
-* {
-    // padding: 0;
-    box-sizing: border-box;
-}
-
-
-.map_info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    // margin-top: 15vh;
-}
-
-.map_text {
-    font-size: 32px;
-    margin-top: 30px;
-    padding: 30px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-.formbold-main-wrapper{
-    margin-top: 12vh;
-}
-
-
-
-.formbold-mb-5 {
-    margin-bottom: 20px;
-}
-.formbold-pt-3 {
-    padding-top: 12px;
-}
-.formbold-main-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px;
-}
-
-.formbold-form-wrapper {
-    margin: 0 auto;
-    max-width: 550px;
-    width: 100%;
-    background: white;
-}
-.formbold-form-label {
-    display: block;
-    font-weight: 500;
-    font-size: 16px;
-    color: #07074d;
-    margin-bottom: 12px;
-}
-.formbold-form-label-2 {
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.formbold-form-input {
-    width: 100%;
-    padding: 12px 24px;
-    border-radius: 6px;
-    border: 1px solid #e0e0e0;
-    background: white;
-    font-weight: 500;
-    font-size: 16px;
-    color: #6b7280;
-    outline: none;
-    resize: none;
-}
-.formbold-form-input:focus {
-    border-color: #6a64f1;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
-}
-
-.formbold-btn {
-    text-align: center;
-    font-size: 16px;
-    border-radius: 6px;
-    padding: 14px 32px;
-    border: none;
-    font-weight: 600;
-    background-color: #6a64f1;
-    color: white;
-    width: 100%;
-    cursor: pointer;
-}
-.formbold-btn:hover {
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
-}
-
-.formbold--mx-3 {
-    margin-left: -12px;
-    margin-right: -12px;
-}
-.formbold-px-3 {
-    padding-left: 12px;
-    padding-right: 12px;
-}
-.flex {
-    display: flex;
-}
-.flex-wrap {
-    flex-wrap: wrap;
-}
-.w-full {
-    width: 100%;
-}
-@media (min-width: 540px) {
-    .sm\:w-half {
-        width: 50%;
-    }
-}
-
-
-
-
-
-nav a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-nav span {
-    color: #555;
-}
-
-.contact_form h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.form-group img {
-    display: block;
-    margin-top: 10px;
-}
-
-.contact_btn {
-    display: inline-block;
-    padding: 10px 30px;
-    margin-bottom: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.contact_btn:hover {
-    background-color: #0056b3;
-}
-
-
-// Qo'shish garak
-
-/*
 .gtco-container {
     max-width: 1140px;
-    position: relative;
     margin: 0 auto;
-    padding-left: 15px;
-    padding-right: 15px;
   }
-
+  
   .row {
-    margin-left: -15px;
-    margin-right: -15px;
-  }
-  .row:before, .row:after {
-    content: " ";
-    display: table;
-  }
-  .row:after {
-    clear: both;
-  }
-
-.is-table-row {
-    display: table;
-}
-.is-table-row .table-cell {
-    float: none;
-    display: table-cell;
-    vertical-align: top;
-    margin-top: 20px;
-}
-
-.table-cell{
-    padding-top: 60px;
-    background-color: #ccc;
-}
-
-.side_bar_table{
     display: flex;
-    text-align: center;
-}
-
-.side_bar_table td {
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.side_bar_table td a {
-    display: block;
-    margin-left: auto;
   }
-
-.button{
-    background: rgb(52, 103, 134);
-    color: #fff;
+  
+  .sidebar {
+    background-color: #ccc;
+    padding: 40px 10px;
+    color: white;
+    min-height: 100vh;
+    // height: 100%;
+  }
+  
+  .content {
+    padding: 50px 40px;
+  }
+  
+  .right-content {
+    // background-color: #ccc;
+    min-height: 100vh;
+  }
+  
+  .button {
     display: block;
-    margin: 2px 0px 0px 20px;
+    background: rgb(52, 103, 134);
+    color: white;
+    text-decoration: none;
+    margin: 5px 0;
+    border-radius: 3px;
     text-align: center;
-}
-
-.side_bar_table a.button {
-  background-color: #2d6684; 
-  color: white;
-  text-decoration: none;
-  border-radius: 3px;
-  width: 200px;
-  height: 25px;
-  text-align: center;
-}
-
-tr{
-    width: 160px;
-}
-
-td{
-    width: 100%;
-    margin-right:10px ;
-}
-
-ul.entry-in-li{
-  padding-left: 60px;
-  list-style-type:none ;
-}
-
-ul.entry-in-li li::before {
-  content: "- ";
-}
-
-
-*/
+  }
+  

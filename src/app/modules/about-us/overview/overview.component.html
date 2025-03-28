@@ -1,24 +1,11 @@
 <div class="gtco-container">
   <div class="row">
-    <div class="col-md-12 col-md-offset-0">
-      <!-- Context of 'About us' Section -->
-      <div class="table-layout">
-        <div class="row is-table-row">
           <!-- Content left -->
-          <div class="col-md-2 table-cell">
-            <table class="side_bar_table">
-              <tbody>
-                <tr>
-                  <td>
+          <div class="col-md-2 sidebar">
                     <a routerLink="/about/overview" class="button cyan"> Overview </a>
                     <a routerLink="/contact-us" class="button cyan"> Contact us </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </div>
-          <div class="col-md-8 table-cell" style="background: #fff">
-
+          <div class="col-md-8 content">
             @for (overview of overviews; track $index) {
               <h2>[{{ overview?.title }}]</h2>
               @for (introduction_item of overview?.introduction; track $index) {
@@ -44,31 +31,11 @@
                 <p>{{ conclusion_item }}</p>
               }
             }
-
-
-
-            <!-- 
-                <ul>
-                  <li *ngFor="let goal of overview.goals">{{ goal }}</li>
-                </ul>
-              
-                <h3>[Research Focus]</h3>
-                <div *ngFor="let category of overview.researchFocus; let i = index">
-                  <h5>{{ i + 1 }}. {{ category.category }}</h5>
-                  <div *ngFor="let topic of category.topics">
-                    <p>- {{ topic }}</p>
-                  </div>
-                </div>
-               -->
-              
           </div>
 
-          <td valign="top"> 
-          <div class="col-md-2 table-cell" style="background: #fff">
+          <!-- Content Right (Bo‘sh joy yoki boshqa content) -->
+          <div class="col-md-2 right-content">
+            <h2></h2>
           </div>
-           </td>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      </div>    
