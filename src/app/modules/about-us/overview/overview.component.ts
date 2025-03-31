@@ -19,9 +19,9 @@ export class OverviewComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.http.get("http://localhost:5000/api/overviews").subscribe({
+    this.http.get("https://backend-production-1b74.up.railway.app/api/overviews").subscribe({
       next:(res)=> {
-        // console.log(res);
+        console.log(res);
         this.overviews= res;
       }
     })
