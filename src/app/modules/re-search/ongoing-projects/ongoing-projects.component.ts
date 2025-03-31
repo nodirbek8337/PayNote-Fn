@@ -1,12 +1,13 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-ongoing-projects',
   standalone: true,
   templateUrl: './ongoing-projects.component.html',
   styleUrl: './ongoing-projects.component.scss',
-  imports: [NgFor]
+  imports: [NgFor, RouterModule]
 })
 export class OngoingProjectsComponent {
 

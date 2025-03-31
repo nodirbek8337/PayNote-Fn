@@ -1,12 +1,13 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-phd-candidate',
   standalone: true,
   templateUrl: './phd-candidate.component.html',
   styleUrl: './phd-candidate.component.scss',
-  imports: [NgFor]
+  imports: [NgFor, RouterModule]
 })
 export class PhdCandidateComponent {
 

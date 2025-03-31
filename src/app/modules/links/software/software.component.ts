@@ -1,12 +1,13 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-software',
   standalone: true,
   templateUrl: './software.component.html',
   styleUrl: './software.component.scss',
-  imports: [NgFor]
+  imports: [NgFor, RouterModule]
 })
 export class SoftwareComponent {
 

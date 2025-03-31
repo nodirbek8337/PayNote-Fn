@@ -1,12 +1,13 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-industrial-professor',
   standalone: true,
   templateUrl: './industrial-professor.component.html',
   styleUrl: './industrial-professor.component.scss',
-  imports: [NgFor]
+  imports: [NgFor, RouterModule]
 })
 export class IndustrialProfessorComponent {
   professors = [

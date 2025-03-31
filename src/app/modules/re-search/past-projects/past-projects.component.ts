@@ -1,12 +1,13 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-past-projects',
   standalone: true,
   templateUrl: './past-projects.component.html',
   styleUrl: './past-projects.component.scss',
-  imports: [NgFor]
+  imports: [NgFor, RouterModule]
 })
 export class PastProjectsComponent {
 
