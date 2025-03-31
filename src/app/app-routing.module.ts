@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomepageComponent } from './homepage/homepage.component';
+import { HomepageComponent } from './modules/homepage/homepage.component';
 
-import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ContactUsComponent } from './modules/contact-us/contact-us.component';
 import { OverviewComponent } from './modules/about-us/overview/overview.component';
 
 import { ProfessorComponent } from './modules/professor/professor/professor.component';

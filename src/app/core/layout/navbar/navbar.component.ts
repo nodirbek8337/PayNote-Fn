@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
-import dbJSON from "../../assets/db.json";
+import dbJSON from "../../../../assets/db.json";
 
 @Component({
   selector: 'app-navbar',

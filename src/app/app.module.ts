@@ -6,10 +6,10 @@ import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { FooterComponent } from './footer/footer.component';
-import { HomepageComponent } from './homepage/homepage.component';
-import { ContactUsComponent } from './contact-us/contact-us.component';
+import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { FooterComponent } from './core/layout/footer/footer.component';
+import { HomepageComponent } from './modules/homepage/homepage.component';
+import { ContactUsComponent } from './modules/contact-us/contact-us.component';
 import { OverviewComponent } from './modules/about-us/overview/overview.component';
 import { ProfessorComponent } from './modules/professor/professor/professor.component';
 import { IndustrialProfessorComponent } from './modules/professor/industrial-professor/industrial-professor.component';
