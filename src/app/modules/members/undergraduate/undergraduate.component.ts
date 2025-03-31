@@ -1,10 +1,13 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-undergraduate',
   standalone: true,
   templateUrl: './undergraduate.component.html',
   styleUrl: './undergraduate.component.scss',
+  imports: [RouterModule]
 })
 export class UndergraduateComponent {
 
