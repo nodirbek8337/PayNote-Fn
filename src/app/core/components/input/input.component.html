@@ -1,0 +1,22 @@
+<div class="input-container position-relative">
+  <input
+    [type]="show ? 'text' : type"
+    class="w-100 input-field"
+    [value]="value"
+    (input)="handleInput($event)"
+    [placeholder]="placeholder"
+  />
+  @if(password){
+    <button
+        type="button"
+        (click)="toggle()"
+        class="eye-btn"
+    >
+        @if(show){
+            <i class="fa-solid fa-eye"></i>
+        } @else {
+            <i class="fa-solid fa-eye-slash"></i>
+        }
+    </button>
+  }
+</div>
