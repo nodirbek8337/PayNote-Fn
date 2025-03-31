@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { InputComponent } from './core/components/input/input/input.component';
 
 @NgModule({
   declarations: [
