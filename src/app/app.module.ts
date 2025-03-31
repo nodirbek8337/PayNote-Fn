@@ -13,7 +13,7 @@ import { NavbarComponent } from './core/layout/navbar/navbar.component';
   declarations: [
     AppComponent,
     NavbarComponent,
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
