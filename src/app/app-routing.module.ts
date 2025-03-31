@@ -27,10 +27,6 @@ const routes: Routes = [
     loadComponent: () => import('./modules/publications/publications.component').then(m => m.PublicationsComponent) 
   },
   { 
-    path: 'lecture/2020', 
-    loadComponent: () => import('./modules/publications/two-2020/two-2020.component').then(m => m.Two2020Component) 
-  },
-  { 
     path: 'contact-us', 
     loadComponent: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
   },
