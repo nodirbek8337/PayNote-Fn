@@ -29,7 +29,6 @@ import { Two2024Component } from './modules/publications/two-2024/two-2024.compo
 import { Two2023Component } from './modules/publications/two-2023/two-2023.component';
 import { Two2022Component } from './modules/publications/two-2022/two-2022.component';
 import { Two2021Component } from './modules/publications/two-2021/two-2021.component';
-import { AllComponent } from './modules/publications/all/all.component';
 import { Two2020Component } from './modules/publications/two-2020/two-2020.component';
 import { Two2019Component } from './modules/publications/two-2019/two-2019.component';
 import { Two2018Component } from './modules/publications/two-2018/two-2018.component';
@@ -43,6 +42,10 @@ import { Two2011Component } from './modules/publications/two-2011/two-2011.compo
 import { Two2010Component } from './modules/publications/two-2010/two-2010.component';
 import { Two2009Component } from './modules/publications/two-2009/two-2009.component';
 import { Two2008Component } from './modules/publications/two-2008/two-2008.component';
+import { AllComponent } from './modules/publications/all/all.component';
+import { PublicationsComponent } from './modules/publications/publications.component';
+
+// import { Two2020Component } from './modules/lecture/two2020/two2020.component';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent},
@@ -68,25 +71,10 @@ const routes: Routes = [
   { path: 'research/ongoing-projects', component: OngoingProjectsComponent},
   { path: 'research/past-projects', component: PastProjectsComponent},
 
-  { path: 'publications/2025', component: Two2025Component},
-  { path: 'publications/2025', component: Two2024Component},
-  { path: 'publications/2025', component: Two2023Component},
-  { path: 'publications/2025', component: Two2022Component},
-  { path: 'publications/2025', component: Two2021Component},
-  { path: 'publications/2025', component: Two2020Component},
-  { path: 'publications/2025', component: Two2019Component},
-  { path: 'publications/2025', component: Two2018Component},
-  { path: 'publications/2025', component: Two2017Component},
-  { path: 'publications/2025', component: Two2016Component},
-  { path: 'publications/2025', component: Two2015Component},
-  { path: 'publications/2025', component: Two2014Component},
-  { path: 'publications/2025', component: Two2013Component},
-  { path: 'publications/2025', component: Two2012Component},
-  { path: 'publications/2025', component: Two2011Component},
-  { path: 'publications/2025', component: Two2010Component},
-  { path: 'publications/2025', component: Two2009Component},
-  { path: 'publications/2025', component: Two2008Component},
-  { path: 'publications/2025', component: AllComponent},
+  { path: 'publications/:id', component: PublicationsComponent},
+
+  { path: 'lecture/2020', component: Two2020Component},
+
 
 
   

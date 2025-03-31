@@ -53,6 +53,7 @@ import { Two2023Component } from './modules/lecture/two2023/two2023.component';
 import { Two2024Component } from './modules/lecture/two2024/two2024.component';
 import { Two2025Component } from './modules/lecture/two2025/two2025.component';
 import { AllComponent } from './modules/publications/all/all.component';
+import { TestComponent } from "./test/test.component";
 
 @NgModule({
   declarations: [
@@ -109,8 +110,9 @@ import { AllComponent } from './modules/publications/all/all.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
-  ],
+    FormsModule,
+    TestComponent
+],
   providers: [
     provideClientHydration(withEventReplay())
   ],
