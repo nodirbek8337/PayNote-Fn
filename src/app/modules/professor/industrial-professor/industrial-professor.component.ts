@@ -1,10 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-industrial-professor',
-  standalone: false,
+  standalone: true,
   templateUrl: './industrial-professor.component.html',
-  styleUrl: './industrial-professor.component.scss'
+  styleUrl: './industrial-professor.component.scss',
+  imports: [NgFor]
 })
 export class IndustrialProfessorComponent {
   professors = [

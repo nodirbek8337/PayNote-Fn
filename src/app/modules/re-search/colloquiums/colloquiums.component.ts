@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-colloquiums',
-  standalone: false,
+  standalone: true,
   templateUrl: './colloquiums.component.html',
-  styleUrl: './colloquiums.component.scss'
+  styleUrl: './colloquiums.component.scss',
+  imports: [NgFor]
 })
 export class ColloquiumsComponent {
 

@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-two-thousand-and-six2006',
-  standalone: false,
+  standalone: true,
   templateUrl: './two-thousand-and-six2006.component.html',
-  styleUrl: './two-thousand-and-six2006.component.scss'
+  styleUrl: './two-thousand-and-six2006.component.scss',
+  imports: [NgFor]
 })
 export class TwoThousandAndSix2006Component {
 

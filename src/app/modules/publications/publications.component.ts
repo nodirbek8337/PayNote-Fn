@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { ActivatedRoute, Params, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { Component } from "@angular/core";
 @Component({
     selector:'app-publications',
     standalone:true,
@@ -7,14 +6,6 @@ import { ActivatedRoute, Params, Router, RouterLink, RouterOutlet } from "@angul
     templateUrl:"./publications.component.html"
 })
 
-export class PublicationsComponent implements OnInit {
-    private readonly router = inject(Router);
-    private readonly activatedRoute = inject(ActivatedRoute);
-
-    ngOnInit(): void {
-        console.log(true, "FROM PUBLIC");
-        this.activatedRoute.queryParamMap.subscribe((value:Params) => {
-            console.log(value, "FROM PUBLICAITON");
-        })
-    }
+export class PublicationsComponent{
+   
 }

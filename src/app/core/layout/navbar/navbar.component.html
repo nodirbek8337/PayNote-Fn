@@ -37,22 +37,27 @@
       </a>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li
-            *ngFor="let item of menuItems"
-            class="nav-item"
-            [ngClass]="{ 'has-dropdown': item.children }"
-          >
-            <a class="nav-link" [routerLink]="item.link">{{ item.title }}</a>
+          @for(item of menuItems; track $index){
+            <li
+              class="nav-item"
+              [ngClass]="{ 'has-dropdown': item.children }"
+            >
+              <a class="nav-link" [routerLink]="item.link">{{ item.title }}</a>
   
-            <!-- Agar menyu ichida qo'shimcha bo'limlar bo'lsa -->
-            <ul *ngIf="item.children" class="dropdown-menu">
-              <li *ngFor="let child of item.children">
-                <a class="dropdown-item" [routerLink]="child.link">{{
-                  child.title
-                }}</a>
-              </li>
-            </ul>
-          </li>
+              <!-- Agar menyu ichida qo'shimcha bo'limlar bo'lsa -->
+              @if(item.children){
+                <ul class="dropdown-menu">
+                  @for(child of item.children; track $index){
+                    <li>
+                      <a class="dropdown-item" [routerLink]="child.link">{{
+                        child.title
+                      }}</a>
+                    </li> 
+                  }
+                </ul>
+              }
+            </li>
+          }
         </ul>
       </div>
     </div>

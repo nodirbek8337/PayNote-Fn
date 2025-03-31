@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-post-doc',
-  standalone: false,
+  standalone: true,
   templateUrl: './post-doc.component.html',
-  styleUrl: './post-doc.component.scss'
+  styleUrl: './post-doc.component.scss',
+  imports: [NgFor]
 })
 export class PostDocComponent {
 

@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-ongoing-projects',
-  standalone: false,
+  standalone: true,
   templateUrl: './ongoing-projects.component.html',
-  styleUrl: './ongoing-projects.component.scss'
+  styleUrl: './ongoing-projects.component.scss',
+  imports: [NgFor]
 })
 export class OngoingProjectsComponent {
 

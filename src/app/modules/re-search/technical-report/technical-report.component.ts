@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-technical-report',
-  standalone: false,
+  standalone: true,
   templateUrl: './technical-report.component.html',
-  styleUrl: './technical-report.component.scss'
+  styleUrl: './technical-report.component.scss',
+  imports: [NgFor]
 })
 export class TechnicalReportComponent {
 

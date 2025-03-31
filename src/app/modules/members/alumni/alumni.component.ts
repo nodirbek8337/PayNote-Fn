@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-alumni',
-  standalone: false,
+  standalone: true,
   templateUrl: './alumni.component.html',
-  styleUrl: './alumni.component.scss'
+  styleUrl: './alumni.component.scss',
+  imports: [NgFor]
 })
 export class AlumniComponent {
 

@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-introduction',
-  standalone: false,
+  standalone: true,
   templateUrl: './introduction.component.html',
-  styleUrl: './introduction.component.scss'
+  styleUrl: './introduction.component.scss',
+  imports: [NgFor]
 })
 export class IntroductionComponent {
 

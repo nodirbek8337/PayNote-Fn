@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-useful-links',
-  standalone: false,
+  standalone: true,
   templateUrl: './useful-links.component.html',
-  styleUrl: './useful-links.component.scss'
+  styleUrl: './useful-links.component.scss',
+  imports: [NgFor]
 })
 export class UsefulLinksComponent {
 

@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { 
     path: '',
-    loadChildren: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
+    loadComponent: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
   },
   { 
     path: 'about', 
@@ -24,19 +24,19 @@ const routes: Routes = [
   },
   { 
     path: 'publications/:id', 
-    loadChildren: () => import('./modules/publications/publications.component').then(m => m.PublicationsComponent) 
+    loadComponent: () => import('./modules/publications/publications.component').then(m => m.PublicationsComponent) 
   },
   { 
     path: 'lecture/2020', 
-    loadChildren: () => import('./modules/publications/two-2020/two-2020.component').then(m => m.Two2020Component) 
+    loadComponent: () => import('./modules/publications/two-2020/two-2020.component').then(m => m.Two2020Component) 
   },
   { 
     path: 'contact-us', 
-    loadChildren: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
+    loadComponent: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
   },
   { 
     path: '**', 
-    loadChildren: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
+    loadComponent: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
   }
 ];
 

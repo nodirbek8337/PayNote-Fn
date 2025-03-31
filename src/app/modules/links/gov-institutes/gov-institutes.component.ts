@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-gov-institutes',
-  standalone: false,
+  standalone: true,
   templateUrl: './gov-institutes.component.html',
-  styleUrl: './gov-institutes.component.scss'
+  styleUrl: './gov-institutes.component.scss',
+  imports: [NgFor]
 })
 export class GovInstitutesComponent {
 

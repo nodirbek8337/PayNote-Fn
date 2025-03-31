@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-miscellaneous',
-  standalone: false,
+  standalone: true,
   templateUrl: './miscellaneous.component.html',
-  styleUrl: './miscellaneous.component.scss'
+  styleUrl: './miscellaneous.component.scss',
+  imports: [NgFor]
 })
 export class MiscellaneousComponent {
 

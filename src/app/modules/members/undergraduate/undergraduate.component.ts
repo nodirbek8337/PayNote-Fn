@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-undergraduate',
-  standalone: false,
+  standalone: true,
   templateUrl: './undergraduate.component.html',
-  styleUrl: './undergraduate.component.scss'
+  styleUrl: './undergraduate.component.scss',
 })
 export class UndergraduateComponent {
 

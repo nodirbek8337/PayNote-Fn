@@ -1,10 +1,12 @@
+import { CommonModule, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-homepage',
-  standalone: false,
+  standalone: true,
   templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.scss'
+  styleUrl: './homepage.component.scss',
+  imports: [CommonModule, NgFor]
 })
 export class HomepageComponent {
   features = [

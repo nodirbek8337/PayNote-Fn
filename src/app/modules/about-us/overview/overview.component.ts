@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-overview',
-  standalone: false,
+  standalone: true,
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })

@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-collaboration-professor',
-  standalone: false,
+  standalone: true,
   templateUrl: './collaboration-professor.component.html',
-  styleUrl: './collaboration-professor.component.scss'
+  styleUrl: './collaboration-professor.component.scss',
+  imports: [NgFor]
 })
 export class CollaborationProfessorComponent implements OnInit{
   contactBool: Boolean = true;

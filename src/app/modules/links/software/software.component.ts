@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-software',
-  standalone: false,
+  standalone: true,
   templateUrl: './software.component.html',
-  styleUrl: './software.component.scss'
+  styleUrl: './software.component.scss',
+  imports: [NgFor]
 })
 export class SoftwareComponent {
 

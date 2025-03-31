@@ -1,10 +1,12 @@
+import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-workshop',
-  standalone: false,
+  standalone: true,
   templateUrl: './workshop.component.html',
-  styleUrl: './workshop.component.scss'
+  styleUrl: './workshop.component.scss',
+  imports: [NgFor]
 })
 export class WorkshopComponent {
 
