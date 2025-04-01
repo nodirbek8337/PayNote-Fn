@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,18 +9,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './software.component.scss',
   imports: [NgFor, RouterModule]
 })
-export class SoftwareComponent {
+export class SoftwareComponent implements OnInit {
 
+  ngOnInit(): void {
+      // console.log('software');
+      
+  }
 
-  professors = [
-    {
-      theme: '[Introduction to Research]',
-      nameRole: 'Bold Chinguun - 1st',
-      image: './assets/img/9.jpg',
-      nationality: 'Ecuador',
-      year: '2024',
-        workMail: 'jake0011@gmail.com',
-        major:'Security and Privacy'
-    },
-  ]
 }

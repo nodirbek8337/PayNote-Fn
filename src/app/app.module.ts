@@ -20,7 +20,7 @@ import { NavbarComponent } from './core/layout/navbar/navbar.component';
     CommonModule,
     AppRoutingModule,
     FormsModule,
-    RouterModule
+    RouterModule,
 ],
   providers: [
     provideClientHydration(withEventReplay())

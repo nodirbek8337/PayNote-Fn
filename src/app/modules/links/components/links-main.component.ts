@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import {RouterModule, RouterOutlet} from '@angular/router';
 
 @Component({
     template: '<router-outlet />',
     standalone: true,
     imports: [
-        RouterOutlet
+        RouterOutlet,
+        RouterModule
     ]
 })
 export class LinksMainComponent {
