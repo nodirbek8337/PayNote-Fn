@@ -30,10 +30,10 @@ const routes: Routes = [
     path: 'contact-us', 
     loadComponent: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
   },
-  {
-    path: 'links',
-    loadChildren: () => import('./modules/links/links.routing').then(c => c.LinksRoutingRouting),
-  },
+  // {
+  //   path: 'links',
+  //   loadChildren: () => import('./modules/links/links.routing').then(c => c.LinksRoutingRouting),
+  // },
   { 
     path: 'login', 
     loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent) 

@@ -69,14 +69,6 @@
         { "title": "2006", "link": "/lecture/2006" },
         { "title": "Until 2005", "link": "/lecture/until-2005" }
       ]
-    },
-    { "title": "Links", "link": "#", "children": [
-        { "title": "Software", "link": "/links/software" },
-        { "title": "Useful Links", "link": "/links/useful-links" },
-        { "title": "Gov. & Institutes", "link": "/links/gov-institutes" },
-        { "title": "Miscellaneous", "link": "/links/miscellaneous" },
-        { "title": "Workshop", "link": "/links/workshop" }
-      ]
     }
   ]
 }

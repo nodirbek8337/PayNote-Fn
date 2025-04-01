@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   templateUrl: './miscellaneous.component.html',
   styleUrl: './miscellaneous.component.scss',
-  imports: [NgFor, RouterModule]
+  imports: [ RouterModule ]
 })
 export class MiscellaneousComponent {
 
