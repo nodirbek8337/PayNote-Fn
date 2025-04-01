@@ -9,7 +9,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './post-doc.component.scss',
   imports: [NgFor, RouterModule]
 })
-export class PostDocComponent {
+export class PostDocComponent{
+
 
   professors = [
     {

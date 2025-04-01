@@ -22,7 +22,7 @@ import { LoadingSpinnerComponent } from './core/components/loading/loading-spinn
     CommonModule,
     AppRoutingModule,
     FormsModule,
-    RouterModule
+    RouterModule,
 ],
   providers: [
     provideClientHydration(withEventReplay())
