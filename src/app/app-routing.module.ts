@@ -31,7 +31,7 @@ const routes: Routes = [
     loadComponent: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
   },
   {
-    path: 'Links',
+    path: 'links',
     loadChildren: () => import('./modules/links/links.routing').then(c => c.LinksRoutingRouting),
   },
   { 

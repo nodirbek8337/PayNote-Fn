@@ -11,15 +11,16 @@ import { RouterModule } from '@angular/router';
 })
 export class TechnicalReportComponent {
 
+  Thesis: string = '../assets/pdf/Amaliy_ish_3.pdf';
+  Presentation:string = '../assets/pdf/Amaliy_ish_5.pdf'
   professors = [
     {
-      theme: '[ Technical report]',
-      nameRole: 'Bold Chinguun - 1st',
-      image: './assets/img/9.jpg',
-      nationality: 'Ecuador',
-      year: '2024',
-        workMail: 'jake0011@gmail.com',
-        major:'Security and Privacy'
+      No: '48',
+      Title: 'Semantic Sequence Contraction and Expansion for Data Interoperability',
+      Name: 'Fahad Ahmed Satti',
+      Date: 'Feb. 2023',
+      Thesis: this.Thesis,
+      Presentation: this.Presentation,
     },
   ]
 }

@@ -37,7 +37,6 @@
   text-align: center;
 }
 
-
 .customers {
   border-collapse: collapse;
   width: 100%;
@@ -47,10 +46,9 @@
   padding: 8px;
 }
 
-.customers tr{
-background-color: #f2f2f2;
-text-align:center;
-
+.customers tr {
+  text-align: center;
+  border-bottom: 2px dotted #ccc;
 }
 
 .customers th {
@@ -58,6 +56,11 @@ text-align:center;
   padding-bottom: 12px;
   text-align: left;
   color: black;
-  border-top:3px dotted black;
-  border-bottom:3px dotted black;
+  border-top: 2px dotted #ccc;
+  border-bottom: 2px dotted #ccc;
+  background-color: #d9d9d9;
+}
+
+.fa-regular{
+  color: #ff0000;
 }
