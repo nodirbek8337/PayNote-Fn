@@ -31,6 +31,10 @@ const routes: Routes = [
     loadComponent: () => import('./modules/about-us/contact-us/contact-us.component').then(m => m.ContactUsComponent) 
   },
   { 
+    path: 'login', 
+    loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent) 
+  },
+  { 
     path: '**', 
     loadComponent: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
   }

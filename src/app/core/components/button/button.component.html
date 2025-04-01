@@ -1,0 +1,13 @@
+<button 
+  [type]="buttonType"
+  class="animated-btn {{ buttonClass }}" 
+  [ngClass]="{ 'clicked': isClicked }"
+  (click)="onClick($event)">
+    @if(link){
+      <a [routerLink]="linkUrl" class="animated-link-a">
+        {{ buttonText }}
+      </a>
+    } @else {
+      {{ buttonText }}
+    }
+</button>
