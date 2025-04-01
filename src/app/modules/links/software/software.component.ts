@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   templateUrl: './software.component.html',
   styleUrl: './software.component.scss',
-  imports: [NgFor, RouterModule]
+  imports: [ RouterModule]
 })
 export class SoftwareComponent implements OnInit {
 

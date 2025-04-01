@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   templateUrl: './useful-links.component.html',
   styleUrl: './useful-links.component.scss',
-  imports: [NgFor, RouterModule]
+  imports: [ RouterModule]
 })
 export class UsefulLinksComponent {
 

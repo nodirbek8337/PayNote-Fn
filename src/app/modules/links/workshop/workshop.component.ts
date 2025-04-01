@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   templateUrl: './workshop.component.html',
   styleUrl: './workshop.component.scss',
-  imports: [NgFor, RouterModule]
+  imports: [ RouterModule]
 })
 export class WorkshopComponent {
 
