@@ -106,15 +106,14 @@
       <table class="educational-information">
         <tbody>
           <tr *ngFor="let titl of professor.title">
-            <th class="th1 table-h"><b>{{titl.year}}</b></th>
-            <th class="th2 table-h"><b>{{titl.career}}</b></th>
-            <th class="th3 table-h"><b>{{titl.university}}</b></th>
+            <th class="th1"><b>{{titl.year}}</b></th>
+            <th class="th1"><b>{{titl.career}}</b></th>
+            <th class="th2"><b>{{titl.university}}</b></th>
           </tr>
-
           <tr *ngFor="let CaI of professor.CareerInformations">
-            <td class="th4">{{CaI.year}}</td>
-            <td class="th4">{{CaI.career}}</td>
-            <td class="th5">{{CaI.universuty}}</td>
+            <td class="th1">{{CaI.year}}</td>
+            <td class="th1">{{CaI.career}}</td>
+            <td class="th2">{{CaI.universuty}}</td>
           </tr>
         </tbody>
       </table>
