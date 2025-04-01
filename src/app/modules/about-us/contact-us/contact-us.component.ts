@@ -10,16 +10,4 @@ import { RouterModule } from '@angular/router';
   imports: [ RouterModule ]
 })
 export class ContactUsComponent {
-  contact = {
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  }
-
-  onSubmit(event: Event) {
-    event.preventDefault();
-    console.log('Form Submitted', this.contact);
-    // Bu yerda formani backendga yuborish kodini qo'shish mumkin
-  }
 }

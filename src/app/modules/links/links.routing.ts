@@ -6,22 +6,22 @@ export const LinksRoutingRouting: Route[] = [
     loadComponent: () => import('./components/links-main.component').then(c => c.LinksMainComponent),
     children: [
       {
-        path: 'phd-candidate',
+        path: 'software',
         loadComponent: () => import('./software/software.component').then(c => c.SoftwareComponent),
       },
       {
-        path: 'master-candidate',
+        path: 'useful-links',
         loadComponent: () => import('./useful-links/useful-links.component').then(c => c.UsefulLinksComponent),
       },
       {
-        path: 'undergraduate',
+        path: 'gov-institutes',
         loadComponent: () => import('./gov-institutes/gov-institutes.component').then(c => c.GovInstitutesComponent),
       },
       {
-        path: 'alumni',
+        path: 'miscellaneous',
         loadComponent: () => import('./miscellaneous/miscellaneous.component').then(c => c.MiscellaneousComponent),
       },{
-        path: 'alumni',
+        path: 'workshop',
         loadComponent: () => import('./workshop/workshop.component').then(c => c.WorkshopComponent),
       },
     ]

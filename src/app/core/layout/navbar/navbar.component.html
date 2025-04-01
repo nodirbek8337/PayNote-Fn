@@ -6,66 +6,68 @@
         <a href="#"><i class="fab fa-facebook"></i></a>
         <a href="#"><i class="fab fa-youtube"></i></a>
       </div>
-  
+
       <nav>
         <ul class="nav gap-3">
           <li class="nav-item">
             <a class="nav-link1 text-white px-3" routerLink="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link1 text-white px-3" href="https://www.ubtuit.uz/" target="_blank">Webmail</a>
+            <a
+              class="nav-link1 text-white px-3"
+              href="https://www.ubtuit.uz/"
+              target="_blank"
+              >Webmail</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link1 text-white" routerLink="/contact-us">Contact us</a>
+            <a class="nav-link1 text-white" routerLink="/contact-us"
+              >Contact us</a
+            >
           </li>
         </ul>
       </nav>
     </div>
   </header>
-  
+
   <nav class="navbar navbar-expand p-0 m-0">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
         <img
           src="../assets/logo_ubtuit1.png"
           alt="Ubiquitous Computing Laboratory Logo"
-         />
-         <div>
+        />
+        <div>
           <h3>Ubiquitous Computing Loborotory</h3>
-         <h3>Urgench, Uzbekistan</h3>
-         </div>
+          <h3>Urgench, Uzbekistan</h3>
+        </div>
       </a>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           @for(item of menuItems; track $index){
-            <li
-              class="nav-item"
-              [ngClass]="{ 'has-dropdown': item.children }"
-            >
-              <a class="nav-link" [routerLink]="item.link">{{ item.title }}</a>
-  
-              <!-- Agar menyu ichida qo'shimcha bo'limlar bo'lsa -->
-              @if(item.children){
-                <ul class="dropdown-menu">
-                  @for(child of item.children; track $index){
-                    <li>
-                      <a class="dropdown-item" [routerLink]="child.link">{{
-                        child.title
-                      }}</a>
-                    </li> 
-                  }
-                </ul>
+          <li class="nav-item" [ngClass]="{ 'has-dropdown': item.children }">
+            <a class="nav-link" [routerLink]="item.link">{{ item.title }}</a>
+
+            <!-- Agar menyu ichida qo'shimcha bo'limlar bo'lsa -->
+            @if(item.children){
+            <ul class="dropdown-menu">
+              @for(child of item.children; track $index){
+              <li>
+                <a class="dropdown-item" [routerLink]="child.link">{{
+                  child.title
+                }}</a>
+              </li>
               }
-            </li>
+            </ul>
+            }
+          </li>
           }
         </ul>
       </div>
     </div>
 
-
-  <div class="gototop js-top">
-    <a href="#" class="js-gotop"><i class="fa-solid fa-arrow-up"></i></a>
-  </div>
-
+    <div class="gototop js-top">
+      <a href="#" class="js-gotop"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
   </nav>
 </div>

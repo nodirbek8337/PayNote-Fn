@@ -1,9 +1,29 @@
 .footer-wrapper {
+<<<<<<< HEAD
+  height: 250px;
+=======
+>>>>>>> aa68675f3080c422af5dc512eeb0b48636982aa1
   width: 100%;
   background-image: url("../../../../assets/img_bg_3.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+<<<<<<< HEAD
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+
+  .company-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33%;
+    padding: 0 3.5rem;
+
+=======
   height: 250px;
 }
 
@@ -20,6 +40,7 @@
     width: 33%;
     padding: 0 3.5rem;
 
+>>>>>>> aa68675f3080c422af5dc512eeb0b48636982aa1
     img {
       width: 110px;
       height: 110px;
