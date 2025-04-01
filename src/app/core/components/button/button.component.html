@@ -2,6 +2,7 @@
   [type]="buttonType"
   class="animated-btn {{ buttonClass }}" 
   [ngClass]="{ 'clicked': isClicked }"
+  [ngStyle]="{ 'width': buttonWidth }"
   (click)="onClick($event)">
     @if(link){
       <a [routerLink]="linkUrl" class="animated-link-a">

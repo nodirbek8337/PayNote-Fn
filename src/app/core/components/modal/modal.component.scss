@@ -1,0 +1,38 @@
+.kep-modal {
+  position: fixed;
+  z-index: 1100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.kep-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  min-width: 500px;
+  width: 30%;
+  height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.kep-modal-header {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.kep-modal-body {
+  padding: 20px 0;
+}
+
+.kep-modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
