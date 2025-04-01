@@ -1,6 +1,7 @@
 <app-navbar></app-navbar>
  <div class="route">
-    <router-outlet></router-outlet>
+   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+   <router-outlet></router-outlet>
  </div>
 
 <app-footer></app-footer>
