@@ -45,6 +45,7 @@ export class ProfessorComponent implements OnInit {
       position: [''],
       department: [''],
       university: [''],
+      imageUrl: [''],
       contact: this.fb.group({
         email: [''],
         officePhone: [''],
@@ -94,6 +95,7 @@ export class ProfessorComponent implements OnInit {
         position: professor.position,
         department: professor.department,
         university: professor.university,
+        imageUrl: professor.imageUrl,
         contact: {
           email: professor.contact.email,
           officePhone: professor.contact.officePhone,

@@ -13,21 +13,29 @@
       </div>
           <!-- //////////////////////////////// -->
           <div class="col-md-8 content">
+            <div class="add-btn text-end">
+              <kep-button 
+                (buttonClick)="openModal()" 
+                buttonText="Qo'shish" 
+                buttonType="button" 
+                buttonWidth="120px">
+              </kep-button>
+            </div>
             <!-- //////////////////////////////////////////////////////////// -->
             <div *ngFor="let prof of professors" class="row mb-5">
               <div class="img col-md-3 text-center">
-                <img [src]="prof.image" class="img-responsive" />
+                <img [src]="prof?.imageUrl" class="img-responsive" />
               </div>
               <div class="col-md-9">
-                <h1>{{ prof.nameRole }}</h1>
+                <h1>{{ prof?.fullName }}</h1>
             
                 <div class="prof_detail"><b>Experience</b><br/></div>
                 <div class="col-md-12">
                   <table class="table table-striped">
-                    <tr *ngFor="let exp of prof.experiences" class="dotted">
-                      <td class="contact_info-main">{{ exp.year }}</td>
-                      <td class="contact_info-mainn">{{ exp.title }}</td>
-                      <td class="contact_info">{{ exp.description }}</td>
+                    <tr *ngFor="let exp of prof?.career" class="dotted">
+                      <td class="contact_info-main">{{ exp?.year }}</td>
+                      <td class="contact_info-mainn">{{ exp?.position }}</td>
+                      <td class="contact_info">{{ exp?.university }}</td>
                     </tr>
                   </table>
                 </div>
@@ -36,19 +44,170 @@
                 <table class="contact-information">
                   <tr>
                     <th class="color">Period</th>
-                    <th>{{prof.workYear}}</th>
+                    <th>{{prof?.contact?.period}}</th>
                   </tr>
                   <tr>
                     <td class="color">E-mail</td>
-                    <td>{{prof.workMail}}</td>
+                    <td>{{prof?.contact?.email}}</td>
                   </tr>
                 </table>
               </div>
+              <div class="add-btn text-end">
+                <kep-button 
+                  (buttonClick)="openModal(prof)" 
+                  buttonText="Yangilash" 
+                  buttonType="button" 
+                  buttonWidth="120px">
+                </kep-button>
+      
+                <kep-button 
+                  style="margin-left: 8px;" 
+                  (buttonClick)="deleteProfessor(prof)" 
+                  buttonText="O'chirish" 
+                  buttonType="button" 
+                  buttonWidth="120px">
+                </kep-button>
+              </div>
             </div>
-            
             <!-- class="col-md-8 table-cell" pastda -->
           </div>
+          <app-modal 
+            [modalShow]="modalShow" 
+            [modalTitle]="currentProfessor ? 'Yangilash' : 'Qo\'shish'" 
+            (modalClose)="modalShow = $event">
+            
+            <div class="kep-modal-body">
+              <form [formGroup]="professorForm" (ngSubmit)="submitForm()">
 
+                <!-- Full Name -->
+                <app-input 
+                  type="text" 
+                  placeholder="Full Name" 
+                  formControlName="fullName">
+                </app-input>
+
+                <!-- Type -->
+                <app-input 
+                  type="text" 
+                  placeholder="Type" 
+                  formControlName="type">
+                </app-input>
+
+                <!-- Position -->
+                <app-input 
+                  type="text" 
+                  placeholder="Position" 
+                  formControlName="position">
+                </app-input>
+
+                <!-- Department -->
+                <app-input 
+                  type="text" 
+                  placeholder="Department" 
+                  formControlName="department">
+                </app-input>
+
+                <!-- University -->
+                <app-input 
+                  type="text" 
+                  placeholder="University" 
+                  formControlName="university">
+                </app-input>
+
+                <app-input 
+                  type="text" 
+                  placeholder="imageUrl" 
+                  formControlName="imageUrl">
+                </app-input>
+
+                <!-- Contact Details -->
+                <div formGroupName="contact">
+                  <app-input type="email" placeholder="Email" formControlName="email"></app-input>
+                  <app-input type="text" placeholder="Office Phone" formControlName="officePhone"></app-input>
+                  <app-input type="text" placeholder="Cell Phone" formControlName="cellPhone"></app-input>
+                  <app-input type="text" placeholder="Office Fax" formControlName="officeFax"></app-input>
+                  <app-input type="text" placeholder="Period" formControlName="period"></app-input>
+                </div>
+
+                <!-- Research Areas -->
+                <h3>Research Areas</h3>
+                <div formArrayName="researchAreas">
+                  <div *ngFor="let area of researchAreas.controls; let i = index">
+                    <app-input 
+                      type="text" 
+                      placeholder="Research Area" 
+                      [formControlName]="i">
+                    </app-input>
+
+                    <kep-button 
+                      buttonText="Remove" 
+                      buttonType="button" 
+                      buttonWidth="100px"
+                      (buttonClick)="removeItem(researchAreas, i)">
+                    </kep-button>
+                  </div>
+                  <kep-button 
+                    buttonText="Add Research Area" 
+                    buttonType="button" 
+                    buttonWidth="180px"
+                    (buttonClick)="addItem(researchAreas)">
+                  </kep-button>
+                </div>
+
+                <!-- Education -->
+                <h3>Education</h3>
+                <div formArrayName="education">
+                  <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i">
+                    <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+                    <app-input type="text" placeholder="University" formControlName="university"></app-input>
+                    <app-input type="text" placeholder="Major" formControlName="major"></app-input>
+                    <app-input type="text" placeholder="Degree" formControlName="degree"></app-input>
+                    <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(education, i)"></kep-button>
+                  </div>
+                  <kep-button buttonText="Add Education" buttonType="button" buttonWidth="180px" (buttonClick)="addEducation()"></kep-button>
+                </div>
+
+                <!-- Career -->
+                <h3>Career</h3>
+                <div formArrayName="career">
+                  <div *ngFor="let careerItem of career.controls; let i = index" [formGroupName]="i">
+                    <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+                    <app-input type="text" placeholder="Position" formControlName="position"></app-input>
+                    <app-input type="text" placeholder="University" formControlName="university"></app-input>
+                    <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(career, i)"></kep-button>
+                  </div>
+                  <kep-button buttonText="Add Career" buttonType="button" buttonWidth="180px" (buttonClick)="addCareer()"></kep-button>
+                </div>
+
+                <!-- Awards -->
+                <h3>Awards</h3>
+                <div formArrayName="awards">
+                  <div *ngFor="let award of awards.controls; let i = index" [formGroupName]="i">
+                    <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+                    <app-input type="text" placeholder="Title" formControlName="title"></app-input>
+                    <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(awards, i)"></kep-button>
+                  </div>
+                  <kep-button buttonText="Add Award" buttonType="button" buttonWidth="180px" (buttonClick)="addAward()"></kep-button>
+                </div>
+
+                <div class="modal-footer">
+                  <kep-button 
+                    buttonText="Yopish" 
+                    buttonType="button" 
+                    buttonWidth="120px"
+                    (buttonClick)="closeModal()">
+                  </kep-button>
+
+                  <kep-button 
+                    buttonText="Saqlash" 
+                    buttonType="submit" 
+                    buttonWidth="120px"
+                    (buttonClick)="submitForm()">
+                  </kep-button>
+                </div>
+              </form>
+            </div>
+          </app-modal>
           <!--  -->
 
           <div class="col-md-2 right-content">
