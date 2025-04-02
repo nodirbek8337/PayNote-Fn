@@ -14,7 +14,9 @@ export class AppComponent {
 
   constructor(private loadingService: LoadingService) {
     this.loadingService.loaderState$.subscribe(state => {
-      this.isLoading = state;
+      setTimeout(() => {
+        this.isLoading = state;
+      });
     });
   }
 }

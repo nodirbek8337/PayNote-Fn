@@ -13,134 +13,293 @@
 </div>
     <div class="col-md-8 content">
       <!-- //////////////////////////////////////////////////////////// -->
-      <div class="row">
-        <div class="img col-md-3 text-center">
-          <img [src]="professor.image" class="img-responsive" />
-          <!-- <br><br> -->
+      <div class="add-btn text-end">
+        <kep-button 
+          (buttonClick)="openModal()" 
+          buttonText="Qo'shish" 
+          buttonType="button" 
+          buttonWidth="120px">
+        </kep-button>
+      </div>
+      <div *ngFor="let professor of professors">
+        <div class="row">
+          <div class="img col-md-3 text-center">
+            <img [src]="professor?.imageUrl" class="img-responsive" />
+            <!-- <br><br> -->
+          </div>
+
+          <div class="col-md-9">
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <h1>{{ professor?.fullName }}</h1>
+
+                    <div class="prof_detail">
+                      <p>{{ professor?.position }},</p>
+                      <p>{{ professor?.department }}</p>
+                      <p>{{ professor?.university }}</p>
+                      <br />
+
+                      <b>Research Area:</b><br />
+                      <span
+                        class="research-area"
+                        *ngFor="let area of professor?.researchAreas"
+                      >
+                        - {{ area }} <br />
+                      </span>
+                      <!-- <br> -->
+                    </div>
+
+                    <b size="4">Contact Informations</b><br />
+                    <table class="col-md-12 table-tabs">
+                      <tbody>
+                        <tr>
+                          <td class="contact_info-main">Address</td>
+                          <td class="contact_info col-md-10">
+                            {{ professor?.contact?.address }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="contact_info-main">E-mail</td>
+                          <td class="contact_info">
+                            {{ professor?.contact?.email }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="contact_info-main">Office</td>
+                          <td class="contact_info">
+                            {{ professor?.contact?.officePhone }}
+                            <br />
+                            {{ professor?.contact?.officeFax }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="contact_info-main">Cell</td>
+                          <td class="contact_info">
+                            {{ professor?.contact?.cellPhone }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="col-md-9">
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <h1>{{ professor.nameRole }}</h1>
+        <!-- //////////////////////////////////////////////// -->
 
-                  <div class="prof_detail">
-                    <p>{{ professor.position }},</p>
-                    <p>{{ professor.department }}</p>
-                    <p>{{ professor.university }}</p>
-                    <br />
+        <h3>*Educational Information</h3>
 
-                    <b>Research Area:</b><br />
-                    <span
-                      class="research-area"
-                      *ngFor="let area of professor.researchAreas"
-                    >
-                      - {{ area }} <br />
-                    </span>
-                    <!-- <br> -->
-                  </div>
+        <table class="educational-information">
+          <tbody>
+            <tr>
+              <th class="th1 table-h"><b>Year</b></th>
+              <th class="th2 table-h"><b>University</b></th>
+              <th class="th3 table-h"><b>Major</b></th>
+              <th class="th3 table-h1"><b>Degree</b></th>
+            </tr>
 
-                  <b size="4">Contact Informations</b><br />
-                  <table class="col-md-12 table-tabs">
-                    <tbody>
-                      <tr>
-                        <td class="contact_info-main">Address</td>
-                        <td class="contact_info col-md-10">
-                          {{ professor.contact.address }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="contact_info-main">E-mail</td>
-                        <td class="contact_info">
-                          {{ professor.contact.email }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="contact_info-main">Office</td>
-                        <td class="contact_info">
-                          {{ professor.contact.office }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="contact_info-main">Cell</td>
-                        <td class="contact_info">
-                          {{ professor.contact.cell }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <tr *ngFor="let edu of professor?.education">
+              <td class="th1">{{edu?.year}}</td>
+              <td class="th2">{{edu?.university}}</td>
+              <td class="th3 table-h"> {{edu?.major}} </td>
+              <td class="th3 table-h1"> {{edu?.degree}} </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- /*/*/*/*/************************** -->
+        <h3>*Career Information</h3>
+
+        <table class="educational-information">
+          <tbody>
+            <tr>
+              <th class="th1"><b>Year</b></th>
+              <th class="th1"><b>Career</b></th>
+              <th class="th2"><b>University</b></th>
+            </tr>
+            <tr *ngFor="let care of professor?.career">
+              <td class="th1">{{care?.year}}</td>
+              <td class="th1">{{care?.position}}</td>
+              <td class="th2">{{care?.university}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- /*///////////////////////////////////////// -->
+
+        <h3>*Awards</h3>
+
+        <table class="educational-information">
+          <tbody>
+            <tr>
+              <th class="th4"><b>Year</b></th>
+              <th class="th5"><b>	Award Title</b></th>
+            </tr>
+
+            <tr *ngFor="let awrds of professor?.awards">
+              <td class="th4">{{awrds?.year}}</td>
+              <td class="th5">{{awrds?.title}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+        <div class="add-btn text-end">
+          <kep-button 
+            (buttonClick)="openModal(professor)" 
+            buttonText="Yangilash" 
+            buttonType="button" 
+            buttonWidth="120px">
+          </kep-button>
+
+          <kep-button 
+            style="margin-left: 8px;" 
+            (buttonClick)="deleteProfessor(professor)" 
+            buttonText="O'chirish" 
+            buttonType="button" 
+            buttonWidth="120px">
+          </kep-button>
         </div>
       </div>
-
-      <!-- //////////////////////////////////////////////// -->
-
-      <h3>*Educational Information</h3>
-
-      <table class="educational-information">
-        <tbody>
-          <tr *ngFor="let titl of professor.title">
-            <th class="th1 table-h"><b>{{titl.year}}</b></th>
-            <th class="th2 table-h"><b>{{titl.university}}</b></th>
-            <th class="th3 table-h"><b>{{titl.major}}</b></th>
-            <th class="th3 table-h1"><b>{{titl.degree}}</b></th>
-          </tr>
-
-          <tr *ngFor="let EdI of professor.EducationalInformations">
-            <td class="th1">{{EdI.year}}</td>
-            <td class="th2">{{EdI.university}}</td>
-            <td class="th3 table-h"> {{EdI.major}} </td>
-            <td class="th3 table-h1"> {{EdI.degree}} </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- /*/*/*/*/************************** -->
-      <h3>*Career Information</h3>
-
-      <table class="educational-information">
-        <tbody>
-          <tr *ngFor="let titl of professor.title">
-            <th class="th1"><b>{{titl.year}}</b></th>
-            <th class="th1"><b>{{titl.career}}</b></th>
-            <th class="th2"><b>{{titl.university}}</b></th>
-          </tr>
-          <tr *ngFor="let CaI of professor.CareerInformations">
-            <td class="th1">{{CaI.year}}</td>
-            <td class="th1">{{CaI.career}}</td>
-            <td class="th2">{{CaI.universuty}}</td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- /*///////////////////////////////////////// -->
-
-      <h3>*Awards</h3>
-
-      <table class="educational-information">
-        <tbody>
-          <tr *ngFor="let titl of professor.title">
-            <th class="th4"><b>{{titl.year}}</b></th>
-            <th class="th5"><b>{{titl.awardTitle}}</b></th>
-          </tr>
-
-          <tr *ngFor="let awrds of professor.Awards">
-            <td class="th4">{{awrds.year}}</td>
-            <td class="th5">{{awrds.title}}</td>
-          </tr>
-
-        </tbody>
-      </table>
-
       <!-- /////////////////////////////////////////////// -->
     </div>
+    
 
     <div class="col-md-2 right-content">
       <h2></h2>
     </div>
   </div>
+  <app-modal 
+  [modalShow]="modalShow" 
+  [modalTitle]="currentProfessor ? 'Yangilash' : 'Qo\'shish'" 
+  (modalClose)="modalShow = $event">
+  
+  <div class="kep-modal-body">
+    <form [formGroup]="professorForm" (ngSubmit)="submitForm()">
+
+      <!-- Full Name -->
+      <app-input 
+        type="text" 
+        placeholder="Full Name" 
+        formControlName="fullName">
+      </app-input>
+
+      <!-- Type -->
+      <app-input 
+        type="text" 
+        placeholder="Type" 
+        formControlName="type">
+      </app-input>
+
+      <!-- Position -->
+      <app-input 
+        type="text" 
+        placeholder="Position" 
+        formControlName="position">
+      </app-input>
+
+      <!-- Department -->
+      <app-input 
+        type="text" 
+        placeholder="Department" 
+        formControlName="department">
+      </app-input>
+
+      <!-- University -->
+      <app-input 
+        type="text" 
+        placeholder="University" 
+        formControlName="university">
+      </app-input>
+
+      <!-- Contact Details -->
+      <div formGroupName="contact">
+        <app-input type="email" placeholder="Email" formControlName="email"></app-input>
+        <app-input type="text" placeholder="Office Phone" formControlName="officePhone"></app-input>
+        <app-input type="text" placeholder="Cell Phone" formControlName="cellPhone"></app-input>
+        <app-input type="text" placeholder="Office Fax" formControlName="officeFax"></app-input>
+        <app-input type="text" placeholder="Period" formControlName="period"></app-input>
+      </div>
+
+      <!-- Research Areas -->
+      <h3>Research Areas</h3>
+      <div formArrayName="researchAreas">
+        <div *ngFor="let area of researchAreas.controls; let i = index">
+          <app-input 
+            type="text" 
+            placeholder="Research Area" 
+            [formControlName]="i">
+          </app-input>
+
+          <kep-button 
+            buttonText="Remove" 
+            buttonType="button" 
+            buttonWidth="100px"
+            (buttonClick)="removeItem(researchAreas, i)">
+          </kep-button>
+        </div>
+        <kep-button 
+          buttonText="Add Research Area" 
+          buttonType="button" 
+          buttonWidth="180px"
+          (buttonClick)="addItem(researchAreas)">
+        </kep-button>
+      </div>
+
+      <!-- Education -->
+      <h3>Education</h3>
+      <div formArrayName="education">
+        <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i">
+          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+          <app-input type="text" placeholder="University" formControlName="university"></app-input>
+          <app-input type="text" placeholder="Major" formControlName="major"></app-input>
+          <app-input type="text" placeholder="Degree" formControlName="degree"></app-input>
+          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(education, i)"></kep-button>
+        </div>
+        <kep-button buttonText="Add Education" buttonType="button" buttonWidth="180px" (buttonClick)="addEducation()"></kep-button>
+      </div>
+
+      <!-- Career -->
+      <h3>Career</h3>
+      <div formArrayName="career">
+        <div *ngFor="let careerItem of career.controls; let i = index" [formGroupName]="i">
+          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+          <app-input type="text" placeholder="Position" formControlName="position"></app-input>
+          <app-input type="text" placeholder="University" formControlName="university"></app-input>
+          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(career, i)"></kep-button>
+        </div>
+        <kep-button buttonText="Add Career" buttonType="button" buttonWidth="180px" (buttonClick)="addCareer()"></kep-button>
+      </div>
+
+      <!-- Awards -->
+      <h3>Awards</h3>
+      <div formArrayName="awards">
+        <div *ngFor="let award of awards.controls; let i = index" [formGroupName]="i">
+          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
+          <app-input type="text" placeholder="Title" formControlName="title"></app-input>
+          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(awards, i)"></kep-button>
+        </div>
+        <kep-button buttonText="Add Award" buttonType="button" buttonWidth="180px" (buttonClick)="addAward()"></kep-button>
+      </div>
+
+      <div class="modal-footer">
+        <kep-button 
+          buttonText="Yopish" 
+          buttonType="button" 
+          buttonWidth="120px"
+          (buttonClick)="closeModal()">
+        </kep-button>
+
+        <kep-button 
+          buttonText="Saqlash" 
+          buttonType="submit" 
+          buttonWidth="120px"
+          (buttonClick)="submitForm()">
+        </kep-button>
+      </div>
+    </form>
+  </div>
+</app-modal>
 </div>

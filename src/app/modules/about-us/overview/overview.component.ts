@@ -14,7 +14,16 @@ import { LoadingService } from '../../../core/services/loading.service';
   standalone: true,
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
-  imports:[RouterModule, HttpClientModule, ReactiveFormsModule, InputComponent, ButtonComponent, ModalComponent, NgFor, NgIf]
+  imports: [
+    RouterModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    ModalComponent,
+    NgFor,
+    NgIf,
+  ],
 })
 export class OverviewComponent implements OnInit {
   _http = inject(HttpClient);
@@ -27,7 +36,7 @@ export class OverviewComponent implements OnInit {
 
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
     this.overviewForm = this.fb.group({
-      title: ['', Validators.required],
+      title: [''],
       introduction: this.fb.array([this.fb.control('')]), 
       researchFocus: this.fb.array([this.createResearchFocus()]),
       conclusion: this.fb.array([this.fb.control('')]), 
