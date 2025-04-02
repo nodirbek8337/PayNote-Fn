@@ -1,0 +1,92 @@
+{
+  "fullName": "Prof. Sungyoung Lee",
+  "type": "regular",
+  "position": "Director of Ubiquitous Computing Laboratory",
+  "department": "Department of Computer Science and Engineering",
+  "university": "Kyung Hee University, Korea",
+  "researchAreas": [
+    "Ubiquitous Computing",
+    "Context-aware Middleware",
+    "Wireless Sensor Network",
+    "Security Systems",
+    "Real-time Embedded Systems",
+    "Distributed Systems",
+    "Intelligent Computing"
+  ],
+  "contact": {
+    "address": "446-701, Room 313, Dept. of Computer Engineering, Kyung Hee University, Seocheon-dong, Giheung-gu, Yongin-si, Gyeonggi-do, Korea",
+    "email": "sylee@oslab.khu.ac.kr",
+    "officePhone": "+82-31-201-2514",
+    "officeFax": "+82-31-202-2520",
+    "cellPhone": "+82-10-7345-1441",
+    "period": ""
+  },
+  "education": [
+    {
+      "year": "1974.3 - 1978.2",
+      "university": "Korea University",
+      "major": "Material Science",
+      "degree": "Bachelor"
+    },
+    {
+      "year": "1984.8 - 1985.12",
+      "university": "Fairleigh Dickinson University, New Jersey, U.S.A.",
+      "major": "Computer Science",
+      "degree": "Master"
+    },
+    {
+      "year": "1986.1 - 1987.12",
+      "university": "Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.",
+      "major": "Computer Science",
+      "degree": "Master"
+    },
+    {
+      "year": "1987.12 - 1991.12",
+      "university": "Illinois Institute of Technology(IIT), Chicago, Illinois, U.S.A.",
+      "major": "Computer Science",
+      "degree": "Ph.D"
+    }
+  ],
+  "career": [
+    {
+      "year": "1990.9 - 1992.8",
+      "position": "Full-Time Lecturer",
+      "university": "Governors State University, University Park, Illinois, U.S.A."
+    },
+    {
+      "year": "1992.9 - 1993.8",
+      "position": "Assistant Professor",
+      "university": "Governors State University, University Park, Illinois, U.S.A."
+    },
+    {
+      "year": "1993.9 - 1996.9",
+      "position": "Assistant Professor",
+      "university": "Kyung Hee University, Korea"
+    },
+    {
+      "year": "1996.10 - 2001.9",
+      "position": "Associate Professor",
+      "university": "Kyung Hee University, Korea"
+    },
+    {
+      "year": "2001.10 - Current",
+      "position": "Professor",
+      "university": "Kyung Hee University, Korea"
+    }
+  ],
+  "awards": [
+    {
+      "year": "2016",
+      "title": "Kyung Hee Fellow"
+    },
+    {
+      "year": "2015",
+      "title": "KIISE Gaheon Academic Award"
+    },
+    {
+      "year": "2006",
+      "title": "KIPS Academic Award"
+    }
+  ],
+  "imageUrl": "https://www.khu.ac.kr/professor/sungyoung-lee.jpg"
+}
