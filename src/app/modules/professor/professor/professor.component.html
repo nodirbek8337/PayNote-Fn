@@ -2,23 +2,26 @@
   <div class="row">
     <!-- Content left -->
     <div class="col-md-2 sidebar">
-      <a routerLink="/professor/professor" class="button cyan">
-        Professor</a>
-      <a routerLink="/professor/industrial-professor"
-        class="button cyan">Industrial Professor</a>
-      <a routerLink="/professor/collaboration-professor"
-        class="button">Collaboration professor</a>
-      <a routerLink="/professor/visiting-professor"
-        class="button cyan">Visiting professor</a>
-</div>
+      <a routerLink="/professor/professor" class="button cyan"> Professor</a>
+      <a routerLink="/professor/industrial-professor" class="button cyan"
+        >Industrial Professor</a
+      >
+      <a routerLink="/professor/collaboration-professor" class="button"
+        >Collaboration professor</a
+      >
+      <a routerLink="/professor/visiting-professor" class="button cyan"
+        >Visiting professor</a
+      >
+    </div>
     <div class="col-md-8 content">
       <!-- //////////////////////////////////////////////////////////// -->
       <div class="add-btn text-end">
-        <kep-button 
-          (buttonClick)="openModal()" 
-          buttonText="Qo'shish" 
-          buttonType="button" 
-          buttonWidth="120px">
+        <kep-button
+          (buttonClick)="openModal()"
+          buttonText="Qo'shish"
+          buttonType="button"
+          buttonWidth="120px"
+        >
         </kep-button>
       </div>
       <div *ngFor="let professor of professors">
@@ -103,10 +106,10 @@
             </tr>
 
             <tr *ngFor="let edu of professor?.education">
-              <td class="th1">{{edu?.year}}</td>
-              <td class="th2">{{edu?.university}}</td>
-              <td class="th3 table-h"> {{edu?.major}} </td>
-              <td class="th3 table-h1"> {{edu?.degree}} </td>
+              <td class="th1">{{ edu?.year }}</td>
+              <td class="th2">{{ edu?.university }}</td>
+              <td class="th3 table-h">{{ edu?.major }}</td>
+              <td class="th3 table-h1">{{ edu?.degree }}</td>
             </tr>
           </tbody>
         </table>
@@ -122,9 +125,9 @@
               <th class="th2"><b>University</b></th>
             </tr>
             <tr *ngFor="let care of professor?.career">
-              <td class="th1">{{care?.year}}</td>
-              <td class="th1">{{care?.position}}</td>
-              <td class="th2">{{care?.university}}</td>
+              <td class="th1">{{ care?.year }}</td>
+              <td class="th1">{{ care?.position }}</td>
+              <td class="th2">{{ care?.university }}</td>
             </tr>
           </tbody>
         </table>
@@ -136,176 +139,277 @@
           <tbody>
             <tr>
               <th class="th4"><b>Year</b></th>
-              <th class="th5"><b>	Award Title</b></th>
+              <th class="th5"><b> Award Title</b></th>
             </tr>
 
             <tr *ngFor="let awrds of professor?.awards">
-              <td class="th4">{{awrds?.year}}</td>
-              <td class="th5">{{awrds?.title}}</td>
+              <td class="th4">{{ awrds?.year }}</td>
+              <td class="th5">{{ awrds?.title }}</td>
             </tr>
-
           </tbody>
         </table>
         <div class="add-btn text-end">
-          <kep-button 
-            (buttonClick)="openModal(professor)" 
-            buttonText="Yangilash" 
-            buttonType="button" 
-            buttonWidth="120px">
+          <kep-button
+            (buttonClick)="openModal(professor)"
+            buttonText="Yangilash"
+            buttonType="button"
+            buttonWidth="120px"
+          >
           </kep-button>
 
-          <kep-button 
-            style="margin-left: 8px;" 
-            (buttonClick)="deleteProfessor(professor)" 
-            buttonText="O'chirish" 
-            buttonType="button" 
-            buttonWidth="120px">
+          <kep-button
+            style="margin-left: 8px"
+            (buttonClick)="deleteProfessor(professor)"
+            buttonText="O'chirish"
+            buttonType="button"
+            buttonWidth="120px"
+          >
           </kep-button>
         </div>
       </div>
       <!-- /////////////////////////////////////////////// -->
     </div>
-    
 
     <div class="col-md-2 right-content">
       <h2></h2>
     </div>
   </div>
-  <app-modal 
-  [modalShow]="modalShow" 
-  [modalTitle]="currentProfessor ? 'Yangilash' : 'Qo\'shish'" 
-  (modalClose)="modalShow = $event">
-  
-  <div class="kep-modal-body">
-    <form [formGroup]="professorForm" (ngSubmit)="submitForm()">
+  <app-modal
+    [modalShow]="modalShow"
+    [modalTitle]="currentProfessor ? 'Yangilash' : 'Qo\'shish'"
+    (modalClose)="modalShow = $event"
+  >
+    <div class="kep-modal-body">
+      <form [formGroup]="professorForm" (ngSubmit)="submitForm()">
+        <!-- Full Name -->
+        <app-input
+          type="text"
+          placeholder="Full Name"
+          formControlName="fullName"
+        >
+        </app-input>
 
-      <!-- Full Name -->
-      <app-input 
-        type="text" 
-        placeholder="Full Name" 
-        formControlName="fullName">
-      </app-input>
+        <!-- Type -->
+        <app-input type="text" placeholder="Type" formControlName="type">
+        </app-input>
 
-      <!-- Type -->
-      <app-input 
-        type="text" 
-        placeholder="Type" 
-        formControlName="type">
-      </app-input>
+        <!-- Position -->
+        <app-input
+          type="text"
+          placeholder="Position"
+          formControlName="position"
+        >
+        </app-input>
 
-      <!-- Position -->
-      <app-input 
-        type="text" 
-        placeholder="Position" 
-        formControlName="position">
-      </app-input>
+        <!-- Department -->
+        <app-input
+          type="text"
+          placeholder="Department"
+          formControlName="department"
+        >
+        </app-input>
 
-      <!-- Department -->
-      <app-input 
-        type="text" 
-        placeholder="Department" 
-        formControlName="department">
-      </app-input>
+        <!-- University -->
+        <app-input
+          type="text"
+          placeholder="University"
+          formControlName="university"
+        >
+        </app-input>
 
-      <!-- University -->
-      <app-input 
-        type="text" 
-        placeholder="University" 
-        formControlName="university">
-      </app-input>
+        <app-input
+          type="text"
+          placeholder="imageUrl"
+          formControlName="imageUrl"
+        >
+        </app-input>
 
-      <app-input 
-        type="text" 
-        placeholder="imageUrl" 
-        formControlName="imageUrl">
-      </app-input>
+        <!-- Contact Details -->
+        <div formGroupName="contact">
+          <app-input
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+          ></app-input>
+          <app-input
+            type="text"
+            placeholder="Office Phone"
+            formControlName="officePhone"
+          ></app-input>
+          <app-input
+            type="text"
+            placeholder="Cell Phone"
+            formControlName="cellPhone"
+          ></app-input>
+          <app-input
+            type="text"
+            placeholder="Office Fax"
+            formControlName="officeFax"
+          ></app-input>
+          <app-input
+            type="text"
+            placeholder="Period"
+            formControlName="period"
+          ></app-input>
+        </div>
 
-      <!-- Contact Details -->
-      <div formGroupName="contact">
-        <app-input type="email" placeholder="Email" formControlName="email"></app-input>
-        <app-input type="text" placeholder="Office Phone" formControlName="officePhone"></app-input>
-        <app-input type="text" placeholder="Cell Phone" formControlName="cellPhone"></app-input>
-        <app-input type="text" placeholder="Office Fax" formControlName="officeFax"></app-input>
-        <app-input type="text" placeholder="Period" formControlName="period"></app-input>
-      </div>
+        <!-- Research Areas -->
+        <h3>Research Areas</h3>
+        <div formArrayName="researchAreas">
+          <div *ngFor="let area of researchAreas.controls; let i = index">
+            <app-input
+              type="text"
+              placeholder="Research Area"
+              [formControlName]="i"
+            >
+            </app-input>
 
-      <!-- Research Areas -->
-      <h3>Research Areas</h3>
-      <div formArrayName="researchAreas">
-        <div *ngFor="let area of researchAreas.controls; let i = index">
-          <app-input 
-            type="text" 
-            placeholder="Research Area" 
-            [formControlName]="i">
-          </app-input>
-
-          <kep-button 
-            buttonText="Remove" 
-            buttonType="button" 
-            buttonWidth="100px"
-            (buttonClick)="removeItem(researchAreas, i)">
+            <kep-button
+              buttonText="Remove"
+              buttonType="button"
+              buttonWidth="100px"
+              (buttonClick)="removeItem(researchAreas, i)"
+            >
+            </kep-button>
+          </div>
+          <kep-button
+            buttonText="Add Research Area"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addItem(researchAreas)"
+          >
           </kep-button>
         </div>
-        <kep-button 
-          buttonText="Add Research Area" 
-          buttonType="button" 
-          buttonWidth="180px"
-          (buttonClick)="addItem(researchAreas)">
-        </kep-button>
-      </div>
 
-      <!-- Education -->
-      <h3>Education</h3>
-      <div formArrayName="education">
-        <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i">
-          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
-          <app-input type="text" placeholder="University" formControlName="university"></app-input>
-          <app-input type="text" placeholder="Major" formControlName="major"></app-input>
-          <app-input type="text" placeholder="Degree" formControlName="degree"></app-input>
-          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(education, i)"></kep-button>
+        <!-- Education -->
+        <h3>Education</h3>
+        <div formArrayName="education">
+          <div
+            *ngFor="let edu of education.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <app-input
+              type="text"
+              placeholder="Year"
+              formControlName="year"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="University"
+              formControlName="university"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="Major"
+              formControlName="major"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="Degree"
+              formControlName="degree"
+            ></app-input>
+            <kep-button
+              buttonText="Remove"
+              buttonType="button"
+              buttonWidth="180px"
+              (buttonClick)="removeItem(education, i)"
+            ></kep-button>
+          </div>
+          <kep-button
+            buttonText="Add Education"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addEducation()"
+          ></kep-button>
         </div>
-        <kep-button buttonText="Add Education" buttonType="button" buttonWidth="180px" (buttonClick)="addEducation()"></kep-button>
-      </div>
 
-      <!-- Career -->
-      <h3>Career</h3>
-      <div formArrayName="career">
-        <div *ngFor="let careerItem of career.controls; let i = index" [formGroupName]="i">
-          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
-          <app-input type="text" placeholder="Position" formControlName="position"></app-input>
-          <app-input type="text" placeholder="University" formControlName="university"></app-input>
-          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(career, i)"></kep-button>
+        <!-- Career -->
+        <h3>Career</h3>
+        <div formArrayName="career">
+          <div
+            *ngFor="let careerItem of career.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <app-input
+              type="text"
+              placeholder="Year"
+              formControlName="year"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="Position"
+              formControlName="position"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="University"
+              formControlName="university"
+            ></app-input>
+            <kep-button
+              buttonText="Remove"
+              buttonType="button"
+              buttonWidth="180px"
+              (buttonClick)="removeItem(career, i)"
+            ></kep-button>
+          </div>
+          <kep-button
+            buttonText="Add Career"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addCareer()"
+          ></kep-button>
         </div>
-        <kep-button buttonText="Add Career" buttonType="button" buttonWidth="180px" (buttonClick)="addCareer()"></kep-button>
-      </div>
 
-      <!-- Awards -->
-      <h3>Awards</h3>
-      <div formArrayName="awards">
-        <div *ngFor="let award of awards.controls; let i = index" [formGroupName]="i">
-          <app-input type="text" placeholder="Year" formControlName="year"></app-input>
-          <app-input type="text" placeholder="Title" formControlName="title"></app-input>
-          <kep-button buttonText="Remove" buttonType="button" buttonWidth="180px" (buttonClick)="removeItem(awards, i)"></kep-button>
+        <!-- Awards -->
+        <h3>Awards</h3>
+        <div formArrayName="awards">
+          <div
+            *ngFor="let award of awards.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <app-input
+              type="text"
+              placeholder="Year"
+              formControlName="year"
+            ></app-input>
+            <app-input
+              type="text"
+              placeholder="Title"
+              formControlName="title"
+            ></app-input>
+            <kep-button
+              buttonText="Remove"
+              buttonType="button"
+              buttonWidth="180px"
+              (buttonClick)="removeItem(awards, i)"
+            ></kep-button>
+          </div>
+          <kep-button
+            buttonText="Add Award"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addAward()"
+          ></kep-button>
         </div>
-        <kep-button buttonText="Add Award" buttonType="button" buttonWidth="180px" (buttonClick)="addAward()"></kep-button>
-      </div>
 
-      <div class="modal-footer">
-        <kep-button 
-          buttonText="Yopish" 
-          buttonType="button" 
-          buttonWidth="120px"
-          (buttonClick)="closeModal()">
-        </kep-button>
+        <div class="modal-footer">
+          <kep-button
+            buttonText="Yopish"
+            buttonType="button"
+            buttonWidth="120px"
+            (buttonClick)="closeModal()"
+          >
+          </kep-button>
 
-        <kep-button 
-          buttonText="Saqlash" 
-          buttonType="submit" 
-          buttonWidth="120px"
-          (buttonClick)="submitForm()">
-        </kep-button>
-      </div>
-    </form>
-  </div>
-</app-modal>
+          <kep-button
+            buttonText="Saqlash"
+            buttonType="submit"
+            buttonWidth="120px"
+            (buttonClick)="submitForm()"
+          >
+          </kep-button>
+        </div>
+      </form>
+    </div>
+  </app-modal>
 </div>

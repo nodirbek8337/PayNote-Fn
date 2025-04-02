@@ -1,80 +1,261 @@
-import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../../environments/environments';
+import { ButtonComponent } from '../../../core/components/button/button.component';
+import { InputComponent } from '../../../core/components/input/input.component';
+import { ModalComponent } from '../../../core/components/modal/modal.component';
+import { NgFor } from '@angular/common';
+import { LoadingService } from '../../../core/services/loading.service';
 
 @Component({
   selector: 'app-collaboration-professor',
   standalone: true,
   templateUrl: './collaboration-professor.component.html',
   styleUrl: './collaboration-professor.component.scss',
-  imports: [NgFor, RouterModule]
+  imports: [
+    RouterModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    ModalComponent,
+    NgFor
+  ]
 })
 export class CollaborationProfessorComponent implements OnInit{
-  contactBool: Boolean = true;
+  _http = inject(HttpClient);
+  professorForm: FormGroup;
 
-  ngOnInit(): void {
-      // if(title === "contact"){
-      //   this.contactBool = false;
-      // }
+  modalShow: boolean = false;
+  professors: any[] = [];
+  currentProfessor: any = null;
+
+  constructor(public fb: FormBuilder, private loadingService: LoadingService) {
+    this.professorForm = this.fb.group({
+      fullName: [''],
+      type: [''],
+      position: [''],
+      department: [''],
+      university: [''],
+      imageUrl: [''],
+      contact: this.fb.group({
+        email: [''],
+        officePhone: [''],
+        cellPhone: [''],
+        officeFax: [''],
+        period: ['']
+      }),
+      researchAreas: this.fb.array([]),
+      education: this.fb.array([]),
+      career: this.fb.array([]),
+      awards: this.fb.array([])
+    });
   }
 
-  professors = [
-    {
-      image: './assets/img/2.jpg',
-      area: 'Research Area :',
-      Research: 'Expert System, Knowledge Maintenance, Live Knowledge.',
-      nameRole: 'Prof.Young Shin Kim',
-      workYear: '2017 ~ Current',
-      Website: 'http://www.utas.edu.au/profiles/staff/ict/byeong-kang',
-        workMail: 'jake0011@gmail.com',
-        desc: [
-        'Dr Byeong Ho Kang, computer scientist, is a Professor in School of Engineering and ICT, University of Tasmania, Australia. He leads the Smart Services and Systems research group of postdoctoral scientists which has carried out fundamental and applied research in research areas, expert systems, Web Services, SNS analysis and smart industry areas. He has served as a chair and steering committee member in many international organizations and during conferences.' 
-      ]
-    },
-    {
-      image: './assets/img/10.jpg',
-      area: 'Research Area :',
-      Research: 'Biomedical Engineering, Activity Recognition, Behaviour Modelling, Mobile based Reminding Solutions.',
-      nameRole: 'Prof.Christopher Nugent',
-      workYear: '2017 ~ Current',
-      Website: 'https://www.ulster.ac.uk/staff/cd-nugent',
-      workMail: 'jake0011@gmail.com',
-      desc: [
-        'Dr Byeong Ho Kang, computer scientist, is a Professor in School of Engineering and ICT, University of Tasmania, Australia. He leads the Smart Services and Systems research group of postdoctoral scientists which has carried out fundamental and applied research in research areas, expert systems, Web Services, SNS analysis and smart industry areas. He has served as a chair and steering committee member in many international organizations and during conferences.' 
-      ]
-    },
-    {
-      image: './assets/img/3.jpg',
-      area: 'Research Area :',
-      Research: 'Wearable, Ubiquitous and Mobile Computing Artificial Intelligence.',
-      nameRole: 'Prof.Christopher Nugent',
-      workYear: '2017 ~ Current',
-      Website: 'http://orestibanos.com/',
+  ngOnInit(): void {
+    this.getProfessors();
+  }
 
-      workMail: 'jake0011@gmail.com',
-      desc: [
-        'Dr Byeong Ho Kang, computer scientist, is a Professor in School of Engineering and ICT, University of Tasmania, Australia. He leads the Smart Services and Systems research group of postdoctoral scientists which has carried out fundamental and applied research in research areas, expert systems, Web Services, SNS analysis and smart industry areas. He has served as a chair and steering committee member in many international organizations and during conferences.' 
-      ]
-    },
-    {
-      image: './assets/img/6.jpg',
-      area: 'Experience:',
-      Research: 'Wearable, Ubiquitous and Mobile Computing Artificial Intelligence.',
-      nameRole: 'Prof.Wajahat Ali Khan',
-      workYear: '2017 ~ Current',
-      Website: 'https://www.linkedin.com/in/anitasantanna',
-      workMail: 'jake0011@gmail.com',
-      experiences: [
-        { year: '2017.08 - present', title: 'Industrial Professor', description: 'Kyung Hee University, Korea' },
-        { year: '2015.10 - 2017.07', title: 'CEO', description: 'Cosbiomatics, Korea' },
-        { year: '2012.03 – 2015.02', title: 'Head of Department', description: 'Kyung Hee University, Korea' },
-        { year: '2006.01 - 2008.12', title: 'Director', description: 'Cosbiomatics, Korea' },
-        { year: '2000.03 - 2005.12', title: 'Head of Department', description: 'Kyung Hee University, Korea' },
-        { year: '1995.05 - 2000.02', title: 'Head of Department', description: 'Cosbiomatics, Korea' },
-        { year: '1995.05 - 2000.02', title: 'Lecturer', description: 'Cosbiomatics, Korea' },
-      ]
-    }
+  getProfessors() {
+    this.loadingService.setLoadingState(true);
+    const params = new HttpParams().set('type', 'collaboration');
+    this._http.get(`${environment.apiUrl}/professors`, { params }).subscribe({
+      next: (res: any) => {
+        this.professors = res;
+      },
+      complete: () => {
+        this.loadingService.setLoadingState(false);
+      },
+      error: (err) => {
+        console.log(err);
+        this.loadingService.setLoadingState(false);
+      }
+    });
+  }
+
+  openModal(professor: any = null): void {
+    this.currentProfessor = professor;
+    this.modalShow = true;
+
+    this.professorForm.reset();
+    this.clearFormArrays();
     
-    // Yana boshqa insonlar
-  ];
+    if (professor) {
+      this.professorForm.patchValue({
+        fullName: professor.fullName,
+        type: professor.type,
+        position: professor.position,
+        department: professor.department,
+        university: professor.university,
+        imageUrl: professor.imageUrl,
+        contact: {
+          email: professor.contact.email,
+          officePhone: professor.contact.officePhone,
+          cellPhone: professor.contact.cellPhone,
+          officeFax: professor.contact.officeFax,
+          period: professor.contact.period
+        }
+      });
+
+      professor.researchAreas.forEach((area: string) => {
+        this.researchAreas.push(this.fb.control(area));
+      });
+
+      professor.education?.forEach((edu: any) => {
+        this.education.push(this.fb.group({
+          year: [edu.year],
+          university: [edu.university],
+          major: [edu.major || ''],
+          degree: [edu.degree || '']
+        }));
+      });
+  
+      professor.career?.forEach((career: any) => {
+        this.career.push(this.fb.group({
+          year: [career.year],
+          position: [career.position],
+          university: [career.university]
+        }));
+      });
+  
+      professor.awards?.forEach((award: any) => {
+        this.awards.push(this.fb.group({
+          year: [award.year],
+          title: [award.title]
+        }));
+      });
+    }
+  }
+
+  submitForm(): void {
+    console.log(this.currentProfessor);
+    
+    if (this.currentProfessor) {
+      this.updateProfessor(this.currentProfessor._id);
+    } else {
+      this.addProfessor();
+    }
+  }
+
+  // Getter methods for form arrays
+  get researchAreas() {
+    return this.professorForm.get('researchAreas') as FormArray;
+  }
+
+  get education() {
+    return this.professorForm.get('education') as FormArray;
+  }
+
+  get career() {
+    return this.professorForm.get('career') as FormArray;
+  }
+
+  get awards() {
+    return this.professorForm.get('awards') as FormArray;
+  }
+
+  addEducation() {
+    this.education.push(this.fb.group({
+      year: [''],
+      university: [''],
+      major: [''],
+      degree: ['']
+    }));
+  }
+  
+  addCareer() {
+    this.career.push(this.fb.group({
+      year: [''],
+      position: [''],
+      university: ['']
+    }));
+  }
+  
+  addAward() {
+    this.awards.push(this.fb.group({
+      year: [''],
+      title: ['']
+    }));
+  }
+
+  addItem(field: FormArray) {
+    field.push(this.fb.control(''));
+  }
+
+  removeItem(field: FormArray, index: number) {
+    field.removeAt(index);
+  }
+
+  clearFormArrays() {
+    this.researchAreas.clear();
+    this.education.clear();
+    this.career.clear();
+    this.awards.clear();
+  }
+
+  closeModal(): void {
+    this.modalShow = false;
+    this.professorForm.reset();
+    this.clearFormArrays();
+  }
+
+  addProfessor(): void {
+    this.loadingService.setLoadingState(true);
+    const professorData = this.professorForm.value;
+    this._http.post(`${environment.apiUrl}/professors`, professorData).subscribe({
+      next: () => {
+        this.modalShow = false;
+        this.getProfessors();
+      },
+      complete: () => {
+        this.loadingService.setLoadingState(false);
+      },
+      error: (err) => {
+        console.log(err);
+        this.loadingService.setLoadingState(false);
+      }
+    });
+  }
+
+  updateProfessor(_id: any): void {
+    this.loadingService.setLoadingState(true);
+    const professorData = this.professorForm.value;
+    this._http.put(`${environment.apiUrl}/professors/${_id}`, professorData).subscribe({
+      next: () => {
+        this.modalShow = false;
+        this.getProfessors();
+      },
+      complete: () => {
+        this.loadingService.setLoadingState(false);
+      },
+      error: (err) => {
+        console.log(err);
+        this.loadingService.setLoadingState(false);
+      }
+    });
+  }
+
+  deleteProfessor(professor: any): void {
+    this.loadingService.setLoadingState(true);
+    this._http.delete(`${environment.apiUrl}/professors/${professor._id}`).subscribe({
+      next: () => {
+        this.getProfessors();
+      },
+      complete: () => {
+        this.loadingService.setLoadingState(false);
+      },
+      error: (err) => {
+        console.log(err);
+        this.loadingService.setLoadingState(false);
+      }
+    });
+  }
 }
