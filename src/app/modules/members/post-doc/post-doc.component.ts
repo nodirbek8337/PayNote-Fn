@@ -32,14 +32,14 @@ import { LoadingService } from '../../../core/services/loading.service';
 })
 export class PostDocComponent implements OnInit {
   _http = inject(HttpClient);
-  professorForm: FormGroup;
+  memberForm: FormGroup;
 
   modalShow: boolean = false;
   members: any[] = [];
   currentProfessor: any = null;
 
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
-    this.professorForm = this.fb.group({
+    this.memberForm = this.fb.group({
       fullName: [''],
       academicStatus: ['post-doc'],
       nationality: [''],
@@ -77,15 +77,15 @@ export class PostDocComponent implements OnInit {
     this.currentProfessor = member;
     this.modalShow = true;
 
-    this.professorForm.reset();
+    this.memberForm.reset();
     this.clearFormArrays();
 
-    this.professorForm.patchValue({
+    this.memberForm.patchValue({
       academicStatus: 'post-doc'
     });
 
     if (member) {
-      this.professorForm.patchValue({
+      this.memberForm.patchValue({
         fullName: member.fullName,
         nationality: member.nationality,
         researchGroup: member.researchGroup,
@@ -113,7 +113,7 @@ export class PostDocComponent implements OnInit {
 
   // Getter methods for form arrays
   get researchAreas() {
-    return this.professorForm.get('researchAreas') as FormArray;
+    return this.memberForm.get('researchAreas') as FormArray;
   }
 
   addItem(field: FormArray) {
@@ -130,13 +130,13 @@ export class PostDocComponent implements OnInit {
 
   closeModal(): void {
     this.modalShow = false;
-    this.professorForm.reset();
+    this.memberForm.reset();
     this.clearFormArrays();
   }
 
   addProfessor(): void {
     this.loadingService.setLoadingState(true);
-    const professorData = this.professorForm.value;
+    const professorData = this.memberForm.value;
     this._http.post(`${environment.apiUrl}/members`, professorData).subscribe({
       next: () => {
         this.modalShow = false;
@@ -154,7 +154,7 @@ export class PostDocComponent implements OnInit {
 
   updateProfessor(_id: any): void {
     this.loadingService.setLoadingState(true);
-    const professorData = this.professorForm.value;
+    const professorData = this.memberForm.value;
     this._http.put(`${environment.apiUrl}/members/${_id}`, professorData).subscribe({
       next: () => {
         this.modalShow = false;
