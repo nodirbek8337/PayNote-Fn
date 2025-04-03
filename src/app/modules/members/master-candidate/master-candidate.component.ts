@@ -41,7 +41,7 @@ export class MasterCandidateComponent implements OnInit {
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
     this.professorForm = this.fb.group({
       fullName: [''],
-      academicStatus: [''],
+      academicStatus: ['master-candidate'],
       nationality: [''],
       researchGroup: [''],
       year: [''],
@@ -82,7 +82,6 @@ export class MasterCandidateComponent implements OnInit {
     if (member) {
       this.professorForm.patchValue({
         fullName: member.fullName,
-        academicStatus: member.academicStatus,
         nationality: member.nationality,
         researchGroup: member.researchGroup,
         year: member.year,
