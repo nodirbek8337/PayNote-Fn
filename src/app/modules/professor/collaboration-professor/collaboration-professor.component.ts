@@ -90,6 +90,10 @@ export class CollaborationProfessorComponent implements OnInit{
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      type: 'collaboration'
+    });
     
     if (professor) {
       this.professorForm.patchValue({

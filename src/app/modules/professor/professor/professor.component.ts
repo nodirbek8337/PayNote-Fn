@@ -90,6 +90,10 @@ export class ProfessorComponent implements OnInit {
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      type: 'regular'
+    });
     
     if (professor) {
       this.professorForm.patchValue({

@@ -91,6 +91,10 @@ export class IndustrialProfessorComponent implements OnInit{
     this.professorForm.reset();
     this.clearFormArrays();
     
+    this.professorForm.patchValue({
+      type: 'industrial'
+    });
+
     if (professor) {
       this.professorForm.patchValue({
         fullName: professor.fullName,

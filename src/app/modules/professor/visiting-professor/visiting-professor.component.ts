@@ -90,6 +90,10 @@ export class VisitingProfessorComponent {
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      type: 'visiting'
+    });
     
     if (professor) {
       this.professorForm.patchValue({
