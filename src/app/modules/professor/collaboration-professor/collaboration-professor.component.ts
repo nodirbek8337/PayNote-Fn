@@ -41,7 +41,7 @@ export class CollaborationProfessorComponent implements OnInit{
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
     this.professorForm = this.fb.group({
       fullName: [''],
-      type: [''],
+      type: ['collaboration'],
       position: [''],
       department: [''],
       university: [''],
@@ -94,7 +94,6 @@ export class CollaborationProfessorComponent implements OnInit{
     if (professor) {
       this.professorForm.patchValue({
         fullName: professor.fullName,
-        type: professor.type,
         position: professor.position,
         department: professor.department,
         university: professor.university,

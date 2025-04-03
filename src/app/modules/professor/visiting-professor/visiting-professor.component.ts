@@ -41,7 +41,7 @@ export class VisitingProfessorComponent {
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
     this.professorForm = this.fb.group({
       fullName: [''],
-      type: [''],
+      type: ['visiting'],
       position: [''],
       department: [''],
       university: [''],
@@ -94,7 +94,6 @@ export class VisitingProfessorComponent {
     if (professor) {
       this.professorForm.patchValue({
         fullName: professor.fullName,
-        type: professor.type,
         position: professor.position,
         department: professor.department,
         university: professor.university,
