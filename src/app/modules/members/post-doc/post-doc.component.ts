@@ -79,6 +79,11 @@ export class PostDocComponent implements OnInit {
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      academicStatus: 'post-doc'
+    });
+
     if (member) {
       this.professorForm.patchValue({
         fullName: member.fullName,

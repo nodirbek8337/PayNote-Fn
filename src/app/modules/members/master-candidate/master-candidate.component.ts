@@ -79,6 +79,11 @@ export class MasterCandidateComponent implements OnInit {
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      academicStatus: 'master-candidate'
+    });
+
     if (member) {
       this.professorForm.patchValue({
         fullName: member.fullName,

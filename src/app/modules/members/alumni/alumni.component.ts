@@ -79,6 +79,11 @@ export class AlumniComponent implements OnInit{
 
     this.professorForm.reset();
     this.clearFormArrays();
+
+    this.professorForm.patchValue({
+      academicStatus: 'alumni'
+    });
+    
     if (member) {
       this.professorForm.patchValue({
         fullName: member.fullName,
