@@ -45,6 +45,9 @@ export class VisitingProfessorComponent {
       position: [''],
       department: [''],
       university: [''],
+      nationality: [''],
+      researchGroup: [''],
+      website: [''],
       imageUrl: [''],
       contact: this.fb.group({
         email: [''],
@@ -95,6 +98,9 @@ export class VisitingProfessorComponent {
         position: professor.position,
         department: professor.department,
         university: professor.university,
+        nationality: professor.nationality,
+        researchGroup: professor.researchGroup,
+        website: professor.website,
         imageUrl: professor.imageUrl,
         contact: {
           email: professor.contact.email,

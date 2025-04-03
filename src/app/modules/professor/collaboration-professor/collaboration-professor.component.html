@@ -56,6 +56,10 @@
               <td>{{ prof?.contact?.period }}</td>
             </tr>
             <tr>
+              <td class="color">Website</td>
+              <td>{{ prof?.website }}</td>
+            </tr>
+            <tr>
               <td class="color">E-mail</td>
               <td>{{ prof?.contact?.email }}</td>
             </tr>
@@ -130,6 +134,30 @@
           type="text"
           placeholder="University"
           formControlName="university"
+        >
+        </app-input>
+
+        <!-- Nationality -->
+        <app-input
+          type="text"
+          placeholder="Nationality"
+          formControlName="nationality"
+        >
+        </app-input>
+
+        <!-- ResearchGroup -->
+        <app-input
+          type="text"
+          placeholder="ResearchGroup"
+          formControlName="researchGroup"
+        >
+        </app-input>
+
+        <!-- Website -->
+        <app-input
+          type="text"
+          placeholder="Website"
+          formControlName="website"
         >
         </app-input>
 
