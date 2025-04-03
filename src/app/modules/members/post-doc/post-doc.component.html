@@ -1,56 +1,206 @@
 <div class="gtco-container">
   <div class="row">
-          <!-- Content left -->
-          <div class="col-md-2 sidebar">
-                    <a routerLink="/members/post-doc" class="button cyan">
-                      Post Doc.</a>
-                    <a routerLink="/members/phd-candidate"
-                      class="button cyan">Ph.D Candidate</a>
-                    <a routerLink="/members/master-candidate"
-                      class="button cyan">Master Candidate</a>
-                    <a routerLink="/members/undergraduate"
-                      class="button cyan">Undergraduate</a>
-                      <a routerLink="/members/alumni"
-                      class="button cyan">Alumni</a>
-          </div>
-          <!-- //////////////////////////////// -->
-          <div class="col-md-8 content">
-            <h4><b>[ Post Doc. / 1 persons ]</b></h4>
-            <!-- //////////////////////////////////////////////////////////// -->
-            <div *ngFor="let prof of professors" class="row mb-5">
-              <div class="img col-md-3 text-center">
-                <img [src]="prof.image" class="img-responsive" />
-              </div>
-              <div class="col-md-9">
-                <h3>{{ prof.nameRole }}</h3>
+    <!-- Content left -->
+    <div class="col-md-2 sidebar">
+      <a routerLink="/members/post-doc" class="button cyan"> Post Doc.</a>
+      <a routerLink="/members/phd-candidate" class="button cyan"
+        >Ph.D Candidate</a
+      >
+      <a routerLink="/members/master-candidate" class="button cyan"
+        >Master Candidate</a
+      >
+      <a routerLink="/members/undergraduate" class="button cyan"
+        >Undergraduate</a
+      >
+      <a routerLink="/members/alumni" class="button cyan">Alumni</a>
+    </div>
+    <!-- //////////////////////////////// -->
+    <div class="col-md-8 content">
+      <h4><b>[ Post Doc. / 1 persons ]</b></h4>
+      <div class="add-btn text-end">
+        <kep-button
+          (buttonClick)="openModal()"
+          buttonText="Qo'shish"
+          buttonType="button"
+          buttonWidth="120px"
+        >
+        </kep-button>
+      </div>
+      <!-- //////////////////////////////////////////////////////////// -->
+      <div *ngFor="let member of members" class="row mb-5">
+        <div class="img col-md-3 text-center">
+          <img [src]="member?.imageUrl" class="img-responsive" />
+        </div>
+        <div class="col-md-9">
+          <h3>{{ member?.fullName }}</h3>
 
-                <h4>Contact Informations</h4>
-                <table class="contact-information">
-                  <tr>
-                    <td>Nationality</td>
-                    <td class="color">{{prof.Nationality}}</td>
-                  </tr>
-                  <tr>
-                      <td>Research Group</td>
-                      <td class="color research-area">{{prof.researchGroup}}</td>
-                  </tr>
-                  <tr>
-                    <td>Research Area</td>
-                    <td class="color">{{prof.researchArea}}</td>
-                </tr>
-                  <tr>
-                    <td>E-mail</td>
-                    <td class="color">{{prof.workMail}}</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
+          <h4>Contact Informations</h4>
+          <table class="contact-information">
+            <tr>
+              <td>Nationality</td>
+              <td class="color">{{ member?.nationality }}</td>
+            </tr>
+            <tr>
+              <td>Research Group</td>
+              <td class="color research-area">{{ member?.researchGroup }}</td>
+            </tr>
+            <tr>
+              <td>Research Area</td>
+              <td class="color">
+                @for (item of member?.researchAreas; track $index) {
+                <span>{{ item }}</span>
+                }
+              </td>
+            </tr>
+            <tr>
+              <td>E-mail</td>
+              <td class="color">{{ member?.email }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="add-btn text-end">
+          <kep-button
+            (buttonClick)="openModal(member)"
+            buttonText="Yangilash"
+            buttonType="button"
+            buttonWidth="120px"
+          >
+          </kep-button>
 
-          <!--  -->
-
-          <div class="col-md-2 right-content">
-            <h2></h2>
-          </div>
+          <kep-button
+            style="margin-left: 8px"
+            (buttonClick)="deleteProfessor(member)"
+            buttonText="O'chirish"
+            buttonType="button"
+            buttonWidth="120px"
+          >
+          </kep-button>
         </div>
       </div>
+    </div>
+
+    <!--  -->
+
+    <div class="col-md-2 right-content">
+      <h2></h2>
+    </div>
+  </div>
+  <app-modal
+    [modalShow]="modalShow"
+    [modalTitle]="currentProfessor ? 'Yangilash' : 'Qo\'shish'"
+    (modalClose)="modalShow = $event"
+  >
+    <div class="kep-modal-body">
+      <form [formGroup]="professorForm" (ngSubmit)="submitForm()">
+        <!-- Full Name -->
+        <app-input
+          type="text"
+          placeholder="Full Name"
+          formControlName="fullName"
+        >
+        </app-input>
+
+        <!-- AcademicStatus -->
+        <app-input
+          type="text"
+          placeholder="AcademicStatus"
+          formControlName="academicStatus"
+        >
+        </app-input>
+
+        <!-- Nationality -->
+        <app-input
+          type="text"
+          placeholder="Nationality"
+          formControlName="nationality"
+        >
+        </app-input>
+
+        <!-- ResearchGroup -->
+        <app-input
+          type="text"
+          placeholder="ResearchGroup"
+          formControlName="researchGroup"
+        >
+        </app-input>
+
+        <!-- Year -->
+        <app-input
+          type="text"
+          placeholder="Year"
+          formControlName="year"
+        >
+        </app-input>
+
+        <!-- Major -->
+        <app-input
+          type="text"
+          placeholder="Major"
+          formControlName="major"
+        >
+        </app-input>
+
+        <!-- Email -->
+        <app-input
+          type="text"
+          placeholder="Email"
+          formControlName="email"
+        >
+        </app-input>
+
+        <!-- ImageUrl -->
+        <app-input
+          type="text"
+          placeholder="ImageUrl"
+          formControlName="imageUrl"
+        >
+        </app-input>
+
+        <!-- Research Areas -->
+        <h3>Research Areas</h3>
+        <div formArrayName="researchAreas">
+          <div *ngFor="let area of researchAreas.controls; let i = index">
+            <app-input
+              type="text"
+              placeholder="Research Area"
+              [formControlName]="i"
+            >
+            </app-input>
+
+            <kep-button
+              buttonText="Remove"
+              buttonType="button"
+              buttonWidth="100px"
+              (buttonClick)="removeItem(researchAreas, i)"
+            >
+            </kep-button>
+          </div>
+          <kep-button
+            buttonText="Add Research Area"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addItem(researchAreas)"
+          >
+          </kep-button>
+        </div>
+        <div class="modal-footer">
+          <kep-button
+            buttonText="Yopish"
+            buttonType="button"
+            buttonWidth="120px"
+            (buttonClick)="closeModal()"
+          >
+          </kep-button>
+
+          <kep-button
+            buttonText="Saqlash"
+            buttonType="submit"
+            buttonWidth="120px"
+            (buttonClick)="submitForm()"
+          >
+          </kep-button>
+        </div>
+      </form>
+    </div>
+  </app-modal>
+</div>
