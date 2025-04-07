@@ -1,19 +1,12 @@
-import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { environment } from '../../../../environments/environments';
 import { ButtonComponent } from '../../../core/components/button/button.component';
 import { InputComponent } from '../../../core/components/input/input.component';
 import { ModalComponent } from '../../../core/components/modal/modal.component';
 import { NgFor } from '@angular/common';
-import { LoadingService } from '../../../core/services/loading.service';
+import { GeneralMemberComponent } from '../components/general-members/general-member.component';
 
 @Component({
   selector: 'app-master-candidate',
@@ -30,159 +23,6 @@ import { LoadingService } from '../../../core/services/loading.service';
     NgFor,
   ]
 })
-export class MasterCandidateComponent implements OnInit {
-  _http = inject(HttpClient);
-  memberForm: FormGroup;
-
-  modalShow: boolean = false;
-  members: any[] = [];
-  currentProfessor: any = null;
-
-  constructor(public fb: FormBuilder, private loadingService: LoadingService) {
-    this.memberForm = this.fb.group({
-      fullName: [''],
-      academicStatus: ['master-candidate'],
-      nationality: [''],
-      researchGroup: [''],
-      year: [''],
-      major: [''],
-      email: [''],
-      imageUrl: [''],
-      researchAreas: this.fb.array([]),
-    });
-  }
-
-  ngOnInit(): void {
-    this.getProfessors();
-  }
-
-  getProfessors() {
-    this.loadingService.setLoadingState(true);
-    const params = new HttpParams().set('academicStatus', 'master-candidate');
-    this._http.get(`${environment.apiUrl}/members`, { params }).subscribe({
-      next: (res: any) => {
-        this.members = res;
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
-  }
-
-  openModal(member: any = null): void {
-    this.currentProfessor = member;
-    this.modalShow = true;
-
-    this.memberForm.reset();
-    this.clearFormArrays();
-
-    this.memberForm.patchValue({
-      academicStatus: 'master-candidate'
-    });
-
-    if (member) {
-      this.memberForm.patchValue({
-        fullName: member.fullName,
-        nationality: member.nationality,
-        researchGroup: member.researchGroup,
-        year: member.year,
-        major: member.major,
-        email: member.email,
-        imageUrl: member.imageUrl,
-      });
-
-      member.researchAreas?.forEach((area: string) => {
-        this.researchAreas.push(this.fb.control(area));
-      });
-    }
-  }
-
-  submitForm(): void {
-    if (this.currentProfessor) {
-      this.updateProfessor(this.currentProfessor._id);
-    } else {
-      this.addProfessor();
-    }
-  }
-
-  // Getter methods for form arrays
-  get researchAreas() {
-    return this.memberForm.get('researchAreas') as FormArray;
-  }
-
-  addItem(field: FormArray) {
-    field.push(this.fb.control(''));
-  }
-
-  removeItem(field: FormArray, index: number) {
-    field.removeAt(index);
-  }
-
-  clearFormArrays() {
-    this.researchAreas.clear();
-  }
-
-  closeModal(): void {
-    this.modalShow = false;
-    this.memberForm.reset();
-    this.clearFormArrays();
-  }
-
-  addProfessor(): void {
-    this.loadingService.setLoadingState(true);
-    const professorData = this.memberForm.value;
-    this._http.post(`${environment.apiUrl}/members`, professorData).subscribe({
-      next: () => {
-        this.modalShow = false;
-        this.getProfessors();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
-  }
-
-  updateProfessor(_id: any): void {
-    this.loadingService.setLoadingState(true);
-    const professorData = this.memberForm.value;
-    this._http
-      .put(`${environment.apiUrl}/members/${_id}`, professorData)
-      .subscribe({
-        next: () => {
-          this.modalShow = false;
-          this.getProfessors();
-        },
-        complete: () => {
-          this.loadingService.setLoadingState(false);
-        },
-        error: (err) => {
-          console.log(err);
-          this.loadingService.setLoadingState(false);
-        },
-      });
-  }
-
-  deleteProfessor(member: any): void {
-    this.loadingService.setLoadingState(true);
-    this._http.delete(`${environment.apiUrl}/members/${member._id}`).subscribe({
-      next: () => {
-        this.getProfessors();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
-  }
+export class MasterCandidateComponent extends GeneralMemberComponent {
+  override academicStatus = 'master-candidate';
 }
