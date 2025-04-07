@@ -1,30 +1,30 @@
 .gtco-container {
   max-width: 1140px;
   margin: 0 auto;
-  }
+}
 
-  .row{
-    display: flex;
-  }
+.row {
+  display: flex;
+}
 
-  .sidebar {
-    background-color: #ccc;
-    padding: 40px 10px;
-    color: white;
-    min-height: 100vh;
-    // height: 100%;
-  }
+.sidebar {
+  background-color: #ccc;
+  padding: 40px 10px;
+  color: white;
+  min-height: 100vh;
+  // height: 100%;
+}
 
-  .content {
-    padding: 100px 40px;
-  }
+.content {
+  padding: 100px 40px;
+}
 
-  .right-content {
-    // background-color: #ccc;
-    min-height: 100vh;
-  }
+.right-content {
+  // background-color: #ccc;
+  min-height: 100vh;
+}
 
-.button{
+.button {
   display: block;
   background: rgb(52, 103, 134);
   color: white;
@@ -35,47 +35,46 @@
 }
 
 ///////////////////////////////////////
-  
-  .research-area {
-    color: #990000;
-  }
 
-  .table-tabs{
-    width: 100%;
-    margin-top: 10px;
- }
+.research-area {
+  color: #990000;
+}
 
-  .contact_info {
-    font-size: 18px;
-    // width: 290px;
-  }
-  
-  //////////
-  .row .img img{
-    height: 196px;
-    width: 150px;
-  }
+.table-tabs {
+  width: 100%;
+  margin-top: 10px;
+}
 
- ////////////////////////
+.contact_info {
+  font-size: 14px;
+}
 
-h4{
+//////////
+.row .img img {
+  height: 196px;
+  width: 150px;
+}
+
+////////////////////////
+
+h4 {
   margin-top: 20px;
   padding: 10px;
-
 }
- .contact-information{
-  table, td, th {
-  border: 1px dotted #000;
-  
+.contact-information {
+  table,
+  td,
+  th {
+    border: 1px dotted #000;
   }
-  
+
   .color {
-  background:#ccc;
-  width:20%;
+    background: #ccc;
+    width: 20%;
   }
-  
+
   table {
     width: 100%;
     border-collapse: collapse;
   }
-                      }
+}
