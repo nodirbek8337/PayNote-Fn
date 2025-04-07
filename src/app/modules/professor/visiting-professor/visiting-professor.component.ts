@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -31,12 +31,14 @@ import { LoadingService } from '../../../core/services/loading.service';
   ]
 })
 export class VisitingProfessorComponent {
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   _http = inject(HttpClient);
   professorForm: FormGroup;
 
   modalShow: boolean = false;
   professors: any[] = [];
   currentProfessor: any = null;
+  selectedFileName: string | null = null;
 
   constructor(public fb: FormBuilder, private loadingService: LoadingService) {
     this.professorForm = this.fb.group({
@@ -144,9 +146,38 @@ export class VisitingProfessorComponent {
     }
   }
 
+  triggerFileInput() {
+    this.fileInputRef.nativeElement.click(); 
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    if (file) {
+      if (file.size > maxSize) {
+        alert('Rasm hajmi 2MB dan oshmasligi kerak!');
+        this.fileInputRef.nativeElement.value = ''; 
+        this.selectedFileName = null;
+        return;
+      }
+
+      this.selectedFileName = this.truncateFileName(file.name, 30);
+    } else {
+      this.selectedFileName = null;
+    }
+  }
+
+  truncateFileName(name: string, maxLength: number): string {
+    if (name.length <= maxLength) return name;
+    const extension = name.substring(name.lastIndexOf('.'));
+    const baseName = name.substring(0, maxLength - extension.length - 3);
+    return baseName + extension;
+  }
+
   submitForm(): void {
-    console.log(this.currentProfessor);
-    
     if (this.currentProfessor) {
       this.updateProfessor(this.currentProfessor._id);
     } else {
@@ -219,13 +250,34 @@ export class VisitingProfessorComponent {
   addProfessor(): void {
     this.loadingService.setLoadingState(true);
     const professorData = this.professorForm.value;
+  
     this._http.post(`${environment.apiUrl}/professors`, professorData).subscribe({
-      next: () => {
-        this.modalShow = false;
-        this.getProfessors();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
+      next: (res: any) => {
+        const createdProfessorId = res._id;
+        
+        const file = this.fileInputRef.nativeElement.files?.[0];
+        if (file) {
+          const formData = new FormData();
+          formData.append('image', file);
+          formData.append('professorId', createdProfessorId);
+  
+          this._http.post(`${environment.apiUrl}/professor-image-upload/upload`, formData).subscribe({
+            next: () => {
+              this.modalShow = false;
+              this.getProfessors();
+            },
+            error: (err) => {
+              console.error('Rasm yuklashda xatolik:', err);
+            },
+            complete: () => {
+              this.loadingService.setLoadingState(false);
+            }
+          });
+        } else {
+          this.modalShow = false;
+          this.getProfessors();
+          this.loadingService.setLoadingState(false);
+        }
       },
       error: (err) => {
         console.log(err);
@@ -237,13 +289,33 @@ export class VisitingProfessorComponent {
   updateProfessor(_id: any): void {
     this.loadingService.setLoadingState(true);
     const professorData = this.professorForm.value;
+  
     this._http.put(`${environment.apiUrl}/professors/${_id}`, professorData).subscribe({
       next: () => {
-        this.modalShow = false;
-        this.getProfessors();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
+        const file = this.fileInputRef.nativeElement.files?.[0];
+  
+        if (file) {
+          const formData = new FormData();
+          formData.append('image', file);
+          formData.append('professorId', _id); 
+  
+          this._http.post(`${environment.apiUrl}/professor-image-upload/upload`, formData).subscribe({
+            next: () => {
+              this.modalShow = false;
+              this.getProfessors();
+            },
+            error: (err) => {
+              console.error("Rasm yangilashda xato:", err);
+            },
+            complete: () => {
+              this.loadingService.setLoadingState(false);
+            }
+          });
+        } else {
+          this.modalShow = false;
+          this.getProfessors();
+          this.loadingService.setLoadingState(false);
+        }
       },
       error: (err) => {
         console.log(err);
@@ -251,15 +323,18 @@ export class VisitingProfessorComponent {
       }
     });
   }
+  
 
   deleteProfessor(professor: any): void {
     this.loadingService.setLoadingState(true);
+
     this._http.delete(`${environment.apiUrl}/professors/${professor._id}`).subscribe({
       next: () => {
-        this.getProfessors();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
+        this._http.delete(`${environment.apiUrl}/professor-image-upload/${professor._id}`).subscribe({
+          next: () => this.getProfessors(),
+          error: (err) => console.error("Rasm o'chirishda xato:", err),
+          complete: () => this.loadingService.setLoadingState(false)
+        });
       },
       error: (err) => {
         console.log(err);

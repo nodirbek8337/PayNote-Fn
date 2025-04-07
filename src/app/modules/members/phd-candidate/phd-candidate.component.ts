@@ -102,8 +102,6 @@ export class PhdCandidateComponent implements OnInit {
   }
 
   submitForm(): void {
-    console.log(this.currentProfessor);
-
     if (this.currentProfessor) {
       this.updateProfessor(this.currentProfessor._id);
     } else {
