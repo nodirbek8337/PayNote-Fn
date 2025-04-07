@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { LoadingSpinnerComponent } from './core/components/loading/loading-spinner.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { LoadingSpinnerComponent } from './core/components/loading/loading-spinn
     AppRoutingModule,
     FormsModule,
     RouterModule,
+    HttpClientModule
 ],
   providers: [
     provideClientHydration(withEventReplay())
