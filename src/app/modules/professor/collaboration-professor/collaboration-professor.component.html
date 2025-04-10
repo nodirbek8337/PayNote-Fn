@@ -55,10 +55,11 @@
               <td class="color">Period</td>
               <td>{{ prof?.contact?.period }}</td>
             </tr>
-            <tr>
+            <tr *ngIf="!!prof.website?.trim()">
               <td class="color">Website</td>
-              <td>{{ prof?.website }}</td>
+              <td>{{ prof.website }}</td>
             </tr>
+
             <tr>
               <td class="color">E-mail</td>
               <td>{{ prof?.contact?.email }}</td>
@@ -110,17 +111,25 @@
         </app-input>
 
         <!-- Image upload -->
-        <div class="d-flex justify-content-between align-items-center" style="padding-right: 40px;">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="padding-right: 40px"
+        >
           <kep-button
-          (buttonClick)="triggerFileInput()"
-          buttonText="Rasm tanlash"
-          buttonType="button"
-          buttonWidth="160px"
-        ></kep-button>
+            (buttonClick)="triggerFileInput()"
+            buttonText="Rasm tanlash"
+            buttonType="button"
+            buttonWidth="160px"
+          ></kep-button>
 
-        <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" />
+          <input
+            type="file"
+            #fileInput
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
 
-        <!-- Rasm holatini ko‘rsatish -->
+          <!-- Rasm holatini ko‘rsatish -->
           @if(selectedFileName){
           <span>{{ selectedFileName }}</span>
           } @else {
@@ -169,11 +178,7 @@
         </app-input>
 
         <!-- Website -->
-        <app-input
-          type="text"
-          placeholder="Website"
-          formControlName="website"
-        >
+        <app-input type="text" placeholder="Website" formControlName="website">
         </app-input>
 
         <app-input

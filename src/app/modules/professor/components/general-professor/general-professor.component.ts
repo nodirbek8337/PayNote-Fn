@@ -40,6 +40,7 @@ export abstract class GeneralProfessorComponent implements OnInit {
       fullName: [''],
       type: [this.professorType],
       position: [''],
+      address: [''],
       department: [''],
       university: [''],
       nationality: [''],
