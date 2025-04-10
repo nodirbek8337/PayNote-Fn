@@ -14,7 +14,7 @@
       >
       <a routerLink="/members/alumni" class="button cyan">Alumni</a>
     </div>
-    <!-- //////////////////////////////// -->
+    <!-- Content Center -->
     <div class="col-md-8 content">
       <h4><b>[ Post Doc. / 1 persons ]</b></h4>
       <div class="add-btn text-end">
@@ -26,7 +26,6 @@
         >
         </kep-button>
       </div>
-      <!-- //////////////////////////////////////////////////////////// -->
       <div *ngFor="let member of members" class="row mb-5">
         <div class="img col-md-3 text-center">
           <img [src]="member?.imageUrl" class="img-responsive" />
@@ -79,7 +78,7 @@
       </div>
     </div>
 
-    <!--  -->
+    <!-- Content Right -->
 
     <div class="col-md-2 right-content">
       <h2></h2>

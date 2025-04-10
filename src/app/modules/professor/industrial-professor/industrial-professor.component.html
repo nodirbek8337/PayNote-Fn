@@ -13,7 +13,7 @@
         >Visiting professor</a
       >
     </div>
-    <!-- //////////////////////////////// -->
+    <!-- Content Center -->
     <div class="col-md-8 content">
       <div class="add-btn text-end">
         <kep-button
@@ -24,7 +24,6 @@
         >
         </kep-button>
       </div>
-      <!-- //////////////////////////////////////////////////////////// -->
       <div *ngFor="let prof of professors" class="row mb-5">
         <div class="img col-md-3 text-center">
           <img [src]="prof?.imageUrl" class="img-responsive" />
@@ -74,9 +73,8 @@
           </kep-button>
         </div>
       </div>
-      <!-- class="col-md-8 table-cell" pastda -->
     </div>
-    <!--  -->
+    <!-- Content Right -->
 
     <div class="col-md-2 right-content">
       <h2></h2>

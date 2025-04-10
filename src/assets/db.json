@@ -41,13 +41,13 @@
       ]
     },
     { "title": "Lecture", "link": "#", "children": [
-        { "title": "2025", "link": "/lecture/2020" },
-        { "title": "2024", "link": "/lecture/2019" },
-        { "title": "2023", "link": "/lecture/2018" },
-        { "title": "2022", "link": "/lecture/2017" },
-        { "title": "2021", "link": "/lecture/2016" },
-        { "title": "2020", "link": "/lecture/2015" },
-        { "title": "2019", "link": "/lecture/2014" }
+        { "title": "2025", "link": "/lecture/2025" },
+        { "title": "2024", "link": "/lecture/2024" },
+        { "title": "2023", "link": "/lecture/2023" },
+        { "title": "2022", "link": "/lecture/2022" },
+        { "title": "2021", "link": "/lecture/2021" },
+        { "title": "2020", "link": "/lecture/2020" },
+        { "title": "2019", "link": "/lecture/2019" }
       ]
     }
   ]
