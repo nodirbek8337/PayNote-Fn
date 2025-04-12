@@ -1,4 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import dbJSON from "../../../../assets/db.json";
 
 @Component({
@@ -6,7 +8,8 @@ import dbJSON from "../../../../assets/db.json";
   standalone: false,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
-  host: { 'ngSkipHydration': '' } 
+  host: { 'ngSkipHydration': '' },
+  providers: [CommonModule, RouterModule],
 })
 export class NavbarComponent implements OnInit {
   menuItems: any[] = [];

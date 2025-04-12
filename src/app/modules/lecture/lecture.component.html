@@ -1,0 +1,15 @@
+<div class="gtco-container">
+  <div class="row">
+    <ul class="col-md-2 sidebar">
+      <li *ngFor="let year of years">
+        <a class="button cyan" [routerLink]="['/lecture', year]">{{ year }}</a>
+      </li>
+    </ul>
+
+    <div class="col-md-8 content">
+      <h1>Lektsiya yillari ro'yxati</h1>
+    </div>
+
+    <div class="col-md-2 right-content"></div>
+  </div>
+</div>
