@@ -1,20 +1,182 @@
 <div class="gtco-container">
   <div class="row">
-<ul class="col-md-2 sidebar">
-  <li *ngFor="let year of years" >
-    <a class="button cyan" [routerLink]="['/publications', year]">{{ year }}</a>
-  </li>
-</ul>
+    <ul class="col-md-2 sidebar">
+      <li *ngFor="let linkYear of linkYears">
+        <a class="button cyan" [routerLink]="['/publications', linkYear]">{{
+          linkYear
+        }}</a>
+      </li>
+    </ul>
 
     <!-- Content Center -->
     <div class="col-md-8 content">
-      <h1>{{ data.text }}</h1>
+      <div class="add-btn text-end">
+        <kep-button
+          (buttonClick)="openSectionModal(null)"
+          buttonText="Bo'lim qo'shish"
+          buttonType="button"
+          buttonWidth="180px"
+        ></kep-button>
+      </div>
+      <div *ngFor="let group of groupedEntries">
+        <h3>[{{ group.title }}, {{ group.year }}]</h3>
+        <div class="add-btn">
+          <kep-button
+            (buttonClick)="openSectionModal(group)"
+            buttonText="Bo'limni yangilash"
+            buttonType="button"
+            buttonWidth="180px"
+          >
+          </kep-button>
 
+          <kep-button
+            style="margin-left: 8px"
+            (buttonClick)="deleteSection(group)"
+            buttonText="Bo'limni  o'chirish"
+            buttonType="button"
+            buttonWidth="180px"
+          >
+          </kep-button>
+        </div>
+        <ul>
+          <hr />
+          <li *ngFor="let entry of group.entries">
+            <span>{{ entry.code }}</span
+            >: {{ entry.title }}<br />
+            <strong>{{ entry.authors }}</strong
+            ><br />
+            <small>{{ entry.source }}</small>
+            <img
+              *ngIf="entry.pdfUrl"
+              src="../../../assets/pdf.png"
+              (click)="openPdf(entry.pdfUrl)"
+              style="margin-left: 10px; cursor: pointer;"
+              alt="pdf"
+              width="20px"
+              height="20px"
+            />
+            <div class="add-btn">
+              <kep-button
+                (buttonClick)="openEntryModal(entry, group)"
+                buttonText="Kirishni yangilash"
+                buttonType="button"
+                buttonWidth="180px"
+              >
+              </kep-button>
 
+              <kep-button
+                style="margin-left: 8px"
+                (buttonClick)="deleteEntry(entry)"
+                buttonText="Kirishni  o'chirish"
+                buttonType="button"
+                buttonWidth="180px"
+              >
+              </kep-button>
+            </div>
+            <hr />
+          </li>
+          <div class="add-btn text-end">
+            <kep-button
+              (buttonClick)="openEntryModal(null, group)"
+              buttonText="Kirish qo'shish"
+              buttonType="button"
+              buttonWidth="180px"
+            ></kep-button>
+          </div>
+        </ul>
+      </div>
+      <app-modal
+        [modalShow]="modalShow"
+        [modalTitle]="
+          sectionModal
+            ? currentSectionId
+              ? 'Bo\'limnini yangilash'
+              : 'Yangi bo\'lim qo‘shish'
+            : currentEntryId
+            ? 'Kirishni yangilash'
+            : 'Yangi kirish qo‘shish'
+        "
+        (modalClose)="modalShow = $event"
+      >
+        <div class="kep-modal-body">
+          <form [formGroup]="entryForm" (ngSubmit)="submitForm()">
+            @if(sectionModal){
+              <!-- Title -->
+              <app-input type="text" placeholder="Title" formControlName="sectionTitle">
+              </app-input>
+
+              <!-- Year -->
+              <app-input type="number" placeholder="Year" formControlName="sectionYear">
+              </app-input>
+            }
+
+            @if(entryModal){
+              <!-- Code -->
+              <app-input type="text" placeholder="Code" formControlName="code">
+              </app-input>
+
+              <!-- Title -->
+              <app-input type="text" placeholder="Title" formControlName="title">
+              </app-input>
+
+              <!-- Authors -->
+              <app-input
+                type="text"
+                placeholder="Authors"
+                formControlName="authors"
+              >
+              </app-input>
+
+              <!-- Source -->
+              <app-input
+                type="text"
+                placeholder="Source"
+                formControlName="source"
+              >
+              </app-input>
+
+              <!-- PDF yuklash -->
+              <div
+                class="d-flex justify-content-between align-items-center"
+                style="padding-right: 40px"
+              >
+                <kep-button
+                  (buttonClick)="triggerFileInput()"
+                  buttonText="PDF tanlash"
+                  buttonType="button"
+                  buttonWidth="160px"
+                ></kep-button>
+
+                <input
+                  type="file"
+                  #fileInput
+                  accept=".pdf"
+                  style="display: none"
+                  (change)="onFileSelected($event)"
+                />
+
+                <span>{{ selectedFileName || "Fayl tanlanmagan" }}</span>
+              </div>
+            }
+            
+            <div class="modal-footer mt-3">
+              <kep-button
+                buttonText="Yopish"
+                buttonType="button"
+                buttonWidth="120px"
+                (buttonClick)="closeModal()"
+              >
+              </kep-button>
+
+              <button class="animated-btnn" [ngClass]="{ 'clicked': isClicked }" type="submit">Saqlash</button>
+            </div>
+          </form>
+        </div>
+      </app-modal>
     </div>
     <!-- Content Right -->
     <div class="col-md-2 right-content">
       <h2></h2>
     </div>
-</div>
+  </div>
 </div>
