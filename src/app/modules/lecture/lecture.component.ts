@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lecture',
   standalone: true,
-  imports: [CommonModule, NgFor, RouterModule],
+  imports: [CommonModule, NgFor, RouterModule, RouterLink],
   templateUrl: './lecture.component.html',
   styleUrls: ['./lecture.component.scss']
 })
@@ -19,5 +19,7 @@ export class LectureComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(true);
+  }
 }

@@ -34,6 +34,10 @@ const routes: Routes = [
     path: 'login', 
     loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent) 
   },
+  {
+    path: 'lecture/:id',
+    loadComponent: () => import('./modules/lecture/lecture.component').then(m => m.LectureComponent),
+  },
   { 
     path: '**', 
     loadComponent: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
@@ -42,10 +46,7 @@ const routes: Routes = [
   //   path: 'publications',
   //   loadChildren: () => import('./modules/publications/publications.component').then(m => m.PublicationsComponent)
   // },  
-  {
-    path: 'lecture',
-    loadChildren: () => import('./modules/lecture/lecture.routing').then(m => m.lectureRoutes)
-  }
+  
   
 ];
 

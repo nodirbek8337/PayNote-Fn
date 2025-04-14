@@ -35,6 +35,10 @@ onWindowScroll() {
   }
 }
 
+navTop(){
+  this.scrollToTop();
+}
+
 // Smooth scroll to top
 scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
