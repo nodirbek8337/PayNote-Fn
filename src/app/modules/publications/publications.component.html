@@ -22,7 +22,7 @@
         <h3>[{{ group.title }}, {{ group.year }}]</h3>
         <div class="add-btn">
           <kep-button
-            (buttonClick)="openSectionModal(groupedEntries)"
+            (buttonClick)="openSectionModal(group)"
             buttonText="Bo'limni yangilash"
             buttonType="button"
             buttonWidth="180px"
@@ -31,7 +31,7 @@
 
           <kep-button
             style="margin-left: 8px"
-            (buttonClick)="deleteSection(groupedEntries)"
+            (buttonClick)="deleteSection(group)"
             buttonText="Bo'limni  o'chirish"
             buttonType="button"
             buttonWidth="180px"
@@ -50,14 +50,14 @@
               *ngIf="entry.pdfUrl"
               src="../../../assets/pdf.png"
               (click)="openPdf(entry.pdfUrl)"
-              style="margin-left: 10px"
+              style="margin-left: 10px; cursor: pointer;"
               alt="pdf"
               width="20px"
               height="20px"
             />
             <div class="add-btn">
               <kep-button
-                (buttonClick)="openEntryModal(entry)"
+                (buttonClick)="openEntryModal(entry, group)"
                 buttonText="Kirishni yangilash"
                 buttonType="button"
                 buttonWidth="180px"
@@ -77,142 +77,102 @@
           </li>
           <div class="add-btn text-end">
             <kep-button
-              (buttonClick)="openEntryModal(null)"
+              (buttonClick)="openEntryModal(null, group)"
               buttonText="Kirish qo'shish"
               buttonType="button"
               buttonWidth="180px"
             ></kep-button>
           </div>
-          <div>
-            <div *ngIf="sectionModal">
-              <app-modal
-                [modalShow]="modalShow"
-                [modalTitle]="
-                  currentEntry
-                    ? 'Bo\'limnini yangilash'
-                    : 'Yangi bo\'lim qo‘shish'
-                "
-                (modalClose)="modalShow = $event"
-              >
-                <div class="kep-modal-body">
-                  <form [formGroup]="entryForm" (ngSubmit)="submitForm()">
-                    <!-- Title -->
-                    <app-input
-                      type="text"
-                      placeholder="Title"
-                      formControlName="title"
-                    >
-                    </app-input>
-
-                    <div class="modal-footer mt-3">
-                      <kep-button
-                        buttonText="Yopish"
-                        buttonType="button"
-                        buttonWidth="120px"
-                        (buttonClick)="closeModal()"
-                      >
-                      </kep-button>
-
-                      <kep-button
-                        buttonText="Saqlash"
-                        buttonType="submit"
-                        buttonWidth="120px"
-                      >
-                      </kep-button>
-                    </div>
-                  </form>
-                </div>
-              </app-modal>
-            </div>
-
-            <div *ngIf="!sectionModal">
-              <app-modal
-                [modalShow]="modalShow"
-                [modalTitle]="
-                  currentEntry ? 'Entryni yangilash' : 'Yangi entry qo‘shish'
-                "
-                (modalClose)="modalShow = $event"
-              >
-                <div class="kep-modal-body">
-                  <form [formGroup]="entryForm" (ngSubmit)="submitForm()">
-                    <!-- Code -->
-                    <app-input
-                      type="text"
-                      placeholder="Code"
-                      formControlName="code"
-                    >
-                    </app-input>
-
-                    <!-- Title -->
-                    <app-input
-                      type="text"
-                      placeholder="Title"
-                      formControlName="title"
-                    >
-                    </app-input>
-
-                    <!-- Authors -->
-                    <app-input
-                      type="text"
-                      placeholder="Authors"
-                      formControlName="authors"
-                    >
-                    </app-input>
-
-                    <!-- Source -->
-                    <app-input
-                      type="text"
-                      placeholder="Source"
-                      formControlName="source"
-                    >
-                    </app-input>
-
-                    <!-- PDF yuklash -->
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                      style="padding-right: 40px"
-                    >
-                      <kep-button
-                        (buttonClick)="triggerFileInput()"
-                        buttonText="PDF tanlash"
-                        buttonType="button"
-                        buttonWidth="160px"
-                      ></kep-button>
-
-                      <input
-                        type="file"
-                        #fileInput
-                        accept=".pdf"
-                        style="display: none"
-                        (change)="onFileSelected($event)"
-                      />
-
-                      <span>{{ selectedFileName || "Fayl tanlanmagan" }}</span>
-                    </div>
-
-                    <div class="modal-footer mt-3">
-                      <kep-button
-                        buttonText="Yopish"
-                        buttonType="button"
-                        buttonWidth="120px"
-                        (buttonClick)="closeModal()"
-                      >
-                      </kep-button>
-
-                      <kep-button
-                        buttonText="Saqlash"
-                        buttonType="submit"
-                        buttonWidth="120px"
-                      >
-                      </kep-button>
-                    </div>
-                  </form>
-                </div>
-              </app-modal>
-            </div>
-          </div>
         </ul>
       </div>
+      <app-modal
+        [modalShow]="modalShow"
+        [modalTitle]="
+          sectionModal
+            ? currentSectionId
+              ? 'Bo\'limnini yangilash'
+              : 'Yangi bo\'lim qo‘shish'
+            : currentEntryId
+            ? 'Kirishni yangilash'
+            : 'Yangi kirish qo‘shish'
+        "
+        (modalClose)="modalShow = $event"
+      >
+        <div class="kep-modal-body">
+          <form [formGroup]="entryForm" (ngSubmit)="submitForm()">
+            @if(sectionModal){
+              <!-- Title -->
+              <app-input type="text" placeholder="Title" formControlName="sectionTitle">
+              </app-input>
+
+              <!-- Year -->
+              <app-input type="number" placeholder="Year" formControlName="sectionYear">
+              </app-input>
+            }
+
+            @if(entryModal){
+              <!-- Code -->
+              <app-input type="text" placeholder="Code" formControlName="code">
+              </app-input>
+
+              <!-- Title -->
+              <app-input type="text" placeholder="Title" formControlName="title">
+              </app-input>
+
+              <!-- Authors -->
+              <app-input
+                type="text"
+                placeholder="Authors"
+                formControlName="authors"
+              >
+              </app-input>
+
+              <!-- Source -->
+              <app-input
+                type="text"
+                placeholder="Source"
+                formControlName="source"
+              >
+              </app-input>
+
+              <!-- PDF yuklash -->
+              <div
+                class="d-flex justify-content-between align-items-center"
+                style="padding-right: 40px"
+              >
+                <kep-button
+                  (buttonClick)="triggerFileInput()"
+                  buttonText="PDF tanlash"
+                  buttonType="button"
+                  buttonWidth="160px"
+                ></kep-button>
+
+                <input
+                  type="file"
+                  #fileInput
+                  accept=".pdf"
+                  style="display: none"
+                  (change)="onFileSelected($event)"
+                />
+
+                <span>{{ selectedFileName || "Fayl tanlanmagan" }}</span>
+              </div>
+            }
+            
+            <div class="modal-footer mt-3">
+              <kep-button
+                buttonText="Yopish"
+                buttonType="button"
+                buttonWidth="120px"
+                (buttonClick)="closeModal()"
+              >
+              </kep-button>
+
+              <button class="animated-btnn" [ngClass]="{ 'clicked': isClicked }" type="submit">Saqlash</button>
+            </div>
+          </form>
+        </div>
+      </app-modal>
     </div>
     <!-- Content Right -->
     <div class="col-md-2 right-content">

@@ -1,13 +1,26 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+// ✅ YANGILANGAN VA TO‘LIQ OPTIMALLASHTIRILGAN PUBLICATIONS COMPONENT
+
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environments';
 import { LoadingService } from '../../core/services/loading.service';
 import { ModalComponent } from '../../core/components/modal/modal.component';
 import { InputComponent } from '../../core/components/input/input.component';
 import { ButtonComponent } from '../../core/components/button/button.component';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgClass } from '@angular/common';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-publications',
@@ -21,27 +34,26 @@ import { NgFor, NgIf } from '@angular/common';
     InputComponent,
     ButtonComponent,
     NgFor,
-    NgIf
+    NgIf,
+    NgClass,
   ],
 })
-export class PublicationsComponent implements OnInit {
-  linkYears: number[] = [];
-  groupedEntries: {
-    title: string;
-    year: number;
-    entries: any[];
-    _id: string;
-  }[] = [];
-  selectedFileName: string | null = null;
+export class PublicationsComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
-  entryForm: FormGroup;
-  sectionForm: FormGroup;
+  linkYears: number[] = [];
+  groupedEntries: { title: string; year: number; entries: any[]; _id: string }[] = [];
   availableSections: any[] = [];
+
+  entryForm: FormGroup;
   modalShow = false;
   sectionModal = false;
-  currentSection: any = null;
-  currentEntry: any = null;
+  entryModal = false;
+  currentSectionId: string | null = null;
+  currentEntryId: string | null = null;
+  selectedFileName: string | null = null;
+  routeSub!: Subscription;
+  isClicked: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,189 +66,189 @@ export class PublicationsComponent implements OnInit {
 
     this.entryForm = this.fb.group({
       sectionId: [''],
+      sectionTitle: [''],
+      sectionYear: [''],
       code: [''],
       title: [''],
       authors: [''],
       source: [''],
     });
-
-    this.sectionForm = this.fb.group({
-      title: [''],
-      year: [currentYear],
-    });
   }
 
   ngOnInit(): void {
-    const year = this.route.snapshot.paramMap.get('id');
-    if (year) this.getEntries(year);
-    this.getSections();
-  }
-
-  getEntries(year: string) {
-    this.loadingService.setLoadingState(true);
-    this._http
-      .get<any[]>(`${environment.apiUrl}/entries?year=${year}`)
-      .subscribe({
-        next: (res) => {
-          const groupMap = new Map<string, any>();
-          res.forEach((entry) => {
-            const section = entry.sectionId;
-            const key = section.title + '-' + section.year;
-            if (!groupMap.has(key)) {
-              groupMap.set(key, {
-                title: section.title,
-                year: section.year,
-                _id: section._id,
-                entries: [],
-              });
-            }
-            groupMap.get(key).entries.push(entry);
-          });
-          this.groupedEntries = Array.from(groupMap.values());
-        },
-        complete: () => this.loadingService.setLoadingState(false),
-        error: (err) => {
-          console.error(err);
-          this.loadingService.setLoadingState(false);
-        },
-      });
-  }
-
-  getSections() {
-    this._http.get(`${environment.apiUrl}/sections`).subscribe({
-      next: (res: any) => (this.availableSections = res),
-      error: (err) => console.error('Sectionlar xatolik:', err),
+    this.routeSub = this.route.paramMap.subscribe((params: ParamMap) => {
+      const year = params.get('id');
+      if (year) this.loadAllData(year);
     });
   }
 
-  triggerFileInput() {
-    this.fileInputRef.nativeElement.click();
+  ngOnDestroy(): void {
+    this.routeSub?.unsubscribe();
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    const maxSize = 4 * 1024 * 1024;
+  loadAllData(year: string) {
+    this.loadingService.setLoadingState(true);
+    forkJoin({
+      entries: this._http.get<any[]>(`${environment.apiUrl}/entries?year=${year}`),
+      sections: this._http.get<any[]>(`${environment.apiUrl}/sections?year=${year}`),
+    }).subscribe({
+      next: ({ entries, sections }) => {
+        this.availableSections = sections;
+        this.groupedEntries = this.groupEntries(entries, sections);
+      },
+      complete: () => this.loadingService.setLoadingState(false),
+      error: (err) => {
+        console.error(err);
+        this.loadingService.setLoadingState(false);
+      },
+    });
+  }
 
-    if (file && file.size > maxSize) {
-      alert('PDF hajmi 4MB dan oshmasligi kerak!');
-      this.fileInputRef.nativeElement.value = '';
-      this.selectedFileName = null;
-    } else {
-      this.selectedFileName = file
-        ? this.truncateFileName(file.name, 30)
-        : null;
+  private groupEntries(entries: any[], sections: any[]) {
+    const groupMap = new Map<string, any>();
+
+    sections.forEach((section) => {
+      const key = `${section.title}-${section.year}`;
+      groupMap.set(key, {
+        title: section.title,
+        year: section.year,
+        _id: section._id,
+        entries: [],
+      });
+    });
+
+    entries.forEach((entry) => {
+      const section = entry.sectionId;
+      const key = `${section.title}-${section.year}`;
+      if (groupMap.has(key)) {
+        groupMap.get(key).entries.push(entry);
+      }
+    });
+
+    return Array.from(groupMap.values());
+  }
+
+  openSectionModal(group: any = null) {
+    this.modalShow = true;
+    this.sectionModal = true;
+    this.entryModal = false;
+    this.currentSectionId = group?._id || null;
+    this.entryForm.reset();
+
+    if (group) {
+      this.entryForm.patchValue({
+        sectionId: group._id,
+        sectionTitle: group.title,
+        sectionYear: group.year,
+      });
     }
   }
 
-  truncateFileName(name: string, maxLength: number): string {
-    if (name.length <= maxLength) return name;
-    const ext = name.substring(name.lastIndexOf('.'));
-    const base = name.substring(0, maxLength - ext.length - 3);
-    return base + ext;
-  }
-
-  openSectionModal(section: any = null) {
-    this.sectionModal = true;
+  openEntryModal(entry: any = null, group: any = null) {
     this.modalShow = true;
-    this.currentSection = section;
-    this.sectionForm.reset();
-    if (section) this.sectionForm.patchValue(section);
-  }
-
-  openEntryModal(entry: any = null) {
     this.sectionModal = false;
-    this.modalShow = true;
-    this.currentEntry = entry;
+    this.entryModal = true;
+    this.currentEntryId = entry?._id || null;
+    this.currentSectionId = group?._id || entry?.sectionId?._id || null;
     this.entryForm.reset();
-    if (entry) this.entryForm.patchValue(entry);
+
+    if (entry) {
+      this.entryForm.patchValue({
+        sectionId: entry.sectionId?._id || entry.sectionId,
+        code: entry.code,
+        title: entry.title,
+        authors: entry.authors,
+        source: entry.source,
+      });
+    } else if (group) {
+      this.entryForm.patchValue({
+        sectionId: group._id,
+      });
+    }
   }
 
   submitForm(): void {
     if (this.sectionModal) {
-      this.currentSection
-        ? this.updateSection(this.currentSection._id)
-        : this.addSection();
-    } else {
-      this.currentEntry
-        ? this.updateEntry(this.currentEntry._id)
-        : this.addEntry();
+      const section = this.currentSectionId ? 'update' : 'add';
+      return section === 'update' ? this.updateSection() : this.addSection();
+    }
+    if (this.entryModal) {
+      const entry = this.currentEntryId ? 'update' : 'add';
+      return entry === 'update' ? this.updateEntry() : this.addEntry();
     }
   }
 
-  updateSection(sectionId: string) {
-    this._http
-      .put(
-        `${environment.apiUrl}/sections/${sectionId}`,
-        this.sectionForm.value
-      )
-      .subscribe({
-        next: () => {
-          this.closeModal();
-          this.getEntries(this.route.snapshot.paramMap.get('id')!);
-          this.getSections();
-        },
-        error: (err) => console.error(err),
-      });
+  private addSection() {
+    const data = {
+      title: this.entryForm.value.sectionTitle,
+      year: this.entryForm.value.sectionYear,
+    };
+    this._http.post(`${environment.apiUrl}/sections`, data).subscribe({
+      next: () => this.afterSubmit(),
+      error: (err) => this.handleError(err),
+    });
   }
 
-  addSection() {
-    this._http
-      .post(`${environment.apiUrl}/sections`, this.sectionForm.value)
-      .subscribe({
-        next: () => {
-          this.closeModal();
-          this.getEntries(this.route.snapshot.paramMap.get('id')!);
-          this.getSections();
-        },
-        error: (err) => console.error(err),
-      });
+  private updateSection() {
+    const data = {
+      title: this.entryForm.value.sectionTitle,
+      year: this.entryForm.value.sectionYear,
+    };
+    this._http.put(`${environment.apiUrl}/sections/${this.currentSectionId}`, data).subscribe({
+      next: () => this.afterSubmit(),
+      error: (err) => this.handleError(err),
+    });
   }
 
-  deleteSection(section: any) {
-    if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-    this._http
-      .delete(`${environment.apiUrl}/sections/${section._id}`)
-      .subscribe({
-        next: () => {
-          this.getEntries(this.route.snapshot.paramMap.get('id')!);
-          this.getSections();
-        },
-        error: (err) => console.error(err),
-      });
-  }
-
-  addEntry() {
+  private addEntry() {
+    const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
-    this._http
-      .post(`${environment.apiUrl}/entries`, this.entryForm.value)
-      .subscribe({
-        next: (res: any) => {
-          if (file) this.uploadPdf(file, res._id);
-          else this.finishEntryAction();
-        },
-        error: (err) => console.error(err),
-      });
+
+    this._http.post(`${environment.apiUrl}/entries`, data).subscribe({
+      next: (res: any) => {
+        if (file) this.uploadPdf(file, res._id);
+        else this.afterSubmit();
+      },
+      error: (err) => this.handleError(err),
+    });
   }
 
-  updateEntry(entryId: string) {
+  private updateEntry() {
+    const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
-    this._http
-      .put(`${environment.apiUrl}/entries/${entryId}`, this.entryForm.value)
-      .subscribe({
-        next: () => {
-          if (file) this.uploadPdf(file, entryId);
-          else this.finishEntryAction();
-        },
-        error: (err) => console.error(err),
-      });
+
+    this._http.put(`${environment.apiUrl}/entries/${this.currentEntryId}`, data).subscribe({
+      next: (res: any) => {
+        if (file) this.uploadPdf(file, res._id);
+        else this.afterSubmit();
+      },
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  private getEntryData() {
+    return {
+      sectionId: this.currentSectionId,
+      title: this.entryForm.value.title,
+      code: this.entryForm.value.code,
+      authors: this.entryForm.value.authors,
+      source: this.entryForm.value.source,
+    };
   }
 
   deleteEntry(entry: any) {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-
     this._http.delete(`${environment.apiUrl}/entries/${entry._id}`).subscribe({
-      next: () => this.getEntries(this.route.snapshot.paramMap.get('id')!),
+      next: () => this.afterSubmit(),
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  deleteSection(section: any) {
+    if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
+    this._http.delete(`${environment.apiUrl}/sections/${section._id}`).subscribe({
+      next: () => this.afterSubmit(),
+      error: (err) => this.handleError(err),
     });
   }
 
@@ -244,32 +256,56 @@ export class PublicationsComponent implements OnInit {
     const formData = new FormData();
     formData.append('pdf', file);
     formData.append('entryId', entryId);
-
     this._http
       .post(`${environment.apiUrl}/entry-pdf-upload/upload`, formData)
       .subscribe({
-        next: () => this.finishEntryAction(),
+        next: () => this.afterSubmit(),
+        error: (err) => this.handleError(err),
       });
   }
 
-  finishEntryAction() {
-    this.modalShow = false;
-    this.getEntries(this.route.snapshot.paramMap.get('id')!);
-    this.fileInputRef.nativeElement.value = '';
-    this.selectedFileName = null;
-    this.currentEntry = null;
-    this.currentSection = null;
+  afterSubmit() {
+    this.closeModal();
+    this.loadAllData(this.route.snapshot.paramMap.get('id')!);
   }
+
+  handleError(err: any) {
+    console.error(err);
+    this.afterSubmit();
+  }
+
+  triggerFileInput() {
+    this.fileInputRef?.nativeElement?.click();
+  }
+  
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    const maxSize = 4 * 1024 * 1024;
+  
+    if (file && file.size > maxSize) {
+      alert('PDF hajmi 4MB dan oshmasligi kerak!');
+      this.fileInputRef.nativeElement.value = '';
+      this.selectedFileName = null;
+    } else {
+      this.selectedFileName = file ? this.truncateFileName(file.name, 30) : null;
+    }
+  }
+  
+  private truncateFileName(name: string, maxLength: number): string {
+    if (name.length <= maxLength) return name;
+    const ext = name.substring(name.lastIndexOf('.'));
+    const base = name.substring(0, maxLength - ext.length - 3);
+    return base + '...' + ext;
+  }
+  
 
   openPdf(url: string | null): void {
     if (!url) return;
     let pdfUrl = url;
     if (pdfUrl.includes('drive.google.com/file/d/')) {
       pdfUrl = pdfUrl
-        .replace(
-          'https://drive.google.com/file/d/',
-          'https://drive.google.com/uc?export=view&id='
-        )
+        .replace('https://drive.google.com/file/d/', 'https://drive.google.com/uc?export=view&id=')
         .split('/view')[0];
     }
     window.open(pdfUrl, '_blank');
@@ -277,11 +313,24 @@ export class PublicationsComponent implements OnInit {
 
   closeModal() {
     this.modalShow = false;
+    this.entryModal = false;
+    this.sectionModal = false;
     this.entryForm.reset();
-    this.sectionForm.reset();
-    this.fileInputRef.nativeElement.value = '';
     this.selectedFileName = null;
-    this.currentEntry = null;
-    this.currentSection = null;
+    this.currentEntryId = null;
+    this.currentSectionId = null;
+  
+    if (this.fileInputRef?.nativeElement) {
+      this.fileInputRef.nativeElement.value = '';
+    }
+  }
+  
+
+  onClick(event: Event) {
+    event.preventDefault();
+    this.isClicked = true;
+    setTimeout(() => {
+      this.isClicked = false;
+    }, 200);
   }
 }
