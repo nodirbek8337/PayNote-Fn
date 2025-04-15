@@ -1,18 +1,28 @@
 <div class="login-container">
-    <form [formGroup]="loginForm" (submit)="onSubmit($event)" class="form-container">
-        <app-input
-          type="email"
-          placeholder="Emailingiz"
-          formControlName="email"
-        ></app-input>
-        <app-input
-          type="password"
-          [password]="true"
-          placeholder="Parol"
-          formControlName="password"
-        ></app-input>
-        <div class="text-center">
-            <kep-button buttonText="Kirish" buttonType="submit" buttonWidth="260px"></kep-button>
-        </div>
-      </form>
+  <form
+    [formGroup]="loginForm"
+    (submit)="onSubmit($event)"
+    class="form-container"
+  >
+    <app-input
+      type="email"
+      placeholder="Emailingiz"
+      formControlName="email"
+    ></app-input>
+    <app-input
+      type="password"
+      [password]="true"
+      placeholder="Parol"
+      formControlName="password"
+    ></app-input>
+    <div class="text-center">
+      <button
+        class="animated-btnn"
+        [ngClass]="{ clicked: isClicked }"
+        type="submit"
+      >
+        Tizimga kirish
+      </button>
+    </div>
+  </form>
 </div>
