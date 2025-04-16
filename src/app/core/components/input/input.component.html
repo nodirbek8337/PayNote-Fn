@@ -8,7 +8,7 @@
     (blur)="onTouched()"
     [disabled]="isDisabled"
     [ngClass]="{
-      'is-invalid': control?.invalid && (control?.dirty || control?.touched)
+      'is-invalid': shouldShowErrors()
     }"
   />
 
@@ -18,13 +18,8 @@
     </button>
   }
 
-  <div
-    *ngIf="control?.invalid && (control?.dirty || control?.touched)"
-    class="invalid-feedback mt-1"
-  >
-    <small *ngIf="required && control?.errors?.['required']">
-      Maydon to‘ldirilishi shart
-    </small>
+  <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
+    <small *ngIf="control?.errors?.['required']">Maydon to‘ldirilishi shart</small>
     <small *ngIf="control?.errors?.['email']">Email noto‘g‘ri formatda</small>
     <small *ngIf="control?.errors?.['pattern']">Qiymat noto‘g‘ri formatda</small>
   </div>
