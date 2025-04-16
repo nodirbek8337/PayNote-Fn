@@ -10,6 +10,7 @@ import { environment } from '../../../../../environments/environments';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { TokenHttpService } from '../../../../core/services/token-http.service';
 import { TokenService } from '../../../../core/services/auth.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-general-member',
@@ -46,13 +47,13 @@ export abstract class GeneralMemberComponent implements OnInit {
 
   initForm() {
     this.memberForm = this.fb.group({
-      fullName: [''],
+      fullName: ['', Validators.required],
       academicStatus: [this.academicStatus],
-      nationality: [''],
-      researchGroup: [''],
-      year: [''],
-      major: [''],
-      email: [''],
+      nationality: ['', Validators.required],
+      researchGroup: ['', Validators.required],
+      year: ['', Validators.required],
+      major: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       imageUrl: [''],
       researchAreas: this.fb.array([]),
     });
@@ -112,10 +113,16 @@ export abstract class GeneralMemberComponent implements OnInit {
   }
 
   submitForm(): void {
+    if (this.memberForm.invalid) {
+      this.memberForm.markAllAsTouched();
+      return;
+    }
+  
     this.currentMember
       ? this.updateMember(this.currentMember._id)
       : this.addMember();
   }
+  
 
   addMember(): void {
     this.loadingService.setLoadingState(true);
@@ -206,7 +213,7 @@ export abstract class GeneralMemberComponent implements OnInit {
   }
 
   addItem(field: FormArray) {
-    field.push(this.fb.control(''));
+    field.push(this.fb.control('', Validators.required));
   }
 
   removeItem(field: FormArray, index: number) {

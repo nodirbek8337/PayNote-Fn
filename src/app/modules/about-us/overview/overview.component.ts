@@ -44,10 +44,16 @@ export class OverviewComponent implements OnInit {
     private tokenService: TokenService
   ) {
     this.overviewForm = this.fb.group({
-      title: [''],
-      introduction: this.fb.array([this.fb.control('')]), 
-      researchFocus: this.fb.array([this.createResearchFocus()]),
-      conclusion: this.fb.array([this.fb.control('')]), 
+      title: ['', Validators.required],
+      introduction: this.fb.array([
+        this.fb.control('', Validators.required)
+      ]),
+      researchFocus: this.fb.array([
+        this.createResearchFocus()
+      ]),
+      conclusion: this.fb.array([
+        this.fb.control('', Validators.required)
+      ]),
     });
   }
   
@@ -114,14 +120,16 @@ export class OverviewComponent implements OnInit {
       this.overviewForm.reset();
     }
   }
-  
 
   submitForm(): void {
-    if (this.currentOverview) {
-      this.updateOverview(this.currentOverview._id);
-    } else {
-      this.addOverview();
+    if (this.overviewForm.invalid) {
+      this.overviewForm.markAllAsTouched();
+      return;
     }
+  
+    this.currentOverview
+      ? this.updateOverview(this.currentOverview._id)
+      : this.addOverview();
   }
 
   get introduction() {
@@ -138,8 +146,10 @@ export class OverviewComponent implements OnInit {
 
   createResearchFocus() {
     return this.fb.group({
-      category: [''],
-      details: this.fb.array([this.fb.control('')])
+      category: ['', Validators.required],
+      details: this.fb.array([
+        this.fb.control('', Validators.required)
+      ])
     });
   }
 
@@ -148,7 +158,7 @@ export class OverviewComponent implements OnInit {
   }
 
   addIntroduction() {
-    this.introduction.push(this.fb.control(''));
+    this.introduction.push(this.fb.control('', Validators.required));
   }
 
   addResearchFocus() {
@@ -156,7 +166,7 @@ export class OverviewComponent implements OnInit {
   }
 
   addDetail(i: number) {
-    this.getDetailsArray(i).push(this.fb.control(''));
+    this.getDetailsArray(i).push(this.fb.control('', Validators.required));
   }
 
   removeResearchFocus(i: number) {
@@ -164,7 +174,7 @@ export class OverviewComponent implements OnInit {
   }
 
   addConclusion() {
-    this.conclusion.push(this.fb.control(''));
+    this.conclusion.push(this.fb.control('', Validators.required));
   }
 
   closeModal(): void {

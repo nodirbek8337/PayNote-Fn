@@ -1,5 +1,3 @@
-// ✅ YANGILANGAN VA TO‘LIQ OPTIMALLASHTIRILGAN PUBLICATIONS COMPONENT
-
 import {
   Component,
   ElementRef,
@@ -23,6 +21,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { forkJoin, Subscription } from 'rxjs';
 import { TokenHttpService } from '../../core/services/token-http.service';
 import { TokenService } from '../../core/services/auth.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-publications',
@@ -69,13 +68,13 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     for (let y = currentYear; y >= 2019; y--) this.linkYears.push(y);
 
     this.entryForm = this.fb.group({
-      sectionId: [''],
-      sectionTitle: [''],
-      sectionYear: [''],
-      code: [''],
-      title: [''],
-      authors: [''],
-      source: [''],
+      sectionId: ['', Validators.required],
+      sectionTitle: ['', Validators.required], 
+      sectionYear: ['', Validators.required], 
+      code: ['', Validators.required],
+      title: ['', Validators.required],
+      authors: ['', Validators.required],
+      source: ['', Validators.required],
     });
   }
 
@@ -177,14 +176,40 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     if (this.sectionModal) {
+      const sectionControls = this.entryForm.controls;
+      const requiredFields = ['sectionTitle', 'sectionYear'];
+  
+      const sectionInvalid = requiredFields.some((field) =>
+        sectionControls[field].invalid
+      );
+  
+      if (sectionInvalid) {
+        requiredFields.forEach((field) => sectionControls[field].markAsTouched());
+        return;
+      }
+  
       const section = this.currentSectionId ? 'update' : 'add';
       return section === 'update' ? this.updateSection() : this.addSection();
     }
+  
     if (this.entryModal) {
+      const entryControls = this.entryForm.controls;
+      const requiredFields = ['sectionId', 'title', 'code', 'authors', 'source'];
+  
+      const entryInvalid = requiredFields.some((field) =>
+        entryControls[field].invalid
+      );
+  
+      if (entryInvalid) {
+        requiredFields.forEach((field) => entryControls[field].markAsTouched());
+        return;
+      }
+  
       const entry = this.currentEntryId ? 'update' : 'add';
       return entry === 'update' ? this.updateEntry() : this.addEntry();
     }
   }
+  
 
   private addSection() {
     const data = {
