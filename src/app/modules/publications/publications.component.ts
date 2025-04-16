@@ -341,4 +341,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       this.isClicked = false;
     }, 200);
   }
+
+
+
 }

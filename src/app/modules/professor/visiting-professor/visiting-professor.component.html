@@ -53,6 +53,10 @@
               <td class="color">Period</td>
               <td>{{ prof?.contact?.period }}</td>
             </tr>
+            <tr *ngIf="!!prof.website?.trim()">
+              <td class="color">Website</td>
+              <td>{{ prof.website }}</td>
+            </tr>
             <tr>
               <td class="color">E-mail</td>
               <td>{{ prof?.contact?.email }}</td>
