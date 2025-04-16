@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormArray,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { environment } from '../../../../../environments/environments';
 import { LoadingService } from '../../../../core/services/loading.service';
@@ -46,22 +47,22 @@ export abstract class GeneralProfessorComponent implements OnInit {
 
   initForm() {
     this.professorForm = this.fb.group({
-      fullName: [''],
+      fullName: ['', Validators.required],
       type: [this.professorType],
-      position: [''],
-      address: [''],
-      department: [''],
-      university: [''],
-      nationality: [''],
-      researchGroup: [''],
-      website: [''],
+      position: ['', Validators.required],
+      department: ['', Validators.required],
+      university: ['', Validators.required],
+      nationality: ['', Validators.required],
+      researchGroup: ['', Validators.required],
+      website: ['', Validators.required],
       imageUrl: [''],
       contact: this.fb.group({
-        email: [''],
-        officePhone: [''],
-        cellPhone: [''],
-        officeFax: [''],
-        period: [''],
+        address: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        officePhone: ['', Validators.required],
+        cellPhone: ['', Validators.required],
+        officeFax: ['', Validators.required],
+        period: ['', Validators.required],
       }),
       researchAreas: this.fb.array([]),
       education: this.fb.array([]),
@@ -129,10 +130,16 @@ export abstract class GeneralProfessorComponent implements OnInit {
   }
 
   submitForm(): void {
+    if (this.professorForm.invalid) {
+      this.professorForm.markAllAsTouched();
+      return;
+    }
+  
     this.currentProfessor
       ? this.updateProfessor(this.currentProfessor._id)
       : this.addProfessor();
   }
+  
 
   addProfessor(): void {
     this.loadingService.setLoadingState(true);
@@ -243,19 +250,31 @@ export abstract class GeneralProfessorComponent implements OnInit {
   }
 
   addItem(field: FormArray) {
-    field.push(this.fb.control(''));
+    field.push(this.fb.control('', Validators.required));
   }
 
   addEducation() {
-    this.education.push(this.fb.group({ year: '', university: '', major: '', degree: '' }));
+    this.education.push(this.fb.group({
+      year: ['', Validators.required],
+      university: ['', Validators.required],
+      major: ['', Validators.required],
+      degree: ['', Validators.required],
+    }));
   }
-
+  
   addCareer() {
-    this.career.push(this.fb.group({ year: '', position: '', university: '' }));
+    this.career.push(this.fb.group({
+      year: ['', Validators.required],
+      position: ['', Validators.required],
+      university: ['', Validators.required],
+    }));
   }
 
   addAward() {
-    this.awards.push(this.fb.group({ year: '', title: '' }));
+    this.awards.push(this.fb.group({
+      year: ['', Validators.required],
+      title: ['', Validators.required],
+    }));
   }
 
   removeItem(field: FormArray, index: number) {

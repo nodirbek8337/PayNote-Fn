@@ -207,14 +207,6 @@
           }
         </div>
 
-        <!-- Address -->
-        <app-input
-          type="text"
-          placeholder="Address"
-          formControlName="address"
-        >
-        </app-input>
-
         <!-- Position -->
         <app-input
           type="text"
@@ -265,6 +257,13 @@
 
         <!-- Contact Details -->
         <div formGroupName="contact">
+          <!-- Address -->
+          <app-input
+            type="text"
+            placeholder="Address"
+            formControlName="address">
+          </app-input>
+
           <app-input
             type="email"
             placeholder="Email"
@@ -332,21 +331,25 @@
               placeholder="Year"
               formControlName="year"
             ></app-input>
+            
             <app-input
               type="text"
               placeholder="University"
               formControlName="university"
             ></app-input>
+
             <app-input
               type="text"
               placeholder="Major"
               formControlName="major"
-            ></app-input>
+              ></app-input>
+
             <app-input
               type="text"
               placeholder="Degree"
               formControlName="degree"
-            ></app-input>
+              ></app-input>
+
             <kep-button
               buttonText="Remove"
               buttonType="button"
@@ -374,16 +377,19 @@
               placeholder="Year"
               formControlName="year"
             ></app-input>
+
             <app-input
               type="text"
               placeholder="Position"
               formControlName="position"
             ></app-input>
+
             <app-input
               type="text"
               placeholder="University"
               formControlName="university"
             ></app-input>
+            
             <kep-button
               buttonText="Remove"
               buttonType="button"
@@ -444,7 +450,6 @@
             buttonText="Saqlash"
             buttonType="submit"
             buttonWidth="120px"
-            (buttonClick)="submitForm()"
           >
           </kep-button>
         </div>
