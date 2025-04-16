@@ -1,26 +1,38 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import dbJSON from "../../../../assets/db.json";
+import { TokenService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: false,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
-  host: { 'ngSkipHydration': '' },
-  providers: [CommonModule, RouterModule],
+  host: { 'ngSkipHydration': '' }
 })
 export class NavbarComponent implements OnInit {
   menuItems: any[] = [];
+  isAuthenticated: boolean = false;
 
+  constructor(
+    private renderer: Renderer2, 
+    private el: ElementRef,
+    private tokenService: TokenService,
+  ) {}
 
   ngOnInit(): void {
-    this.menuItems = dbJSON.menuItems;   
-}
+    this.menuItems = dbJSON.menuItems;
+    
+    this.tokenService.auth$.subscribe(val => {
+      this.isAuthenticated = val;
+    });
+  }
 
-
-constructor(private renderer: Renderer2, private el: ElementRef) {}
+  logout() {
+    this.tokenService.logout();
+    this.isAuthenticated = false;
+  }
 
 // Scroll event listener
 @HostListener('window:scroll', [])
