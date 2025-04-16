@@ -7,10 +7,12 @@ import {
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environments';
 import { NgIf } from '@angular/common';
+import { environment } from '../../../environments/environments';
+import { TokenService } from '../../core/services/auth.service';
 import { InputComponent } from '../../core/components/input/input.component';
 import { ButtonComponent } from '../../core/components/button/button.component';
+
 
 @Component({
   selector: 'app-login',
@@ -26,7 +28,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -49,7 +52,7 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           if (response.token) {
-            localStorage.setItem('login_access_token', response.token);
+            this.tokenService.login(response.token);
             this.router.navigate(['']);
           } else {
             this.errorMessage = 'Token topilmadi. Login muvaffaqiyatsiz.';

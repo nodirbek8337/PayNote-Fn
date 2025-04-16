@@ -17,7 +17,7 @@
     <!-- Content Center -->
     <div class="col-md-8 content">
       <h4><b>[ Ph.D Candidate / 2 students ]</b></h4>
-      <div class="add-btn text-end">
+      <div class="add-btn text-end" *ngIf="isAuthenticated">
         <kep-button
           (buttonClick)="openModal()"
           buttonText="Qo'shish"
@@ -49,7 +49,7 @@
             </tr>
           </table>
         </div>
-        <div class="add-btn text-end">
+        <div class="add-btn text-end" *ngIf="isAuthenticated">
           <kep-button
             (buttonClick)="openModal(member)"
             buttonText="Yangilash"
@@ -75,6 +75,7 @@
     </div>
   </div>
   <app-modal
+    *ngIf="isAuthenticated"
     [modalShow]="modalShow"
     [modalTitle]="currentMember ? 'Yangilash' : 'Qo\'shish'"
     (modalClose)="modalShow = $event"

@@ -6,7 +6,7 @@
       <a routerLink="/contact-us" class="button cyan"> Contact us </a>
     </div>
     <div class="col-md-8 content">
-      <div class="add-btn text-end">
+      <div class="add-btn text-end" *ngIf="isAuthenticated">
         <kep-button 
           (buttonClick)="openModal()" 
           buttonText="Qo'shish" 
@@ -40,7 +40,7 @@
         @for (conclusion_item of overview?.conclusion; track $index) {
           <p>{{ conclusion_item }}</p>
         }
-        <div class="add-btn text-end">
+        <div class="add-btn text-end" *ngIf="isAuthenticated">
           <kep-button 
             (buttonClick)="openModal(overview)" 
             buttonText="Yangilash" 
@@ -66,6 +66,7 @@
   </div>
   <!-- modal content -->
   <app-modal 
+    *ngIf="isAuthenticated"
     [modalShow]="modalShow" 
     [modalTitle]="currentOverview ? 'Yangilash' : 'Qo\'shish'" 
     (modalClose)="modalShow = $event">

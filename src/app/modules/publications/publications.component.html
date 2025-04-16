@@ -10,7 +10,7 @@
 
     <!-- Content Center -->
     <div class="col-md-8 content">
-      <div class="add-btn text-end">
+      <div class="add-btn text-end" *ngIf="isAuthenticated">
         <kep-button
           (buttonClick)="openSectionModal(null)"
           buttonText="Bo'lim qo'shish"
@@ -20,8 +20,9 @@
       </div>
       <div *ngFor="let group of groupedEntries">
         <h3>[{{ group.title }}, {{ group.year }}]</h3>
-        <div class="add-btn">
+        <div class="add-btn" *ngIf="isAuthenticated">
           <kep-button
+            
             (buttonClick)="openSectionModal(group)"
             buttonText="Bo'limni yangilash"
             buttonType="button"
@@ -55,7 +56,7 @@
               width="20px"
               height="20px"
             />
-            <div class="add-btn">
+            <div class="add-btn" *ngIf="isAuthenticated">
               <kep-button
                 (buttonClick)="openEntryModal(entry, group)"
                 buttonText="Kirishni yangilash"
@@ -75,7 +76,7 @@
             </div>
             <hr />
           </li>
-          <div class="add-btn text-end">
+          <div class="add-btn text-end" *ngIf="isAuthenticated">
             <kep-button
               (buttonClick)="openEntryModal(null, group)"
               buttonText="Kirish qo'shish"
@@ -86,6 +87,7 @@
         </ul>
       </div>
       <app-modal
+        *ngIf="isAuthenticated"
         [modalShow]="modalShow"
         [modalTitle]="
           sectionModal

@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { environment } from '../../../../../environments/environments';
 import { LoadingService } from '../../../../core/services/loading.service';
+import { TokenHttpService } from '../../../../core/services/token-http.service';
+import { TokenService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-general-professor',
@@ -21,18 +23,25 @@ export abstract class GeneralProfessorComponent implements OnInit {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   _http = inject(HttpClient);
   loadingService = inject(LoadingService);
+  tokenHttp = inject(TokenHttpService);
+  tokenService = inject(TokenService);
 
   professorForm!: FormGroup;
   professors: any[] = [];
   currentProfessor: any = null;
   modalShow: boolean = false;
   selectedFileName: string | null = null;
+  isAuthenticated: boolean = false;
 
   constructor(public fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
     this.getProfessors();
+
+    this.tokenService.auth$.subscribe(val => {
+      this.isAuthenticated = val;
+    });
   }
 
   initForm() {
@@ -129,7 +138,7 @@ export abstract class GeneralProfessorComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.professorForm.value;
 
-    this._http.post(`${environment.apiUrl}/professors`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/professors`, data).subscribe({
       next: (res: any) => {
         const id = res._id;
         const file = this.fileInputRef.nativeElement.files?.[0];
@@ -139,7 +148,7 @@ export abstract class GeneralProfessorComponent implements OnInit {
           formData.append('image', file);
           formData.append('professorId', id);
 
-          this._http
+          this.tokenHttp
             .post(`${environment.apiUrl}/professor-image-upload/upload`, formData)
             .subscribe({
               complete: () => {
@@ -166,7 +175,7 @@ export abstract class GeneralProfessorComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.professorForm.value;
 
-    this._http.put(`${environment.apiUrl}/professors/${_id}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/professors/${_id}`, data).subscribe({
       next: () => {
         const file = this.fileInputRef.nativeElement.files?.[0];
         if (file) {
@@ -174,7 +183,7 @@ export abstract class GeneralProfessorComponent implements OnInit {
           formData.append('image', file);
           formData.append('professorId', _id);
 
-          this._http
+          this.tokenHttp
             .post(`${environment.apiUrl}/professor-image-upload/upload`, formData)
             .subscribe({
               complete: () => {
@@ -199,9 +208,9 @@ export abstract class GeneralProfessorComponent implements OnInit {
 
   deleteProfessor(professor: any): void {
     this.loadingService.setLoadingState(true);
-    this._http.delete(`${environment.apiUrl}/professors/${professor._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/professors/${professor._id}`).subscribe({
       next: () => {
-        this._http
+        this.tokenHttp
           .delete(`${environment.apiUrl}/professor-image-upload/${professor._id}`)
           .subscribe({
             next: () => this.getProfessors(),

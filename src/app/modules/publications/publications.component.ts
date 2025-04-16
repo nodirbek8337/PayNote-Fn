@@ -19,8 +19,10 @@ import { LoadingService } from '../../core/services/loading.service';
 import { ModalComponent } from '../../core/components/modal/modal.component';
 import { InputComponent } from '../../core/components/input/input.component';
 import { ButtonComponent } from '../../core/components/button/button.component';
-import { NgFor, NgIf, NgClass } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { forkJoin, Subscription } from 'rxjs';
+import { TokenHttpService } from '../../core/services/token-http.service';
+import { TokenService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-publications',
@@ -53,12 +55,15 @@ export class PublicationsComponent implements OnInit, OnDestroy {
   selectedFileName: string | null = null;
   routeSub!: Subscription;
   isClicked: boolean = false;
+  isAuthenticated: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private _http: HttpClient,
     private fb: FormBuilder,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private tokenHttp: TokenHttpService,
+    private tokenService: TokenService
   ) {
     const currentYear = new Date().getFullYear();
     for (let y = currentYear; y >= 2019; y--) this.linkYears.push(y);
@@ -78,6 +83,10 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     this.routeSub = this.route.paramMap.subscribe((params: ParamMap) => {
       const year = params.get('id');
       if (year) this.loadAllData(year);
+    });
+
+    this.tokenService.auth$.subscribe(val => {
+      this.isAuthenticated = val;
     });
   }
 
@@ -182,7 +191,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       title: this.entryForm.value.sectionTitle,
       year: this.entryForm.value.sectionYear,
     };
-    this._http.post(`${environment.apiUrl}/sections`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/sections`, data).subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -193,7 +202,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       title: this.entryForm.value.sectionTitle,
       year: this.entryForm.value.sectionYear,
     };
-    this._http.put(`${environment.apiUrl}/sections/${this.currentSectionId}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/sections/${this.currentSectionId}`, data).subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -203,7 +212,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
 
-    this._http.post(`${environment.apiUrl}/entries`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/entries`, data).subscribe({
       next: (res: any) => {
         if (file) this.uploadPdf(file, res._id);
         else this.afterSubmit();
@@ -216,7 +225,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
 
-    this._http.put(`${environment.apiUrl}/entries/${this.currentEntryId}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/entries/${this.currentEntryId}`, data).subscribe({
       next: (res: any) => {
         if (file) this.uploadPdf(file, res._id);
         else this.afterSubmit();
@@ -237,7 +246,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   deleteEntry(entry: any) {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-    this._http.delete(`${environment.apiUrl}/entries/${entry._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/entries/${entry._id}`).subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -245,7 +254,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   deleteSection(section: any) {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-    this._http.delete(`${environment.apiUrl}/sections/${section._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/sections/${section._id}`).subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -255,7 +264,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     formData.append('pdf', file);
     formData.append('entryId', entryId);
-    this._http
+    this.tokenHttp
       .post(`${environment.apiUrl}/entry-pdf-upload/upload`, formData)
       .subscribe({
         next: () => this.afterSubmit(),

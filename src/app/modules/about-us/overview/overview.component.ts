@@ -8,6 +8,8 @@ import { InputComponent } from '../../../core/components/input/input.component';
 import { ModalComponent } from '../../../core/components/modal/modal.component';
 import { NgFor, NgIf } from '@angular/common';
 import { LoadingService } from '../../../core/services/loading.service';
+import { TokenHttpService } from '../../../core/services/token-http.service';
+import { TokenService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-overview',
@@ -33,8 +35,14 @@ export class OverviewComponent implements OnInit {
   confirmModalShow: boolean = false;
   overviews: any[] = [];
   currentOverview: any = null;
+  isAuthenticated: boolean = false;
 
-  constructor(public fb: FormBuilder, private loadingService: LoadingService) {
+  constructor(
+    public fb: FormBuilder, 
+    private loadingService: LoadingService, 
+    private tokenHttp: TokenHttpService,
+    private tokenService: TokenService
+  ) {
     this.overviewForm = this.fb.group({
       title: [''],
       introduction: this.fb.array([this.fb.control('')]), 
@@ -45,6 +53,10 @@ export class OverviewComponent implements OnInit {
   
   ngOnInit(): void {
     this.getAll();
+
+    this.tokenService.auth$.subscribe(val => {
+      this.isAuthenticated = val;
+    });
   }
 
   getAll(){
@@ -195,7 +207,7 @@ export class OverviewComponent implements OnInit {
   addOverview(): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this._http.post(`${environment.apiUrl}/overviews`, overviewData).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/overviews`, overviewData).subscribe({
       next: () => {
         this.modalShow = false; 
         this.getAll(); 
@@ -213,7 +225,7 @@ export class OverviewComponent implements OnInit {
   updateOverview(_id: any): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this._http.put(`${environment.apiUrl}/overviews/${_id}`, overviewData).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/overviews/${_id}`, overviewData).subscribe({
       next: (res) => {
         this.modalShow = false; 
         this.getAll();
@@ -239,7 +251,7 @@ export class OverviewComponent implements OnInit {
   deleteOverview(overview: any): void {
     this.loadingService.setLoadingState(true);
     this.confirmModalShow = false;
-    this._http.delete(`${environment.apiUrl}/overviews/${overview?._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/overviews/${overview?._id}`).subscribe({
       next: () => {
         this.getAll(); 
       },

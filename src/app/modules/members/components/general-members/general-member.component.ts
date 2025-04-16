@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { environment } from '../../../../../environments/environments';
 import { LoadingService } from '../../../../core/services/loading.service';
+import { TokenHttpService } from '../../../../core/services/token-http.service';
+import { TokenService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-general-member',
@@ -26,12 +28,20 @@ export abstract class GeneralMemberComponent implements OnInit {
   currentMember: any = null;
   modalShow: boolean = false;
   selectedFileName: string | null = null;
+  isAuthenticated: boolean = false;
 
-  constructor(public fb: FormBuilder) {}
+  constructor(
+    public fb: FormBuilder, 
+    private tokenHttp: TokenHttpService,
+    private tokenService: TokenService) {}
 
   ngOnInit(): void {
     this.initForm();
     this.getMembers();
+
+    this.tokenService.auth$.subscribe(val => {
+      this.isAuthenticated = val;
+    });
   }
 
   initForm() {
@@ -110,7 +120,7 @@ export abstract class GeneralMemberComponent implements OnInit {
   addMember(): void {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
-    this._http.post(`${environment.apiUrl}/members`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/members`, data).subscribe({
       next: (res: any) => {
         const createdId = res._id;
         const file = this.fileInputRef.nativeElement.files?.[0];
@@ -120,7 +130,7 @@ export abstract class GeneralMemberComponent implements OnInit {
           formData.append('image', file);
           formData.append('memberId', createdId);
 
-          this._http.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
+          this.tokenHttp.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
             complete: () => {
               this.modalShow = false;
               this.getMembers();
@@ -145,7 +155,7 @@ export abstract class GeneralMemberComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
 
-    this._http.put(`${environment.apiUrl}/members/${_id}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/members/${_id}`, data).subscribe({
       next: () => {
         const file = this.fileInputRef.nativeElement.files?.[0];
         if (file) {
@@ -153,7 +163,7 @@ export abstract class GeneralMemberComponent implements OnInit {
           formData.append('image', file);
           formData.append('memberId', _id);
 
-          this._http.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
+          this.tokenHttp.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
             complete: () => {
               this.modalShow = false;
               this.getMembers();
@@ -176,9 +186,9 @@ export abstract class GeneralMemberComponent implements OnInit {
 
   deleteMember(member: any): void {
     this.loadingService.setLoadingState(true);
-    this._http.delete(`${environment.apiUrl}/members/${member._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/members/${member._id}`).subscribe({
       next: () => {
-        this._http.delete(`${environment.apiUrl}/member-image-upload/${member._id}`).subscribe({
+        this.tokenHttp.delete(`${environment.apiUrl}/member-image-upload/${member._id}`).subscribe({
           next: () => this.getMembers(),
           error: (err) => console.error('Rasm o‘chirishda xato:', err),
           complete: () => this.loadingService.setLoadingState(false)

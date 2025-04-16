@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../core/components/button/button.component';
 import { InputComponent } from '../../../core/components/input/input.component';
 import { ModalComponent } from '../../../core/components/modal/modal.component';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { GeneralMemberComponent } from '../components/general-members/general-member.component';
 
 
@@ -22,6 +22,7 @@ import { GeneralMemberComponent } from '../components/general-members/general-me
     ButtonComponent,
     ModalComponent,
     NgFor,
+    NgIf
   ]
 })
 export class AlumniComponent extends GeneralMemberComponent {
