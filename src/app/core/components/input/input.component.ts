@@ -1,51 +1,74 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  forwardRef,
+  inject,
+  Input
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ControlContainer
+} from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports: [CommonModule],
+  imports: [NgIf, NgClass, FormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true,
-    },
-  ],
+    }
+  ]
 })
 export class InputComponent implements ControlValueAccessor {
+  private controlContainer = inject(ControlContainer);
+
   @Input() type: string = 'text';
+  @Input() placeholder: string = '';
+  @Input() formControlName!: string;
   @Input() password: boolean = false;
-  @Input() placeholder?: string;
-  show = false;
-  value: string = '';
+  @Input() required: boolean = false;
+
+  value: any = '';
+  isDisabled: boolean = false;
+  show: boolean = false;
+
+  onChange = (_: any) => {};
+  onTouched = () => {};
+
+  writeValue(val: any): void {
+    this.value = val;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
+  }
+
+  get control() {
+    return this.controlContainer?.control?.get(this.formControlName);
+  }
 
   toggle() {
     this.show = !this.show;
   }
 
   handleInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    this.value = target.value;
+    const input = event.target as HTMLInputElement;
+    this.value = input.value;
     this.onChange(this.value);
-    this.onTouched();
-  }
-
-  onChange: (value: string) => void = () => {};
-  onTouched: () => void = () => {};
-
-  writeValue(value: string): void {
-    this.value = value || '';
-  }
-
-  registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
   }
 }

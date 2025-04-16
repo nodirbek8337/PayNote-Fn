@@ -8,6 +8,7 @@ import { ModalComponent } from '../../../core/components/modal/modal.component';
 import { NgFor } from '@angular/common';
 import { GeneralMemberComponent } from '../components/general-members/general-member.component';
 
+
 @Component({
   selector: 'app-alumni',
   standalone: true,
