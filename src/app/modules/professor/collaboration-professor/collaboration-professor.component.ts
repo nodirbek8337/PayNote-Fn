@@ -8,6 +8,7 @@ import { ModalComponent } from '../../../core/components/modal/modal.component';
 import { NgFor, NgIf } from '@angular/common';
 import { GeneralProfessorComponent } from '../components/general-professor/general-professor.component';
 
+
 @Component({
   selector: 'app-collaboration-professor',
   standalone: true,

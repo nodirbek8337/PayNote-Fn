@@ -5,18 +5,27 @@
     [value]="value"
     (input)="handleInput($event)"
     [placeholder]="placeholder"
+    (blur)="onTouched()"
+    [disabled]="isDisabled"
+    [ngClass]="{
+      'is-invalid': control?.invalid && (control?.dirty || control?.touched)
+    }"
   />
+
   @if(password){
-    <button
-        type="button"
-        (click)="toggle()"
-        class="eye-btn"
-    >
-        @if(show){
-            <i class="fa-solid fa-eye"></i>
-        } @else {
-            <i class="fa-solid fa-eye-slash"></i>
-        }
+    <button type="button" (click)="toggle()" class="eye-btn">
+      <i class="fa-solid" [ngClass]="show ? 'fa-eye-slash' : 'fa-eye'"></i>
     </button>
   }
+
+  <div
+    *ngIf="control?.invalid && (control?.dirty || control?.touched)"
+    class="invalid-feedback mt-1"
+  >
+    <small *ngIf="required && control?.errors?.['required']">
+      Maydon to‘ldirilishi shart
+    </small>
+    <small *ngIf="control?.errors?.['email']">Email noto‘g‘ri formatda</small>
+    <small *ngIf="control?.errors?.['pattern']">Qiymat noto‘g‘ri formatda</small>
+  </div>
 </div>

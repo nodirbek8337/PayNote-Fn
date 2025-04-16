@@ -21,7 +21,10 @@ export class ButtonComponent {
   isClicked: boolean = false;
 
   onClick(event: Event) {
-    event.preventDefault();
+    if(this.buttonType != 'submit'){
+      event.preventDefault();
+    }
+    
     this.isClicked = true;
 
     this.buttonClick.emit();
