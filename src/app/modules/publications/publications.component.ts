@@ -34,8 +34,7 @@ import { forkJoin, Subscription } from 'rxjs';
     InputComponent,
     ButtonComponent,
     NgFor,
-    NgIf,
-    NgClass,
+    NgIf
   ],
 })
 export class PublicationsComponent implements OnInit, OnDestroy {
