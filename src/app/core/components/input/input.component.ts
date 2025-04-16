@@ -2,7 +2,8 @@ import {
   Component,
   forwardRef,
   inject,
-  Input
+  Input,
+  OnInit
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -26,7 +27,7 @@ import { FormsModule } from '@angular/forms';
     }
   ]
 })
-export class InputComponent implements ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor, OnInit {
   private controlContainer = inject(ControlContainer);
 
   @Input() type: string = 'text';
@@ -41,6 +42,11 @@ export class InputComponent implements ControlValueAccessor {
 
   onChange = (_: any) => {};
   onTouched = () => {};
+
+  ngOnInit(): void {
+    const validator = this.control?.validator?.({} as any);
+    this.required ||= !!validator?.['required'];
+  }
 
   writeValue(val: any): void {
     this.value = val;
@@ -70,5 +76,10 @@ export class InputComponent implements ControlValueAccessor {
     const input = event.target as HTMLInputElement;
     this.value = input.value;
     this.onChange(this.value);
+  }
+
+  shouldShowErrors(): boolean {
+    const control = this.control;
+    return !!control && this.required && control.invalid && (control.dirty || control.touched);
   }
 }
