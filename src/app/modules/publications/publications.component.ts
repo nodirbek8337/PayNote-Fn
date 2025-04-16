@@ -334,8 +334,6 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  ngOnInit(): void {
-      
-  }
+
 
 }
