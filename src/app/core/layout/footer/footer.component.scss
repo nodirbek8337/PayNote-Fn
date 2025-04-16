@@ -1,4 +1,6 @@
 .footer-wrapper {
+  position: relative;
+  z-index: 1; 
   height: 250px;
   width: 100%;
   background-image: url("../../../../assets/img_bg_3.jpg");

@@ -5,6 +5,8 @@ import {
   ViewChild,
   OnDestroy,
 } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -39,6 +41,7 @@ import { Validators } from '@angular/forms';
   ],
 })
 export class PublicationsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   linkYears: number[] = [];
@@ -91,6 +94,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
+
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadAllData(year: string) {
@@ -98,7 +104,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     forkJoin({
       entries: this._http.get<any[]>(`${environment.apiUrl}/entries?year=${year}`),
       sections: this._http.get<any[]>(`${environment.apiUrl}/sections?year=${year}`),
-    }).subscribe({
+    })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: ({ entries, sections }) => {
         this.availableSections = sections;
         this.groupedEntries = this.groupEntries(entries, sections);
@@ -216,7 +224,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       title: this.entryForm.value.sectionTitle,
       year: this.entryForm.value.sectionYear,
     };
-    this.tokenHttp.post(`${environment.apiUrl}/sections`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/sections`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -227,7 +237,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       title: this.entryForm.value.sectionTitle,
       year: this.entryForm.value.sectionYear,
     };
-    this.tokenHttp.put(`${environment.apiUrl}/sections/${this.currentSectionId}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/sections/${this.currentSectionId}`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -237,7 +249,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
 
-    this.tokenHttp.post(`${environment.apiUrl}/entries`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/entries`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => {
         if (file) this.uploadPdf(file, res._id);
         else this.afterSubmit();
@@ -250,7 +264,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     const data = this.getEntryData();
     const file = this.fileInputRef.nativeElement.files?.[0];
 
-    this.tokenHttp.put(`${environment.apiUrl}/entries/${this.currentEntryId}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/entries/${this.currentEntryId}`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => {
         if (file) this.uploadPdf(file, res._id);
         else this.afterSubmit();
@@ -271,7 +287,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   deleteEntry(entry: any) {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-    this.tokenHttp.delete(`${environment.apiUrl}/entries/${entry._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/entries/${entry._id}`)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -279,7 +297,9 @@ export class PublicationsComponent implements OnInit, OnDestroy {
 
   deleteSection(section: any) {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
-    this.tokenHttp.delete(`${environment.apiUrl}/sections/${section._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/sections/${section._id}`)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => this.afterSubmit(),
       error: (err) => this.handleError(err),
     });
@@ -291,6 +311,7 @@ export class PublicationsComponent implements OnInit, OnDestroy {
     formData.append('entryId', entryId);
     this.tokenHttp
       .post(`${environment.apiUrl}/entry-pdf-upload/upload`, formData)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.afterSubmit(),
         error: (err) => this.handleError(err),

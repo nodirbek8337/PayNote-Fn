@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, inject, OnDestroy } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -18,7 +20,8 @@ import { Validators } from '@angular/forms';
   template: '',
   imports: [ReactiveFormsModule, HttpClientModule],
 })
-export abstract class GeneralMemberComponent implements OnInit {
+export abstract class GeneralMemberComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   @Input() academicStatus: string = 'alumni';
   _http = inject(HttpClient);
   loadingService = inject(LoadingService);
@@ -45,6 +48,11 @@ export abstract class GeneralMemberComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   initForm() {
     this.memberForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -62,7 +70,9 @@ export abstract class GeneralMemberComponent implements OnInit {
   getMembers() {
     this.loadingService.setLoadingState(true);
     const params = new HttpParams().set('academicStatus', this.academicStatus);
-    this._http.get(`${environment.apiUrl}/members`, { params }).subscribe({
+    this._http.get(`${environment.apiUrl}/members`, { params })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => (this.members = res),
       complete: () => this.loadingService.setLoadingState(false),
       error: (err) => {
@@ -127,7 +137,9 @@ export abstract class GeneralMemberComponent implements OnInit {
   addMember(): void {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
-    this.tokenHttp.post(`${environment.apiUrl}/members`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/members`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => {
         const createdId = res._id;
         const file = this.fileInputRef.nativeElement.files?.[0];
@@ -162,7 +174,9 @@ export abstract class GeneralMemberComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
 
-    this.tokenHttp.put(`${environment.apiUrl}/members/${_id}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/members/${_id}`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
         const file = this.fileInputRef.nativeElement.files?.[0];
         if (file) {
@@ -192,10 +206,13 @@ export abstract class GeneralMemberComponent implements OnInit {
   }
 
   deleteMember(member: any): void {
+    if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
     this.loadingService.setLoadingState(true);
     this.tokenHttp.delete(`${environment.apiUrl}/members/${member._id}`).subscribe({
       next: () => {
-        this.tokenHttp.delete(`${environment.apiUrl}/member-image-upload/${member._id}`).subscribe({
+        this.tokenHttp.delete(`${environment.apiUrl}/member-image-upload/${member._id}`)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
           next: () => this.getMembers(),
           error: (err) => console.error('Rasm o‘chirishda xato:', err),
           complete: () => this.loadingService.setLoadingState(false)

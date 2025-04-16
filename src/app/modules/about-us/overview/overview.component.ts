@@ -1,5 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environments';
@@ -27,7 +29,8 @@ import { TokenService } from '../../../core/services/auth.service';
     NgIf,
   ],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   _http = inject(HttpClient);
   overviewForm: FormGroup;
 
@@ -65,9 +68,16 @@ export class OverviewComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getAll(){
     this.loadingService.setLoadingState(true);
-    this._http.get(`${environment.apiUrl}/overviews`).subscribe({
+    this._http.get(`${environment.apiUrl}/overviews`)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => {
         this.overviews = [...res];
       },
@@ -217,7 +227,9 @@ export class OverviewComponent implements OnInit {
   addOverview(): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this.tokenHttp.post(`${environment.apiUrl}/overviews`, overviewData).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/overviews`, overviewData)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
         this.modalShow = false; 
         this.getAll(); 
@@ -235,7 +247,9 @@ export class OverviewComponent implements OnInit {
   updateOverview(_id: any): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this.tokenHttp.put(`${environment.apiUrl}/overviews/${_id}`, overviewData).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/overviews/${_id}`, overviewData)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res) => {
         this.modalShow = false; 
         this.getAll();
@@ -259,9 +273,12 @@ export class OverviewComponent implements OnInit {
   }
 
   deleteOverview(overview: any): void {
+    if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
     this.loadingService.setLoadingState(true);
     this.confirmModalShow = false;
-    this.tokenHttp.delete(`${environment.apiUrl}/overviews/${overview?._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/overviews/${overview?._id}`)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
         this.getAll(); 
       },

@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, inject, OnDestroy } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
@@ -19,7 +21,8 @@ import { TokenService } from '../../../../core/services/auth.service';
   styleUrls: [],
   imports: [ReactiveFormsModule, HttpClientModule],
 })
-export abstract class GeneralProfessorComponent implements OnInit {
+export abstract class GeneralProfessorComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   @Input() professorType: string = 'regular';
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   _http = inject(HttpClient);
@@ -43,6 +46,11 @@ export abstract class GeneralProfessorComponent implements OnInit {
     this.tokenService.auth$.subscribe(val => {
       this.isAuthenticated = val;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initForm() {
@@ -74,7 +82,9 @@ export abstract class GeneralProfessorComponent implements OnInit {
   getProfessors() {
     this.loadingService.setLoadingState(true);
     const params = new HttpParams().set('type', this.professorType);
-    this._http.get(`${environment.apiUrl}/professors`, { params }).subscribe({
+    this._http.get(`${environment.apiUrl}/professors`, { params })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => (this.professors = res),
       complete: () => this.loadingService.setLoadingState(false),
       error: (err) => {
@@ -145,7 +155,9 @@ export abstract class GeneralProfessorComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.professorForm.value;
 
-    this.tokenHttp.post(`${environment.apiUrl}/professors`, data).subscribe({
+    this.tokenHttp.post(`${environment.apiUrl}/professors`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: (res: any) => {
         const id = res._id;
         const file = this.fileInputRef.nativeElement.files?.[0];
@@ -182,7 +194,9 @@ export abstract class GeneralProfessorComponent implements OnInit {
     this.loadingService.setLoadingState(true);
     const data = this.professorForm.value;
 
-    this.tokenHttp.put(`${environment.apiUrl}/professors/${_id}`, data).subscribe({
+    this.tokenHttp.put(`${environment.apiUrl}/professors/${_id}`, data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
         const file = this.fileInputRef.nativeElement.files?.[0];
         if (file) {
@@ -214,8 +228,11 @@ export abstract class GeneralProfessorComponent implements OnInit {
   }
 
   deleteProfessor(professor: any): void {
+    if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
     this.loadingService.setLoadingState(true);
-    this.tokenHttp.delete(`${environment.apiUrl}/professors/${professor._id}`).subscribe({
+    this.tokenHttp.delete(`${environment.apiUrl}/professors/${professor._id}`)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
         this.tokenHttp
           .delete(`${environment.apiUrl}/professor-image-upload/${professor._id}`)
