@@ -28,7 +28,9 @@
 }
 
 .kep-modal-body {
+  position: fixed;
   padding: 20px 0;
+  z-index: 1000;
 }
 
 .kep-modal-footer {
