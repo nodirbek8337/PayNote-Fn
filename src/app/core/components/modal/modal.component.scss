@@ -1,6 +1,6 @@
 .kep-modal {
-  position: fixed;
-  z-index: 1100;
+  position: fixed !important;
+  z-index: 2000 !important;
   top: 0;
   left: 0;
   width: 100%;
@@ -28,12 +28,12 @@
 }
 
 .kep-modal-body {
-  position: fixed;
   padding: 20px 0;
-  z-index: 1000;
+  width: 100%;
 }
 
 .kep-modal-footer {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
