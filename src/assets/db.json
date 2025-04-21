@@ -36,8 +36,7 @@
         { "title": "2022", "link": "/publications/2022" },
         { "title": "2021", "link": "/publications/2021" },
         { "title": "2020", "link": "/publications/2020" },
-        { "title": "2019", "link": "/publications/2019" },
-        { "title": "All Publications", "link": "/publications/all" }
+        { "title": "2019", "link": "/publications/2019" }
       ]
     },
     { "title": "Lecture", "link": "#", "children": [
