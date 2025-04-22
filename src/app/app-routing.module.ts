@@ -42,11 +42,6 @@ const routes: Routes = [
     path: '**', 
     loadComponent: () => import('./modules/homepage/homepage.component').then(m => m.HomepageComponent)
   },
-  // {
-  //   path: 'publications',
-  //   loadChildren: () => import('./modules/publications/publications.component').then(m => m.PublicationsComponent)
-  // },  
-  
   
 ];
 
