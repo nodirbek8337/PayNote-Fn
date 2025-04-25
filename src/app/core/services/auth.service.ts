@@ -10,7 +10,10 @@ export class TokenService {
   }
 
   private hasToken(): boolean {
-    return typeof window !== 'undefined' && !!localStorage.getItem('login_access_token');
+    return (
+      typeof window !== 'undefined' &&
+      !!localStorage.getItem('login_access_token')
+    );
   }
 
   isLoggedIn(): boolean {

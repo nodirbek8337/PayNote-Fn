@@ -1,26 +1,25 @@
 .animated-btn {
-    border: none;
-    background-color: rgba(140, 0, 11, 0.9);
-    color: #fff;
-    border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 16px;
-    min-width: 60px;
-    transition: transform 0.1s ease-in-out;
-    margin: 4px;
-  }
-  
-  .animated-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0px 4px 12px rgba(140, 0, 11, 0.9) !important;
-  }
-  
-  .animated-btn.clicked {
-    transform: scale(0.9);
-  }
-  
-  .animated-link-a{
-    text-decoration: none;
-    color: #fff;
-  }
-  
+  border: none;
+  background-color: rgba(140, 0, 11, 0.9);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 16px;
+  min-width: 60px;
+  transition: transform 0.1s ease-in-out;
+  margin: 4px;
+}
+
+.animated-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0px 4px 12px rgba(140, 0, 11, 0.9) !important;
+}
+
+.animated-btn.clicked {
+  transform: scale(0.9);
+}
+
+.animated-link-a {
+  text-decoration: none;
+  color: #fff;
+}

@@ -7,7 +7,7 @@ import { RouterLink, RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, NgFor, RouterModule, RouterLink],
   templateUrl: './lecture.component.html',
-  styleUrls: ['./lecture.component.scss']
+  styleUrls: ['./lecture.component.scss'],
 })
 export class LectureComponent implements OnInit {
   years: number[] = [];

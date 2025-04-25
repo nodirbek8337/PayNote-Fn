@@ -1,4 +1,12 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  inject,
+  OnDestroy,
+} from '@angular/core';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -35,15 +43,16 @@ export abstract class GeneralMemberComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
 
   constructor(
-    public fb: FormBuilder, 
+    public fb: FormBuilder,
     private tokenHttp: TokenHttpService,
-    private tokenService: TokenService) {}
+    private tokenService: TokenService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.getMembers();
 
-    this.tokenService.auth$.subscribe(val => {
+    this.tokenService.auth$.subscribe((val) => {
       this.isAuthenticated = val;
     });
   }
@@ -70,16 +79,17 @@ export abstract class GeneralMemberComponent implements OnInit, OnDestroy {
   getMembers() {
     this.loadingService.setLoadingState(true);
     const params = new HttpParams().set('academicStatus', this.academicStatus);
-    this._http.get(`${environment.apiUrl}/members`, { params })
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res: any) => (this.members = res),
-      complete: () => this.loadingService.setLoadingState(false),
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
+    this._http
+      .get(`${environment.apiUrl}/members`, { params })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => (this.members = res),
+        complete: () => this.loadingService.setLoadingState(false),
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 
   openModal(member: any = null): void {
@@ -111,7 +121,9 @@ export abstract class GeneralMemberComponent implements OnInit, OnDestroy {
       this.fileInputRef.nativeElement.value = '';
       this.selectedFileName = null;
     } else {
-      this.selectedFileName = file ? this.truncateFileName(file.name, 30) : null;
+      this.selectedFileName = file
+        ? this.truncateFileName(file.name, 30)
+        : null;
     }
   }
 
@@ -127,102 +139,116 @@ export abstract class GeneralMemberComponent implements OnInit, OnDestroy {
       this.memberForm.markAllAsTouched();
       return;
     }
-  
+
     this.currentMember
       ? this.updateMember(this.currentMember._id)
       : this.addMember();
   }
-  
 
   addMember(): void {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
-    this.tokenHttp.post(`${environment.apiUrl}/members`, data)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res: any) => {
-        const createdId = res._id;
-        const file = this.fileInputRef.nativeElement.files?.[0];
+    this.tokenHttp
+      .post(`${environment.apiUrl}/members`, data)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          const createdId = res._id;
+          const file = this.fileInputRef.nativeElement.files?.[0];
 
-        if (file) {
-          const formData = new FormData();
-          formData.append('image', file);
-          formData.append('memberId', createdId);
+          if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('memberId', createdId);
 
-          this.tokenHttp.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
-            complete: () => {
-              this.modalShow = false;
-              this.getMembers();
-              this.loadingService.setLoadingState(false);
-            },
-            error: (err) => console.error('Rasm yuklashda xatolik:', err)
-          });
-        } else {
-          this.modalShow = false;
-          this.getMembers();
+            this.tokenHttp
+              .post(
+                `${environment.apiUrl}/member-image-upload/upload`,
+                formData
+              )
+              .subscribe({
+                complete: () => {
+                  this.modalShow = false;
+                  this.getMembers();
+                  this.loadingService.setLoadingState(false);
+                },
+                error: (err) => console.error('Rasm yuklashda xatolik:', err),
+              });
+          } else {
+            this.modalShow = false;
+            this.getMembers();
+            this.loadingService.setLoadingState(false);
+          }
+        },
+        error: (err) => {
+          console.log(err);
           this.loadingService.setLoadingState(false);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
+        },
+      });
   }
 
   updateMember(_id: string): void {
     this.loadingService.setLoadingState(true);
     const data = this.memberForm.value;
 
-    this.tokenHttp.put(`${environment.apiUrl}/members/${_id}`, data)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: () => {
-        const file = this.fileInputRef.nativeElement.files?.[0];
-        if (file) {
-          const formData = new FormData();
-          formData.append('image', file);
-          formData.append('memberId', _id);
+    this.tokenHttp
+      .put(`${environment.apiUrl}/members/${_id}`, data)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          const file = this.fileInputRef.nativeElement.files?.[0];
+          if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('memberId', _id);
 
-          this.tokenHttp.post(`${environment.apiUrl}/member-image-upload/upload`, formData).subscribe({
-            complete: () => {
-              this.modalShow = false;
-              this.getMembers();
-              this.loadingService.setLoadingState(false);
-            },
-            error: (err) => console.error('Rasm yangilashda xatolik:', err)
-          });
-        } else {
-          this.modalShow = false;
-          this.getMembers();
+            this.tokenHttp
+              .post(
+                `${environment.apiUrl}/member-image-upload/upload`,
+                formData
+              )
+              .subscribe({
+                complete: () => {
+                  this.modalShow = false;
+                  this.getMembers();
+                  this.loadingService.setLoadingState(false);
+                },
+                error: (err) => console.error('Rasm yangilashda xatolik:', err),
+              });
+          } else {
+            this.modalShow = false;
+            this.getMembers();
+            this.loadingService.setLoadingState(false);
+          }
+        },
+        error: (err) => {
+          console.log(err);
           this.loadingService.setLoadingState(false);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
+        },
+      });
   }
 
   deleteMember(member: any): void {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
     this.loadingService.setLoadingState(true);
-    this.tokenHttp.delete(`${environment.apiUrl}/members/${member._id}`).subscribe({
-      next: () => {
-        this.tokenHttp.delete(`${environment.apiUrl}/member-image-upload/${member._id}`)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => this.getMembers(),
-          error: (err) => console.error('Rasm o‘chirishda xato:', err),
-          complete: () => this.loadingService.setLoadingState(false)
-        });
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      },
-    });
+    this.tokenHttp
+      .delete(`${environment.apiUrl}/members/${member._id}`)
+      .subscribe({
+        next: () => {
+          this.tokenHttp
+            .delete(`${environment.apiUrl}/member-image-upload/${member._id}`)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: () => this.getMembers(),
+              error: (err) => console.error('Rasm o‘chirishda xato:', err),
+              complete: () => this.loadingService.setLoadingState(false),
+            });
+        },
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 
   get researchAreas() {

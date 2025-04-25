@@ -5,5 +5,5 @@ export const lectureRoutes: Routes = [
   {
     path: '',
     component: LectureComponent,
-  }
+  },
 ];

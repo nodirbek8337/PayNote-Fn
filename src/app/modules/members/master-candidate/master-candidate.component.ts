@@ -21,8 +21,8 @@ import { GeneralMemberComponent } from '../components/general-members/general-me
     ButtonComponent,
     ModalComponent,
     NgFor,
-    NgIf
-  ]
+    NgIf,
+  ],
 })
 export class MasterCandidateComponent extends GeneralMemberComponent {
   override academicStatus = 'master-candidate';

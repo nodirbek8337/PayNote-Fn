@@ -98,17 +98,25 @@
         </app-input>
 
         <!-- Image upload -->
-        <div class="d-flex justify-content-between align-items-center" style="padding-right: 40px;">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="padding-right: 40px"
+        >
           <kep-button
-          (buttonClick)="triggerFileInput()"
-          buttonText="Rasm tanlash"
-          buttonType="button"
-          buttonWidth="160px"
-        ></kep-button>
+            (buttonClick)="triggerFileInput()"
+            buttonText="Rasm tanlash"
+            buttonType="button"
+            buttonWidth="160px"
+          ></kep-button>
 
-        <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" />
+          <input
+            type="file"
+            #fileInput
+            style="display: none"
+            (change)="onFileSelected($event)"
+          />
 
-        <!-- Rasm holatini ko‘rsatish -->
+          <!-- Rasm holatini ko‘rsatish -->
           @if(selectedFileName){
           <span>{{ selectedFileName }}</span>
           } @else {

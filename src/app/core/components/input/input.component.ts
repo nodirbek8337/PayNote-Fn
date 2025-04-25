@@ -1,14 +1,8 @@
-import {
-  Component,
-  forwardRef,
-  inject,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
-  ControlContainer
+  ControlContainer,
 } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,8 +18,8 @@ import { FormsModule } from '@angular/forms';
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true,
-    }
-  ]
+    },
+  ],
 })
 export class InputComponent implements ControlValueAccessor, OnInit {
   private controlContainer = inject(ControlContainer);
@@ -75,11 +69,16 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   handleInput(event: Event) {
     const input = event.target as HTMLInputElement;
     this.value = input.value;
-    this.onChange(this.value); 
+    this.onChange(this.value);
   }
 
   shouldShowErrors(): boolean {
     const control = this.control;
-    return !!control && this.required && control.invalid && (control.dirty || control.touched);
+    return (
+      !!control &&
+      this.required &&
+      control.invalid &&
+      (control.dirty || control.touched)
+    );
   }
 }

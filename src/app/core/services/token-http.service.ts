@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenHttpService {
   constructor(private http: HttpClient, private router: Router) {}
@@ -24,11 +24,11 @@ export class TokenHttpService {
       this.router.navigate(['/login']);
       return throwError(() => new Error('Token yo‘q'));
     }
-  
+
     return this.http.post<T>(url, data, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
@@ -38,25 +38,25 @@ export class TokenHttpService {
       this.router.navigate(['/login']);
       return throwError(() => new Error('Token yo‘q'));
     }
-  
+
     return this.http.put<T>(url, data, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
-  
+
   delete<T>(url: string): Observable<T> {
     const token = localStorage.getItem('login_access_token');
     if (!token) {
       this.router.navigate(['/login']);
       return throwError(() => new Error('Token yo‘q'));
     }
-  
+
     return this.http.delete<T>(url, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 

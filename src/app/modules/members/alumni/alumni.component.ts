@@ -8,7 +8,6 @@ import { ModalComponent } from '../../../core/components/modal/modal.component';
 import { NgFor, NgIf } from '@angular/common';
 import { GeneralMemberComponent } from '../components/general-members/general-member.component';
 
-
 @Component({
   selector: 'app-alumni',
   standalone: true,
@@ -22,8 +21,8 @@ import { GeneralMemberComponent } from '../components/general-members/general-me
     ButtonComponent,
     ModalComponent,
     NgFor,
-    NgIf
-  ]
+    NgIf,
+  ],
 })
 export class AlumniComponent extends GeneralMemberComponent {
   override academicStatus = 'alumni';

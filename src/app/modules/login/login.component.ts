@@ -13,7 +13,6 @@ import { TokenService } from '../../core/services/auth.service';
 import { InputComponent } from '../../core/components/input/input.component';
 import { ButtonComponent } from '../../core/components/button/button.component';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,

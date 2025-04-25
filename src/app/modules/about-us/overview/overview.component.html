@@ -7,55 +7,55 @@
     </div>
     <div class="col-md-8 content">
       <div class="add-btn text-end" *ngIf="isAuthenticated">
-        <kep-button 
-          (buttonClick)="openModal()" 
-          buttonText="Qo'shish" 
-          buttonType="button" 
-          buttonWidth="120px">
+        <kep-button
+          (buttonClick)="openModal()"
+          buttonText="Qo'shish"
+          buttonType="button"
+          buttonWidth="120px"
+        >
         </kep-button>
       </div>
       @for (overview of overviews; track $index) {
-        <h2>[{{ overview?.title }}]</h2>
+      <h2>[{{ overview?.title }}]</h2>
 
-        @for (introduction_item of overview?.introduction; track $index) {
-        <p>{{ introduction_item }}</p>
-        } 
-
-        @for (researchFocus_item of overview?.researchFocus; track $index) {
-          @if(researchFocus_item?.category && researchFocus_item?.category.length > 0) {
-            <p>{{ $index + 1 + "." + researchFocus_item?.category }}</p>
-            <ul class="entry-in-li">
-              @for (details_item of researchFocus_item?.details; track $index) {
-              <li>{{ details_item }}</li>
-              }
-            </ul>
-          } @else {
-            <ul>
-              @for (details_item of researchFocus_item?.details; track $index) {
-              <li>{{ details_item }}</li>
-              }
-            </ul>
-          } 
-        } 
-        @for (conclusion_item of overview?.conclusion; track $index) {
-          <p>{{ conclusion_item }}</p>
+      @for (introduction_item of overview?.introduction; track $index) {
+      <p>{{ introduction_item }}</p>
+      } @for (researchFocus_item of overview?.researchFocus; track $index) {
+      @if(researchFocus_item?.category && researchFocus_item?.category.length >
+      0) {
+      <p>{{ $index + 1 + "." + researchFocus_item?.category }}</p>
+      <ul class="entry-in-li">
+        @for (details_item of researchFocus_item?.details; track $index) {
+        <li>{{ details_item }}</li>
         }
-        <div class="add-btn text-end" *ngIf="isAuthenticated">
-          <kep-button 
-            (buttonClick)="openModal(overview)" 
-            buttonText="Yangilash" 
-            buttonType="button" 
-            buttonWidth="120px">
-          </kep-button>
+      </ul>
+      } @else {
+      <ul>
+        @for (details_item of researchFocus_item?.details; track $index) {
+        <li>{{ details_item }}</li>
+        }
+      </ul>
+      } } @for (conclusion_item of overview?.conclusion; track $index) {
+      <p>{{ conclusion_item }}</p>
+      }
+      <div class="add-btn text-end" *ngIf="isAuthenticated">
+        <kep-button
+          (buttonClick)="openModal(overview)"
+          buttonText="Yangilash"
+          buttonType="button"
+          buttonWidth="120px"
+        >
+        </kep-button>
 
-          <kep-button 
-            style="margin-left: 8px;" 
-            (buttonClick)="deleteOverview(overview)" 
-            buttonText="O'chirish" 
-            buttonType="button" 
-            buttonWidth="120px">
-          </kep-button>
-        </div>
+        <kep-button
+          style="margin-left: 8px"
+          (buttonClick)="deleteOverview(overview)"
+          buttonText="O'chirish"
+          buttonType="button"
+          buttonWidth="120px"
+        >
+        </kep-button>
+      </div>
       }
     </div>
 
@@ -65,129 +65,152 @@
     </div>
   </div>
   <!-- modal content -->
-  <app-modal class="add-modal"
+  <app-modal
+    class="add-modal"
     *ngIf="isAuthenticated"
-    [modalShow]="modalShow" 
-    [modalTitle]="currentOverview ? 'Yangilash' : 'Qo\'shish'" 
-    (modalClose)="modalShow = $event">
-      <div class="kep-modal-body">
-        <form [formGroup]="overviewForm" (ngSubmit)="submitForm()">
-          <app-input 
-            type="text" 
-            placeholder="title" 
-            formControlName="title">
-          </app-input>
-          
-          <div formArrayName="introduction">
-            <div *ngFor="let intro of introduction.controls; let i = index">
-              <app-input 
-                type="text" 
-                placeholder="Introduction" 
-                [formControlName]="i.toString()">
-              </app-input>
+    [modalShow]="modalShow"
+    [modalTitle]="currentOverview ? 'Yangilash' : 'Qo\'shish'"
+    (modalClose)="modalShow = $event"
+  >
+    <div class="kep-modal-body">
+      <form [formGroup]="overviewForm" (ngSubmit)="submitForm()">
+        <app-input type="text" placeholder="title" formControlName="title">
+        </app-input>
+
+        <div formArrayName="introduction">
+          <div *ngFor="let intro of introduction.controls; let i = index">
+            <app-input
+              type="text"
+              placeholder="Introduction"
+              [formControlName]="i.toString()"
+            >
+            </app-input>
+          </div>
+          <kep-button
+            buttonText="Add Introduction"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addIntroduction()"
+          >
+          </kep-button>
+        </div>
+
+        <!-- ResearchFocus uchun FormArray -->
+        <div formArrayName="researchFocus">
+          <div
+            *ngFor="let focus of researchFocus.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <!-- Category input -->
+            <app-input
+              type="text"
+              placeholder="Category"
+              formControlName="category"
+            >
+            </app-input>
+
+            <!-- Agar category bo'sh bo'lsa, introduction ichiga qo'shilsin -->
+            <div *ngIf="focus.get('category')?.value === ''">
+              <div formArrayName="details">
+                <div
+                  *ngFor="
+                    let detail of getDetailsArray(i).controls;
+                    let j = index
+                  "
+                >
+                  <app-input
+                    type="text"
+                    placeholder="Detail"
+                    [formControlName]="j.toString()"
+                  >
+                  </app-input>
+                </div>
+                <kep-button
+                  buttonText="Add Detail"
+                  buttonType="button"
+                  buttonWidth="220px"
+                  (buttonClick)="addDetail(i)"
+                >
+                </kep-button>
+              </div>
             </div>
-            <kep-button 
-              buttonText="Add Introduction" 
-              buttonType="button" 
-              buttonWidth="180px"
-              (buttonClick)="addIntroduction()">
+
+            <div *ngIf="focus.get('category')?.value !== ''">
+              <div formArrayName="details">
+                <div
+                  *ngFor="
+                    let detail of getDetailsArray(i).controls;
+                    let j = index
+                  "
+                >
+                  <app-input
+                    type="text"
+                    placeholder="Detail"
+                    [formControlName]="j.toString()"
+                  >
+                  </app-input>
+                </div>
+                <kep-button
+                  buttonText="Add Detail"
+                  buttonType="button"
+                  buttonWidth="220px"
+                  (buttonClick)="addDetail(i)"
+                >
+                </kep-button>
+              </div>
+            </div>
+            <kep-button
+              buttonText="Remove Research"
+              buttonType="button"
+              buttonWidth="220px"
+              (buttonClick)="removeResearchFocus(i)"
+            >
             </kep-button>
           </div>
 
-          <!-- ResearchFocus uchun FormArray -->
-          <div formArrayName="researchFocus">
-            <div *ngFor="let focus of researchFocus.controls; let i = index" [formGroupName]="i">
-              
-              <!-- Category input -->
-              <app-input 
-                type="text" 
-                placeholder="Category" 
-                formControlName="category">
-              </app-input>
-          
-              <!-- Agar category bo'sh bo'lsa, introduction ichiga qo'shilsin -->
-              <div *ngIf="focus.get('category')?.value === ''">
-                <div formArrayName="details">
-                  <div *ngFor="let detail of getDetailsArray(i).controls; let j = index">
-                    <app-input 
-                      type="text" 
-                      placeholder="Detail" 
-                      [formControlName]="j.toString()">
-                    </app-input>
-                  </div>
-                  <kep-button 
-                    buttonText="Add Detail" 
-                    buttonType="button" 
-                    buttonWidth="220px"
-                    (buttonClick)="addDetail(i)">
-                  </kep-button>
-                </div>
-              </div>
-          
-              <div *ngIf="focus.get('category')?.value !== ''">
-                <div formArrayName="details">
-                  <div *ngFor="let detail of getDetailsArray(i).controls; let j = index">
-                    <app-input 
-                      type="text" 
-                      placeholder="Detail" 
-                      [formControlName]="j.toString()">
-                    </app-input>
-                  </div>
-                  <kep-button 
-                    buttonText="Add Detail" 
-                    buttonType="button" 
-                    buttonWidth="220px"
-                    (buttonClick)="addDetail(i)">
-                  </kep-button>
-                </div>
-              </div>
-              <kep-button 
-                buttonText="Remove Research" 
-                buttonType="button" 
-                buttonWidth="220px"
-                (buttonClick)="removeResearchFocus(i)">
-              </kep-button>
-            </div>
-          
-            <kep-button 
-              buttonText="Add Research Focus" 
-              buttonType="button" 
-              buttonWidth="220px"
-              (buttonClick)="addResearchFocus()">
-            </kep-button>
+          <kep-button
+            buttonText="Add Research Focus"
+            buttonType="button"
+            buttonWidth="220px"
+            (buttonClick)="addResearchFocus()"
+          >
+          </kep-button>
+        </div>
+
+        <div formArrayName="conclusion">
+          <div *ngFor="let intro of conclusion.controls; let i = index">
+            <app-input
+              type="text"
+              placeholder="Conclusion"
+              [formControlName]="i.toString()"
+            >
+            </app-input>
           </div>
-          
-          
-          <div formArrayName="conclusion">
-            <div *ngFor="let intro of conclusion.controls; let i = index">
-              <app-input 
-                type="text" 
-                placeholder="Conclusion" 
-                [formControlName]="i.toString()">
-              </app-input>
-            </div>
-            <kep-button 
-              buttonText="Add Conclusion" 
-              buttonType="button" 
-              buttonWidth="180px"
-              (buttonClick)="addConclusion()">
-            </kep-button>
-          </div>
-        </form>
-      </div>
-      <div class="kep-modal-footer">
-        <kep-button 
-          buttonText="Yopish" 
-          buttonType="button" 
-          buttonWidth="120px"
-          (buttonClick)="closeModal()">
-        </kep-button>
-        <kep-button 
-          buttonText="Saqlash" 
-          buttonType="button" 
-          buttonWidth="120px"
-          (buttonClick)="submitForm()">
-        </kep-button>
-      </div>
+          <kep-button
+            buttonText="Add Conclusion"
+            buttonType="button"
+            buttonWidth="180px"
+            (buttonClick)="addConclusion()"
+          >
+          </kep-button>
+        </div>
+      </form>
+    </div>
+    <div class="kep-modal-footer">
+      <kep-button
+        buttonText="Yopish"
+        buttonType="button"
+        buttonWidth="120px"
+        (buttonClick)="closeModal()"
+      >
+      </kep-button>
+      <kep-button
+        buttonText="Saqlash"
+        buttonType="button"
+        buttonWidth="120px"
+        (buttonClick)="submitForm()"
+      >
+      </kep-button>
+    </div>
   </app-modal>
 </div>

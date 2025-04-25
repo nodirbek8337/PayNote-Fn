@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
   selector: 'kep-button',
   imports: [RouterModule, NgClass, NgStyle],
   templateUrl: './button.component.html',
-  styleUrl: './button.component.scss'
+  styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
   @Input() buttonText: string = 'Button';
@@ -21,10 +21,10 @@ export class ButtonComponent {
   isClicked: boolean = false;
 
   onClick(event: Event) {
-    if(this.buttonType != 'submit'){
+    if (this.buttonType != 'submit') {
       event.preventDefault();
     }
-    
+
     this.isClicked = true;
 
     this.buttonClick.emit();

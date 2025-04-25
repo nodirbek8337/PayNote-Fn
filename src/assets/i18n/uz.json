@@ -1,0 +1,13 @@
+{
+    "HOME": {
+      "TITLE": "Xush kelibsiz",
+      "DESCRIPTION": "Bu bosh sahifa."
+    },
+    "NAVBAR": {
+      "HOME": "Bosh sahifa",
+      "WEBMAIL": "Veb pochta",
+      "CONTACT_US": "Biz bilan bog'lanish",
+      "LOGOUT": "Chiqish"
+    }
+  }
+  

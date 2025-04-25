@@ -2,7 +2,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environments';
 import { ButtonComponent } from '../../../core/components/button/button.component';
@@ -41,29 +47,23 @@ export class OverviewComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
 
   constructor(
-    public fb: FormBuilder, 
-    private loadingService: LoadingService, 
+    public fb: FormBuilder,
+    private loadingService: LoadingService,
     private tokenHttp: TokenHttpService,
     private tokenService: TokenService
   ) {
     this.overviewForm = this.fb.group({
       title: ['', Validators.required],
-      introduction: this.fb.array([
-        this.fb.control('', Validators.required)
-      ]),
-      researchFocus: this.fb.array([
-        this.createResearchFocus()
-      ]),
-      conclusion: this.fb.array([
-        this.fb.control('', Validators.required)
-      ]),
+      introduction: this.fb.array([this.fb.control('', Validators.required)]),
+      researchFocus: this.fb.array([this.createResearchFocus()]),
+      conclusion: this.fb.array([this.fb.control('', Validators.required)]),
     });
   }
-  
+
   ngOnInit(): void {
     this.getAll();
 
-    this.tokenService.auth$.subscribe(val => {
+    this.tokenService.auth$.subscribe((val) => {
       this.isAuthenticated = val;
     });
   }
@@ -73,22 +73,23 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getAll(){
+  getAll() {
     this.loadingService.setLoadingState(true);
-    this._http.get(`${environment.apiUrl}/overviews`)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res: any) => {
-        this.overviews = [...res];
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      }
-    })
+    this._http
+      .get(`${environment.apiUrl}/overviews`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          this.overviews = [...res];
+        },
+        complete: () => {
+          this.loadingService.setLoadingState(false);
+        },
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 
   openModal(overview: any = null): void {
@@ -96,36 +97,37 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.modalShow = true;
 
     this.overviewForm.reset();
-    
+
     if (overview) {
       this.overviewForm.patchValue({
-        title: overview.title
+        title: overview.title,
       });
-  
+
       this.removeAllIntroduction(0);
       overview.introduction.forEach((intro: string) => {
         this.introduction.push(this.fb.control(intro));
       });
-  
+
       this.removeAllResearchFocus(0);
       overview.researchFocus.forEach((focus: any) => {
         const researchGroup = this.fb.group({
           category: [focus.category],
-          details: this.fb.array([])
+          details: this.fb.array([]),
         });
-  
+
         focus.details.forEach((detail: string) => {
-          (researchGroup.get('details') as FormArray).push(this.fb.control(detail));
+          (researchGroup.get('details') as FormArray).push(
+            this.fb.control(detail)
+          );
         });
-  
+
         this.researchFocus.push(researchGroup);
       });
-  
+
       this.removeAllConclusion(0);
       overview.conclusion.forEach((conc: string) => {
         this.conclusion.push(this.fb.control(conc));
       });
-  
     } else {
       this.overviewForm.reset();
     }
@@ -136,7 +138,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.overviewForm.markAllAsTouched();
       return;
     }
-  
+
     this.currentOverview
       ? this.updateOverview(this.currentOverview._id)
       : this.addOverview();
@@ -157,9 +159,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   createResearchFocus() {
     return this.fb.group({
       category: ['', Validators.required],
-      details: this.fb.array([
-        this.fb.control('', Validators.required)
-      ])
+      details: this.fb.array([this.fb.control('', Validators.required)]),
     });
   }
 
@@ -188,8 +188,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   closeModal(): void {
-    this.modalShow = false;  
-    this.overviewForm.reset(); 
+    this.modalShow = false;
+    this.overviewForm.reset();
 
     this.removeAllIntroduction(1);
     this.removeAllResearchFocus(1);
@@ -198,20 +198,20 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   removeAllIntroduction(count: number): void {
     const introduction = this.overviewForm.get('introduction') as FormArray;
-    while (introduction.length > count) {  
+    while (introduction.length > count) {
       introduction.removeAt(count);
     }
   }
 
   removeAllResearchFocus(count: number): void {
     const researchFocus = this.overviewForm.get('researchFocus') as FormArray;
-    while (researchFocus.length > count) {  
+    while (researchFocus.length > count) {
       researchFocus.removeAt(count);
     }
-  
+
     researchFocus.controls.forEach((focus) => {
       const details = focus.get('details') as FormArray;
-      while (details.length > count) {  
+      while (details.length > count) {
         details.removeAt(count);
       }
     });
@@ -219,7 +219,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   removeAllConclusion(count: number): void {
     const conclusion = this.overviewForm.get('conclusion') as FormArray;
-    while (conclusion.length > count) {  
+    while (conclusion.length > count) {
       conclusion.removeAt(count);
     }
   }
@@ -227,48 +227,50 @@ export class OverviewComponent implements OnInit, OnDestroy {
   addOverview(): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this.tokenHttp.post(`${environment.apiUrl}/overviews`, overviewData)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: () => {
-        this.modalShow = false; 
-        this.getAll(); 
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      }
-    });
+    this.tokenHttp
+      .post(`${environment.apiUrl}/overviews`, overviewData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.modalShow = false;
+          this.getAll();
+        },
+        complete: () => {
+          this.loadingService.setLoadingState(false);
+        },
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 
   updateOverview(_id: any): void {
     this.loadingService.setLoadingState(true);
     const overviewData = this.overviewForm.value;
-    this.tokenHttp.put(`${environment.apiUrl}/overviews/${_id}`, overviewData)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res) => {
-        this.modalShow = false; 
-        this.getAll();
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      }
-    });
+    this.tokenHttp
+      .put(`${environment.apiUrl}/overviews/${_id}`, overviewData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.modalShow = false;
+          this.getAll();
+        },
+        complete: () => {
+          this.loadingService.setLoadingState(false);
+        },
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 
-  deleteConfirmModal(){
+  deleteConfirmModal() {
     this.confirmModalShow = true;
   }
 
-  closeDeleteConfirmModal(){
+  closeDeleteConfirmModal() {
     this.confirmModalShow = false;
   }
 
@@ -276,19 +278,20 @@ export class OverviewComponent implements OnInit, OnDestroy {
     if (!confirm('Haqiqatan ham o‘chirmoqchimisiz?')) return;
     this.loadingService.setLoadingState(true);
     this.confirmModalShow = false;
-    this.tokenHttp.delete(`${environment.apiUrl}/overviews/${overview?._id}`)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: () => {
-        this.getAll(); 
-      },
-      complete: () => {
-        this.loadingService.setLoadingState(false);
-      },
-      error: (err) => {
-        console.log(err);
-        this.loadingService.setLoadingState(false);
-      }
-    });
+    this.tokenHttp
+      .delete(`${environment.apiUrl}/overviews/${overview?._id}`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.getAll();
+        },
+        complete: () => {
+          this.loadingService.setLoadingState(false);
+        },
+        error: (err) => {
+          console.log(err);
+          this.loadingService.setLoadingState(false);
+        },
+      });
   }
 }
