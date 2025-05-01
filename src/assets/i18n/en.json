@@ -46,7 +46,12 @@
     "DESC14": "Past Projects",
     "TITLE5": "Publications",
     "TITLE6": "Lecture"
-    
+  },
+  "FOOTER":{
+    "PHONE":"Phone number",
+    "EMAIL": "Email",
+    "ADDRESS": "Address",
+    "SOCIAL": "Social media"
   }
 
 }

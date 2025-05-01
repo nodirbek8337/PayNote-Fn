@@ -43,5 +43,11 @@
     "DESC14":"tugallangan loyihalar",
     "TITLE5": "Nashrlar",
     "TITLE6": "Ma'ruzalar"
+  },
+  "FOOTER":{
+    "PHONE":"Telefon raqami",
+    "EMAIL": "Elektron pochta",
+    "ADDRESS": "Manzil",
+    "SOCIAL": "Ijtimoiy tarmoqlar"
   }
 }
