@@ -1,13 +1,52 @@
 {
-    "HOME": {
-      "TITLE": "Welcome",
-      "DESCRIPTION": "This is the home page."
-    },
-    "NAVBAR": {
-      "HOME": "Home",
-      "WEBMAIL": "Webmail",
-      "CONTACT_US": "Contact us",
-      "LOGOUT": "Logout"
-    }
+  "languages": {
+    "en": { "name": "En"},
+    "ru": { "name": "Ru"},
+    "uz": { "name": "Uz"}
+  },
+  "HOME": {
+    "TITLE": "Welcome",
+    "DESCRIPTION": "This is the home page."
+  },
+  "NAVBAR": {
+    "HOME": "Home",
+    "WEBMAIL": "Webmail",
+    "CONTACT_US": "Contact us",
+    "LOGOUT": "Logout",
+    "TITLE": "UBIQUITOUS COMPUTING LABORATORY",
+    "LOCATION":"Urgench, Uzbekistan"
+  },
+  "HOMEPAGE":{
+    "TITLE2": "Major projects",
+    "DESCRIPTION": "UCLab. There are more than 20 graduate students, candidates of sciences and master's students at Ubtuit University, who are studying in the field of ubiquitous systems. They work on scientific projects under the guidance of Professor Khojayev Otabek Kadambayevich.",
+    "CLOUD": "Cloud and Big Data",
+    "CONTEXT":"Context Awareness",
+    "KNOWLADGE": "Knowledge Engineering",
+    "USER": "User Interface/User Experience",
+    "HEALTH":"Health Informatics"
+  },
+  "DB_TITLES":{
+    "TITLE1": "About Us",
+    "DESC1": "Overview",
+    "TITLE2": "Professor",
+    "DESC2": "Industrial Professor",
+    "DESC3": "Collaboration Professor",
+    "DESC4": "Visiting Professors",
+    "TITLE3": "Members",
+    "DESC5": "Ph.D Candidate",
+    "DESC6": "Master Candidate",
+    "DESC7": "Undergraduate",
+    "DESC8": "Alumni",
+    "TITLE4": "Research",
+    "DESC9": "Introduction",
+    "DESC10": "Ph.D Thesis",
+    "DESC11": "Technical Report",
+    "DESC12": "Colloquiums",
+    "DESC13": "On-going Projects",
+    "DESC14": "Past Projects",
+    "TITLE5": "Publications",
+    "TITLE6": "Lecture"
+    
   }
-  
+
+}

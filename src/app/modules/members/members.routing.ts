@@ -6,10 +6,6 @@ export const MembersRoutingRouting: Route[] = [
     loadComponent: () => import('./components/members-main.component').then(c => c.MembersMainComponent),
     children: [
       {
-        path: 'post-doc',
-        loadComponent: () => import('./post-doc/post-doc.component').then(c => c.PostDocComponent),
-      },
-      {
         path: 'phd-candidate',
         loadComponent: () => import('./phd-candidate/phd-candidate.component').then(c => c.PhdCandidateComponent),
       },

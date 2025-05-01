@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoadingService } from './core/services/loading.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +13,17 @@ export class AppComponent {
 
   isLoading: boolean = false;
 
-  constructor(private loadingService: LoadingService) {
+  constructor(
+    private loadingService: LoadingService, 
+    private translate: TranslateService
+    
+  ) {
     this.loadingService.loaderState$.subscribe(state => {
       setTimeout(() => {
         this.isLoading = state;
       });
     });
+    translate.setDefaultLang('en');
+    translate.use('en');
   }
 }

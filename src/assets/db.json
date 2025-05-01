@@ -1,35 +1,34 @@
 {
   "menuItems": [
-    { "title": "About Us", "link": "#", "children": [
-        { "title": "Overview", "link": "/about/overview" },
-        { "title": "contact-us", "link": "/contact-us" }
+    { "title": "DB_TITLES.TITLE1", "link": "#", "children": [
+        { "title": "DB_TITLES.DESC1", "link": "/about/overview" },
+        { "title": "NAVBAR.CONTACT_US", "link": "/contact-us" }
       ]
     },
-    { "title": "Professor", "link": "#", "children": [
-        { "title": "Professor", "link": "professor/professor" },
-        { "title": "Industrial Professor", "link": "professor/industrial-professor" },
-        { "title": "Collaboration Professor", "link": "professor/collaboration-professor" },
-        { "title": "Visiting Professor", "link": "professor/visiting-professor" }
+    { "title": "DB_TITLES.TITLE2", "link": "#", "children": [
+        { "title": "DB_TITLES.TITLE2", "link": "professor/professor" },
+        { "title": "DB_TITLES.DESC2", "link": "professor/industrial-professor" },
+        { "title": "DB_TITLES.DESC3", "link": "professor/collaboration-professor" },
+        { "title": "DB_TITLES.DESC4", "link": "professor/visiting-professor" }
       ]
     },
-    { "title": "Members", "link": "#", "children": [
-        { "title": "Post Doc.", "link": "members/post-doc" },
-        { "title": "Ph.D Candidate", "link": "members/phd-candidate" },
-        { "title": "Master Candidate", "link": "members/master-candidate" },
-        { "title": "Undergraduate", "link": "members/undergraduate" },
-        { "title": "Alumni", "link": "members/alumni" }
+    { "title": "DB_TITLES.TITLE3", "link": "#", "children": [
+        { "title": "DB_TITLES.DESC5", "link": "members/phd-candidate" },
+        { "title": "DB_TITLES.DESC6", "link": "members/master-candidate" },
+        { "title": "DB_TITLES.DESC7", "link": "members/undergraduate" },
+        { "title": "DB_TITLES.DESC8", "link": "members/alumni" }
       ]
     },
-    { "title": "Research", "link": "#", "children": [
-        { "title": "Introduction", "link": "research/introduction" },
-        { "title": "Ph.D Thesis", "link": "research/phd-thesis" },
-        { "title": "Technical Report", "link": "research/technical-report" },
-        { "title": "Colloquiums", "link": "research/colloquiums" },
-        { "title": "On-going Projects", "link": "research/ongoing-projects" },
-        { "title": "Past Projects", "link": "research/past-projects" }
+    { "title": "DB_TITLES.TITLE4", "link": "#", "children": [
+        { "title": "DB_TITLES.DESC9", "link": "research/introduction" },
+        { "title": "DB_TITLES.DESC10", "link": "research/phd-thesis" },
+        { "title": "DB_TITLES.DESC11", "link": "research/technical-report" },
+        { "title": "DB_TITLES.DESC12", "link": "research/colloquiums" },
+        { "title": "DB_TITLES.DESC13", "link": "research/ongoing-projects" },
+        { "title": "DB_TITLES.DESC14", "link": "research/past-projects" }
       ]
     },
-    { "title": "Publications", "link": "#", "children": [
+    { "title": "DB_TITLES.TITLE5", "link": "#", "children": [
       { "title": "2025", "link": "/publications/2025" },
         { "title": "2024", "link": "/publications/2024" },
         { "title": "2023", "link": "/publications/2023" },
@@ -39,7 +38,7 @@
         { "title": "2019", "link": "/publications/2019" }
       ]
     },
-    { "title": "Lecture", "link": "#", "children": [
+    { "title": "DB_TITLES.TITLE6", "link": "#", "children": [
         { "title": "2025", "link": "/lecture/2025" },
         { "title": "2024", "link": "/lecture/2024" },
         { "title": "2023", "link": "/lecture/2023" },

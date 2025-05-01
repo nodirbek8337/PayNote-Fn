@@ -9,21 +9,39 @@
 
       <nav>
         <ul class="nav gap-3">
+          <li class="form-inline">
+            <select
+              class="form-control"
+              [(ngModel)]="selectedLanguage"
+              (change)="switchLang(selectedLanguage)"
+            >
+              <!-- Barcha tillar ro'yxati -->
+              <option
+                *ngFor="let language of availableLanguages"
+                [value]="language.code"
+              >
+                {{ language.name }}
+              </option>
+            </select>
+          </li>
+
           <li class="nav-item">
-            <a class="nav-link1 text-white px-3" routerLink="/">Home</a>
+            <a class="nav-link1 text-white px-3" routerLink="/">{{
+              "NAVBAR.HOME" | translate
+            }}</a>
           </li>
           <li class="nav-item">
             <a
               class="nav-link1 text-white px-3"
               href="https://www.ubtuit.uz/"
               target="_blank"
-              >Webmail</a
+              >{{ "NAVBAR.WEBMAIL" | translate }}</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link1 text-white" routerLink="/contact-us"
-              >Contact us</a
-            >
+            <a class="nav-link1 text-white" routerLink="/contact-us">{{
+              "NAVBAR.CONTACT_US" | translate
+            }}</a>
           </li>
         </ul>
       </nav>
@@ -31,22 +49,22 @@
   </header>
 
   <nav class="navbar navbar-expand p-0 m-0">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex justify-content-evenly">
       <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
         <img
           src="../assets/Group-logo.svg"
           alt="Ubiquitous Computing Laboratory Logo"
         />
         <div>
-          <h3>Ubiquitous Computing Laboratory</h3>
-          <h3>Urgench, Uzbekistan</h3>
+          <h4>{{ "NAVBAR.TITLE" | translate }}</h4>
+          <h4>{{ "NAVBAR.LOCATION" | translate }}</h4>
         </div>
       </a>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           @for(item of menuItems; track $index){
           <li class="nav-item" [ngClass]="{ 'has-dropdown': item.children }">
-            <a class="nav-link" [routerLink]="item.link">{{ item.title }}</a>
+            <a class="nav-link" [routerLink]="item?.link">{{ item.title | translate }}</a>
 
             <!-- Agar menyu ichida qo'shimcha bo'limlar bo'lsa -->
             @if(item.children){
@@ -54,7 +72,7 @@
               @for(child of item.children; track $index){
               <li>
                 <a class="dropdown-item" [routerLink]="child.link">{{
-                  child.title
+                  child.title | translate
                 }}</a>
               </li>
               }

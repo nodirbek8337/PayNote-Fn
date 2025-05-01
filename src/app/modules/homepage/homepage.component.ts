@@ -1,27 +1,29 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
-  imports: [CommonModule, NgFor],
+  imports: [CommonModule, NgFor, TranslateModule],
 })
 export class HomepageComponent {
   features = [
-    { title: 'Cloud and Big Data', link: '', icon: 'fa-solid fa-cloud' },
+    { title: 'HOMEPAGE.CLOUD', link: '', icon: 'fa-solid fa-cloud' },
     {
-      title: 'Context Awareness',
+      title: 'HOMEPAGE.CONTEXT',
       link: '',
       icon: 'fa-solid fa-map-location-dot',
     },
-    { title: 'Knowledge Engineering', link: '', icon: 'fa-solid fa-gear' },
+    { title: 'HOMEPAGE.KNOWLADGE', link: '', icon: 'fa-solid fa-gear' },
     {
-      title: 'User Interface/User Experience',
+      title: 'HOMEPAGE.USER',
       link: '',
       icon: 'fa-solid fa-desktop',
     },
-    { title: 'Health Informatics', link: '', icon: 'fa-regular fa-heart' },
+    { title: 'HOMEPAGE.HEALTH', link: '', icon: 'fa-regular fa-heart' },
   ];
 }

@@ -9,7 +9,14 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { LoadingSpinnerComponent } from './core/components/loading/loading-spinner.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -24,10 +31,16 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     FormsModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
 ],
   providers: [
-    provideClientHydration(withEventReplay())
   ],
   bootstrap: [AppComponent]
 })
