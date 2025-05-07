@@ -8,13 +8,10 @@ import {
   PLATFORM_ID,
   Inject
 } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import dbJSON from '../../../../assets/db.json';
 import { TokenService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
@@ -90,29 +87,23 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.menuItems = dbJSON.menuItems;
-
+  
     this.tokenService.auth$.subscribe((val) => {
       this.isAuthenticated = val;
-
     });
-
-      ////////
-      // this.translate.get('Sitetitle').subscribe((res: string) => {
-      //   console.log('Tarjima natijasi:', res);
-      // });
-
-      // console.log('Mavjud tillar:', this.translate.getLangs());
-      // console.log('Hozirgi til:', this.translate.currentLang);
-
-
-      ///////////////
-
+  
+    if (isPlatformBrowser(this.platformId)) {
       const savedLang = localStorage.getItem('selectedLanguage') || 'en';
-  this.translate.use(savedLang); // Tilni qo'llash
-  this.selectedLanguage = savedLang; // Tanlangan tilni saqlash
-  this.updateAvailableLanguages();
-
+      this.translate.use(savedLang); // Tilni qo'llash
+      this.selectedLanguage = savedLang; // Tanlangan tilni saqlash
+    } else {
+      this.selectedLanguage = 'en'; // Serverda ishlayotgan bo‘lsa default til
+      this.translate.use('en');
+    }
+  
+    this.updateAvailableLanguages();
   }
+  
 
   logout() {
     this.tokenService.logout();
