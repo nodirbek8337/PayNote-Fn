@@ -7,8 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:suni_intelekt_loborotoriyasi": "node dist/suni_intelekt_loborotoriyasi/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -21,9 +20,7 @@
     "@angular/material": "^19.1.0",
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
-    "@angular/platform-server": "^19.1.0",
     "@angular/router": "^19.1.0",
-    "@angular/ssr": "^19.2.5",
     "@fortawesome/angular-fontawesome": "^1.0.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@ngx-translate/core": "^16.0.4",
