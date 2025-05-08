@@ -23,7 +23,7 @@ RUN npm run build --prod
 FROM nginx:latest
 
 # ✅ Nginx config to correct location:
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /app/dist/suni_intelekt_loborotoriyasi /usr/share/nginx/html
 
