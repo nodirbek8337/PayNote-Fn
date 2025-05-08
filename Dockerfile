@@ -22,14 +22,10 @@ RUN npm run build --prod
 # Stage 2: Serve with Nginx
 FROM nginx:latest
 
-# Copy custom Nginx config if you have one (optional)
-COPY nginx.conf /etc/nginx/nginx.conf
+# ✅ Nginx config to correct location:
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built Angular app from the first stage
 COPY --from=build /app/dist/suni_intelekt_loborotoriyasi /usr/share/nginx/html
 
-# Expose the default HTTP port
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
