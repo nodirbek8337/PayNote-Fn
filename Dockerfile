@@ -1,5 +1,5 @@
 # 1. Build bosqichi: Angular build
-FROM node:18.18.0 AS build
+FROM node:24.0.0-slim AS build
 
 # Ishchi katalog
 WORKDIR /app
