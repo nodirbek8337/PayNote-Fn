@@ -14,7 +14,7 @@ FROM nginx:latest
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Copy built Angular app (note: we go into /browser!)
-COPY --from=build /app/dist/suniy_intelekt_loborotoriyasi/browser /usr/share/nginx/html
+COPY --from=build /app/dist/suni_intelekt_loborotoriyasi /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
