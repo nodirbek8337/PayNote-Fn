@@ -1,0 +1,7 @@
+buildCommand: npm run build
+publishPath: dist/suni_intelekt_loborotoriyasi
+staticPublishOptions:
+  redirects:
+    - source: /.*
+      destination: /index.html
+      statusCode: 200
