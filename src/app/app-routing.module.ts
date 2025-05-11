@@ -35,7 +35,7 @@ const routes: Routes = [
     loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent) 
   },
   {
-    path: 'lecture/:id',
+    path: 'lecture',
     loadComponent: () => import('./modules/lecture/lecture.component').then(m => m.LectureComponent),
   },
   { 

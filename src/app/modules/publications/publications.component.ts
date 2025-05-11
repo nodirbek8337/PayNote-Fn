@@ -56,7 +56,6 @@ export class PublicationsComponent implements OnInit, OnDestroy {
   currentEntryId: string | null = null;
   selectedFileName: string | null = null;
   routeSub!: Subscription;
-  isClicked: boolean = false;
   isAuthenticated: boolean = false;
 
   constructor(
@@ -378,16 +377,4 @@ export class PublicationsComponent implements OnInit, OnDestroy {
       this.fileInputRef.nativeElement.value = '';
     }
   }
-  
-
-  onClick(event: Event) {
-    event.preventDefault();
-    this.isClicked = true;
-    setTimeout(() => {
-      this.isClicked = false;
-    }, 200);
-  }
-
-
-
 }
