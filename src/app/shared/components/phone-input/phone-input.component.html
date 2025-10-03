@@ -1,0 +1,18 @@
+<div class="app-input-container">
+  <input
+    type="tel"
+    pInputText
+    style="width: 100%;"
+    [placeholder]="placeholder"
+    [disabled]="isDisabled"
+    [value]="displayValue"
+    (input)="onInput($event)"
+    maxlength="16"
+    [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+  />
+
+  <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
+    <small *ngIf="control?.errors?.['required']"> Telefon raqami majburiy </small>
+    <small *ngIf="control?.errors?.['pattern']"> Noto‘g‘ri telefon raqami </small>
+  </div>
+</div>

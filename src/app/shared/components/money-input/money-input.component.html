@@ -1,0 +1,33 @@
+<div class="money-input grid gap-2" style="grid-template-columns: 1fr auto; margin: 0 8px">
+  <input
+    pInputText
+    type="text"
+    [placeholder]="placeholder"
+    [disabled]="isDisabled"
+    [value]="displayValue"
+    (keydown)="onKeyDown($event)"
+    (paste)="onPaste($event)"
+    (input)="onAmountInput($event)"
+    [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+    [attr.inputmode]="currency === 'USD' ? 'decimal' : 'numeric'"
+    autocomplete="off"
+  />
+
+  <p-select
+    [options]="currencyOptions"
+    optionLabel="label"
+    optionValue="value"
+    [(ngModel)]="currency"
+    [disabled]="isDisabled"
+    (onChange)="onCurrencyChange($event.value)"
+    placeholder="Valyuta"
+    styleClass="w-32"
+  ></p-select>
+</div>
+
+<div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
+  <small *ngIf="control?.errors?.['required']">Miqdor majburiy</small>
+  <small *ngIf="control?.errors?.['currencyMissing']">Valyuta majburiy</small>
+  <small *ngIf="control?.errors?.['min']">Qiymat juda kichik (min: {{ control?.errors?.['min']?.min }})</small>
+  <small *ngIf="control?.errors?.['max']">Qiymat juda katta (max: {{ control?.errors?.['max']?.max }})</small>
+</div>

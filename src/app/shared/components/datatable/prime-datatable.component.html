@@ -1,0 +1,159 @@
+<div class="datatable-card card mt-1">
+  <div class="card-body">
+    <div class="header-content mb-3">
+      <div class="header-title-content">
+        <h4 *ngIf="tableTitle">{{ tableTitle }}</h4>
+        <button *ngIf="hasRefreshBtn" pButton icon="pi pi-refresh" class="table-refresh-btn" (click)="triggerRefresh()"></button>
+        <button *ngIf="hasClearFilterBtn" pButton icon="pi pi-filter-slash" class="table-refresh-btn" (click)="clearAllFilters()" [disabled]="loading || isFilterEmpty()"></button>
+      </div>
+      <div>
+        <input
+          *ngIf="showQuickFilterTop"
+          pInputText type="text" style="width: 240px"
+          placeholder="Tez qidiruv..."
+          [(ngModel)]="quickFilterValue"
+          (ngModelChange)="onQuickFilterChange($event)" />
+
+        <button
+          *ngIf="showDrawerFilters && drawerFilterComponent"
+          pButton icon="pi pi-sliders-h"
+          class="ms-4" label="Filtrlar"
+          (click)="openDrawer()">
+        </button>
+
+        <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="ms-4" label="Qo'shish" (click)="triggerAdd()"></button>
+      </div>
+    </div>
+
+    <ng-content select="[filter]"></ng-content>
+
+    <p-table
+      [value]="value"
+      [columns]="columnDefs"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [loading]="loading"
+      [lazy]="true"
+      [scrollable]="true"
+      scrollHeight="70vh"
+      (onLazyLoad)="loadData($event)"
+      (onRowClick)="handleRowClick($event)"
+      class="datatable-content"
+      dataKey="id"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr class="sort-headers">
+          <th *ngFor="let col of columns" [pSortableColumn]="col.sortable !== false ? col.field : null" class="sort-header" [ngClass]="col.widthClass">
+            {{ col.header }}
+            <p-sortIcon *ngIf="col.sortable !== false" [field]="col.field"></p-sortIcon>
+          </th>
+          <th *ngIf="customActions?.length" class="sort-header">Harakat+</th>
+          <th *ngIf="hasAction" class="sort-header">Harakat</th>
+        </tr>
+
+        <tr class="filter-headers" *ngIf="showColumnFilterRow">
+          <th *ngFor="let col of columns" class="filter-header" [ngClass]="col.widthClass">
+            <ng-container *ngIf="col.searchable !== false">
+              <ng-container *ngIf="col.filterType === 'dropdown'">
+                <p-select
+                  [options]="col.filterOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Tanlash"
+                  [style.width.%]="100"
+                  [(ngModel)]="columnFilters[col.field]"
+                  (onChange)="onColumnFilter($event.value, col.field)"
+                  [showClear]="true"
+                ></p-select>
+              </ng-container>
+
+              <ng-container *ngIf="col.filterType === 'date-range'">
+                <datepicker-range
+                  [value]="columnFilters[col.field]"
+                  (valueChange)="onColumnFilter($event, col.field)"
+                  [placeholder]="'Vaqt oraliqi'">
+                </datepicker-range>
+              </ng-container>
+
+              <ng-container *ngIf="!col.filterType || col.filterType === 'text'">
+                <input
+                  pInputText type="text" [style.width.%]="100"
+                  placeholder="Qidirish..."
+                  [(ngModel)]="columnFilters[col.field]"
+                  (ngModelChange)="onColumnFilter($event, col.field)" />
+              </ng-container>
+            </ng-container>
+          </th>
+
+          <th *ngIf="customActions?.length" class="filter-header"></th>
+          <th *ngIf="hasAction" class="filter-header"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr class="body-contents">
+          <td *ngFor="let col of columns" class="body-content" [ngClass]="col.widthClass">
+            <datatable-column-renderer
+              [field]="col.field"
+              [row]="rowData"
+              [cellRendererComponent]="col.cellRendererComponent"
+              [cellRendererFn]="col.cellRendererFn">
+            </datatable-column-renderer>
+          </td>
+          <td *ngIf="customActions?.length" class="center-content">
+            <datatable-actions [row]="rowData" [actions]="customActions"></datatable-actions>
+          </td>
+          <td *ngIf="hasAction" class="center-content">
+            <div class="action-buttons">
+              <button pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)"></button>
+              <button pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
+            <div style="height: 57vh; display: flex; justify-content: center; align-items: center">
+              <div class="text-center text-muted">
+                <div><i class="pi pi-info-circle text-3xl mb-2 d-block"></i><span class="pl-1">Maʼlumot topilmadi</span></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="loadingbody">
+        <tr>
+          <td [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
+            <div style="height: 57vh; display: flex; justify-content: center; align-items: center"></div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-drawer
+  *ngIf="showDrawerFilters && drawerFilterComponent"
+  [(visible)]="filterDrawerVisible"
+  (visibleChange)="onDrawerVisibleChange($event)"
+  position="right"
+  header="Filtrlar"
+  [dismissible]="true"
+  [modal]="true"
+  [showCloseIcon]="true"
+  [blockScroll]="true"
+  [style]="{ width: '420px' }"
+>
+  <ng-template #drawerHost></ng-template>
+</p-drawer>
+
+<p-dialog [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '600px' }" [closable]="true" [draggable]="false" [resizable]="false" header="{{ editMode ? 'Yangilash' : 'Qo\'shish' }}">
+  <ng-template #formContainer></ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

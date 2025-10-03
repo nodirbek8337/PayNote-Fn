@@ -1,0 +1,17 @@
+<prime-datatable
+  *ngIf="_defaultService"
+  [_defaultService]="_defaultService"
+  [columnDefs]="columnDefs"
+  [formComponent]="FormComponent"
+  [customActions]="customRowActions"
+  [tableTitle]="'Contacts'"
+  [hasCreate]="true"
+  [hasAction]="true"
+  [hasRefreshBtn]="true"
+  [hasClearFilterBtn]="true"
+  [hasRowIndex]="true"
+  [showColumnFilterRow]="false"
+  [showDrawerFilters]="true"
+  [showQuickFilterTop]="true"
+  [drawerFilterComponent]="FilterComponent"
+></prime-datatable>

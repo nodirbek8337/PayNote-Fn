@@ -1,0 +1,63 @@
+import {Injectable, Injector, signal} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpService} from './http.service';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  public isLoading = signal<boolean>(false)
+
+  constructor(
+    private router: Router,
+    private _httpService: HttpService,
+    private messageService: MessageService,
+    private injector: Injector,
+  ) { }
+  private get translate() {
+    return this.injector.get(TranslateService);
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem("payNoteToken");
+  }
+
+  login(data: any) {
+    this.isLoading.set(true)
+    this._httpService.post("/api/v1/user/login", data).subscribe({
+      next: (value: any) => {
+        localStorage.setItem("payNoteToken", value.token)
+        if (value.status) {
+          this.router.navigate([``])
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant("Messages.Success"),
+            detail: this.translate.instant("Messages.LoginSuccessfully")
+          });
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        switch (err.status) {
+          case HttpStatusCode.Unauthorized:
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant("Messages.Error"),
+              detail: this.translate.instant("ErrorResponse.401")
+            });
+            break;
+        }
+      },
+      complete: () => {
+        this.isLoading.set(false)
+      }
+    })
+  }
+
+  logout() {
+    localStorage.clear()
+    this.router.navigate([`/login`]);
+  }
+}
