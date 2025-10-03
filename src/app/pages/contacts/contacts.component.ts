@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
-import { ContactsService } from './contacts.service';
+import { ContactsService } from '../service/contacts.service';
 import { NgIf } from '@angular/common';
 import { ContactsFormComponent } from './form/contacts-form.component';
 import { ICustomAction } from '../../shared/interfaces/custom-action.interface';
@@ -15,7 +15,6 @@ import { CustomAmountRendererComponent } from '../../shared/components/badge/cus
     standalone: true,
     imports: [PrimeDatatableComponent, NgIf],
     templateUrl: './contacts.component.html',
-    styleUrls: ['./contacts.component.scss'],
     providers: [DateFormatPipe, PhoneNumberPipe],
 })
 export class ContactsComponent {

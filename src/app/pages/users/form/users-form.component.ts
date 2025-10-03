@@ -17,9 +17,9 @@ export type ContactFormModel = {
 };
 
 @Component({
-  selector: 'contacts-form',
+  selector: 'users-form',
   standalone: true,
-  templateUrl: './contacts-form.component.html',
+  templateUrl: './users-form.component.html',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -30,7 +30,7 @@ export type ContactFormModel = {
     MoneyInputComponent
   ],
 })
-export class ContactsFormComponent implements OnInit {
+export class UsersFormComponent implements OnInit {
   @Input() model: Partial<ContactFormModel> = {};
   @Input() loading = false;
 

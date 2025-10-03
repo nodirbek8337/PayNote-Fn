@@ -4,6 +4,7 @@
     type="text"
     [placeholder]="placeholder"
     [disabled]="isDisabled"
+    style="height: 40px;"
     [value]="displayValue"
     (keydown)="onKeyDown($event)"
     (paste)="onPaste($event)"
@@ -21,7 +22,7 @@
     [disabled]="isDisabled"
     (onChange)="onCurrencyChange($event.value)"
     placeholder="Valyuta"
-    styleClass="w-32"
+    styleClass="w-32 user-select"
   ></p-select>
 </div>
 

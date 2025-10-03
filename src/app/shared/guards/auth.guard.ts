@@ -1,20 +1,14 @@
-import {Injectable} from '@angular/core';
-import {CanActivate} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(): boolean {
-    if (this.authService.isAuthenticated()) {
-      return true;
-    } else {
-      this.authService.logout()
-      return false;
-    }
+  canActivate(): boolean | UrlTree {
+    return localStorage.getItem('payNoteToken')
+      ? true
+      : this.router.parseUrl('/auth/login');
   }
-
 }

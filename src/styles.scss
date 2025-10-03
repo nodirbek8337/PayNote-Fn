@@ -63,3 +63,26 @@
         max-width: 50% !important;
     }
 }
+
+.logo-content {
+    height: 40px;
+}
+
+.login-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.user-select {
+  height: 40px;
+}
+
+.p-datepicker .p-inputtext {
+  height: 40px !important;
+  line-height: 40px !important;
+  padding: 0 12px !important;
+  display: flex;
+  align-items: center;
+}

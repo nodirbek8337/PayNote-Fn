@@ -8,7 +8,7 @@ import { DatepickerRangeComponent } from '../../../shared/components/datepicker-
 type FilterType = 'dropdown' | 'date-range' | 'text';
 
 @Component({
-  selector: 'contacts-filter',
+  selector: 'users-filter',
   standalone: true,
   imports: [CommonModule, FormsModule, SelectModule, InputTextModule, DatepickerRangeComponent],
   template: `
@@ -66,7 +66,7 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
     </div>
   `
 })
-export class ContactsFilterComponent {
+export class UsersFilterComponent {
   @Input() columnDefs: any[] = [];
   @Input() columnFilters: Record<string, any> = {};
   @Input() loading = false;
