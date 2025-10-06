@@ -1,75 +1,72 @@
-import { inject, Injector } from '@angular/core';
+import { inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
 import {
   HttpErrorResponse,
   HttpEvent,
   HttpHandlerFn,
   HttpInterceptorFn,
   HttpRequest,
-  HttpStatusCode,
+  HttpStatusCode
 } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 
 export const AuthInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const authService = inject(AuthService);
-  const injector = inject(Injector);
+  const toast = inject(ToastService);
 
-  const messageService = inject(MessageService);
-  let translate: TranslateService | null = null;
-
-  const TOKEN = localStorage.getItem('payNoteToken');
-  let authReq = req;
-
-  if (TOKEN) {
-    authReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${TOKEN}`),
-    });
-  }
+  const token = localStorage.getItem('payNoteToken');
+  const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+  const isAuthLogin = req.url.includes('/auth/login');
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (!translate) {
-        translate = injector.get(TranslateService);
-      }
-
-      const showError = (key: string) => {
-        messageService.add({
-          severity: 'error',
-          summary: translate!.instant('Messages.Error'),
-          detail: translate!.instant(key),
-        });
-      };
+      const show = (msg: string) => toast.error(msg);
 
       switch (error.status) {
-        case HttpStatusCode.Unauthorized: // 401
-          authService.logout();
+        case HttpStatusCode.Unauthorized:
+          show('Kirish rad etildi. Login yoki parol notog\'ri.');
+          if (!isAuthLogin) authService.logoutAndRedirect();
           break;
-        case HttpStatusCode.BadRequest: // 400
-          showError('ErrorResponse.400');
+        case HttpStatusCode.BadRequest:
+          show('Notog\'ri sorov. Ma\'lumotlarni tekshirib qayta urinib ko\'ring.');
           break;
-        case HttpStatusCode.Forbidden: // 403
-          showError('ErrorResponse.403');
+        case HttpStatusCode.Forbidden:
+          show('Ruxsat yo\'q. Ushbu amalni bajarishga huquqingiz yo\'q.');
           break;
-        case HttpStatusCode.NotFound: // 404
-          showError('ErrorResponse.404');
+        case HttpStatusCode.NotFound:
+          show('Topilmadi. So\'ralgan ma\'lumot mavjud emas.');
           break;
-        case HttpStatusCode.UnprocessableEntity: // 422
-          showError('ErrorResponse.422');
+        case HttpStatusCode.Conflict:
+          show('Nizoli holat. Ma\'lumot allaqachon mavjud.');
           break;
-        case HttpStatusCode.InternalServerError: // 500
-          showError('ErrorResponse.500');
+        case HttpStatusCode.UnprocessableEntity:
+          show('Ma\'lumotlar notog\'ri to\'ldirilgan.');
           break;
-        case 0: // Network error (CORS yoki internet yo‘q)
-          showError('ErrorResponse.0');
+        case 429:
+          show('Juda ko\'p sorov yuborildi. Birozdan so\'ng urinib ko\'ring.');
+          break;
+        case HttpStatusCode.InternalServerError:
+          show('Serverda xatolik yuz berdi.');
+          break;
+        case 502:
+          show('Tashqi xizmat xatolik qaytardi.');
+          break;
+        case 503:
+          show('Xizmat vaqtincha ishlamayapti.');
+          break;
+        case 504:
+          show('Tarmoq kechikishi. Internetni tekshiring.');
+          break;
+        case 0:
+          show('Internet aloqasi yo\'q. Ulab qayta urinib ko\'ring.');
           break;
         default:
-          showError('ErrorResponse.default');
+          show('Noma\'lum xatolik yuz berdi.');
           break;
       }
 

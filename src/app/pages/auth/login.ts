@@ -8,6 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { HttpClient } from '@angular/common/http';
 import { LayoutService } from '../../layout/service/layout.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -32,7 +33,7 @@ import { LayoutService } from '../../layout/service/layout.service';
 
                             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Parol</label>
                             <p-password id="password1" [(ngModel)]="password" placeholder="Parol" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
-                            <p-button (onClick)="saveStorage()" label="Tizimga kirish" styleClass="w-full mt-6" routerLink="/"></p-button>
+                            <p-button (onClick)="onSubmit()" label="Tizimga kirish" styleClass="w-full mt-6" routerLink="/"></p-button>
                         </div>
                     </div>
                 </div>
@@ -48,16 +49,14 @@ export class Login {
     checked: boolean = false;
 
     _http = inject(HttpClient);
+    _auth = inject(AuthService);
     private layout = inject(LayoutService);
 
     ngOnInit() {
         this.layout.toggleDarkMode(this.layout.layoutConfig());
     }
 
-    saveStorage() {
-        this._http.post('https://pay-note.koyeb.app/auth/login', { username: this.email, password: this.password }).subscribe((res: any) => {
-            localStorage.setItem('payNoteToken', res.token);
-            localStorage.setItem('payNoteUser', JSON.stringify(res.user));
-        });
+    onSubmit() {
+        this._auth.login({ username: this.email, password: this.password });
     }
 }

@@ -1,9 +1,9 @@
 import { Injectable, Injector, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from './http.service';
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ToastService } from './toast.service';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private router: Router,
     private _httpService: HttpService,
-    private messageService: MessageService,
+    private toast: ToastService,
     private injector: Injector
   ) {}
 
@@ -26,31 +26,15 @@ export class AuthService {
 
   login(data: any) {
     this.isLoading.set(true);
-    this._httpService.post('/api/v1/user/login', data).subscribe({
-      next: (value: any) => {
+    this._httpService.post('/auth/login', data)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe((value: any) => {
         localStorage.setItem('payNoteToken', value.token);
         if (value.status) {
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('Messages.Success'),
-            detail: this.translate.instant('Messages.LoginSuccessfully')
-          });
-          setTimeout(() => {
-            this.router.navigateByUrl('/', { replaceUrl: true });
-          }, 200);
+          this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
+          setTimeout(() => this.router.navigateByUrl('/', { replaceUrl: true }), 600);
         }
-      },
-      error: (err: HttpErrorResponse) => {
-        if (err.status === HttpStatusCode.Unauthorized) {
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('Messages.Error'),
-            detail: this.translate.instant('ErrorResponse.401')
-          });
-        }
-      },
-      complete: () => this.isLoading.set(false)
-    });
+      });
   }
 
   logout(): void {
