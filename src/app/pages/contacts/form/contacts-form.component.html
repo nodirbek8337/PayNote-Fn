@@ -4,7 +4,7 @@
     <app-money-input formControlName="amount" [defaultCurrency]="model.amountCurrency ?? 'UZS'" [emitCurrency]="true" [required]="true" [allowNegative]="true"> </app-money-input>
     <app-input placeholder="Izoh" formControlName="note" type="text"></app-input>
     <div class="flex justify-end gap-2 mt-4">
-        <button pButton type="button" label="Bekor qilish" (click)="closeModal()" class="p-button-text p-button-danger"></button>
+        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
         <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
     </div>
 </form>

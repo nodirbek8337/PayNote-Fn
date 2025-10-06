@@ -3,5 +3,6 @@ export interface ICustomAction {
     tooltip?: string;
     color?: string;
     disabled?: boolean;
+    TooltipTitle?: string;
     action: (row: any) => void;
 }

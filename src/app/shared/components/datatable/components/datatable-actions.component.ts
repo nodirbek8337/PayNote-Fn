@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ICustomAction } from '../../../interfaces/custom-action.interface';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'datatable-actions',
@@ -16,11 +17,13 @@ import { ButtonModule } from 'primeng/button';
         [title]="btn.tooltip"
         [disabled]="btn.disabled"
         (click)="btn.action(row)"
+        [pTooltip]="btn.TooltipTitle" 
+        tooltipPosition="top"
       ></button>
     </ng-container>
   `,
   styles: [],
-  imports: [CommonModule, ButtonModule]
+  imports: [CommonModule, ButtonModule, TooltipModule]
 })
 export class DatatableActionsComponent {
   @Input() row: any;

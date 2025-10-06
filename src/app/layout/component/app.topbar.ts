@@ -138,11 +138,11 @@ export class AppTopbar implements OnInit, OnDestroy {
 
     if (val.type === 'logout') {
       this.confirmation.confirm({
-        header: 'Log out?',
+        header: 'Tizimdan chiqish?',
         message: 'Haqiqatan ham tizimdan chiqasizmi?',
         icon: 'pi pi-exclamation-triangle',
-        acceptLabel: 'Logout',
-        rejectLabel: 'Bekor qilish',
+        acceptLabel: 'Chiqish',
+        rejectLabel: 'Ortga',
         acceptButtonStyleClass: 'p-button-danger',
         accept: () => this.logout(),
         reject: () => { this.selectedOption = null; }

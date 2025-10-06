@@ -20,6 +20,7 @@ import { ICustomAction } from '../../interfaces/custom-action.interface';
 import { DrawerModule } from 'primeng/drawer';
 import { SignClassPipe } from "../../pipes/sign-class.pipe";
 import { MoneyPipe } from "../../pipes/money.pipe";
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'prime-datatable',
@@ -40,7 +41,8 @@ import { MoneyPipe } from "../../pipes/money.pipe";
     DatatableColumnRendererComponent,
     DrawerModule,
     SignClassPipe,
-    MoneyPipe
+    MoneyPipe,
+    TooltipModule
 ],
   providers: [ConfirmationService]
 })
