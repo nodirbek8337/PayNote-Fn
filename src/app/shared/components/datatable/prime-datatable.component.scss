@@ -9,6 +9,36 @@
     column-gap: 0.5rem;
 }
 
+.max-amount-content {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    column-gap: 1rem;
+}
+
+.quick-filter-input {
+    width: 240px;
+    height: 40px;
+}
+
+@media (max-width: 960px) {
+    .table-page-container .header-title-content h4 {
+        display: none;
+    }
+
+    .max-amount-content {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .quick-filter-input {
+        width: 160px;
+        height: 36px;
+    }
+}
+
 .table-refresh-btn {
     width: 40px;
     height: 40px;

@@ -1,34 +1,12 @@
-<div class="money-input grid gap-2" style="grid-template-columns: 1fr auto; margin: 0 8px">
-  <input
-    pInputText
-    type="text"
-    [placeholder]="placeholder"
-    [disabled]="isDisabled"
-    style="height: 40px;"
-    [value]="displayValue"
-    (keydown)="onKeyDown($event)"
-    (paste)="onPaste($event)"
-    (input)="onAmountInput($event)"
-    [ngClass]="{ 'is-invalid': shouldShowErrors() }"
-    [attr.inputmode]="currency === 'USD' ? 'decimal' : 'numeric'"
-    autocomplete="off"
-  />
+<div class="money-input">
+    <input pInputText class="flex-1" [placeholder]="placeholder" [disabled]="isDisabled" [value]="displayValue" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput($any($event.target).value)" />
 
-  <p-select
-    [options]="currencyOptions"
-    optionLabel="label"
-    optionValue="value"
-    [(ngModel)]="currency"
-    [disabled]="isDisabled"
-    (onChange)="onCurrencyChange($event.value)"
-    placeholder="Valyuta"
-    styleClass="w-32 user-select"
-  ></p-select>
+    <p-select styleClass="w-28" [options]="currencyOptions" [ngModel]="currency" (ngModelChange)="onCurrencyChange($event)" [disabled]="isDisabled"> </p-select>
 </div>
 
-<div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
-  <small *ngIf="control?.errors?.['required']">Miqdor majburiy</small>
-  <small *ngIf="control?.errors?.['currencyMissing']">Valyuta majburiy</small>
-  <small *ngIf="control?.errors?.['min']">Qiymat juda kichik (min: {{ control?.errors?.['min']?.min }})</small>
-  <small *ngIf="control?.errors?.['max']">Qiymat juda katta (max: {{ control?.errors?.['max']?.max }})</small>
+<div *ngIf="shouldShowErrors()" class="text-xs text-red-500 mt-1">
+    <ng-container *ngIf="control?.errors?.['required']">Majburiy maydon.</ng-container>
+    <ng-container *ngIf="control?.errors?.['min']">Minimal qiymat: {{ control?.errors?.['min'].min }}</ng-container>
+    <ng-container *ngIf="control?.errors?.['max']">Maksimal qiymat: {{ control?.errors?.['max'].max }}</ng-container>
+    <ng-container *ngIf="control?.errors?.['currencyMissing']">Valyuta tanlanishi shart.</ng-container>
 </div>

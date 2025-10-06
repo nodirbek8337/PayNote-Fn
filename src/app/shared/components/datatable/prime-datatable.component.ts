@@ -18,6 +18,8 @@ import { DatatableActionsComponent } from "./components/datatable-actions.compon
 import { DatatableColumnRendererComponent } from "./components/datatable-column-renderer.component";
 import { ICustomAction } from '../../interfaces/custom-action.interface';
 import { DrawerModule } from 'primeng/drawer';
+import { SignClassPipe } from "../../pipes/sign-class.pipe";
+import { MoneyPipe } from "../../pipes/money.pipe";
 
 @Component({
   selector: 'prime-datatable',
@@ -36,8 +38,10 @@ import { DrawerModule } from 'primeng/drawer';
     DatepickerRangeComponent,
     DatatableActionsComponent,
     DatatableColumnRendererComponent,
-    DrawerModule
-  ],
+    DrawerModule,
+    SignClassPipe,
+    MoneyPipe
+],
   providers: [ConfirmationService]
 })
 export class PrimeDatatableComponent extends TableFeatureBaseComponent implements AfterViewInit, OnChanges {
@@ -59,7 +63,6 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
   @Input() showQuickFilterTop = true;
   @Input() showQuickFilterBottom = false;
 
-  /** Drawer'ga beriladigan tashqi filter komponent */
   @Input() drawerFilterComponent?: Type<any>;
   @ViewChild('drawerHost', { read: ViewContainerRef }) drawerHost!: ViewContainerRef;
   private drawerRef?: ComponentRef<any>;
@@ -73,7 +76,6 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
   isSubmitting = false;
   filterDrawerVisible = false;
 
-  /** Header quick search */
   quickFilterValue = '';
 
   ngAfterViewInit(): void {
@@ -86,7 +88,6 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     }
   }
 
-  /** Drawer faqat komponent bo'lsa ochiladi */
   openDrawer() {
     if (this.showDrawerFilters && this.drawerFilterComponent) {
       this.filterDrawerVisible = true;
@@ -112,7 +113,6 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
       columnDefs: this.columnDefs,
       columnFilters: this.columnFilters,
       loading: this.loading,
-      /** 🔹 quickText — headerdagi qidiruv matni drawer placeholder’lariga uzatiladi */
       quickText: this.quickFilterValue,
       onColumnFilter: (val: any, field: string) => this.onColumnFilter(val, field),
       clearAllFilters: () => this.clearAllFilters()
@@ -120,7 +120,6 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     this.drawerRef.changeDetectorRef.detectChanges();
   }
 
-  // CRUD va table eventlari (sizdagi mavjud kodlar)
   triggerAdd() {
     this.editData = {};
     this.editMode = false;
@@ -138,8 +137,8 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
 
   triggerDelete(row: any) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete this item?`,
-      header: 'Confirm Delete',
+      message: `Siz rostan ham bu kontaktni oʻchirib tashlamoqchimisiz?`,
+      header: "O'chirishni tasdiqlang",
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this._defaultService.delete(row._id).subscribe({

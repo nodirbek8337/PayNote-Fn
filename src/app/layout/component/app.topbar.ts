@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,10 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
+
+type SelectValue =
+  | { type: 'logout' }
+  | { type: 'route'; url: string };
 
 @Component({
   selector: 'app-topbar',
@@ -31,13 +35,13 @@ import { SelectModule } from 'primeng/select';
           </a>
         </div>
 
-        <app-topmenu></app-topmenu>
+        <app-topmenu class="menu-n"></app-topmenu>
 
         <div class="layout-topbar-actions">
-          <div class="layout-topbar-menu hidden lg:block">
+          <div class="layout-topbar-menu">
             <div class="layout-topbar-menu-content flex items-center gap-3">
               <p-select
-                [options]="userOptions"
+                [options]="selectOptions"
                 optionLabel="label"
                 optionValue="value"
                 [(ngModel)]="selectedOption"
@@ -59,7 +63,6 @@ import { SelectModule } from 'primeng/select';
       display: flex;
       align-items: center;
     }
-
     ::ng-deep .user-select .p-select-label {
       display: flex;
       align-items: center;
@@ -67,12 +70,29 @@ import { SelectModule } from 'primeng/select';
     }
   `]
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit, OnDestroy {
   items!: MenuItem[];
 
   userName = this.getUserName();
-  userOptions = [{ label: 'Logout', value: 'logout' }];
-  selectedOption: string | null = null;
+
+  private baseOptions = [
+    { label: 'Tizimdan chiqish', value: { type: 'logout' } as SelectValue }
+  ];
+
+  private mobileNavOptions = [
+    { label: 'Kontaktlar', value: { type: 'route', url: '/' } as SelectValue },
+    { label: 'Foydalanuvchilar',    value: { type: 'route', url: '/users' }    as SelectValue }
+  ];
+
+  get selectOptions() {
+    return this.isXs ? [...this.mobileNavOptions, ...this.baseOptions] : this.baseOptions;
+  }
+
+  selectedOption: SelectValue | null = null;
+
+  private mediaQuery?: MediaQueryList;
+  private mqListener?: (e: MediaQueryListEvent) => void;
+  isXs = false;
 
   constructor(
     public layoutService: LayoutService,
@@ -80,8 +100,43 @@ export class AppTopbar {
     private router: Router
   ) {}
 
+  ngOnInit(): void {
+    if (typeof window !== 'undefined' && 'matchMedia' in window) {
+      this.mediaQuery = window.matchMedia('(max-width: 480px)');
+      this.isXs = this.mediaQuery.matches;
+
+      this.mqListener = (e: MediaQueryListEvent) => {
+        this.isXs = e.matches;
+        if (!this.isXs && this.selectedOption && this.selectedOption.type === 'route') {
+          this.selectedOption = null;
+        }
+      };
+
+      if ('addEventListener' in this.mediaQuery) {
+        this.mediaQuery.addEventListener('change', this.mqListener);
+      } else {
+        // @ts-ignore
+        this.mediaQuery.addListener(this.mqListener);
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.mediaQuery && this.mqListener) {
+      if ('removeEventListener' in this.mediaQuery) {
+        this.mediaQuery.removeEventListener('change', this.mqListener);
+      } else {
+        // @ts-ignore
+        this.mediaQuery.removeListener(this.mqListener);
+      }
+    }
+  }
+
   onUserAction(event: any) {
-    if (event?.value === 'logout') {
+    const val = event?.value as SelectValue | undefined;
+    if (!val) return;
+
+    if (val.type === 'logout') {
       this.confirmation.confirm({
         header: 'Log out?',
         message: 'Haqiqatan ham tizimdan chiqasizmi?',
@@ -90,10 +145,16 @@ export class AppTopbar {
         rejectLabel: 'Bekor qilish',
         acceptButtonStyleClass: 'p-button-danger',
         accept: () => this.logout(),
-        reject: () => {
-          this.selectedOption = null;
-        }
+        reject: () => { this.selectedOption = null; }
       });
+      return;
+    }
+
+    if (val.type === 'route') {
+      this.router.navigate([val.url]).finally(() => {
+        this.selectedOption = null;
+      });
+      return;
     }
   }
 

@@ -1,8 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
 @use './tailwind.css';
 @use './assets/layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './assets/demo/demo.scss';
+
+:root { --page-min-width: 760px; }
+
+.table-page-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.table-page-container .card-body {
+  min-width: var(--page-min-width);
+}
+
+.table-page-container .header-content {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  white-space: nowrap;
+}
+
+.table-page-container .p-datatable-wrapper {
+  overflow-x: visible !important;
+}
 
 .p-button {
     height: 40px;

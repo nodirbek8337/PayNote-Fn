@@ -52,8 +52,8 @@ export class AppTopMenu implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      { label: 'Contacts', icon: 'pi pi-address-book', routerLink: ['/'],      exact: true  },
-      { label: 'Users',    icon: 'pi pi-user',         routerLink: ['/users'], exact: true  },
+      { label: 'Kontaktlar', icon: 'pi pi-address-book', routerLink: ['/'],      exact: true  },
+      { label: 'Foydalanuvchilar',    icon: 'pi pi-user',         routerLink: ['/users'], exact: true  },
     ];
   }
 }

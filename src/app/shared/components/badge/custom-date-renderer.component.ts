@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <span>
-    {{ rowData?.[field] | date: 'dd MMM yyyy, HH:mm' }}
+      {{ rowData?.[field] | date: displayFormat : undefined : 'uz' }}
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,4 +15,6 @@ import { CommonModule } from '@angular/common';
 export class CustomDateRendererComponent {
   @Input() rowData!: any;
   @Input() field!: string;
+
+  @Input() displayFormat: string = 'd MMMM y, HH:mm';
 }

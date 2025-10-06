@@ -9,6 +9,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
 
     value: any[] = [];
     totalRecords: number = 0;
+    amountTotals: any = {};
     loading: boolean = false;
     columnFilters: { [key: string]: any } = {};
     editMode = false;
@@ -63,6 +64,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
                         ...item
                     })) ?? [];
                 this.totalRecords = res.pagination?.total ?? res.total ?? res.data?.total ?? 0;
+                this.amountTotals = res.amount_totals;
                 this.loading = false;
             },
             error: () => {

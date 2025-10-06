@@ -6,26 +6,26 @@ import { AppFooter } from './app.footer';
 import { LayoutService } from '../service/layout.service';
 
 @Component({
-  selector: 'app-layout',
-  standalone: true,
-  imports: [CommonModule, AppTopbar, RouterModule, AppFooter],
-  template: `
-    <div class="layout-wrapper layout-full" [ngClass]="containerClass">
-      <app-topbar></app-topbar>
+    selector: 'app-layout',
+    standalone: true,
+    imports: [CommonModule, AppTopbar, RouterModule, AppFooter],
+    template: `
+        <div class="layout-wrapper layout-full" [ngClass]="containerClass">
+            <app-topbar></app-topbar>
 
-      <div class="layout-main-container">
-        <div class="layout-main">
-          <router-outlet></router-outlet>
+            <div class="layout-main-container">
+                <div class="layout-main">
+                    <router-outlet></router-outlet>
+                </div>
+                <app-footer></app-footer>
+            </div>
         </div>
-        <app-footer></app-footer>
-      </div>
-    </div>
-  `
+    `
 })
 export class AppLayout {
-  constructor(public layoutService: LayoutService) {}
+    constructor(public layoutService: LayoutService) {}
 
-  get containerClass() {
-    return { 'layout-full': true };
-  }
+    get containerClass() {
+        return { 'layout-full': true };
+    }
 }
