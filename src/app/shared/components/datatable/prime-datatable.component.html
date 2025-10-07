@@ -2,26 +2,25 @@
     <div class="datatable-card card mt-1">
         <div class="card-body">
             <div class="header-content mb-3">
-                <div class="header-title-content">
-                    <h4 *ngIf="tableTitle">{{ tableTitle }}</h4>
-                    <button *ngIf="hasRefreshBtn" pButton icon="pi pi-refresh" class="table-refresh-btn" (click)="triggerRefresh()"></button>
-                    <button *ngIf="hasClearFilterBtn" pButton icon="pi pi-filter-slash" class="table-refresh-btn" (click)="clearAllFilters()" [disabled]="loading || isFilterEmpty()"></button>
-                    <div *ngIf="amountTotals as t" class="max-amount-content">
-                        <span class="text-lg font-semibold" [ngClass]="t.UZS | signClass">
-                            {{ t.UZS | money: 'UZS' }}
-                        </span>
-                        <span class="text-lg font-semibold" [ngClass]="t.USD | signClass">
-                            {{ t.USD | money: 'USD' }}
-                        </span>
+                <div class="header-left">
+                    <h4 *ngIf="tableTitle" class="header-title">{{ tableTitle }}</h4>
+                    <div class="header-actions">
+                        <button *ngIf="hasRefreshBtn" pButton icon="pi pi-refresh" class="table-refresh-btn" (click)="triggerRefresh()"></button>
+                        <button *ngIf="hasClearFilterBtn" pButton icon="pi pi-filter-slash" class="table-refresh-btn" (click)="clearAllFilters()" [disabled]="loading || isFilterEmpty()"></button>
+                    </div>
+                    <div *ngIf="amountTotals as t" class="totals-chips">
+                        <span class="chip" [ngClass]="t.UZS | signClass">{{ t.UZS | money: 'UZS' }}</span>
+                        <span class="chip" [ngClass]="t.USD | signClass">{{ t.USD | money: 'USD' }}</span>
                     </div>
                 </div>
-                <div>
+                <div class="header-right">
                     <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" placeholder="Tez qidiruv..." [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
-                    <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="ms-4" label="Filtrlar" (click)="openDrawer()"></button>
-                    <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="ms-4" label="Qo'shish" (click)="triggerAdd()"></button>
+                    <div class="cta-buttons">
+                        <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="btn-ctl" label="Filtrlar" (click)="openDrawer()"></button>
+                        <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="btn-ctl" label="Qo'shish" (click)="triggerAdd()"></button>
+                    </div>
                 </div>
             </div>
-
             <ng-content select="[filter]"></ng-content>
 
             <p-table
@@ -33,7 +32,7 @@
                 [rowsPerPageOptions]="rowsPerPageOptions"
                 [loading]="loading"
                 [lazy]="true"
-                [scrollable]="true"
+                [scrollable]="false"
                 scrollHeight="70vh"
                 (onLazyLoad)="loadData($event)"
                 (onRowClick)="handleRowClick($event)"
@@ -83,7 +82,7 @@
 
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr class="body-contents">
-                        <td *ngFor="let col of columns" class="body-content" [ngClass]="col.widthClass">
+                        <td *ngFor="let col of columns" class="body-content" [ngClass]="col.widthClass" [attr.data-label]="col.header" [attr.data-field]="col.field">
                             <datatable-column-renderer [field]="col.field" [row]="rowData" [cellRendererComponent]="col.cellRendererComponent" [cellRendererFn]="col.cellRendererFn"> </datatable-column-renderer>
                         </td>
                         <td *ngIf="customActions?.length" class="center-content">
@@ -93,6 +92,15 @@
                             <div class="action-buttons">
                                 <button pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"></button>
                                 <button pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"></button>
+                            </div>
+                        </td>
+
+                        <td *ngIf="customActions?.length || hasAction" class="actions-merged">
+                            <div class="action-buttons">
+                                <datatable-actions *ngIf="customActions?.length" [row]="rowData" [actions]="customActions"></datatable-actions>
+
+                                <button *ngIf="hasAction" pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)"></button>
+                                <button *ngIf="hasAction" pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)"></button>
                             </div>
                         </td>
                     </tr>

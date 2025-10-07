@@ -1,42 +1,21 @@
 .header-content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    min-width: 0;
 }
 
-.header-title-content {
+.header-actions {
     display: flex;
-    column-gap: 0.5rem;
-}
-
-.max-amount-content {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    column-gap: 1rem;
-}
-
-.quick-filter-input {
-    width: 240px;
-    height: 40px;
-}
-
-@media (max-width: 960px) {
-    .table-page-container .header-title-content h4 {
-        display: none;
-    }
-
-    .max-amount-content {
-        margin-bottom: 0;
-    }
-}
-
-@media (max-width: 760px) {
-    .quick-filter-input {
-        width: 160px;
-        height: 36px;
-    }
+    gap: 6px;
 }
 
 .table-refresh-btn {
@@ -44,16 +23,48 @@
     height: 40px;
 }
 
-::ng-deep .p-datatable-scrollable-body {
-    max-height: 70vh !important;
-    overflow-y: auto;
+.totals-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.totals-chips .chip {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--surface-border) 30%, transparent);
+    font-weight: 600;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.quick-filter-input {
+    width: 260px;
+    height: 40px;
+}
+.btn-ctl {
+    height: 40px;
+}
+
+:host ::ng-deep td.actions-merged {
+    display: none;
 }
 
 ::ng-deep .p-datatable-table-container {
     min-height: 70vh;
 }
+::ng-deep .p-datatable-scrollable-body {
+    max-height: 70vh !important;
+    overflow-y: auto;
+}
 
-/* Light Mode */
 ::ng-deep .datatable-content .p-datatable {
     border: 1px solid #e5e7eb;
     border-radius: var(--content-border-radius);
@@ -82,7 +93,6 @@
 .sort-headers .sort-header:first-child {
     border-top-left-radius: var(--content-border-radius);
 }
-
 .sort-headers .sort-header:last-child {
     border-top-right-radius: var(--content-border-radius);
 }
@@ -90,7 +100,6 @@
 .body-contents:nth-child(even) {
     background-color: #f9f9fc;
 }
-
 .body-contents:hover {
     background-color: #e0e7ff;
     cursor: pointer;
@@ -108,7 +117,6 @@
     column-gap: 0.5rem;
 }
 
-/* Dark Mode */
 ::ng-deep html.app-dark .datatable-content .p-datatable {
     border-color: #52525b !important;
 }
@@ -123,8 +131,158 @@
 ::ng-deep html.app-dark .body-contents:nth-child(even) {
     background-color: #374151 !important;
 }
-
 ::ng-deep html.app-dark .body-contents:hover {
     background-color: #4b5563 !important;
     cursor: pointer;
+}
+
+@media (max-width: 960px) {
+    .header-title {
+        display: none;
+    }
+    .max-amount-content {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .header-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            'btnsLeft btnsRight'
+            'search    search'
+            'totals    totals';
+        column-gap: 8px;
+        row-gap: 8px;
+        align-items: center;
+    }
+
+    .header-left,
+    .header-right {
+        display: contents;
+    }
+
+    .header-actions {
+        grid-area: btnsLeft;
+        display: flex;
+        gap: 6px;
+        justify-content: flex-start;
+    }
+
+    .cta-buttons {
+        grid-area: btnsRight;
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+    }
+
+    .quick-filter-input {
+        grid-area: search;
+        width: 100%;
+        height: 36px;
+    }
+
+    .totals-chips {
+        grid-area: totals;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .totals-chips .chip {
+        white-space: nowrap;
+    }
+
+    .header-title {
+        display: none;
+    }
+
+    .btn-ctl,
+    .table-refresh-btn {
+        height: 36px;
+        width: 36px;
+        padding: 0;
+    }
+    :host ::ng-deep .btn-ctl .p-button-label {
+        display: none;
+    }
+
+    :host ::ng-deep .p-datatable thead {
+        display: none !important;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr {
+        display: block;
+        margin: 0.75rem 0;
+        border: 1px solid var(--surface-border);
+        border-radius: 12px;
+        background: var(--surface-card);
+        overflow: hidden;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr > td {
+        display: block;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        padding: 0.6rem 0.9rem;
+        border: 0;
+        height: auto;
+        text-align: left !important;
+        position: relative;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr > td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        opacity: 0.65;
+        margin-bottom: 0.15rem;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr > td + td {
+        border-top: 1px dashed var(--surface-border);
+    }
+
+    .body-contents:nth-child(even),
+    .body-contents:hover {
+        background: transparent !important;
+    }
+
+    :host ::ng-deep td.center-content {
+        display: none !important;
+    }
+
+    :host ::ng-deep td.actions-merged {
+        display: block !important;
+        border-top: 1px solid var(--surface-border);
+        padding: 0.5rem 0.75rem;
+    }
+    :host ::ng-deep td.actions-merged .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr > td[class*='w-'],
+    :host ::ng-deep .p-datatable-thead > tr > th[class*='w-'] {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    :host ::ng-deep td[data-field='phone'],
+    :host ::ng-deep td[data-field='telefon'],
+    :host ::ng-deep td[data-field='createdAt'],
+    :host ::ng-deep td[data-field='yaratilganVaqti'],
+    :host ::ng-deep td[data-field='amount'],
+    :host ::ng-deep td[data-field='miqdor'] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
