@@ -1,4 +1,4 @@
-import { Directive, SimpleChanges, Input, OnChanges, OnInit } from '@angular/core';
+import { Directive, Input, OnInit } from '@angular/core';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { DefaultService } from '../../../services/default.service';
 
@@ -58,11 +58,13 @@ export abstract class TableFeatureBaseComponent implements OnInit {
 
         this._defaultService.reloadTable().subscribe({
             next: (res) => {
-                this.value =
-                    res.data?.map((item: any, index: number) => ({
-                        rowIndex: this.currentPageStartIndex + index + 1,
-                        ...item
-                    })) ?? [];
+                const items = Array.isArray(res.data) ? [...res.data].reverse() : [];
+
+                this.value = items.map((item: any, index: number) => ({
+                    rowIndex: this.currentPageStartIndex + index + 1,
+                    ...item
+                }));
+
                 this.totalRecords = res.pagination?.total ?? res.total ?? res.data?.total ?? 0;
                 this.amountTotals = res.amount_totals;
                 this.loading = false;
@@ -76,61 +78,45 @@ export abstract class TableFeatureBaseComponent implements OnInit {
     }
 
     onColumnFilter(value: any, field: string) {
-        if (
-          (typeof value === 'string' && value.trim() !== '') ||
-          (Array.isArray(value) && value.length > 0) ||
-          (typeof value === 'object' && value !== null) ||
-          typeof value === 'number' ||
-          typeof value === 'boolean'
-        ) {
-          this.columnFilters[field] = value;
+        if ((typeof value === 'string' && value.trim() !== '') || (Array.isArray(value) && value.length > 0) || (typeof value === 'object' && value !== null) || typeof value === 'number' || typeof value === 'boolean') {
+            this.columnFilters[field] = value;
         } else {
-          delete this.columnFilters[field];
+            delete this.columnFilters[field];
         }
-      
-        if (this.filterTimeout) clearTimeout(this.filterTimeout);
-      
-        this.filterTimeout = setTimeout(() => {
-          this.applyFilters();
-        }, 500);
-      
-        console.log('Field:', field, '| Filter Value:', value);
-      }
-      
 
-      applyFilters() {
+        if (this.filterTimeout) clearTimeout(this.filterTimeout);
+
+        this.filterTimeout = setTimeout(() => {
+            this.applyFilters();
+        }, 500);
+    }
+
+    applyFilters() {
         const formattedFilters: any = {};
-      
+
         for (const key in this.columnFilters) {
-          const value = this.columnFilters[key];
-      
-          if (typeof value === 'string' && value.trim() !== '') {
-            formattedFilters[key] = { value, matchMode: 'contains' };
-          }
-      
-          else if (typeof value === 'number' || typeof value === 'boolean') {
-            formattedFilters[key] = { value, matchMode: 'equals' };
-          }
-      
-          else if (Array.isArray(value) && value.length === 2 && value[0] && value[1]) {
-            formattedFilters[`${key}_from`] = {
-              value: value[0].toISOString(),
-              matchMode: 'gte'
-            };
-            formattedFilters[`${key}_to`] = {
-              value: value[1].toISOString(),
-              matchMode: 'lte'
-            };
-          }
-      
-          else if (value) {
-            formattedFilters[key] = { value, matchMode: 'contains' };
-          }
+            const value = this.columnFilters[key];
+
+            if (typeof value === 'string' && value.trim() !== '') {
+                formattedFilters[key] = { value, matchMode: 'contains' };
+            } else if (typeof value === 'number' || typeof value === 'boolean') {
+                formattedFilters[key] = { value, matchMode: 'equals' };
+            } else if (Array.isArray(value) && value.length === 2 && value[0] && value[1]) {
+                formattedFilters[`${key}_from`] = {
+                    value: value[0].toISOString(),
+                    matchMode: 'gte'
+                };
+                formattedFilters[`${key}_to`] = {
+                    value: value[1].toISOString(),
+                    matchMode: 'lte'
+                };
+            } else if (value) {
+                formattedFilters[key] = { value, matchMode: 'contains' };
+            }
         }
-      
+
         this.reload(formattedFilters);
-      }
-      
+    }
 
     isFilterEmpty(): boolean {
         return Object.keys(this.columnFilters).length === 0;

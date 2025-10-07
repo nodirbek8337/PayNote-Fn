@@ -90,15 +90,16 @@
                         </td>
                         <td *ngIf="hasAction" class="center-content">
                             <div class="action-buttons">
+                                <button pButton icon="pi pi-copy" class="p-button-sm p-button-text p-button-success me-2" (click)="triggerClone(rowData)" pTooltip="Nusxalash" tooltipPosition="top"></button>
                                 <button pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"></button>
-                                <button pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"></button>
+                                <button pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)" pTooltip="O‘chirish" tooltipPosition="top"></button>
                             </div>
                         </td>
 
                         <td *ngIf="customActions?.length || hasAction" class="actions-merged">
                             <div class="action-buttons">
                                 <datatable-actions *ngIf="customActions?.length" [row]="rowData" [actions]="customActions"></datatable-actions>
-
+                                <button *ngIf="hasAction" pButton icon="pi pi-copy" class="p-button-sm p-button-text p-button-success me-2" (click)="triggerClone(rowData)"></button>
                                 <button *ngIf="hasAction" pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)"></button>
                                 <button *ngIf="hasAction" pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)"></button>
                             </div>
