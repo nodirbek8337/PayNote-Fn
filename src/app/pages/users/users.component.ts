@@ -26,38 +26,29 @@ export class UsersComponent {
     FilterComponent = UsersFilterComponent;
 
     columnDefs = [
-        { field: 'username', header: 'username', widthClass: 'w-40p', sortable: false, placeholder: 'username' },
+        { field: 'username', header: 'Login', widthClass: 'w-40p', sortable: false, placeholder: 'Login' },
         {
             field: 'role',
-            header: 'role',
-            widthClass: 'w-10p',
+            header: 'Rol',
+            widthClass: 'w-20p',
             sortable: false,
             placeholder: 'role'
         },
         {
             field: 'isActive',
-            header: 'isActive',
-            widthClass: 'w-10p',
+            header: 'Holat',
+            widthClass: 'w-15p',
             sortable: false,
             searchable: false,
             cellRendererComponent: CustomActiveBadgeComponent
         },
         {
             field: 'createdAt',
-            header: 'createdAt',
+            header: 'Yaratilgan vaqt',
             filterType: 'date-range',
             widthClass: 'w-15p',
             sortable: false,
-            placeholder: 'Yaratilgan vaqti',
-            cellRendererComponent: CustomDateRendererComponent
-        },
-        {
-            field: 'updatedAt',
-            header: 'UpdatedAt',
-            filterType: 'date-range',
-            widthClass: 'w-15p',
-            sortable: false,
-            placeholder: 'Yangilangan vaqti',
+            placeholder: 'Yaratilgan vaqt',
             cellRendererComponent: CustomDateRendererComponent
         }
     ];

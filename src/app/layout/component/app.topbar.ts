@@ -163,7 +163,7 @@ export class AppTopbar implements OnInit, OnDestroy {
       localStorage.clear();
     } finally {
       this.selectedOption = null;
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
     }
   }
 

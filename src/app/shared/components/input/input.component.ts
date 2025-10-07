@@ -1,13 +1,14 @@
-import { Component, forwardRef, inject, Input, OnInit, Optional } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, Optional } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [NgIf, NgClass, InputTextModule, FormsModule],
+  imports: [NgIf, NgClass, InputTextModule, PasswordModule, FormsModule],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   providers: [{
@@ -19,14 +20,13 @@ import { FormsModule } from '@angular/forms';
 export class InputComponent implements ControlValueAccessor, OnInit {
   constructor(@Optional() private controlContainer: ControlContainer) {}
 
-  @Input() type: string = 'text';
+  @Input() type: 'text' | 'password' | 'email' | 'number' = 'text';
   @Input() placeholder = '';
   @Input() formControlName!: string;
   @Input() required = false;
 
   value: any = '';
   isDisabled = false;
-  showPassword = false;
 
   onChange = (_: any) => {};
   onTouched = () => {};
@@ -44,13 +44,6 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   get control() {
     return this.controlContainer?.control?.get?.(this.formControlName);
   }
-
-  get actualType(): string {
-    if (this.type !== 'password') return this.type;
-    return this.showPassword ? 'text' : 'password';
-  }
-
-  togglePasswordVisibility() { this.showPassword = !this.showPassword; }
 
   shouldShowErrors(): boolean {
     const c = this.control;

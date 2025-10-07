@@ -1,25 +1,38 @@
 <div class="app-input-container">
+  <ng-container *ngIf="type !== 'password'; else passwordTpl">
     <input
-        [type]="actualType"
-        pInputText
-        style="width: 100%; height: 40px;"
-        [placeholder]="placeholder"
-        [disabled]="isDisabled"
-        [(ngModel)]="value"
-        (ngModelChange)="onChange($event)"
-        (blur)="onTouched()"
-        [ngClass]="{
-            'is-invalid': shouldShowErrors()
-        }"
+      pInputText
+      [type]="type"
+      class="w-full"
+      style="height: 40px;"
+      [placeholder]="placeholder"
+      [disabled]="isDisabled"
+      [ngModel]="value"
+      (ngModelChange)="onChange($event)"
+      (blur)="onTouched()"
+      [ngClass]="{ 'is-invalid': shouldShowErrors() }"
     />
+  </ng-container>
 
-    <button *ngIf="type === 'password'" type="button" class="eye-btn" (click)="togglePasswordVisibility()">
-        <i [ngClass]="[showPassword ? 'pi pi-times' : 'pi pi-eye-slash', 'text-3xl', 'mb-2', 'd-block']"></i>
-    </button>
+  <ng-template #passwordTpl>
+    <p-password
+      [ngModel]="value"
+      (ngModelChange)="onChange($event)"
+      (onBlur)="onTouched()"
+      [toggleMask]="true"
+      [feedback]="false"
+      [fluid]="true"
+      [placeholder]="placeholder"
+      [disabled]="isDisabled"
+      styleClass="w-full"
+      [inputStyle]="{ height: '40px' }"
+      [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+    ></p-password>
+  </ng-template>
 
-    <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
-        <small *ngIf="control?.errors?.['required']"> Maydon to‘ldirilishi shart </small>
-        <small *ngIf="control?.errors?.['email']">Email noto‘g‘ri formatda</small>
-        <small *ngIf="control?.errors?.['pattern']">Qiymat noto‘g‘ri formatda</small>
-    </div>
+  <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
+    <small *ngIf="control?.errors?.['required']">Maydon to‘ldirilishi shart</small>
+    <small *ngIf="control?.errors?.['email']">Email noto‘g‘ri formatda</small>
+    <small *ngIf="control?.errors?.['pattern']">Qiymat noto‘g‘ri formatda</small>
+  </div>
 </div>

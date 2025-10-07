@@ -1,0 +1,27 @@
+.switch-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 8px 12px;
+  gap: 1rem;
+
+  &__label {
+    user-select: none;
+    line-height: 1;
+  }
+
+  &__ctrl {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  &__state {
+    font-size: .875rem;
+    opacity: .9;
+
+    &.on  { color: #16a34a; }
+    &.off { color: #ef4444; }
+  }
+}

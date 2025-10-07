@@ -25,18 +25,23 @@ export class AuthService {
     }
 
     login(data: any) {
-        this.isLoading.set(true);
-        this._httpService
-            .post('/auth/login', data)
-            .pipe(finalize(() => this.isLoading.set(false)))
-            .subscribe((value: any) => {
-                localStorage.setItem('payNoteToken', value.token);
-                localStorage.setItem('payNoteUser', JSON.stringify({ id: value?.user?.id, role: value?.user?.role, username: value?.user?.username }));
-                if (value.status) {
-                    this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
-                    setTimeout(() => this.router.navigateByUrl('/', { replaceUrl: true }), 600);
-                }
-            });
+    this.isLoading.set(true);
+    this._httpService.post('/auth/login', data)
+        .pipe(finalize(() => this.isLoading.set(false)))
+        .subscribe((value: any) => {
+        if (!value?.token) return;
+        localStorage.setItem('payNoteToken', value.token);
+        localStorage.setItem(
+            'payNoteUser',
+            JSON.stringify({
+            id: value?.user?.id,
+            role: value?.user?.role,
+            username: value?.user?.username
+            })
+        );
+        this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
+        this.router.navigateByUrl('/', { replaceUrl: true });
+        });
     }
 
     logout(): void {
@@ -46,6 +51,6 @@ export class AuthService {
 
     logoutAndRedirect(): void {
         this.logout();
-        this.router.navigate(['auth/login']);
+        this.router.navigate(['/login']);
     }
 }

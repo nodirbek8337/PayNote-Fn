@@ -1,0 +1,18 @@
+<div class="switch-toggle">
+  <label>{{ label }}</label>
+
+  <div class="switch-toggle__ctrl">
+    <p-inputSwitch
+      [ngModel]="value"
+      (ngModelChange)="onToggle($event)"
+      [disabled]="effectiveDisabled">
+    </p-inputSwitch>
+
+    <span *ngIf="showStateText"
+          class="switch-toggle__state"
+          [class.on]="value"
+          [class.off]="!value">
+      {{ value ? trueLabel : falseLabel }}
+    </span>
+  </div>
+</div>

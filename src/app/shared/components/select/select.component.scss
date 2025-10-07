@@ -1,0 +1,28 @@
+.app-select-container {
+  width: 100%;
+  padding: 8px;
+}
+
+:host ::ng-deep .app-select .p-select,
+:host ::ng-deep .app-multi .p-multiselect {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+:host ::ng-deep .app-select .p-select-label {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.is-invalid :where(.p-select, .p-multiselect, .p-inputtext) {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, .15);
+}
+
+.invalid-feedback {
+  color: #ef4444;
+  font-size: 12px;
+}

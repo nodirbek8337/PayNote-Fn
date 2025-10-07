@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
-    <app-input placeholder="Ism" formControlName="name" [required]="true"></app-input>
+    <app-input placeholder="Ism" formControlName="name"></app-input>
     <app-phone-input formControlName="phone"></app-phone-input>
     <app-money-input formControlName="amount" [defaultCurrency]="model.amountCurrency ?? 'UZS'" [emitCurrency]="true" [required]="true" [allowNegative]="true"> </app-money-input>
     <app-input placeholder="Izoh" formControlName="note" type="text"></app-input>

@@ -33,7 +33,7 @@ import { AuthService } from '../../shared/services/auth.service';
 
                             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Parol</label>
                             <p-password id="password1" [(ngModel)]="password" placeholder="Parol" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
-                            <p-button (onClick)="onSubmit()" label="Tizimga kirish" styleClass="w-full mt-6" routerLink="/"></p-button>
+                            <p-button (onClick)="onSubmit()" label="Tizimga kirish" styleClass="w-full mt-6"></p-button>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ import { AuthService } from '../../shared/services/auth.service';
         </div>
     `
 })
-export class Login {
+export class LoginComponenet {
     email: string = '';
 
     password: string = '';

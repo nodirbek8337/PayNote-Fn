@@ -53,7 +53,7 @@ export class ContactsComponent {
         // },
         {
             field: 'createdAt',
-            header: 'Yaratilgan vaqti',
+            header: 'Yaratilgan vaqt',
             filterType: 'date-range',
             widthClass: 'w-15p',
             sortable: false,
@@ -61,7 +61,7 @@ export class ContactsComponent {
         }
         // {
         //     field: 'updatedAt',
-        //     header: 'Yangilangan vaqti',
+        //     header: 'Yangilangan vaqt',
         //     filterType: 'date-range',
         //     widthClass: 'w-10p',
         //     sortable: false,

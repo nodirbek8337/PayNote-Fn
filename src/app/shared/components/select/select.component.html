@@ -1,0 +1,45 @@
+<div class="app-select-container">
+    <ng-container *ngIf="!multiple; else multiTpl">
+        <p-select
+            [style]="{ width: '100%', height: '40px' }"
+            styleClass="app-select w-full"
+            [options]="options"
+            [optionLabel]="optionLabel"
+            [optionValue]="optionValue || undefined"
+            [placeholder]="placeholder"
+            [showClear]="showClear"
+            [filter]="filter"
+            [disabled]="isDisabled || disabled"
+            [dataKey]="dataKey"
+            [ngModel]="value"
+            (ngModelChange)="onModelChange($event)"
+            (onBlur)="onBlur()"
+            [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+        ></p-select>
+    </ng-container>
+
+    <ng-template #multiTpl>
+        <p-multiSelect
+            *ngIf="multiple"
+            [style]="{ width: '100%', height: '40px' }"
+            styleClass="app-multi w-full"
+            [options]="options"
+            [optionLabel]="optionLabel"
+            [optionValue]="optionValue || undefined"
+            [placeholder]="placeholder"
+            [showClear]="showClear"
+            [filter]="filter"
+            [disabled]="isDisabled || disabled"
+            [dataKey]="dataKey"
+            display="chip"
+            [ngModel]="value"
+            (ngModelChange)="onModelChange($event)"
+            (onBlur)="onBlur()"
+            [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+        ></p-multiSelect>
+    </ng-template>
+
+    <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
+        <small *ngIf="control?.errors?.['required']">Majburiy maydon.</small>
+    </div>
+</div>

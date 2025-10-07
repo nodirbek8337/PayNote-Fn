@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputComponent } from "../../../shared/components/input/input.component";
-import { PhoneInputComponent } from '../../../shared/components/phone-input/phone-input.component';
-import { MoneyInputComponent } from '../../../shared/components/money-input/money-input.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
-export type ContactFormModel = {
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { SelectComponent } from '../../../shared/components/select/select.component';
+import { SwitchToggleComponent } from '../../../shared/components/switch-toggle/switch-toggle.component';
+
+export type UserFormModel = {
   _id?: string;
-  name: string;
-  phone?: string;
-  amount: number;
-  amountCurrency?: 'UZS' | 'USD';
-  note?: string;
+  username: string;
+  role: 'admin' | 'user' | string;
+  isActive?: boolean;
+  password?: string;
 };
 
 @Component({
@@ -24,50 +24,74 @@ export type ContactFormModel = {
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
-    InputTextModule,
+    InputSwitchModule,
     InputComponent,
-    PhoneInputComponent,
-    MoneyInputComponent
+    SelectComponent,
+    SwitchToggleComponent
   ],
 })
-export class UsersFormComponent implements OnInit {
-  @Input() model: Partial<ContactFormModel> = {};
+export class UsersFormComponent implements OnInit, OnChanges {
+  @Input() model: Partial<UserFormModel> = {};
   @Input() loading = false;
 
   onClose!: () => void;
-  onSubmitted!: (payload: ContactFormModel) => void;
+  onSubmitted!: (payload: UserFormModel) => void;
 
-  form: FormGroup;
+  form!: FormGroup;
+  isEdit = false;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(120)]],
-      phone: ['', [Validators.pattern(/^\d{12}$/)]],
-      amount: [null],
-      note: ['', [Validators.maxLength(500)]],
-    });
-  }
+  roleOptions = [
+    { label: 'Admin', value: 'admin' },
+    { label: 'User',  value: 'user'  }
+  ];
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    if (this.model) {
-      const amountForControl =
-        this.model.amount != null
-          ? {
-            amount: this.model.amount,
-            currency: (this.model.amountCurrency || 'UZS') as 'UZS' | 'USD'
-          }
-          : null;
+    this.buildForm();
+  }
 
-      this.form.patchValue(
-        {
-          name: this.model.name ?? '',
-          phone: this.model.phone ?? '',
-          amount: amountForControl,
-          note: this.model.note ?? ''
-        },
-        { emitEvent: false }
-      );
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['loading'] && this.form) {
+      this.loading ? this.form.disable({ emitEvent: false }) : this.form.enable({ emitEvent: false });
     }
+    if (changes['model'] && !changes['model'].firstChange && this.form) {
+      this.patchForm();
+    }
+  }
+
+  private buildForm() {
+    this.isEdit = !!this.model?._id;
+
+    this.form = this.fb.group({
+      username: [this.model.username ?? '', [Validators.required, Validators.maxLength(120)]],
+      role:     [this.model.role ?? 'user', [Validators.required]],
+      isActive: [this.model.isActive ?? true],
+      password: ['']
+    });
+
+    if (!this.isEdit) {
+      this.form.get('password')!.setValidators([Validators.required, Validators.minLength(6)]);
+      this.form.get('password')!.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private patchForm() {
+    this.isEdit = !!this.model?._id;
+
+    this.form.patchValue({
+      username: this.model.username ?? '',
+      role: this.model.role ?? 'user',
+      isActive: this.model.isActive ?? true,
+      password: ''
+    }, { emitEvent: false });
+
+    const pwdCtrl = this.form.get('password')!;
+    pwdCtrl.clearValidators();
+    if (!this.isEdit) {
+      pwdCtrl.setValidators([Validators.required, Validators.minLength(6)]);
+    }
+    pwdCtrl.updateValueAndValidity({ emitEvent: false });
   }
 
   submitForm() {
@@ -76,29 +100,15 @@ export class UsersFormComponent implements OnInit {
       return;
     }
 
-    const amountCtrlValue = this.form.value.amount as
-      | { amount: number | null; currency: 'UZS' | 'USD' }
-      | number
-      | null;
+    const raw = this.form.value;
+    const password = (raw.password ?? '').trim();
 
-    let amount = 0;
-    let amountCurrency: 'UZS' | 'USD' = 'UZS';
-
-    if (amountCtrlValue && typeof amountCtrlValue === 'object') {
-      amount = Number(amountCtrlValue.amount ?? 0);
-      amountCurrency = (amountCtrlValue.currency || 'UZS') as 'UZS' | 'USD';
-    } else {
-      amount = Number(amountCtrlValue ?? 0);
-      amountCurrency = 'UZS';
-    }
-
-    const payload: ContactFormModel = {
+    const payload: UserFormModel = {
       _id: this.model._id,
-      name: this.form.value.name,
-      phone: this.form.value.phone || undefined,
-      amount,
-      amountCurrency,
-      note: this.form.value.note || undefined
+      username: (raw.username ?? '').trim(),
+      role: raw.role,
+      isActive: !!raw.isActive,
+      ...(password ? { password } : {})
     };
 
     this.onSubmitted?.(payload);
@@ -107,4 +117,8 @@ export class UsersFormComponent implements OnInit {
   closeModal() {
     this.onClose?.();
   }
+
+  get passwordLabel() {
+    return this.isEdit ? 'Yangi parol (ixtiyoriy)' : 'Parol';
+    }
 }

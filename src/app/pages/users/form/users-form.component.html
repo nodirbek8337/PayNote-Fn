@@ -1,8 +1,8 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
-    <app-input placeholder="Ism" formControlName="name" [required]="true"></app-input>
-    <app-phone-input formControlName="phone"></app-phone-input>
-    <app-money-input formControlName="amount" [defaultCurrency]="model.amountCurrency ?? 'UZS'" [emitCurrency]="true" [required]="true" [allowNegative]="true"> </app-money-input>
-    <app-input placeholder="Izoh" formControlName="note" type="text"></app-input>
+    <app-input formControlName="username" placeholder="Login"> </app-input>
+    <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol" [showClear]="false"> </app-select>
+    <app-input formControlName="password" [type]="'password'" placeholder="Parol"></app-input>
+    <app-switch-toggle formControlName="isActive" label="Holat" [trueLabel]="'Faol'" [falseLabel]="'Nofaol'" [showStateText]="true"> </app-switch-toggle>
     <div class="flex justify-end gap-2 mt-4">
         <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
         <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
