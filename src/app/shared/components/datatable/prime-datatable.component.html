@@ -139,12 +139,25 @@
         [modal]="true"
         [showCloseIcon]="true"
         [blockScroll]="true"
-        [style]="{ width: '420px' }"
+        styleClass="datatable-drawer"
     >
-        <ng-template #drawerHost></ng-template>
+        <div class="drawer-inner">
+            <ng-template #drawerHost></ng-template>
+        </div>
     </p-drawer>
 
-    <p-dialog [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '600px' }" [closable]="true" [draggable]="false" [resizable]="false" header="{{ editMode ? 'Yangilash' : 'Qo\'shish' }}">
+    <p-dialog
+        [(visible)]="showEditDialog"
+        [modal]="true"
+        [closable]="true"
+        [draggable]="false"
+        [resizable]="false"
+        [header]="editMode ? 'Yangilash' : 'Qo\'shish'"
+        [style]="{ width: '600px', maxWidth: '95vw' }"
+        [breakpoints]="{ '760px': '90vw' }"
+        [contentStyle]="{ 'max-height': 'calc(100dvh - 9rem)', overflow: 'auto', padding: '1rem' }"
+        styleClass="datatable-dialog"
+    >
         <ng-template #formContainer></ng-template>
     </p-dialog>
 

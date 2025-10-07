@@ -102,7 +102,7 @@ export class AppTopbar implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (typeof window !== 'undefined' && 'matchMedia' in window) {
-      this.mediaQuery = window.matchMedia('(max-width: 480px)');
+      this.mediaQuery = window.matchMedia('(max-width: 540px)');
       this.isXs = this.mediaQuery.matches;
 
       this.mqListener = (e: MediaQueryListEvent) => {
