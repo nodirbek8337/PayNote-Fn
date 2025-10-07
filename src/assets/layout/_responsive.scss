@@ -108,3 +108,14 @@
         }
     }
 }
+
+@media (max-width: 760px) {
+    .layout-main-container {
+        padding: 5rem 1rem 0 1rem !important;
+    }
+
+    .card {
+        padding: 1rem !important;
+        margin: 0 !important;
+    }
+}

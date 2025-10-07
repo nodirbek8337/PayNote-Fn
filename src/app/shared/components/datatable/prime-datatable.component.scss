@@ -53,6 +53,11 @@
     height: 40px;
 }
 
+.cta-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 :host ::ng-deep td.actions-merged {
     display: none;
 }
