@@ -3,35 +3,53 @@ import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
-  selector: 'datepicker-range',
-  standalone: true,
-  templateUrl: './datepicker-range.component.html',
-  imports: [FormsModule, DatePickerModule],
+    selector: 'datepicker-range',
+    standalone: true,
+    templateUrl: './datepicker-range.component.html',
+    imports: [FormsModule, DatePickerModule]
 })
 export class DatepickerRangeComponent {
-  @Input() value: Date[] | null = null;
-  @Output() valueChange = new EventEmitter<Date[] | null>();
+    @Input() value: Date[] | null = null;
+    @Output() valueChange = new EventEmitter<Date[] | null>();
 
-  @Input() placeholder: string = 'Sanani tanlang';
-  @Input() dateFormat: string = 'dd-mm-yy';
-  @Input() showTime: boolean = false;
-  @Input() baseZIndex = 2000;
+    @Input() placeholder: string = 'Sanani tanlang';
+    @Input() dateFormat: string = 'dd-mm-yy';
+    @Input() showTime: boolean = false;
+    @Input() baseZIndex = 2000;
 
-  onSelect() {
-    if (!this.value || !this.value[0]) return;
+    onSelect() {
+        if (!this.value || !this.value[0]) return;
 
-    const start = new Date(this.value[0]);
-    const end   = new Date(this.value[1] ?? this.value[0]);
+        const startOfDay = (d: Date) => {
+            const x = new Date(d);
+            x.setHours(0, 0, 0, 0);
+            return x;
+        };
+        const endOfDay = (d: Date) => {
+            const x = new Date(d);
+            x.setHours(23, 59, 59, 999);
+            return x;
+        };
 
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
+        if (!this.value[1]) {
+            this.value = [startOfDay(this.value[0])];
+            return;
+        }
 
-    this.value = [start, end];
-    this.valueChange.emit(this.value);
-  }
+        let a = startOfDay(this.value[0]);
+        let b = endOfDay(this.value[1]);
 
-  clear() {
-    this.value = null;
-    this.valueChange.emit(null);
-  }
+        if (b < a) {
+            a = startOfDay(this.value[1]);
+            b = endOfDay(this.value[0]);
+        }
+
+        this.value = [a, b];
+        this.valueChange.emit(this.value);
+    }
+
+    clear() {
+        this.value = null;
+        this.valueChange.emit(null);
+    }
 }
