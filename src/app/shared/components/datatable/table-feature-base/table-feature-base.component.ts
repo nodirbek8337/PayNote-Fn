@@ -58,7 +58,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
 
         this._defaultService.reloadTable().subscribe({
             next: (res) => {
-                const items = Array.isArray(res.data) ? [...res.data].reverse() : [];
+                const items = Array.isArray(res.data) ? res.data : [];
 
                 this.value = items.map((item: any, index: number) => ({
                     rowIndex: this.currentPageStartIndex + index + 1,
