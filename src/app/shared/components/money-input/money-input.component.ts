@@ -96,7 +96,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
 
   onFocus() {
     this.isEditing = true;
-    this.displayValue = this.toRawString(this.amount, this.currency);
+    this.displayValue = this.toRawString(this.amount);
   }
 
   onBlur() {
@@ -106,7 +106,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   }
 
   onInput(raw: string) {
-    this.displayValue = this.sanitize(raw, this.currency, this.allowNegative);
+    this.displayValue = this.sanitize(raw, this.allowNegative);
     this.amount = this.toNumber(this.displayValue);
     this.emitValue();
   }
@@ -124,32 +124,27 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
 
   private toNumber(v: any): number | null {
     if (v === null || v === undefined || v === '') return null;
-    if (v === '-' || v === '-.' || v === '.') return null;
+    if (v === '-' ) return null;
     const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-    }
-
-  private toRawString(amount: number | null, cur: CurrencyCode): string {
-    if (amount === null) return '';
-    return cur === 'UZS' ? String(Math.trunc(amount)) : String(amount);
+    if (!Number.isFinite(n)) return null;
+    return Math.trunc(n);
   }
 
-  private sanitize(raw: string, cur: CurrencyCode, allowNeg: boolean): string {
-    let s = (raw ?? '').replace(/[^\d\.\-]/g, '');
-    s = allowNeg ? s.replace(/(?!^)-/g, '') : s.replace(/-/g, '');
+  private toRawString(amount: number | null): string {
+    if (amount === null) return '';
+    return String(Math.trunc(amount));
+  }
 
-    if (cur === 'UZS') {
-      s = s.split('.')[0] || s;
-    } else {
-      const m = s.match(/^-?\d*(?:\.\d{0,2})?/);
-      s = m ? m[0] : '';
-    }
+  private sanitize(raw: string, allowNeg: boolean): string {
+    let s = (raw ?? '').replace(/[^\d-]/g, '');
+    s = allowNeg ? s.replace(/(?!^)-/g, '') : s.replace(/-/g, '');
+    s = s.replace(/^(-?)0+(?=\d)/, '$1');
     return s;
   }
 
   private refreshDisplay() {
     if (this.isEditing) {
-      this.displayValue = this.toRawString(this.amount, this.currency);
+      this.displayValue = this.toRawString(this.amount);
     } else {
       this.displayValue = this.amount === null
         ? ''

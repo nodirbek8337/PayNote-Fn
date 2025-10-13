@@ -21,9 +21,14 @@ export class MoneyPipe implements PipeTransform {
         style: 'currency',
         currency: code,
         currencyDisplay,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(n);
     } catch {
-      const formatted = new Intl.NumberFormat(locale).format(n);
+      const formatted = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(n);
       return `${formatted} ${code}`;
     }
   }

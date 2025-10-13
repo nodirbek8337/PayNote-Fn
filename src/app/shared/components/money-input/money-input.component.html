@@ -1,5 +1,5 @@
 <div class="money-input">
-    <input pInputText class="flex-1" [placeholder]="placeholder" [disabled]="isDisabled" [value]="displayValue" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput($any($event.target).value)" />
+    <input pInputText class="flex-1" [placeholder]="placeholder" [disabled]="isDisabled" [value]="displayValue" inputmode="numeric" pattern="\d*" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput($any($event.target).value)" />
 
     <p-select styleClass="w-28" [options]="currencyOptions" [ngModel]="currency" (ngModelChange)="onCurrencyChange($event)" [disabled]="isDisabled"> </p-select>
 </div>
