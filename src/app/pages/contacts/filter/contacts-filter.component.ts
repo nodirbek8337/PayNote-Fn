@@ -16,6 +16,7 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
       <ng-container *ngFor="let col of columnDefs">
         <ng-container *ngIf="col?.searchable !== false">
           <div>
+            <!-- dropdown -->
             <ng-container *ngIf="col.filterType === 'dropdown'">
               <p-select
                 [options]="col.filterOptions"
