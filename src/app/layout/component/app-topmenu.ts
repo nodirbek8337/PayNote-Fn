@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-topmenu',
@@ -60,15 +61,19 @@ import { RouterModule } from '@angular/router';
   `]
 })
 export class AppTopMenu implements OnInit {
+  private authService = inject(AuthService);
   items: Array<{ label: string; icon: string; routerLink: any[]; exact: boolean }> = [];
 
   ngOnInit(): void {
-    this.items = [
+    const allItems = [
+      { label: 'Kabinet', icon: 'pi pi-chart-bar', routerLink: ['/cabinet'], exact: true },
       { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: ['/sales'], exact: true },
       { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'], exact: true },
       { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'], exact: true },
       { label: 'Tarix', icon: 'pi pi-history', routerLink: ['/sales-history'], exact: true },
       { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true },
     ];
+
+    this.items = this.authService.isAdmin() ? allItems : allItems.slice(0, 2);
   }
 }

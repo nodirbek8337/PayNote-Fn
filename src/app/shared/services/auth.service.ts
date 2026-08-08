@@ -25,6 +25,25 @@ export class AuthService {
         return !!this.getAccessToken();
     }
 
+    getCurrentUser(): { id?: string; username?: string; role?: string } | null {
+        if (typeof localStorage === 'undefined') return null;
+
+        try {
+            const raw = localStorage.getItem('payNoteUser');
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
+    }
+
+    getRole(): string | null {
+        return this.getCurrentUser()?.role ?? null;
+    }
+
+    isAdmin(): boolean {
+        return this.getRole() === 'admin';
+    }
+
     getAccessToken(): string | null {
         if (typeof document === 'undefined') return null;
 
@@ -52,7 +71,7 @@ export class AuthService {
             })
         );
         this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
-        this.router.navigateByUrl('/sales', { replaceUrl: true });
+        this.router.navigateByUrl('/cabinet', { replaceUrl: true });
         });
     }
 

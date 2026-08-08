@@ -16,13 +16,28 @@ export type SalePayloadItem = {
     amount: number;
 };
 
+export type SalesPeriodSummary = {
+    salesCount: number;
+    itemCount: number;
+    total: number;
+};
+
+export type MySalesSummary = {
+    today: SalesPeriodSummary;
+    month: SalesPeriodSummary;
+};
+
 @Injectable({ providedIn: 'root' })
 export class SalesService {
     private http = inject(HttpClient);
     private baseUrl = environment.apiUrl;
 
     getProducts(params: Record<string, string | number> = {}): Observable<any> {
-        return this.http.get(`${this.baseUrl}/api/products`, { params });
+        return this.http.get(`${this.baseUrl}/api/sales/products`, { params });
+    }
+
+    getMySummary(): Observable<{ success: boolean; data: MySalesSummary }> {
+        return this.http.get<{ success: boolean; data: MySalesSummary }>(`${this.baseUrl}/api/sales/me/summary`);
     }
 
     sell(items: SalePayloadItem[]): Observable<any> {

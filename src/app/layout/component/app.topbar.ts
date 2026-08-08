@@ -31,7 +31,7 @@ type SelectValue =
     <div class="layout-topbar">
       <div class="layout-topbar-container">
         <div>
-          <a class="layout-topbar-logo" routerLink="/sales">
+          <a class="layout-topbar-logo" routerLink="/cabinet">
             <img src="assets/images/logo.png" alt="Pay Note" class="logo-content" />
           </a>
         </div>
@@ -50,7 +50,17 @@ type SelectValue =
                 (onChange)="onUserAction($event)"
                 styleClass="user-select"
                 panelStyleClass="user-select-panel"
-              ></p-select>
+              >
+                <ng-template pTemplate="item" let-option>
+                  <span
+                    class="user-menu-option"
+                    [class.logout-option]="option?.value?.type === 'logout'"
+                  >
+                    <i [class]="option?.value?.type === 'logout' ? 'pi pi-sign-out' : 'pi pi-angle-right'"></i>
+                    <span>{{ option.label }}</span>
+                  </span>
+                </ng-template>
+              </p-select>
             </div>
           </div>
         </div>
@@ -113,6 +123,32 @@ type SelectValue =
       padding: 0.8rem 0.95rem !important;
       font-weight: 600;
     }
+    .user-menu-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .user-menu-option i {
+      width: 1rem;
+      color: var(--text-color-secondary);
+      font-size: 0.85rem;
+    }
+    .logout-option {
+      color: var(--action-delete-text);
+    }
+    .logout-option i {
+      color: var(--action-delete-text);
+    }
+    ::ng-deep .user-select-panel .p-select-option:has(.logout-option) {
+      margin-top: 0.3rem;
+      border-top: 1px solid color-mix(in srgb, var(--action-delete-text) 22%, transparent);
+      background: var(--action-delete-bg) !important;
+    }
+    ::ng-deep .user-select-panel .p-select-option:has(.logout-option):hover {
+      background: color-mix(in srgb, var(--action-delete-bg) 72%, var(--action-delete-text) 28%) !important;
+      color: var(--action-delete-hover) !important;
+    }
     ::ng-deep .user-select-panel .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
       background: color-mix(in srgb, var(--action-primary-soft) 90%, transparent) !important;
       color: var(--text-color) !important;
@@ -146,13 +182,22 @@ export class AppTopbar implements OnInit, OnDestroy {
     { label: 'Tizimdan chiqish', value: { type: 'logout' } as SelectValue }
   ];
 
-  private mobileNavOptions = [
-    { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue },
-    { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
-    { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
-    { label: 'Tarix', value: { type: 'route', url: '/sales-history' } as SelectValue },
-    { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
-  ];
+  private get mobileNavOptions() {
+    const commonOptions = [
+      { label: 'Kabinet', value: { type: 'route', url: '/cabinet' } as SelectValue },
+      { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue }
+    ];
+
+    if (!this.authService.isAdmin()) return commonOptions;
+
+    return [
+      ...commonOptions,
+      { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
+      { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
+      { label: 'Tarix', value: { type: 'route', url: '/sales-history' } as SelectValue },
+      { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
+    ];
+  }
 
   get selectOptions() {
     return this.isXs ? [...this.mobileNavOptions, ...this.baseOptions] : this.baseOptions;

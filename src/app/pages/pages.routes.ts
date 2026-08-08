@@ -5,13 +5,16 @@ import { ProductsComponent } from './products/products.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SalesComponent } from './sales/sales.component';
 import { SalesHistoryComponent } from './sales-history/sales-history.component';
+import { CabinetComponent } from './cabinet/cabinet.component';
+import { AdminGuard } from '../shared/guards/admin.guard';
 
 export default [
-    { path: '', redirectTo: 'sales', pathMatch: 'full' },
-    { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard] },
-    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
-    { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AuthGuard] },
+    { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
+    { path: 'cabinet', component: CabinetComponent, canActivate: [AuthGuard] },
     { path: 'sales', component: SalesComponent, canActivate: [AuthGuard] },
-    { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-    { path: '**', redirectTo: 'sales', canActivate: [AuthGuard] }
+    { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: 'users', component: UsersComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: '**', redirectTo: 'cabinet', canActivate: [AuthGuard] }
 ] as Routes;

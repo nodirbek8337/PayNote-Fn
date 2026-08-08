@@ -8,6 +8,8 @@ import { SalesHistoryComponent } from './app/pages/sales-history/sales-history.c
 import { LoginComponenet } from './app/pages/login/login';
 import { AuthGuard } from './app/shared/guards/auth.guard';
 import { GuestGuard } from './app/shared/guards/guest.guard';
+import { AdminGuard } from './app/shared/guards/admin.guard';
+import { CabinetComponent } from './app/pages/cabinet/cabinet.component';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponenet, canMatch: [GuestGuard] },
@@ -16,12 +18,13 @@ export const appRoutes: Routes = [
     component: AppLayout,
     canMatch: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'inventory', pathMatch: 'full' },
-      { path: 'inventory', component: InventoryComponent },
-      { path: 'products', component: ProductsComponent },
-      { path: 'sales-history', component: SalesHistoryComponent },
+      { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
+      { path: 'cabinet', component: CabinetComponent },
       { path: 'sales', component: SalesComponent },
-      { path: 'users', component: UsersComponent },
+      { path: 'inventory', component: InventoryComponent, canActivate: [AdminGuard] },
+      { path: 'products', component: ProductsComponent, canActivate: [AdminGuard] },
+      { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AdminGuard] },
+      { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
     ]
   },
   { path: '**', redirectTo: '' }

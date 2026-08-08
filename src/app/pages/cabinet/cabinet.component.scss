@@ -1,0 +1,200 @@
+:host {
+    display: block;
+}
+
+.cabinet-page {
+    min-height: calc(100dvh - 7.5rem);
+    padding: 1.25rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--table-bg);
+    box-shadow: var(--paynote-shadow-soft);
+}
+
+.cabinet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--table-head-from), var(--table-head-to));
+
+    h1,
+    p {
+        margin: 0;
+    }
+
+    h1 {
+        margin-top: 0.2rem;
+        color: var(--text-color);
+        font-size: 1.55rem;
+    }
+
+    p {
+        margin-top: 0.3rem;
+        color: var(--text-color-secondary);
+    }
+}
+
+.cabinet-eyebrow {
+    color: var(--action-primary-from);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.refresh-summary {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--action-primary);
+    border-radius: 8px;
+    background: var(--action-primary-soft);
+    color: var(--action-primary-from);
+    cursor: pointer;
+    font-weight: 800;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+        background: color-mix(in srgb, var(--action-primary) 22%, transparent);
+        outline: none;
+    }
+
+    &:disabled {
+        cursor: wait;
+        opacity: 0.65;
+    }
+}
+
+.period-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.period-card {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--table-bg) 90%, var(--surface-hover) 10%);
+}
+
+.period-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--surface-border);
+
+    h2,
+    p {
+        margin: 0;
+    }
+
+    h2 {
+        color: var(--text-color);
+        font-size: 1.08rem;
+    }
+
+    p {
+        margin-top: 0.2rem;
+        color: var(--text-color-secondary);
+        font-size: 0.82rem;
+    }
+}
+
+.period-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--action-primary) 36%, transparent);
+    border-radius: 8px;
+    background: var(--action-primary-soft);
+    color: var(--action-primary-from);
+}
+
+.metric-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin-top: 0.9rem;
+}
+
+.metric {
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--surface-border), transparent 8%);
+    border-radius: 8px;
+    background: var(--field-bg);
+
+    span,
+    strong {
+        display: block;
+    }
+
+    span {
+        color: var(--text-color-secondary);
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    strong {
+        margin-top: 0.35rem;
+        overflow-wrap: anywhere;
+        color: var(--text-color);
+        font-size: 1.18rem;
+    }
+}
+
+.primary-metric {
+    grid-column: 1 / -1;
+    background: color-mix(in srgb, var(--table-head-to) 82%, var(--action-primary) 18%);
+}
+
+@media (max-width: 900px) {
+    .period-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .cabinet-page {
+        min-height: 0;
+        padding: 0.65rem;
+    }
+
+    .cabinet-header {
+        align-items: flex-start;
+        padding: 0.9rem;
+
+        h1 {
+            font-size: 1.3rem;
+        }
+    }
+
+    .refresh-summary {
+        width: 40px;
+        flex: 0 0 40px;
+        justify-content: center;
+        padding: 0;
+
+        span {
+            display: none;
+        }
+    }
+
+    .metric-list {
+        grid-template-columns: 1fr;
+    }
+
+    .primary-metric {
+        grid-column: auto;
+    }
+}

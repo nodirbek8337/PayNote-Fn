@@ -1,0 +1,65 @@
+<section class="cabinet-page">
+    <header class="cabinet-header">
+        <div>
+            <span class="cabinet-eyebrow">Shaxsiy kabinet</span>
+            <h1>{{ user?.username || 'Foydalanuvchi' }}</h1>
+            <p>{{ roleLabel }} sifatidagi sotuv natijalaringiz</p>
+        </div>
+        <button type="button" class="refresh-summary" (click)="loadSummary()" [disabled]="loading" aria-label="Yangilash">
+            <i class="pi" [ngClass]="loading ? 'pi-spin pi-spinner' : 'pi-refresh'"></i>
+            <span>Yangilash</span>
+        </button>
+    </header>
+
+    <div class="period-grid">
+        <article class="period-card today-card">
+            <div class="period-title">
+                <span class="period-icon"><i class="pi pi-sun"></i></span>
+                <div>
+                    <h2>Bugungi natija</h2>
+                    <p>Bugun amalga oshirilgan sotuvlar</p>
+                </div>
+            </div>
+
+            <div class="metric-list">
+                <div class="metric primary-metric">
+                    <span>Sotilgan mahsulotlar</span>
+                    <strong>{{ summary.today.itemCount }} ta</strong>
+                </div>
+                <div class="metric">
+                    <span>Sotuvlar soni</span>
+                    <strong>{{ summary.today.salesCount }} ta</strong>
+                </div>
+                <div class="metric">
+                    <span>Jami summa</span>
+                    <strong>{{ summary.today.total | money: 'UZS' }}</strong>
+                </div>
+            </div>
+        </article>
+
+        <article class="period-card month-card">
+            <div class="period-title">
+                <span class="period-icon"><i class="pi pi-calendar"></i></span>
+                <div>
+                    <h2>Shu oydagi natija</h2>
+                    <p>Joriy oy bo‘yicha umumiy ko‘rsatkichlar</p>
+                </div>
+            </div>
+
+            <div class="metric-list">
+                <div class="metric primary-metric">
+                    <span>Sotilgan mahsulotlar</span>
+                    <strong>{{ summary.month.itemCount }} ta</strong>
+                </div>
+                <div class="metric">
+                    <span>Sotuvlar soni</span>
+                    <strong>{{ summary.month.salesCount }} ta</strong>
+                </div>
+                <div class="metric">
+                    <span>Jami summa</span>
+                    <strong>{{ summary.month.total | money: 'UZS' }}</strong>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
