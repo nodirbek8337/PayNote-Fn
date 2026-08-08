@@ -11,6 +11,8 @@ export enum ValidationErrorKey {
   Min = 'min',
   Max = 'max',
   CurrencyMissing = 'currencyMissing',
+  AmountExpression = 'amountExpression',
+  AmountNegative = 'amountNegative',
 }
 
 export enum ValidationErrorText {
@@ -21,6 +23,8 @@ export enum ValidationErrorText {
   PhonePattern = "Noto'g'ri telefon raqami",
   PasswordRequirements = "Parol kamida 6 ta belgi, bitta katta harf, bitta kichik harf va bitta raqamdan iborat bo'lishi kerak",
   CurrencyMissing = 'Valyuta tanlanishi shart',
+  AmountExpression = "Sonni to'g'ri kiriting: masalan 100, 3+100 yoki 100-5",
+  AmountNegative = "Maxsulot soni 0 dan kichik bo'lishi mumkin emas",
 }
 
 export const INPUT_ERROR_MESSAGES: ControlErrorMessages = {
@@ -31,6 +35,8 @@ export const INPUT_ERROR_MESSAGES: ControlErrorMessages = {
   [ValidationErrorKey.PasswordUppercase]: ValidationErrorText.PasswordRequirements,
   [ValidationErrorKey.PasswordLowercase]: ValidationErrorText.PasswordRequirements,
   [ValidationErrorKey.PasswordNumber]: ValidationErrorText.PasswordRequirements,
+  [ValidationErrorKey.AmountExpression]: ValidationErrorText.AmountExpression,
+  [ValidationErrorKey.AmountNegative]: ValidationErrorText.AmountNegative,
 } as const;
 
 export const SELECT_ERROR_MESSAGES: ControlErrorMessages = {

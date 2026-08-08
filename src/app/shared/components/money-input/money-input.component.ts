@@ -39,7 +39,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   @Input() min?: number;
   @Input() max?: number;
   @Input() requireCurrency = true;
-  @Input() allowNegative = true;
+  @Input() allowNegative = false;
 
   @Input() locale = 'uz-UZ';
   @Input() currencyDisplay: 'symbol' | 'narrowSymbol' | 'code' | 'name' = 'narrowSymbol';

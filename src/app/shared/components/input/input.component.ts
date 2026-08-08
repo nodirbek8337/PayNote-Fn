@@ -25,6 +25,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   @Input() placeholder = '';
   @Input() formControlName!: string;
   @Input() required = false;
+  @Input() allowMathExpression = false;
+  @Input() allowNegative = false;
 
   value: any = '';
   isDisabled = false;
@@ -40,7 +42,14 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   }
 
   writeValue(val: any): void {
-    this.value = this.type === 'number' ? this.formatNumberValue(val) : val;
+    if (this.type !== 'number') {
+      this.value = val;
+      return;
+    }
+
+    this.value = this.allowMathExpression
+      ? this.formatNumberExpressionValue(val)
+      : this.formatNumberValue(val);
   }
   registerOnChange(fn: any): void { this.onChange = fn; }
   registerOnTouched(fn: any): void { this.onTouched = fn; }
@@ -62,9 +71,29 @@ export class InputComponent implements ControlValueAccessor, OnInit {
       return;
     }
 
+    if (this.allowMathExpression) {
+      const raw = this.sanitizeNumberExpression(value);
+      this.value = this.formatNumberExpression(raw);
+      this.onChange(raw);
+      return;
+    }
+
     const raw = this.sanitizeNumber(value);
     this.value = this.formatNumberRaw(raw);
     this.onChange(raw === '' || raw === '-' ? null : Number(raw));
+  }
+
+  handleBlur(): void {
+    if (this.type === 'number' && this.allowMathExpression) {
+      const result = this.evaluateNumberExpression(this.value);
+
+      if (result !== null && result >= 0) {
+        this.value = this.formatNumberRaw(String(result));
+        this.onChange(result);
+      }
+    }
+
+    this.onTouched();
   }
 
   get nativeInputType(): string {
@@ -72,7 +101,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   }
 
   get inputMode(): string | null {
-    return this.type === 'number' ? 'numeric' : null;
+    return this.type === 'number' ? (this.allowMathExpression ? 'text' : 'numeric') : null;
   }
 
   togglePasswordVisibility(): void {
@@ -86,7 +115,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
 
   private sanitizeNumber(value: any): string {
     let raw = String(value ?? '').replace(/[^\d-]/g, '');
-    raw = raw.replace(/(?!^)-/g, '');
+    raw = this.allowNegative ? raw.replace(/(?!^)-/g, '') : raw.replace(/-/g, '');
     raw = raw.replace(/^(-?)0+(?=\d)/, '$1');
     return raw;
   }
@@ -104,5 +133,61 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
     return `${isNegative ? '-' : ''}${formatted}`;
+  }
+
+  private sanitizeNumberExpression(value: any): string {
+    let raw = String(value ?? '').replace(/[^\d+\-\s.]/g, '');
+    raw = raw.replace(/[.]/g, ' ');
+    raw = raw.replace(/\s+/g, ' ');
+    raw = raw.replace(/^[+-]+/, '');
+
+    const operatorMatch = raw.match(/[+-]/);
+    if (!operatorMatch) return raw.trim();
+
+    const operatorIndex = operatorMatch.index ?? -1;
+    const left = raw.slice(0, operatorIndex).replace(/[+-]/g, '').trim();
+    const operator = operatorMatch[0];
+    const right = raw.slice(operatorIndex + 1).replace(/[+-]/g, '').trim();
+
+    return `${left}${operator}${right}`;
+  }
+
+  private formatNumberExpressionValue(value: any): string {
+    if (value === null || value === undefined || value === '') return '';
+    return this.formatNumberExpression(this.sanitizeNumberExpression(value));
+  }
+
+  private formatNumberExpression(raw: string): string {
+    if (!raw) return '';
+
+    const operatorIndex = raw.search(/[+-]/);
+    if (operatorIndex === -1) return this.formatNumberExpressionPart(raw);
+
+    const left = raw.slice(0, operatorIndex);
+    const operator = raw[operatorIndex];
+    const right = raw.slice(operatorIndex + 1);
+
+    return `${this.formatNumberExpressionPart(left)}${operator}${this.formatNumberExpressionPart(right)}`;
+  }
+
+  private formatNumberExpressionPart(part: string): string {
+    const digits = part.replace(/[^\d]/g, '');
+    if (!digits) return '';
+
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  private evaluateNumberExpression(value: any): number | null {
+    const raw = String(value ?? '').trim().replace(/[.\s]/g, '');
+    if (!raw || !/^\d+(?:[+-]\d+)?$/.test(raw)) return null;
+
+    const operatorIndex = raw.search(/[+-]/);
+    if (operatorIndex === -1) return Number(raw);
+
+    const left = Number(raw.slice(0, operatorIndex));
+    const right = Number(raw.slice(operatorIndex + 1));
+    if (!Number.isFinite(left) || !Number.isFinite(right)) return null;
+
+    return raw[operatorIndex] === '+' ? left + right : left - right;
   }
 }

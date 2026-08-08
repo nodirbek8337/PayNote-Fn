@@ -10,7 +10,7 @@
       [attr.inputmode]="inputMode"
       [ngModel]="value"
       (ngModelChange)="handleValueChange($event)"
-      (blur)="onTouched()"
+      (blur)="handleBlur()"
       [ngClass]="{ 'is-invalid': shouldShowErrors() }"
     />
   </ng-container>

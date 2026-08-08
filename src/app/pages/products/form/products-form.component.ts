@@ -30,7 +30,7 @@ export class ProductsFormComponent implements OnInit {
     constructor(private fb: FormBuilder) {
         this.form = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(120)]],
-            price: [null, [Validators.required]]
+            price: [null, [Validators.required, Validators.min(0)]]
         });
     }
 
