@@ -35,6 +35,22 @@
                     <strong>{{ summary.today.total | money: 'UZS' }}</strong>
                 </div>
             </div>
+
+            <div class="sold-products">
+                <h3>Sotilgan maxsulotlar</h3>
+                <div class="sold-products-list" *ngIf="summary.today.products.length; else noTodayProducts">
+                    <div class="sold-product" *ngFor="let product of summary.today.products">
+                        <div class="sold-product-name">
+                            <strong>{{ product.name }}</strong>
+                            <span>{{ product.amount }} ta sotilgan</span>
+                        </div>
+                        <strong class="sold-product-total">{{ product.total | money: 'UZS' }}</strong>
+                    </div>
+                </div>
+                <ng-template #noTodayProducts>
+                    <div class="products-empty">Bugun hali maxsulot sotilmagan</div>
+                </ng-template>
+            </div>
         </article>
 
         <article class="period-card month-card">
@@ -59,6 +75,22 @@
                     <span>Jami summa</span>
                     <strong>{{ summary.month.total | money: 'UZS' }}</strong>
                 </div>
+            </div>
+
+            <div class="sold-products">
+                <h3>Sotilgan maxsulotlar</h3>
+                <div class="sold-products-list" *ngIf="summary.month.products.length; else noMonthProducts">
+                    <div class="sold-product" *ngFor="let product of summary.month.products">
+                        <div class="sold-product-name">
+                            <strong>{{ product.name }}</strong>
+                            <span>{{ product.amount }} ta sotilgan</span>
+                        </div>
+                        <strong class="sold-product-total">{{ product.total | money: 'UZS' }}</strong>
+                    </div>
+                </div>
+                <ng-template #noMonthProducts>
+                    <div class="products-empty">Bu oy hali maxsulot sotilmagan</div>
+                </ng-template>
             </div>
         </article>
     </div>

@@ -77,7 +77,7 @@ export class AuthService {
 
     logout(): void {
         this.clearAccessToken();
-        localStorage.removeItem('payNoteUser');
+        this.clearStoredSession();
     }
 
     logoutAndRedirect(): void {
@@ -96,5 +96,18 @@ export class AuthService {
         if (typeof document === 'undefined') return;
 
         document.cookie = `${this.tokenCookieName}=; Max-Age=0; Path=/; SameSite=Lax`;
+    }
+
+    private clearStoredSession(): void {
+        this.removePayNoteStorageKeys(localStorage);
+        this.removePayNoteStorageKeys(sessionStorage);
+    }
+
+    private removePayNoteStorageKeys(storage: Storage | undefined): void {
+        if (typeof storage === 'undefined') return;
+
+        Object.keys(storage)
+            .filter((key) => key.startsWith('payNote'))
+            .forEach((key) => storage.removeItem(key));
     }
 }

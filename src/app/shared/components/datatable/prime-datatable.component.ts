@@ -18,6 +18,7 @@ import { DrawerModule } from 'primeng/drawer';
 import { SignClassPipe } from '../../pipes/sign-class.pipe';
 import { MoneyPipe } from '../../pipes/money.pipe';
 import { TooltipModule } from 'primeng/tooltip';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'prime-datatable',
@@ -74,6 +75,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     @Output() onRowClick = new EventEmitter<any>();
 
     confirmationService = inject(ConfirmationService);
+    private toast = inject(ToastService);
     @Input() customActions: ICustomAction[] = [];
 
     isSubmitting = false;
@@ -163,7 +165,10 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
             rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
             accept: () => {
                 this._defaultService.delete(row._id).subscribe({
-                    next: () => this.reload(),
+                    next: () => {
+                        this.toast.success("Ma'lumot o'chirildi");
+                        this.reload();
+                    },
                     error: (err) => console.error('Delete error:', err)
                 });
             }
@@ -203,12 +208,12 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
                     this.isSubmitting = false;
                     this.showEditDialog = false;
                     this.formRef!.instance.loading = false;
+                    this.toast.success(this.editMode ? "Ma'lumot yangilandi" : "Ma'lumot qo'shildi");
                     this.reload();
                 },
                 error: () => {
                     this.isSubmitting = false;
                     this.formRef!.instance.loading = false;
-                    this.showEditDialog = false;
                 }
             });
         };

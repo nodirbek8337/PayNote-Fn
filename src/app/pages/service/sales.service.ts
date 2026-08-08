@@ -20,6 +20,14 @@ export type SalesPeriodSummary = {
     salesCount: number;
     itemCount: number;
     total: number;
+    products: SalesSummaryProduct[];
+};
+
+export type SalesSummaryProduct = {
+    productId: string;
+    name: string;
+    amount: number;
+    total: number;
 };
 
 export type MySalesSummary = {

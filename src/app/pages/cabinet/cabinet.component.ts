@@ -33,7 +33,12 @@ export class CabinetComponent implements OnInit {
             .getMySummary()
             .pipe(finalize(() => (this.loading = false)))
             .subscribe((response) => {
-                if (response?.data) this.summary = response.data;
+                if (response?.data) {
+                    this.summary = {
+                        today: this.normalizePeriod(response.data.today),
+                        month: this.normalizePeriod(response.data.month)
+                    };
+                }
             });
     }
 
@@ -42,6 +47,15 @@ export class CabinetComponent implements OnInit {
     }
 
     private emptyPeriod(): SalesPeriodSummary {
-        return { salesCount: 0, itemCount: 0, total: 0 };
+        return { salesCount: 0, itemCount: 0, total: 0, products: [] };
+    }
+
+    private normalizePeriod(period?: Partial<SalesPeriodSummary> | null): SalesPeriodSummary {
+        return {
+            salesCount: Number(period?.salesCount ?? 0),
+            itemCount: Number(period?.itemCount ?? 0),
+            total: Number(period?.total ?? 0),
+            products: Array.isArray(period?.products) ? period.products : []
+        };
     }
 }

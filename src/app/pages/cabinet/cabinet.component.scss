@@ -158,6 +158,72 @@
     background: color-mix(in srgb, var(--table-head-to) 82%, var(--action-primary) 18%);
 }
 
+.sold-products {
+    margin-top: 1rem;
+
+    h3 {
+        margin: 0 0 0.65rem;
+        color: var(--text-color-secondary);
+        font-size: 0.92rem;
+    }
+}
+
+.sold-products-list {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.sold-product {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    background: var(--field-bg);
+}
+
+.sold-product-name {
+    min-width: 0;
+
+    strong,
+    span {
+        display: block;
+    }
+
+    strong {
+        overflow: hidden;
+        color: var(--text-color);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    span {
+        margin-top: 0.2rem;
+        color: var(--text-color-secondary);
+        font-size: 0.8rem;
+    }
+}
+
+.sold-product-total {
+    flex: 0 0 auto;
+    color: var(--action-primary-from);
+    font-size: 0.92rem;
+}
+
+.products-empty {
+    display: grid;
+    min-height: 72px;
+    place-items: center;
+    padding: 0.8rem;
+    border: 1px dashed var(--surface-border);
+    border-radius: 6px;
+    color: var(--text-color-secondary);
+    text-align: center;
+}
+
 @media (max-width: 900px) {
     .period-grid {
         grid-template-columns: 1fr;
@@ -196,5 +262,9 @@
 
     .primary-metric {
         grid-column: auto;
+    }
+
+    .sold-product {
+        align-items: flex-start;
     }
 }
