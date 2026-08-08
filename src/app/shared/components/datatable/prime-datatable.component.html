@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" placeholder="Tezkor qidiruv..." [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
+                    <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" [placeholder]="quickFilterPlaceholder" [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
                     <div class="cta-buttons">
                         <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="btn-ctl" label="Filtrlar" (click)="openDrawer()"></button>
                         <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="btn-ctl" label="Qo'shish" (click)="triggerAdd()"></button>

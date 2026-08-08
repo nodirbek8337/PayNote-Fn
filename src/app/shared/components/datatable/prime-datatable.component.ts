@@ -64,6 +64,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     @Input() showDrawerFilters = true;
     @Input() showQuickFilterTop = true;
     @Input() showQuickFilterBottom = false;
+    @Input() quickFilterPlaceholder = 'Tezkor qidiruv...';
 
     @Input() drawerFilterComponent?: Type<any>;
     @ViewChild('drawerHost', { read: ViewContainerRef }) drawerHost!: ViewContainerRef;
