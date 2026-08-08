@@ -1,0 +1,9 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
+    <app-select placeholder="Mahsulotni tanlang" formControlName="productId" [options]="productOptions" [required]="true" [disabled]="!!model._id"></app-select>
+    <app-input placeholder="Soni" type="number" formControlName="amount"></app-input>
+
+    <div class="flex justify-end gap-2 mt-4">
+        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
+        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
+    </div>
+</form>

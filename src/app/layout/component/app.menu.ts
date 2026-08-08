@@ -21,12 +21,19 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Contacts',
-                items: [{ label: 'Contacts', icon: 'pi pi-clipboard', routerLink: ['/'] }]
+                label: 'Omborxona',
+                items: [
+                    { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'] },
+                    { label: 'Mahsulotlar', icon: 'pi pi-box', routerLink: ['/products'] }
+                ]
             },
             {
-                label: 'Users',
-                items: [{ label: 'Contacts', icon: 'pi pi-clipboard', routerLink: ['/users'] }]
+                label: 'Sotuv',
+                items: [{ label: 'Sotuvlar', icon: 'pi pi-shopping-cart', routerLink: ['/contacts'] }]
+            },
+            {
+                label: 'Sozlamalar',
+                items: [{ label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'] }]
             },
         ];
     }

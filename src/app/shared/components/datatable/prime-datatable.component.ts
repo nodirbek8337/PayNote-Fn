@@ -54,6 +54,9 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     @Input() rowsPerPageOptions: number[] = [15, 30, 50];
     @Input() hasCreate = false;
     @Input() hasAction = false;
+    @Input() hasClone = true;
+    @Input() hasEdit = true;
+    @Input() hasDelete = true;
     @Input() hasRefreshBtn = false;
     @Input() hasClearFilterBtn = false;
 

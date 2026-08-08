@@ -2,9 +2,14 @@ import { Routes } from '@angular/router';
 import { ContactsComponent } from './contacts/contacts.component';
 import { AuthGuard } from '../shared/guards/auth.guard';
 import { UsersComponent } from './users/users.component';
+import { ProductsComponent } from './products/products.component';
+import { InventoryComponent } from './inventory/inventory.component';
 
 export default [
-    { path: '', component: ContactsComponent, canActivate: [AuthGuard] },
+    { path: '', redirectTo: 'inventory', pathMatch: 'full' },
+    { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: ContactsComponent, canActivate: [AuthGuard] },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-    { path: '**', redirectTo: '', canActivate: [AuthGuard] }
+    { path: '**', redirectTo: 'inventory', canActivate: [AuthGuard] }
 ] as Routes;
