@@ -1,14 +1,16 @@
 import { Component, forwardRef, Input, Optional } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
-import { NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { digits12, formatUzPhoneDash } from '../../utils/phone.util';
+import { ControlErrorComponent } from '../control-error/control-error.component';
+import { PHONE_ERROR_MESSAGES } from '../../constants/control-error-messages';
 
 @Component({
   selector: 'app-phone-input',
   standalone: true,
-  imports: [NgIf, NgClass, InputTextModule, FormsModule],
+  imports: [NgClass, InputTextModule, FormsModule, ControlErrorComponent],
   templateUrl: './phone-input.component.html',
   styleUrls: ['../input/input.component.scss'],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PhoneInputComponent), multi: true }]
@@ -23,6 +25,7 @@ export class PhoneInputComponent implements ControlValueAccessor {
   rawValue = '';
   displayValue = '998-';
   isDisabled = false;
+  readonly errorMessages = PHONE_ERROR_MESSAGES;
 
   onChange = (_: any) => {};
   onTouched = () => {};
@@ -50,4 +53,5 @@ export class PhoneInputComponent implements ControlValueAccessor {
     const c = this.control;
     return !!c && this.required && c.invalid && (c.dirty || c.touched);
   }
+
 }

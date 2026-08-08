@@ -1,9 +1,9 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
-    <app-input placeholder="Mahsulot nomi" formControlName="name"></app-input>
-    <app-money-input formControlName="price" placeholder="Narxi" [defaultCurrency]="'UZS'" [emitCurrency]="false" [required]="true" [allowNegative]="false"></app-money-input>
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid entity-form">
+    <app-input placeholder="Maxsulot nomini kiriting" formControlName="name"></app-input>
+    <app-money-input formControlName="price" placeholder="Maxsulot narxini kiriting" [defaultCurrency]="'UZS'" [emitCurrency]="false" [required]="true" [allowNegative]="false"></app-money-input>
 
     <div class="flex justify-end gap-2 mt-4">
-        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
-        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
+        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>
+        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="form-save-btn"></button>
     </div>
 </form>

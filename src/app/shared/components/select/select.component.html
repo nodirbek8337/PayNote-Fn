@@ -39,7 +39,5 @@
         ></p-multiSelect>
     </ng-template>
 
-    <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
-        <small *ngIf="control?.errors?.['required']">Majburiy maydon.</small>
-    </div>
+    <app-control-error [control]="control" [messages]="errorMessages" />
 </div>

@@ -19,6 +19,8 @@ export abstract class TableFeatureBaseComponent implements OnInit {
     protected currentPageStartIndex = 0;
     protected filterTimeout: any;
     protected dataLoadedOnce = false;
+    private lastLoadSignature = '';
+    private activeLoadSignature = '';
 
     abstract _defaultService: DefaultService;
     abstract columnDefs: any[];
@@ -36,10 +38,16 @@ export abstract class TableFeatureBaseComponent implements OnInit {
             rows: this.rows,
             filters
         };
-        this.loadData(reloadEvent);
+        this.loadData(reloadEvent, true);
     }
 
-    loadData(event: TableLazyLoadEvent) {
+    loadData(event: TableLazyLoadEvent, force = false) {
+        const loadSignature = this.getLoadSignature(event);
+
+        if (!force && (loadSignature === this.lastLoadSignature || loadSignature === this.activeLoadSignature)) {
+            return;
+        }
+
         const request = this._defaultService.tableRequest;
         request.setPageParamsPrimeNg(event.first ?? 0, event.rows ?? this.rows);
         this.currentPageStartIndex = event.first ?? 0;
@@ -55,6 +63,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
         }
 
         this.loading = true;
+        this.activeLoadSignature = loadSignature;
 
         this._defaultService.reloadTable().subscribe({
             next: (res) => {
@@ -68,12 +77,25 @@ export abstract class TableFeatureBaseComponent implements OnInit {
                 this.totalRecords = res.pagination?.total ?? res.total ?? res.data?.total ?? 0;
                 this.amountTotals = res.amount_totals;
                 this.loading = false;
+                this.lastLoadSignature = loadSignature;
+                this.activeLoadSignature = '';
             },
             error: () => {
                 this.value = [];
                 this.totalRecords = 0;
                 this.loading = false;
+                this.activeLoadSignature = '';
             }
+        });
+    }
+
+    private getLoadSignature(event: TableLazyLoadEvent): string {
+        return JSON.stringify({
+            first: event.first ?? 0,
+            rows: event.rows ?? this.rows,
+            sortField: event.sortField ?? null,
+            sortOrder: event.sortOrder ?? null,
+            filters: event.filters ?? null
         });
     }
 
@@ -123,8 +145,9 @@ export abstract class TableFeatureBaseComponent implements OnInit {
     }
 
     clearAllFilters() {
+        if (this.filterTimeout) clearTimeout(this.filterTimeout);
         this.columnFilters = {};
-        this.applyFilters();
+        this.reload({});
     }
 
     protected addRowIndexColumn() {

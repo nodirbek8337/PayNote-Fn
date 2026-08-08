@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 import { DatepickerRangeComponent } from '../../../shared/components/datepicker-range/datepicker-range.component';
 
 type FilterType = 'dropdown' | 'date-range' | 'text';
@@ -10,9 +11,9 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
 @Component({
   selector: 'users-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, DatepickerRangeComponent],
+  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, DatepickerRangeComponent],
   template: `
-    <div class="p-3" style="display:grid; grid-template-columns:1fr; gap:12px">
+    <div class="users-filter">
       <ng-container *ngFor="let col of columnDefs">
         <ng-container *ngIf="col?.searchable !== false">
           <div>
@@ -53,18 +54,37 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
         </ng-container>
       </ng-container>
 
-      <div class="mt-3 flex justify-content-between">
+      <div class="users-filter__footer">
         <button
           pButton
-          class="p-button-secondary"
+          type="button"
+          class="p-button-secondary filter-clear-btn"
           icon="pi pi-filter-slash"
           label="Tozalash"
-          (click)="clearAllFilters()"
+          (click)="onClearFilters()"
           [disabled]="loading || isFilterEmpty()">
         </button>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .users-filter {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .users-filter__footer {
+      display: flex;
+      justify-content: stretch;
+      padding-top: 0.35rem;
+    }
+
+    :host ::ng-deep .filter-clear-btn.p-button {
+      width: 100%;
+      justify-content: center;
+    }
+  `]
 })
 export class UsersFilterComponent {
   @Input() columnDefs: any[] = [];
@@ -79,13 +99,21 @@ export class UsersFilterComponent {
   @Input() clearAllFilters!: () => void;
 
   @Input() defaultPlaceholders: Record<FilterType, string> = {
-    'dropdown':  'Tanlash',
-    'date-range':'Vaqt oraliqi',
-    'text':      'Qidirish...'
+    'dropdown':  'Tanlang',
+    'date-range':'Vaqt oraligini tanlang',
+    'text':      'Qidiring...'
   };
 
   isFilterEmpty(): boolean {
-    return Object.keys(this.columnFilters || {}).length === 0;
+    return !Object.values(this.columnFilters || {}).some((value) => {
+      if (Array.isArray(value)) return value.length > 0;
+      return value !== null && value !== undefined && value !== '';
+    });
+  }
+
+  onClearFilters(): void {
+    this.columnFilters = {};
+    this.clearAllFilters?.();
   }
 
   resolvePlaceholder(col: any, type: FilterType): string {

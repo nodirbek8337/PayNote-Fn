@@ -3,18 +3,19 @@ import {
   ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer,
   Validator, NG_VALIDATORS, AbstractControl, ValidationErrors
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { MoneyPipe } from '../../pipes/money.pipe';
+import { ControlErrorComponent } from '../control-error/control-error.component';
+import { MONEY_ERROR_MESSAGES } from '../../constants/control-error-messages';
 
 type CurrencyCode = 'UZS' | 'USD';
 
 @Component({
   selector: 'app-money-input',
   standalone: true,
-  imports: [NgIf, FormsModule, InputTextModule, SelectModule],
+  imports: [FormsModule, InputTextModule, SelectModule, ControlErrorComponent],
   providers: [
     MoneyPipe,
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MoneyInputComponent), multi: true },
@@ -49,6 +50,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   private isEditing = false;
 
   isDisabled = false;
+  readonly errorMessages = MONEY_ERROR_MESSAGES;
 
   private onChangeCb: (v: any) => void = () => {};
   private onTouchedCb: () => void = () => {};
@@ -96,7 +98,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
 
   onFocus() {
     this.isEditing = true;
-    this.displayValue = this.toRawString(this.amount);
+    this.displayValue = this.formatEditingValue(this.amount);
   }
 
   onBlur() {
@@ -106,8 +108,9 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   }
 
   onInput(raw: string) {
-    this.displayValue = this.sanitize(raw, this.allowNegative);
-    this.amount = this.toNumber(this.displayValue);
+    const sanitized = this.sanitize(raw, this.allowNegative);
+    this.amount = this.toNumber(sanitized);
+    this.displayValue = this.formatRawString(sanitized);
     this.emitValue();
   }
 
@@ -125,7 +128,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   private toNumber(v: any): number | null {
     if (v === null || v === undefined || v === '') return null;
     if (v === '-' ) return null;
-    const n = Number(v);
+    const n = Number(String(v).replace(/\./g, ''));
     if (!Number.isFinite(n)) return null;
     return Math.trunc(n);
   }
@@ -142,9 +145,23 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
     return s;
   }
 
+  private formatEditingValue(amount: number | null): string {
+    return this.formatRawString(this.toRawString(amount));
+  }
+
+  private formatRawString(raw: string): string {
+    if (!raw || raw === '-') return raw;
+
+    const isNegative = raw.startsWith('-');
+    const digits = raw.replace(/[^\d]/g, '');
+    const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return `${isNegative ? '-' : ''}${formatted}`;
+  }
+
   private refreshDisplay() {
     if (this.isEditing) {
-      this.displayValue = this.toRawString(this.amount);
+      this.displayValue = this.formatEditingValue(this.amount);
     } else {
       this.displayValue = this.amount === null
         ? ''

@@ -24,12 +24,8 @@ export class AppMenu {
                 label: 'Omborxona',
                 items: [
                     { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'] },
-                    { label: 'Mahsulotlar', icon: 'pi pi-box', routerLink: ['/products'] }
+                    { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'] }
                 ]
-            },
-            {
-                label: 'Sotuv',
-                items: [{ label: 'Sotuvlar', icon: 'pi pi-shopping-cart', routerLink: ['/contacts'] }]
             },
             {
                 label: 'Sozlamalar',

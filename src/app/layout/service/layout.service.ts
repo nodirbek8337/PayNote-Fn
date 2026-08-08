@@ -19,7 +19,7 @@ interface LayoutState {
 
 export const DEFAULT_LAYOUT_CONFIG: LayoutConfig = {
   preset: 'Lara',
-  primary: 'emerald',
+  primary: 'blue',
   surface: 'slate',
   darkTheme: true,
   menuMode: 'overlay'

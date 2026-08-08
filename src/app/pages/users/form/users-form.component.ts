@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -20,6 +20,7 @@ export type UserFormModel = {
   selector: 'users-form',
   standalone: true,
   templateUrl: './users-form.component.html',
+  styleUrls: ['./users-form.component.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -41,8 +42,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
   isEdit = false;
 
   roleOptions = [
-    { label: 'Admin', value: 'admin' },
-    { label: 'User',  value: 'user'  }
+    { label: 'Boshliq', value: 'admin' },
+    { label: 'Ishchi',  value: 'user'  }
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -65,15 +66,12 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
     this.form = this.fb.group({
       username: [this.model.username ?? '', [Validators.required, Validators.maxLength(120)]],
-      role:     [this.model.role ?? 'user', [Validators.required]],
+      role:     [this.model.role ?? null, [Validators.required]],
       isActive: [this.model.isActive ?? true],
       password: ['']
     });
 
-    if (!this.isEdit) {
-      this.form.get('password')!.setValidators([Validators.required, Validators.minLength(6)]);
-      this.form.get('password')!.updateValueAndValidity({ emitEvent: false });
-    }
+    this.setPasswordValidators();
   }
 
   private patchForm() {
@@ -81,17 +79,39 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
     this.form.patchValue({
       username: this.model.username ?? '',
-      role: this.model.role ?? 'user',
+      role: this.model.role ?? null,
       isActive: this.model.isActive ?? true,
       password: ''
     }, { emitEvent: false });
 
     const pwdCtrl = this.form.get('password')!;
-    pwdCtrl.clearValidators();
-    if (!this.isEdit) {
-      pwdCtrl.setValidators([Validators.required, Validators.minLength(6)]);
-    }
-    pwdCtrl.updateValueAndValidity({ emitEvent: false });
+    this.setPasswordValidators(pwdCtrl);
+  }
+
+  private setPasswordValidators(control = this.form.get('password')!) {
+    const validators = this.isEdit
+      ? [this.passwordRulesValidator()]
+      : [Validators.required, this.passwordRulesValidator()];
+
+    control.clearValidators();
+    control.setValidators(validators);
+    control.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private passwordRulesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = String(control.value ?? '');
+      if (!value) return null;
+
+      const errors: ValidationErrors = {};
+
+      if (value.length < 6) errors['passwordMinLength'] = true;
+      if (!/[A-Z]/.test(value)) errors['passwordUppercase'] = true;
+      if (!/[a-z]/.test(value)) errors['passwordLowercase'] = true;
+      if (!/\d/.test(value)) errors['passwordNumber'] = true;
+
+      return Object.keys(errors).length ? errors : null;
+    };
   }
 
   submitForm() {
@@ -119,6 +139,6 @@ export class UsersFormComponent implements OnInit, OnChanges {
   }
 
   get passwordLabel() {
-    return this.isEdit ? 'Yangi parol (ixtiyoriy)' : 'Parol';
-    }
+    return this.isEdit ? 'Yangi parol kiriting (ixtiyoriy)' : 'Parol kiriting';
+  }
 }

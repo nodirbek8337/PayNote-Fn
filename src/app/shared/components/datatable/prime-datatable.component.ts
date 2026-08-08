@@ -1,4 +1,4 @@
-import { Component, inject, ComponentRef, Input, Output, EventEmitter, Type, ViewChild, ViewContainerRef, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+﻿import { Component, inject, ComponentRef, Input, Output, EventEmitter, Type, ViewChild, ViewContainerRef, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DefaultService } from '../../services/default.service';
 import { CommonModule } from '@angular/common';
@@ -145,17 +145,21 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
 
     triggerEdit(row: any) {
         this.editData = row;
-        this.editMode = true;
-        this.showEditDialog = true;
         const id = row?._id ?? row?.id ?? null;
+        this.editMode = !!id;
+        this.showEditDialog = true;
         setTimeout(() => this.loadFormComponent(id), 0);
     }
 
     triggerDelete(row: any) {
         this.confirmationService.confirm({
-            message: `Siz rostan ham bu kontaktni oʻchirib tashlamoqchimisiz?`,
-            header: "O'chirishni tasdiqlang",
-            icon: 'pi pi-exclamation-triangle',
+            message: `Bu ma'lumot o'chirilgandan keyin uni qayta tiklab bo'lmaydi.`,
+            header: "O'chirishni tasdiqlash",
+            icon: 'pi pi-trash',
+            acceptLabel: "O'chirish",
+            rejectLabel: 'Bekor qilish',
+            acceptButtonStyleClass: 'confirm-accept-btn',
+            rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
             accept: () => {
                 this._defaultService.delete(row._id).subscribe({
                     next: () => this.reload(),
@@ -224,8 +228,10 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
         super.clearAllFilters();
         this.quickFilterValue = '';
         if (this.drawerRef) {
+            (this.drawerRef.instance as any).columnFilters = this.columnFilters;
             (this.drawerRef.instance as any).quickText = '';
             this.drawerRef.changeDetectorRef.detectChanges();
         }
     }
 }
+

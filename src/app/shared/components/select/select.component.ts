@@ -4,11 +4,13 @@ import { NgIf, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ControlErrorComponent } from '../control-error/control-error.component';
+import { SELECT_ERROR_MESSAGES } from '../../constants/control-error-messages';
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [NgIf, NgClass, FormsModule, SelectModule, MultiSelectModule],
+  imports: [NgIf, NgClass, FormsModule, SelectModule, MultiSelectModule, ControlErrorComponent],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [{
@@ -28,7 +30,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
   @Input() placeholder: string = '';
   @Input() showClear: boolean = true;
-  @Input() filter: boolean = true;
+  @Input() filter: boolean = false;
 
   @Input() multiple: boolean = false;
 
@@ -38,6 +40,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
   value: any = null;
   isDisabled = false;
+  readonly errorMessages = SELECT_ERROR_MESSAGES;
 
   private onChangeCb: (v: any) => void = () => {};
   private onTouchedCb: () => void = () => {};

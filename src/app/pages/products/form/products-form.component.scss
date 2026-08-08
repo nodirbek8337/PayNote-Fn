@@ -1,0 +1,9 @@
+.entity-form {
+  display: grid;
+  gap: 0.2rem;
+}
+
+:host ::ng-deep .app-input-container,
+:host ::ng-deep .money-input {
+  padding: 0;
+}

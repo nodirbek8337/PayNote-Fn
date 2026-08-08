@@ -1,12 +1,7 @@
-<div class="money-input">
+<div class="money-input" [class.is-invalid]="shouldShowErrors()">
     <input pInputText class="flex-1" [placeholder]="placeholder" [disabled]="isDisabled" [value]="displayValue" inputmode="numeric" pattern="\d*" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput($any($event.target).value)" />
 
     <p-select styleClass="w-28" [options]="currencyOptions" [ngModel]="currency" (ngModelChange)="onCurrencyChange($event)" [disabled]="isDisabled"> </p-select>
 </div>
 
-<div *ngIf="shouldShowErrors()" class="text-xs text-red-500 mt-1">
-    <ng-container *ngIf="control?.errors?.['required']">Majburiy maydon.</ng-container>
-    <ng-container *ngIf="control?.errors?.['min']">Minimal qiymat: {{ control?.errors?.['min'].min }}</ng-container>
-    <ng-container *ngIf="control?.errors?.['max']">Maksimal qiymat: {{ control?.errors?.['max'].max }}</ng-container>
-    <ng-container *ngIf="control?.errors?.['currencyMissing']">Valyuta tanlanishi shart.</ng-container>
-</div>
+<app-control-error [control]="control" [messages]="errorMessages" />

@@ -2,37 +2,43 @@
   <ng-container *ngIf="type !== 'password'; else passwordTpl">
     <input
       pInputText
-      [type]="type"
+      [type]="nativeInputType"
       class="w-full"
       style="height: 40px;"
       [placeholder]="placeholder"
       [disabled]="isDisabled"
+      [attr.inputmode]="inputMode"
       [ngModel]="value"
-      (ngModelChange)="onChange($event)"
+      (ngModelChange)="handleValueChange($event)"
       (blur)="onTouched()"
       [ngClass]="{ 'is-invalid': shouldShowErrors() }"
     />
   </ng-container>
 
   <ng-template #passwordTpl>
-    <p-password
-      [ngModel]="value"
-      (ngModelChange)="onChange($event)"
-      (onBlur)="onTouched()"
-      [toggleMask]="true"
-      [feedback]="false"
-      [fluid]="true"
-      [placeholder]="placeholder"
-      [disabled]="isDisabled"
-      styleClass="w-full"
-      [inputStyle]="{ height: '40px' }"
-      [ngClass]="{ 'is-invalid': shouldShowErrors() }"
-    ></p-password>
+    <div class="password-field" [class.is-disabled]="isDisabled" [class.is-invalid]="shouldShowErrors()">
+      <input
+        pInputText
+        [type]="showPassword ? 'text' : 'password'"
+        class="password-field__input"
+        [placeholder]="placeholder"
+        [disabled]="isDisabled"
+        [ngModel]="value"
+        (ngModelChange)="onChange($event)"
+        (blur)="onTouched()"
+      />
+      <button
+        type="button"
+        class="password-field__toggle"
+        [disabled]="isDisabled"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="passwordToggleLabel"
+        [title]="passwordToggleLabel"
+      >
+        <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
+      </button>
+    </div>
   </ng-template>
 
-  <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
-    <small *ngIf="control?.errors?.['required']">Maydon to‘ldirilishi shart</small>
-    <small *ngIf="control?.errors?.['email']">Email noto‘g‘ri formatda</small>
-    <small *ngIf="control?.errors?.['pattern']">Qiymat noto‘g‘ri formatda</small>
-  </div>
+  <app-control-error [control]="control" [messages]="errorMessages" />
 </div>

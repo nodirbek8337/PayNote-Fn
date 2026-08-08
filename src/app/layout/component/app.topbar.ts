@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
+import { AuthService } from '../../shared/services/auth.service';
 
 type SelectValue =
   | { type: 'logout' }
@@ -55,7 +56,7 @@ type SelectValue =
       </div>
     </div>
 
-    <p-confirmDialog></p-confirmDialog>
+    <p-confirmDialog styleClass="paynote-confirm-dialog"></p-confirmDialog>
   `,
   styles: [`
     ::ng-deep .user-select .p-select {
@@ -80,8 +81,9 @@ export class AppTopbar implements OnInit, OnDestroy {
   ];
 
   private mobileNavOptions = [
-    { label: 'Kontaktlar', value: { type: 'route', url: '/' } as SelectValue },
-    { label: 'Foydalanuvchilar',    value: { type: 'route', url: '/users' }    as SelectValue }
+    { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
+    { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
+    { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
   ];
 
   get selectOptions() {
@@ -97,7 +99,8 @@ export class AppTopbar implements OnInit, OnDestroy {
   constructor(
     public layoutService: LayoutService,
     private confirmation: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -140,10 +143,11 @@ export class AppTopbar implements OnInit, OnDestroy {
       this.confirmation.confirm({
         header: 'Tizimdan chiqish?',
         message: 'Haqiqatan ham tizimdan chiqasizmi?',
-        icon: 'pi pi-exclamation-triangle',
+        icon: 'pi pi-sign-out',
         acceptLabel: 'Chiqish',
-        rejectLabel: 'Ortga',
-        acceptButtonStyleClass: 'p-button-danger',
+        rejectLabel: 'Bekor qilish',
+        acceptButtonStyleClass: 'confirm-accept-btn',
+        rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
         accept: () => this.logout(),
         reject: () => { this.selectedOption = null; }
       });
@@ -160,7 +164,7 @@ export class AppTopbar implements OnInit, OnDestroy {
 
   logout() {
     try {
-      localStorage.clear();
+      this.authService.logout();
     } finally {
       this.selectedOption = null;
       this.router.navigate(['/login']);

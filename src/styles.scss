@@ -1,7 +1,92 @@
-@use './tailwind.css';
+﻿@use './tailwind.css';
 @use './assets/layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './assets/demo/demo.scss';
+
+:root,
+html.app-dark {
+  --p-primary-color: var(--action-primary);
+  --p-primary-contrast-color: #07111f;
+  --p-primary-hover-color: var(--action-primary-from);
+  --p-primary-active-color: var(--action-primary-hover-to);
+  --text-color: #b8c7df;
+  --text-color-secondary: #9fb0cc;
+  --surface-ground: #07111f;
+  --surface-card: var(--table-bg);
+  --surface-overlay: #10233d;
+  --surface-hover: #172d4d;
+  --surface-border: #243b5e;
+  --page-bg-start: #0b182a;
+  --page-bg-end: #050b14;
+  --content-border-radius: 8px;
+  --field-bg: #0a1627;
+  --table-bg: #0d1b2f;
+  --table-head-from: #132946;
+  --table-head-to: #0f2139;
+  --control-radius: 8px;
+  --focus-primary: 0 0 0 3px rgba(79, 140, 255, 0.20);
+  --action-primary: #4f8cff;
+  --action-primary-soft: rgba(79, 140, 255, 0.14);
+  --action-primary-from: #75a6ff;
+  --action-primary-to: var(--action-primary);
+  --action-primary-hover-from: #8bb6ff;
+  --action-primary-hover-to: #5b96ff;
+  --action-primary-text: #06101f;
+  --action-neutral-bg: #111d2d;
+  --action-neutral-border: #394861;
+  --action-neutral-hover-border: #64748b;
+  --action-neutral-text: #aebbd0;
+  --action-neutral-hover-bg: rgba(148, 163, 184, 0.12);
+  --action-danger-from: #e9b3b3;
+  --action-danger-to: #c87979;
+  --action-danger-hover-from: #f0c4c4;
+  --action-danger-hover-to: #d28c8c;
+  --action-danger-border: #d99a9a;
+  --action-danger-text: #201011;
+  --status-empty-text: #aebbd0;
+  --status-empty-bg: rgba(148, 163, 184, 0.12);
+  --status-empty-border: rgba(148, 163, 184, 0.24);
+  --action-delete-text: #e2a0a0;
+  --action-delete-hover: #f0b8b8;
+  --action-delete-bg: rgba(226, 160, 160, 0.13);
+  --action-edit-text: #7dd3fc;
+  --action-edit-hover: #a5e4ff;
+  --action-edit-bg: rgba(125, 211, 252, 0.12);
+  --action-copy-text: #b69cff;
+  --action-copy-hover: #cab9ff;
+  --action-copy-bg: rgba(182, 156, 255, 0.13);
+  --status-active-text: #d5d9ff;
+  --status-active-bg: rgba(129, 140, 248, 0.20);
+  --status-active-border: rgba(129, 140, 248, 0.42);
+  --status-inactive-text: var(--action-delete-text);
+  --status-inactive-bg: var(--action-delete-bg);
+  --status-inactive-border: color-mix(in srgb, var(--action-delete-text) 32%, transparent);
+  --error-text: var(--action-delete-text);
+  --error-border: color-mix(in srgb, var(--action-delete-text) 72%, transparent);
+  --error-ring: var(--action-delete-bg);
+  --paynote-soft-blue: rgba(79, 140, 255, 0.16);
+  --paynote-soft-blue-alt: rgba(79, 140, 255, 0.10);
+  --paynote-soft-blue-glow: rgba(79, 140, 255, 0.08);
+  --paynote-bronze: #6ea8ff;
+  --shadow-color: rgba(0, 0, 0, 0.32);
+  --shadow-color-strong: rgba(0, 0, 0, 0.48);
+  --paynote-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+  --paynote-shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+body {
+  background:
+    radial-gradient(circle at 14% 6%, var(--action-primary-soft), transparent 27rem),
+    radial-gradient(circle at 92% 2%, var(--paynote-soft-blue-glow), transparent 24rem),
+    linear-gradient(180deg, var(--page-bg-start) 0%, var(--surface-ground) 58%, var(--page-bg-end) 100%);
+}
+
+html.app-dark body {
+  background:
+    radial-gradient(circle at 14% 6%, var(--action-primary-soft), transparent 27rem),
+    radial-gradient(circle at 92% 2%, var(--paynote-soft-blue-glow), transparent 24rem),
+    linear-gradient(180deg, var(--page-bg-start) 0%, var(--surface-ground) 58%, var(--page-bg-end) 100%);
+}
 
 .table-page-container .header-content {
   display: flex;
@@ -11,7 +96,456 @@
 }
 
 .p-button {
-    height: 40px;
+  height: 40px;
+  border-radius: 8px !important;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined) {
+  border-color: var(--p-primary-color) !important;
+  background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+  color: var(--action-primary-text) !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--action-primary) 20%, transparent);
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):hover {
+  background: linear-gradient(180deg, var(--action-primary-hover-from) 0%, var(--action-primary-hover-to) 100%) !important;
+  border-color: var(--action-primary-hover-from) !important;
+  filter: none;
+  transform: none;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--action-primary-hover-from) 18%, transparent), 0 10px 22px color-mix(in srgb, var(--action-primary) 18%, transparent);
+}
+
+.p-button:focus-visible,
+.p-button.p-focus {
+  box-shadow:
+    var(--focus-primary),
+    0 10px 22px color-mix(in srgb, var(--action-primary) 20%, transparent) !important;
+}
+
+.p-button-success,
+.p-button-info,
+.p-button-secondary {
+  color: var(--action-primary-text) !important;
+}
+
+.p-button-success:not(.p-button-text):not(.p-button-outlined),
+.p-button-info:not(.p-button-text):not(.p-button-outlined),
+.p-button-secondary:not(.p-button-text):not(.p-button-outlined) {
+  border-color: var(--p-primary-color) !important;
+  background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+}
+
+.p-button-text.p-button-success,
+.p-button-text.p-button-info,
+.p-button-text.p-button-secondary {
+  color: var(--p-primary-color) !important;
+}
+
+.p-select-overlay,
+.p-dropdown-panel,
+.p-multiselect-panel {
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 8px !important;
+  background: var(--table-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: var(--paynote-shadow) !important;
+  z-index: 1200 !important;
+}
+
+.p-select-option,
+.p-dropdown-item,
+.p-multiselect-option {
+  color: var(--text-color) !important;
+  background: transparent !important;
+}
+
+.p-select-option:not(.p-disabled):hover,
+.p-dropdown-item:not(.p-disabled):hover,
+.p-multiselect-option:not(.p-disabled):hover {
+  background: var(--action-primary-soft) !important;
+  color: var(--text-color) !important;
+}
+
+.p-button.p-button-text {
+  color: var(--p-primary-color);
+}
+
+.p-button.p-button-text:hover {
+  background: var(--paynote-soft-blue) !important;
+}
+
+.p-button.p-button-outlined,
+.p-button.p-button-outlined:enabled:hover,
+.p-button.p-button-outlined:enabled:focus {
+  border-color: var(--action-neutral-border) !important;
+  color: var(--action-neutral-text) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.p-button.p-button-outlined:enabled:hover {
+  border-color: var(--action-neutral-hover-border) !important;
+  background: var(--action-neutral-hover-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.p-button.p-button-outlined:enabled:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--action-neutral-hover-border) 22%, transparent) !important;
+}
+
+.p-button-text.p-button-danger,
+.p-button-text.p-button-danger:enabled:hover,
+.p-button-text.p-button-danger:enabled:focus,
+.p-button-danger.p-button-outlined,
+.p-button-danger.p-button-outlined:enabled:hover,
+.p-button-danger.p-button-outlined:enabled:focus {
+  border-color: var(--action-primary) !important;
+  color: var(--action-primary) !important;
+  background: transparent !important;
+}
+
+.p-button-text.p-button-danger:enabled:hover,
+.p-button-danger.p-button-outlined:enabled:hover {
+  background: var(--action-primary-soft) !important;
+  color: var(--text-color) !important;
+}
+
+.p-button-success,
+.p-button-success:enabled:hover,
+.p-button-success:enabled:focus,
+.p-button-success.p-button-outlined,
+.p-button-success.p-button-text {
+  border-color: var(--action-primary) !important;
+  color: var(--action-primary) !important;
+}
+
+.p-button-success:not(.p-button-text):not(.p-button-outlined),
+.p-button-success:not(.p-button-text):not(.p-button-outlined):enabled:hover {
+  background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+  color: var(--action-primary-text) !important;
+}
+
+.p-inputtext,
+.p-select,
+.p-multiselect,
+.p-password input {
+  border-radius: 8px !important;
+  border-color: var(--surface-border) !important;
+  background: var(--field-bg) !important;
+  color: var(--text-color) !important;
+  font-size: 0.96rem !important;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+.p-select-label,
+.p-multiselect-label,
+.p-password input::placeholder,
+.p-inputtext::placeholder {
+  font-size: 0.96rem !important;
+}
+
+html.app-dark .p-inputtext,
+html.app-dark .p-select,
+html.app-dark .p-multiselect,
+html.app-dark .p-password input {
+  background: var(--field-bg) !important;
+}
+
+.p-inputtext:enabled:focus,
+.p-select:not(.p-disabled).p-focus,
+.p-multiselect:not(.p-disabled).p-focus,
+.p-password input:enabled:focus {
+  border-color: var(--p-primary-color) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-color), transparent 82%) !important;
+}
+
+.p-password .p-password-toggle-mask,
+.p-password .p-password-icon,
+.p-password i {
+  cursor: pointer !important;
+}
+
+.p-password {
+  position: relative;
+}
+
+.p-password .p-password-toggle-mask {
+  right: 0.35rem !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  color: var(--text-color-secondary) !important;
+  background: transparent !important;
+  transition: background-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+
+.p-password .p-password-toggle-mask:hover {
+  color: var(--text-color) !important;
+  background: var(--action-primary-soft) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--action-primary) 18%, transparent) !important;
+}
+
+.p-password .p-password-toggle-mask:focus-visible {
+  outline: 0 !important;
+  color: var(--text-color) !important;
+  background: var(--action-primary-soft) !important;
+  box-shadow: var(--focus-primary) !important;
+}
+
+.p-password .p-password-toggle-mask svg,
+.p-password .p-password-toggle-mask .p-icon,
+.p-password .p-password-toggle-mask i {
+  width: 1rem !important;
+  height: 1rem !important;
+  font-size: 1rem !important;
+}
+
+.p-password input {
+  padding-right: 2.8rem !important;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider,
+.p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  background: var(--action-primary) !important;
+}
+
+.p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider,
+.p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+  background: var(--action-primary-from) !important;
+}
+
+.p-toast .p-toast-message-success {
+  border-color: color-mix(in srgb, var(--action-primary) 32%, transparent) !important;
+  background: var(--table-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.p-toast .p-toast-message-success .p-toast-message-icon,
+.p-toast .p-toast-message-success .p-toast-summary {
+  color: var(--action-primary-from) !important;
+}
+
+.layout-topbar {
+  background: color-mix(in srgb, var(--surface-ground), transparent 4%) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border), transparent 10%);
+  box-shadow: 0 10px 32px color-mix(in srgb, var(--shadow-color) 82%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.layout-main-container {
+  padding-top: 5.5rem !important;
+}
+
+.card,
+.datatable-card {
+  border: 1px solid color-mix(in srgb, var(--surface-border), transparent 8%);
+  box-shadow: var(--paynote-shadow-soft);
+}
+
+.p-dialog {
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: var(--paynote-shadow) !important;
+}
+
+.p-dialog .p-dialog-header,
+.p-dialog .p-dialog-content,
+.p-dialog .p-dialog-footer {
+  background: var(--surface-card) !important;
+  color: var(--text-color) !important;
+}
+
+.p-dialog-mask {
+  backdrop-filter: blur(6px);
+}
+
+.datatable-drawer.p-drawer {
+  background: var(--table-bg) !important;
+  color: var(--text-color) !important;
+  border-left: 1px solid var(--surface-border) !important;
+  box-shadow: -18px 0 48px color-mix(in srgb, var(--shadow-color-strong) 75%, transparent) !important;
+}
+
+.datatable-drawer .p-drawer-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 1rem 1.15rem !important;
+  background: linear-gradient(180deg, var(--table-head-from) 0%, var(--table-head-to) 100%) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+  color: var(--text-color) !important;
+}
+
+.datatable-drawer .p-drawer-title {
+  color: var(--text-color) !important;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.datatable-drawer .p-drawer-close-button {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 8px !important;
+  color: var(--action-primary-hover-from) !important;
+  background: color-mix(in srgb, var(--action-primary) 8%, transparent) !important;
+}
+
+.datatable-drawer .p-drawer-close-button:hover {
+  color: var(--text-color) !important;
+  background: color-mix(in srgb, var(--action-primary) 16%, transparent) !important;
+}
+
+.datatable-drawer .p-drawer-content,
+.datatable-drawer .drawer-inner {
+  background: var(--table-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.datatable-drawer .drawer-inner {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+.paynote-confirm-dialog.p-dialog {
+  width: min(460px, calc(100vw - 32px)) !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 8px !important;
+  background: var(--table-bg) !important;
+  box-shadow: 0 26px 70px var(--shadow-color-strong), 0 0 0 1px color-mix(in srgb, var(--action-primary) 8%, transparent) !important;
+}
+
+.paynote-confirm-dialog .p-dialog-header {
+  padding: 1.25rem 1.35rem 0.8rem !important;
+  background: linear-gradient(180deg, var(--surface-overlay) 0%, var(--table-bg) 100%) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--action-primary) 18%, transparent);
+}
+
+.paynote-confirm-dialog .p-dialog-title {
+  color: var(--text-color) !important;
+  font-size: 1.08rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.paynote-confirm-dialog .p-dialog-header-icon {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 8px !important;
+  color: var(--action-primary-hover-from) !important;
+  background: color-mix(in srgb, var(--action-primary) 8%, transparent) !important;
+}
+
+.paynote-confirm-dialog .p-dialog-header-icon:hover {
+  color: var(--text-color) !important;
+  background: color-mix(in srgb, var(--action-primary) 16%, transparent) !important;
+}
+
+.paynote-confirm-dialog .p-dialog-content {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.95rem !important;
+  padding: 1.1rem 1.35rem 1rem !important;
+  background: var(--table-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.paynote-confirm-dialog .p-confirmdialog-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 46px;
+  width: 46px !important;
+  height: 46px !important;
+  margin: 0 !important;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--action-delete-text) 34%, transparent);
+  background: var(--action-delete-bg);
+  color: var(--action-delete-text) !important;
+  font-size: 1.25rem !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--action-delete-text) 8%, transparent);
+}
+
+.paynote-confirm-dialog .p-confirmdialog-message {
+  margin: 0 !important;
+  color: var(--text-color) !important;
+  line-height: 1.55 !important;
+}
+
+.paynote-confirm-dialog .p-dialog-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 0.65rem !important;
+  padding: 0.25rem 1.35rem 1.25rem !important;
+  background: var(--table-bg) !important;
+  border-top: 0 !important;
+}
+
+.paynote-confirm-dialog .confirm-reject-btn {
+  min-width: 112px;
+  border-color: var(--action-neutral-border) !important;
+  background: var(--action-neutral-bg) !important;
+  color: var(--action-neutral-text) !important;
+  box-shadow: none !important;
+}
+
+.paynote-confirm-dialog .confirm-reject-btn.p-button-outlined {
+  border-color: var(--action-neutral-border) !important;
+  color: var(--action-neutral-text) !important;
+}
+
+.paynote-confirm-dialog .confirm-reject-btn:hover {
+  border-color: var(--action-neutral-hover-border) !important;
+  background: var(--action-neutral-hover-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.paynote-confirm-dialog .confirm-reject-btn.p-button-outlined:hover {
+  border-color: var(--action-neutral-hover-border) !important;
+  color: var(--text-color) !important;
+}
+
+.paynote-confirm-dialog .confirm-accept-btn {
+  min-width: 112px;
+  border-color: var(--action-danger-border) !important;
+  background: linear-gradient(180deg, var(--action-danger-from) 0%, var(--action-danger-to) 100%) !important;
+  color: var(--action-danger-text) !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--action-danger-to) 18%, transparent) !important;
+}
+
+.paynote-confirm-dialog .confirm-accept-btn:hover {
+  border-color: var(--action-danger-hover-from) !important;
+  background: linear-gradient(180deg, var(--action-danger-hover-from) 0%, var(--action-danger-hover-to) 100%) !important;
+  color: var(--action-danger-text) !important;
+  transform: none !important;
+}
+
+.form-save-btn.p-button {
+  min-width: 96px;
+  border-color: var(--action-primary) !important;
+  background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+  color: var(--action-primary-text) !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--action-primary) 22%, transparent) !important;
+}
+
+.form-save-btn.p-button:enabled:hover {
+  border-color: var(--action-primary-hover-from) !important;
+  background: linear-gradient(180deg, var(--action-primary-hover-from) 0%, var(--action-primary-hover-to) 100%) !important;
+  color: var(--action-primary-text) !important;
+  transform: none !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--action-primary-hover-from) 18%, transparent), 0 10px 22px color-mix(in srgb, var(--action-primary) 18%, transparent) !important;
+}
+
+.form-save-btn.p-button:enabled:focus {
+  box-shadow: var(--focus-primary), 0 10px 22px color-mix(in srgb, var(--action-primary) 20%, transparent) !important;
+}
+
+.form-save-btn.p-button:disabled {
+  opacity: 0.55;
 }
 
 .datatable-content {
@@ -92,3 +626,4 @@
   display: flex;
   align-items: center;
 }
+

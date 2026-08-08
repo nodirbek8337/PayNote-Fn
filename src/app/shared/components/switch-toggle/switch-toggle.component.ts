@@ -3,11 +3,12 @@ import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FormsModule } from '@angular/forms';
+import { CustomActiveBadgeComponent } from '../badge/custom-active-renderer.component';
 
 @Component({
   selector: 'app-switch-toggle',
   standalone: true,
-  imports: [CommonModule, InputSwitchModule, FormsModule],
+  imports: [CommonModule, InputSwitchModule, FormsModule, CustomActiveBadgeComponent],
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SwitchToggleComponent), multi: true }
   ],
@@ -17,7 +18,9 @@ import { FormsModule } from '@angular/forms';
 export class SwitchToggleComponent implements ControlValueAccessor {
   @Input() label = 'Faol holat';
   @Input() trueLabel = 'Faol';
-  @Input() falseLabel = 'Nofaol';
+  @Input() falseLabel = 'Faol emas';
+  @Input() activeDescription = 'Yoqilgan holatda ishlaydi';
+  @Input() inactiveDescription = "O'chirilgan holatda ishlamaydi";
   @Input() showStateText = true;
   @Input() disabled = false;
 
@@ -40,4 +43,8 @@ export class SwitchToggleComponent implements ControlValueAccessor {
   }
 
   get effectiveDisabled() { return this.disabled || this.isDisabled; }
+
+  get badgeRow() {
+    return { value: this.value };
+  }
 }

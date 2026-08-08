@@ -1,27 +1,45 @@
 .switch-toggle {
+  margin-top: 4px;
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: start;
-  padding: 8px 12px;
+  justify-content: space-between;
+  padding: 0.85rem 0.95rem;
   gap: 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--field-bg);
 
-  &__label {
+  &__text {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  label {
+    color: var(--text-color);
+    font-size: 1.02rem;
+    font-weight: 800;
+    line-height: 1.1;
     user-select: none;
-    line-height: 1;
+  }
+
+  &__text span {
+    color: var(--text-color-secondary);
+    font-size: 0.92rem;
+    line-height: 1.25;
   }
 
   &__ctrl {
     display: inline-flex;
     align-items: center;
-    gap: .5rem;
-  }
-
-  &__state {
-    font-size: .875rem;
-    opacity: .9;
-
-    &.on  { color: #16a34a; }
-    &.off { color: #ef4444; }
+    flex: 0 0 auto;
   }
 }

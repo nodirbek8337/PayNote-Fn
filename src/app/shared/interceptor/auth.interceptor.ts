@@ -19,7 +19,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const toast = inject(ToastService);
 
-  const token = localStorage.getItem('payNoteToken');
+  const token = authService.getAccessToken();
   const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
   const isAuthLogin = req.url.includes('/auth/login');
 
@@ -29,7 +29,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
-          show('Kirish rad etildi. Login yoki parol notog\'ri.');
+          show('Kirish rad etildi. Username yoki parol notoʻgʻri.');
           if (!isAuthLogin) authService.logoutAndRedirect();
           break;
         case HttpStatusCode.BadRequest:

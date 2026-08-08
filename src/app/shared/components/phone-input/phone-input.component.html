@@ -11,8 +11,5 @@
     [ngClass]="{ 'is-invalid': shouldShowErrors() }"
   />
 
-  <div *ngIf="shouldShowErrors()" class="invalid-feedback mt-1">
-    <small *ngIf="control?.errors?.['required']"> Telefon raqami majburiy </small>
-    <small *ngIf="control?.errors?.['pattern']"> Noto‘g‘ri telefon raqami </small>
-  </div>
+  <app-control-error [control]="control" [messages]="errorMessages" />
 </div>

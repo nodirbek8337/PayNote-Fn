@@ -1,10 +1,31 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
-    <app-input formControlName="username" placeholder="Login"> </app-input>
-    <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol" [showClear]="false"> </app-select>
-    <app-input formControlName="password" [type]="'password'" placeholder="Parol"></app-input>
-    <app-switch-toggle formControlName="isActive" label="Holat" [trueLabel]="'Faol'" [falseLabel]="'Nofaol'" [showStateText]="true"> </app-switch-toggle>
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid users-form">
+    <div class="form-field">
+        <label>Username</label>
+        <app-input formControlName="username" placeholder="Username kiriting"> </app-input>
+    </div>
+
+    <div class="form-field">
+        <label>Rol tanlash</label>
+        <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"> </app-select>
+    </div>
+
+    <div class="form-field">
+        <label>Parol</label>
+        <app-input formControlName="password" [type]="'password'" [placeholder]="passwordLabel"></app-input>
+    </div>
+
+    <app-switch-toggle
+        formControlName="isActive"
+        label="Holati"
+        [trueLabel]="'Faol'"
+        [falseLabel]="'Faol emas'"
+        [activeDescription]="'Foydalanuvchi tizimga kira oladi'"
+        [inactiveDescription]="'Foydalanuvchi tizimga kira olmaydi'"
+        [showStateText]="true">
+    </app-switch-toggle>
+
     <div class="flex justify-end gap-2 mt-4">
-        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
-        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
+        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>
+        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="form-save-btn"></button>
     </div>
 </form>

@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
 .header-left {
@@ -21,6 +21,7 @@
 .table-refresh-btn {
     width: 40px;
     height: 40px;
+    border-radius: 8px !important;
 }
 
 .totals-chips {
@@ -45,12 +46,22 @@
     flex-wrap: wrap;
 }
 
+.header-title {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
 .quick-filter-input {
     width: 260px;
     height: 40px;
+    background: var(--field-bg);
 }
 .btn-ctl {
     height: 40px;
+    border-radius: 8px !important;
 }
 
 .cta-buttons {
@@ -63,25 +74,45 @@
 }
 
 ::ng-deep .p-datatable-table-container {
-    min-height: 63vh;
+    min-height: 72vh;
+    overflow: visible !important;
 }
 ::ng-deep .p-datatable-scrollable-body {
-    max-height: 63vh !important;
+    max-height: 72vh !important;
     overflow-y: auto;
 }
 
 ::ng-deep .datatable-content .p-datatable {
-    border: 1px solid #e5e7eb;
-    border-radius: var(--content-border-radius);
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    overflow: visible;
+    background: var(--surface-card);
+    box-shadow: none;
+}
+
+::ng-deep .datatable-content .p-datatable-table-container {
+    background: var(--table-bg);
+    border-bottom: 0;
 }
 
 ::ng-deep .sort-headers .sort-header,
 ::ng-deep .filter-headers .filter-header {
-    background-color: #f0f0f5;
-    color: #333;
+    background: linear-gradient(180deg, var(--table-head-from) 0%, var(--table-head-to) 100%);
+    color: var(--text-color);
     border: none;
     text-align: center;
     height: 52px !important;
+    font-weight: 800;
+}
+
+::ng-deep .sort-headers .sort-header:hover,
+::ng-deep .filter-headers .filter-header:hover,
+::ng-deep .datatable-content .p-datatable-thead > tr > th:hover,
+::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:hover,
+::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:not(.p-highlight):hover {
+    background: linear-gradient(180deg, var(--table-head-from) 0%, var(--table-head-to) 100%) !important;
+    color: var(--text-color) !important;
+    box-shadow: none !important;
 }
 
 ::ng-deep .datatable-content .p-datatable-thead > tr > th,
@@ -90,9 +121,31 @@
     padding: 0 8px;
 }
 
+::ng-deep .datatable-content .p-datatable-tbody > tr.p-datatable-emptymessage,
+::ng-deep .datatable-content .p-datatable-tbody > tr.p-datatable-emptymessage > td,
+::ng-deep .datatable-content .p-datatable-tbody > tr.p-datatable-loadingbody,
+::ng-deep .datatable-content .p-datatable-tbody > tr.p-datatable-loadingbody > td {
+    background-color: var(--table-bg) !important;
+    color: var(--text-color) !important;
+}
+
+::ng-deep .datatable-content .p-datatable-tbody > tr.empty-table-row,
+::ng-deep .datatable-content .p-datatable-tbody > tr.empty-table-row > td.empty-table-cell,
+::ng-deep .datatable-content .empty-table-state {
+    background-color: var(--table-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.empty-table-state {
+    min-height: 68vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .sort-headers .sort-header,
 .filter-headers .filter-header {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--surface-border);
 }
 
 .sort-headers .sort-header:first-child {
@@ -102,12 +155,11 @@
     border-top-right-radius: var(--content-border-radius);
 }
 
-.body-contents:nth-child(even) {
-    background-color: #f9f9fc;
-}
+.body-contents,
+.body-contents:nth-child(even),
 .body-contents:hover {
-    background-color: #e0e7ff;
-    cursor: pointer;
+    background-color: var(--table-bg);
+    cursor: default;
 }
 
 .body-content,
@@ -122,37 +174,42 @@
     column-gap: 0.5rem;
 }
 
-::ng-deep html.app-dark .datatable-content .p-datatable {
-    border-color: #52525b !important;
+:host ::ng-deep .action-buttons .p-button {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px !important;
 }
 
-::ng-deep html.app-dark .sort-headers .sort-header,
-::ng-deep html.app-dark .filter-headers .filter-header {
-    background-color: #1f2937 !important;
-    color: #f9fafb !important;
-    border-color: #52525b !important;
+:host ::ng-deep .action-copy {
+    color: var(--action-copy-text) !important;
 }
 
-::ng-deep html.app-dark .body-contents:nth-child(even) {
-    background-color: #374151 !important;
+:host ::ng-deep .action-copy:hover {
+    background: var(--action-copy-bg) !important;
+    color: var(--action-copy-hover) !important;
 }
-::ng-deep html.app-dark .body-contents:hover {
-    background-color: #4b5563 !important;
-    cursor: pointer;
+
+:host ::ng-deep .action-edit {
+    color: var(--action-edit-text) !important;
+}
+
+:host ::ng-deep .action-edit:hover {
+    background: var(--action-edit-bg) !important;
+    color: var(--action-edit-hover) !important;
+}
+
+:host ::ng-deep .action-delete {
+    color: var(--action-delete-text) !important;
+}
+
+:host ::ng-deep .action-delete:hover {
+    background: var(--action-delete-bg) !important;
+    color: var(--action-delete-hover) !important;
 }
 
 ::ng-deep .datatable-drawer.p-drawer {
     width: 420px;
     max-width: 100vw;
-}
-
-::ng-deep .datatable-drawer .p-drawer-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background: var(--surface-card);
-    border-bottom: 1px solid var(--surface-border);
-    padding: 0.75rem 1rem;
 }
 
 ::ng-deep .datatable-drawer .p-drawer-content {
@@ -173,12 +230,119 @@
 
 ::ng-deep .datatable-dialog .p-dialog-header {
     border-bottom: 1px solid var(--surface-border);
-    background: var(--surface-card);
+    background: var(--table-bg);
+    color: var(--text-color);
+}
+
+::ng-deep .datatable-dialog .p-dialog-title {
+    font-size: 1.18rem;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+::ng-deep .datatable-dialog .p-dialog-content {
+    font-size: 0.96rem;
 }
 
 ::ng-deep .datatable-dialog .p-dialog-footer {
     border-top: 1px solid var(--surface-border);
     background: var(--surface-card);
+}
+
+:host ::ng-deep .datatable-card.card {
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--table-bg) 97%, transparent), color-mix(in srgb, var(--field-bg) 95%, transparent)),
+        linear-gradient(135deg, var(--paynote-soft-blue), var(--paynote-soft-blue-alt));
+    border-radius: 8px;
+    padding: 1.4rem;
+}
+
+:host ::ng-deep .p-paginator {
+    background: var(--field-bg);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    color: var(--text-color-secondary);
+    overflow: visible;
+    position: relative;
+    z-index: 3;
+    min-height: 52px;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page,
+:host ::ng-deep .p-paginator .p-paginator-first,
+:host ::ng-deep .p-paginator .p-paginator-prev,
+:host ::ng-deep .p-paginator .p-paginator-next,
+:host ::ng-deep .p-paginator .p-paginator-last {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border: 1px solid transparent !important;
+    border-radius: 8px !important;
+    color: var(--text-color-secondary) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight,
+:host ::ng-deep .p-paginator .p-paginator-page.p-paginator-page-selected,
+:host ::ng-deep .p-paginator .p-paginator-page[aria-current='page'],
+:host ::ng-deep .p-select-option.p-select-option-selected {
+    background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+    border-color: var(--action-primary) !important;
+    color: var(--action-primary-text) !important;
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--action-primary) 20%, transparent) !important;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight,
+:host ::ng-deep .p-paginator .p-paginator-page.p-paginator-page-selected,
+:host ::ng-deep .p-paginator .p-paginator-page[aria-current='page'] {
+    pointer-events: none;
+    cursor: default !important;
+}
+
+:host ::ng-deep .p-paginator .p-select {
+    background: var(--field-bg) !important;
+    border-color: var(--surface-border) !important;
+    box-shadow: none !important;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+:host ::ng-deep .p-paginator .p-select:not(.p-disabled):hover {
+    background: var(--action-primary-soft) !important;
+    border-color: var(--action-primary) !important;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--action-primary) 18%, transparent), 0 10px 22px color-mix(in srgb, var(--action-primary) 12%, transparent) !important;
+}
+
+:host ::ng-deep .p-paginator .p-select.p-focus,
+:host ::ng-deep .p-paginator .p-paginator-page:focus-visible,
+:host ::ng-deep .p-paginator .p-paginator-first:focus-visible,
+:host ::ng-deep .p-paginator .p-paginator-prev:focus-visible,
+:host ::ng-deep .p-paginator .p-paginator-next:focus-visible,
+:host ::ng-deep .p-paginator .p-paginator-last:focus-visible {
+    border-color: var(--action-primary) !important;
+    box-shadow: var(--focus-primary), 0 10px 22px color-mix(in srgb, var(--action-primary) 14%, transparent) !important;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page:not(.p-disabled):hover,
+:host ::ng-deep .p-paginator .p-paginator-first:not(.p-disabled):hover,
+:host ::ng-deep .p-paginator .p-paginator-prev:not(.p-disabled):hover,
+:host ::ng-deep .p-paginator .p-paginator-next:not(.p-disabled):hover,
+:host ::ng-deep .p-paginator .p-paginator-last:not(.p-disabled):hover {
+    background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+    border-color: var(--action-primary) !important;
+    color: var(--action-primary-text) !important;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--action-primary-hover-from) 18%, transparent), 0 10px 22px color-mix(in srgb, var(--action-primary) 18%, transparent) !important;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page.p-highlight:hover,
+:host ::ng-deep .p-paginator .p-paginator-page.p-paginator-page-selected:hover,
+:host ::ng-deep .p-paginator .p-paginator-page[aria-current='page']:hover {
+    background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
+    border-color: var(--action-primary) !important;
+    color: var(--action-primary-text) !important;
 }
 
 @media (max-width: 960px) {

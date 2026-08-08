@@ -2,5 +2,9 @@
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
-    padding: 0 0.5rem !important;
+}
+
+:host ::ng-deep .money-input.is-invalid :where(.p-inputtext, .p-select) {
+    border-color: var(--error-border) !important;
+    box-shadow: 0 0 0 1px var(--error-ring);
 }

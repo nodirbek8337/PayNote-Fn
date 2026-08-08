@@ -24,21 +24,33 @@ import { RouterModule } from '@angular/router';
     </ul>
   `,
   styles: [`
+    ul {
+      background: color-mix(in srgb, var(--surface-card), transparent 8%);
+      border: 1px solid color-mix(in srgb, var(--surface-border), transparent 18%);
+      border-radius: 8px;
+      padding: 0.25rem !important;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.20);
+    }
     .topmenu-link {
-      color: var(--text-color);
+      color: var(--text-color-secondary);
       text-decoration: none;
-      transition: color .15s ease-in-out, background-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      border-radius: 8px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: color .15s ease-in-out, background-color .15s ease-in-out, box-shadow .15s ease-in-out, transform .15s ease-in-out;
     }
     .topmenu-link:hover {
-      color: var(--primary-color);
-      background-color: color-mix(in srgb, var(--primary-color), transparent 90%);
+      color: #b8c7df;
+      background-color: rgba(79, 140, 255, 0.10);
+      border-color: rgba(117, 166, 255, 0.26);
     }
 
     .topmenu-active {
-      color: var(--primary-color) !important;
-      background-color: color-mix(in srgb, var(--primary-color), transparent 85%);
-      box-shadow: inset 0 1px 0 color-mix(in srgb, var(--primary-color), transparent 70%);
-      font-weight: 600;
+      color: #b8c7df !important;
+      background: rgba(79, 140, 255, 0.14);
+      border-color: rgba(117, 166, 255, 0.44);
+      box-shadow: inset 0 0 0 1px rgba(117, 166, 255, 0.12);
+      font-weight: 800;
     }
 
     .topmenu-link:focus-visible {
@@ -52,8 +64,9 @@ export class AppTopMenu implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      { label: 'Kontaktlar', icon: 'pi pi-address-book', routerLink: ['/'],      exact: true  },
-      { label: 'Foydalanuvchilar',    icon: 'pi pi-user',         routerLink: ['/users'], exact: true  },
+      { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'], exact: true },
+      { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'], exact: true },
+      { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true },
     ];
   }
 }

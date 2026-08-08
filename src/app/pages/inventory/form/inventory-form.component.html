@@ -1,9 +1,22 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid">
-    <app-select placeholder="Mahsulotni tanlang" formControlName="productId" [options]="productOptions" [required]="true" [disabled]="!!model._id"></app-select>
-    <app-input placeholder="Soni" type="number" formControlName="amount"></app-input>
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid entity-form">
+    <div class="inventory-details">
+        <div class="detail-item">
+            <span class="detail-label">Maxsulot nomi</span>
+            <strong>{{ productName }}</strong>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Maxsulot narxi</span>
+            <strong>{{ productPrice | money: 'UZS' }}</strong>
+        </div>
+    </div>
+
+    <div class="form-field">
+        <label>Maxsulot soni</label>
+        <app-input [placeholder]="amountPlaceholder" type="number" formControlName="amount"></app-input>
+    </div>
 
     <div class="flex justify-end gap-2 mt-4">
-        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-text p-button-danger"></button>
-        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="p-button-text p-button-success"></button>
+        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>
+        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="form-save-btn"></button>
     </div>
 </form>

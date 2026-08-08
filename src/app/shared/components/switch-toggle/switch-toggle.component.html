@@ -1,5 +1,17 @@
 <div class="switch-toggle">
-  <label>{{ label }}</label>
+  <div class="switch-toggle__text">
+    <div class="switch-toggle__heading">
+      <label>{{ label }}</label>
+      <app-custom-active-badge
+        *ngIf="showStateText"
+        [rowData]="badgeRow"
+        field="value"
+        [trueLabel]="trueLabel"
+        [falseLabel]="falseLabel">
+      </app-custom-active-badge>
+    </div>
+    <span>{{ value ? activeDescription : inactiveDescription }}</span>
+  </div>
 
   <div class="switch-toggle__ctrl">
     <p-inputSwitch
@@ -7,12 +19,5 @@
       (ngModelChange)="onToggle($event)"
       [disabled]="effectiveDisabled">
     </p-inputSwitch>
-
-    <span *ngIf="showStateText"
-          class="switch-toggle__state"
-          [class.on]="value"
-          [class.off]="!value">
-      {{ value ? trueLabel : falseLabel }}
-    </span>
   </div>
 </div>

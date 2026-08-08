@@ -20,10 +20,10 @@ export class ProductsComponent {
     FormComponent = ProductsFormComponent;
 
     columnDefs = [
-        { field: 'name', header: 'Mahsulot nomi', widthClass: 'w-35p', sortable: false, placeholder: 'Mahsulot nomi' },
+        { field: 'name', header: 'Maxsulot nomi', widthClass: 'w-35p', sortable: false, placeholder: 'Maxsulot nomini kiriting' },
         {
             field: 'price',
-            header: 'Narxi',
+            header: 'Maxsulot narxi',
             widthClass: 'w-20p',
             sortable: false,
             searchable: false,

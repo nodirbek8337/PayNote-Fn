@@ -3,7 +3,6 @@ import { NgIf } from '@angular/common';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { InventoryItemsService } from '../service/inventory-items.service';
 import { InventoryFormComponent } from './form/inventory-form.component';
-import { CustomDateRendererComponent } from '../../shared/components/badge/custom-date-renderer.component';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 
 @Component({
@@ -20,23 +19,29 @@ export class InventoryComponent {
     FormComponent = InventoryFormComponent;
 
     columnDefs = [
-        { field: 'productName', header: 'Mahsulot', widthClass: 'w-30p', sortable: false, placeholder: 'Mahsulot nomi' },
         {
-            field: 'productPrice',
-            header: 'Narxi',
+            field: 'name',
+            header: 'Maxsulot nomi',
+            widthClass: 'w-30p',
+            sortable: false,
+            placeholder: 'Maxsulot nomini kiriting',
+            cellRendererFn: (row: any) => `<span>${row.name ?? row.productName ?? '-'}</span>`
+        },
+        {
+            field: 'price',
+            header: 'Maxsulot narxi',
             widthClass: 'w-20p',
             sortable: false,
             searchable: false,
-            cellRendererFn: (row: any, field: string) => `<span>${this._moneyPipe.transform(row[field], 'UZS')}</span>`
+            cellRendererFn: (row: any) => `<span>${this._moneyPipe.transform(row.price ?? row.productPrice, 'UZS')}</span>`
         },
-        { field: 'amount', header: 'Soni', widthClass: 'w-15p', sortable: false, searchable: false },
         {
-            field: 'updatedAt',
-            header: 'Yangilangan vaqt',
-            filterType: 'date-range',
-            widthClass: 'w-20p',
+            field: 'amount',
+            header: 'Maxsulot soni',
+            widthClass: 'w-15p',
             sortable: false,
-            cellRendererComponent: CustomDateRendererComponent
+            searchable: false,
+            cellRendererFn: (row: any) => `<span>${row.amount ?? 0}</span>`
         }
     ];
 }

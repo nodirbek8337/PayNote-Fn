@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="header-right">
-                    <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" placeholder="Tez qidiruv..." [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
+                    <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" placeholder="Tezkor qidiruv..." [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
                     <div class="cta-buttons">
                         <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="btn-ctl" label="Filtrlar" (click)="openDrawer()"></button>
                         <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="btn-ctl" label="Qo'shish" (click)="triggerAdd()"></button>
@@ -33,7 +33,7 @@
                 [loading]="loading"
                 [lazy]="true"
                 [scrollable]="false"
-                scrollHeight="63vh"
+                scrollHeight="72vh"
                 (onLazyLoad)="loadData($event)"
                 (onRowClick)="handleRowClick($event)"
                 class="datatable-content"
@@ -57,7 +57,7 @@
                                         [options]="col.filterOptions"
                                         optionLabel="label"
                                         optionValue="value"
-                                        placeholder="Tanlash"
+                                        placeholder="Tanlang"
                                         [style.width.%]="100"
                                         [(ngModel)]="columnFilters[col.field]"
                                         (onChange)="onColumnFilter($event.value, col.field)"
@@ -66,11 +66,11 @@
                                 </ng-container>
 
                                 <ng-container *ngIf="col.filterType === 'date-range'">
-                                    <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="'Vaqt oraliqi'"> </datepicker-range>
+                                    <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="'Vaqt oraligini tanlang'"> </datepicker-range>
                                 </ng-container>
 
                                 <ng-container *ngIf="!col.filterType || col.filterType === 'text'">
-                                    <input pInputText type="text" [style.width.%]="100" placeholder="Qidirish..." [(ngModel)]="columnFilters[col.field]" (ngModelChange)="onColumnFilter($event, col.field)" />
+                                    <input pInputText type="text" [style.width.%]="100" placeholder="Qidiring..." [(ngModel)]="columnFilters[col.field]" (ngModelChange)="onColumnFilter($event, col.field)" />
                                 </ng-container>
                             </ng-container>
                         </th>
@@ -90,27 +90,27 @@
                         </td>
                         <td *ngIf="hasAction" class="center-content">
                             <div class="action-buttons">
-                                <button *ngIf="hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text p-button-success me-2" (click)="triggerClone(rowData)" pTooltip="Nusxalash" tooltipPosition="top"></button>
-                                <button *ngIf="hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"></button>
-                                <button *ngIf="hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"></button>
+                                <button *ngIf="hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)" pTooltip="Nusxalash" tooltipPosition="top"></button>
+                                <button *ngIf="hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"></button>
+                                <button *ngIf="hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"></button>
                             </div>
                         </td>
 
                         <td *ngIf="customActions?.length || hasAction" class="actions-merged">
                             <div class="action-buttons">
                                 <datatable-actions *ngIf="customActions?.length" [row]="rowData" [actions]="customActions"></datatable-actions>
-                                <button *ngIf="hasAction && hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text p-button-success me-2" (click)="triggerClone(rowData)"></button>
-                                <button *ngIf="hasAction && hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text p-button-info me-2" (click)="triggerEdit(rowData)"></button>
-                                <button *ngIf="hasAction && hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text p-button-danger" (click)="triggerDelete(rowData)"></button>
+                                <button *ngIf="hasAction && hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)"></button>
+                                <button *ngIf="hasAction && hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)"></button>
+                                <button *ngIf="hasAction && hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
-                            <div style="height: 57vh; display: flex; justify-content: center; align-items: center">
+                    <tr class="empty-table-row">
+                        <td class="empty-table-cell" [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
+                            <div class="empty-table-state">
                                 <div class="text-center text-muted">
                                     <div><i class="pi pi-info-circle text-3xl mb-2 d-block"></i><span class="pl-1">Maʼlumot topilmadi</span></div>
                                 </div>
@@ -120,9 +120,9 @@
                 </ng-template>
 
                 <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
-                            <div style="height: 57vh; display: flex; justify-content: center; align-items: center"></div>
+                    <tr class="empty-table-row">
+                        <td class="empty-table-cell" [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
+                            <div class="empty-table-state"></div>
                         </td>
                     </tr>
                 </ng-template>
@@ -162,5 +162,5 @@
         <ng-template #formContainer></ng-template>
     </p-dialog>
 
-    <p-confirmDialog></p-confirmDialog>
+    <p-confirmDialog styleClass="paynote-confirm-dialog"></p-confirmDialog>
 </div>

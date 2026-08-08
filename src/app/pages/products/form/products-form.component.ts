@@ -15,6 +15,7 @@ export type ProductFormModel = {
     selector: 'products-form',
     standalone: true,
     templateUrl: './products-form.component.html',
+    styleUrls: ['./products-form.component.scss'],
     imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputComponent, MoneyInputComponent]
 })
 export class ProductsFormComponent implements OnInit {

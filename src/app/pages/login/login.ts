@@ -23,16 +23,16 @@ import { AuthService } from '../../shared/services/auth.service';
                             <div class="login-content">
                                 <img src="assets/images/logo.png" alt="Pay Note" width="100" />
                             </div>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Pay Note ga xush kelibsiz!</div>
+                            <div class="text-3xl font-medium mb-4" style="color: var(--text-color)">Pay Note ga xush kelibsiz!</div>
                             <span class="text-muted-color font-medium">Tizimga kirish</span>
                         </div>
 
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Login</label>
-                            <input pInputText id="email1" type="text" placeholder="Login" class="w-full md:w-[30rem] mb-4" [(ngModel)]="email" />
+                            <label for="email1" class="block text-xl font-medium mb-2" style="color: var(--text-color)">Username</label>
+                            <input pInputText id="email1" type="text" placeholder="Username kiriting" class="w-full md:w-[30rem] mb-4" [(ngModel)]="email" />
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Parol</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Parol" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                            <label for="password1" class="block font-medium text-xl mb-2" style="color: var(--text-color)">Parol</label>
+                            <p-password id="password1" [(ngModel)]="password" placeholder="Parol kiriting" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
                             <p-button (onClick)="onSubmit()" label="Tizimga kirish" styleClass="w-full mt-6"></p-button>
                         </div>
                     </div>

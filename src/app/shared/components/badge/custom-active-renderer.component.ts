@@ -8,6 +8,40 @@ import { CommonModule } from '@angular/common';
   template: `
     <span [ngClass]="badgeClass">{{ display }}</span>
   `,
+  styles: [`
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      padding: 0.32rem 0.7rem;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .status-badge.active {
+      color: var(--status-active-text);
+      background: var(--status-active-bg);
+      border: 1px solid var(--status-active-border);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--status-active-border) 18%, transparent);
+    }
+
+    .status-badge.inactive {
+      color: var(--status-inactive-text);
+      background: var(--status-inactive-bg);
+      border: 1px solid var(--status-inactive-border);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--status-inactive-border) 18%, transparent);
+    }
+
+    .status-badge.empty {
+      color: var(--status-empty-text);
+      background: var(--status-empty-bg);
+      border: 1px solid var(--status-empty-border);
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomActiveBadgeComponent {
@@ -27,7 +61,7 @@ export class CustomActiveBadgeComponent {
   get field() { return this._field; }
 
   @Input() trueLabel = 'Faol';
-  @Input() falseLabel = 'Nofaol';
+  @Input() falseLabel = 'Faol emas';
   @Input() nullLabel = '-';
 
   display = this.nullLabel;
@@ -36,7 +70,7 @@ export class CustomActiveBadgeComponent {
   private recompute() {
     if (!this._rowData || !this._field) {
       this.display = this.nullLabel;
-      this.badgeClass = 'px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 bg-gray-100';
+      this.badgeClass = 'status-badge empty';
       return;
     }
 
@@ -44,7 +78,7 @@ export class CustomActiveBadgeComponent {
 
     if (raw === null || raw === undefined) {
       this.display = this.nullLabel;
-      this.badgeClass = 'px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 bg-gray-100';
+      this.badgeClass = 'status-badge empty';
       return;
     }
 
@@ -53,8 +87,6 @@ export class CustomActiveBadgeComponent {
       : !!raw;
 
     this.display = val ? this.trueLabel : this.falseLabel;
-    this.badgeClass = val
-      ? 'px-3 py-1.5 rounded-md text-sm font-medium text-green-600 bg-green-100'
-      : 'px-3 py-1.5 rounded-md text-sm font-medium text-red-600 bg-red-100';
+    this.badgeClass = val ? 'status-badge active' : 'status-badge inactive';
   }
 }

@@ -1,6 +1,5 @@
 .app-select-container {
   width: 100%;
-  padding: 8px;
 }
 
 :host ::ng-deep .app-select .p-select,
@@ -18,11 +17,6 @@
 }
 
 .is-invalid :where(.p-select, .p-multiselect, .p-inputtext) {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 1px rgba(239, 68, 68, .15);
-}
-
-.invalid-feedback {
-  color: #ef4444;
-  font-size: 12px;
+  border-color: var(--error-border) !important;
+  box-shadow: 0 0 0 1px var(--error-ring);
 }
