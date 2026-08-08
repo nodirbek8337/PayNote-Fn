@@ -31,7 +31,7 @@ type SelectValue =
     <div class="layout-topbar">
       <div class="layout-topbar-container">
         <div>
-          <a class="layout-topbar-logo" routerLink="/">
+          <a class="layout-topbar-logo" routerLink="/sales">
             <img src="assets/images/logo.png" alt="Pay Note" class="logo-content" />
           </a>
         </div>
@@ -49,6 +49,7 @@ type SelectValue =
                 [placeholder]="userName"
                 (onChange)="onUserAction($event)"
                 styleClass="user-select"
+                panelStyleClass="user-select-panel"
               ></p-select>
             </div>
           </div>
@@ -60,14 +61,79 @@ type SelectValue =
   `,
   styles: [`
     ::ng-deep .user-select .p-select {
-      height: 40px;
+      min-width: 132px;
+      height: 44px;
       display: flex;
       align-items: center;
+      padding: 0 0.25rem 0 0.55rem;
+      border-radius: 10px;
+      border: 1px solid color-mix(in srgb, var(--action-primary) 38%, var(--surface-border)) !important;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 68%, transparent) 0%, color-mix(in srgb, var(--table-bg) 90%, transparent) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 10px 20px color-mix(in srgb, var(--action-primary) 10%, transparent);
+      transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+    }
+    ::ng-deep .user-select .p-select:hover {
+      border-color: color-mix(in srgb, var(--action-primary-hover-from) 52%, var(--surface-border)) !important;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 76%, transparent) 0%, color-mix(in srgb, var(--table-bg) 94%, transparent) 100%) !important;
+    }
+    ::ng-deep .user-select .p-select.p-focus,
+    ::ng-deep .user-select .p-select:focus-within {
+      border-color: color-mix(in srgb, var(--action-primary-hover-from) 78%, white 8%) !important;
+      box-shadow: var(--focus-primary), 0 10px 20px color-mix(in srgb, var(--action-primary) 14%, transparent) !important;
     }
     ::ng-deep .user-select .p-select-label {
       display: flex;
       align-items: center;
       height: 100%;
+      color: var(--text-color);
+      font-weight: 600;
+      padding-right: 0.35rem;
+    }
+    ::ng-deep .user-select .p-select-dropdown {
+      width: 2rem;
+      color: var(--text-color-secondary);
+    }
+    ::ng-deep .user-select .p-select-dropdown .pi {
+      font-size: 0.85rem;
+    }
+    ::ng-deep .user-select-panel {
+      min-width: 132px !important;
+      border-radius: 10px !important;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--action-primary) 26%, var(--surface-border)) !important;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 54%, transparent) 0%, color-mix(in srgb, var(--table-bg) 96%, transparent) 100%) !important;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34) !important;
+    }
+    ::ng-deep .user-select-panel .p-select-option {
+      padding: 0.8rem 0.95rem !important;
+      font-weight: 600;
+    }
+    ::ng-deep .user-select-panel .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
+      background: color-mix(in srgb, var(--action-primary-soft) 90%, transparent) !important;
+      color: var(--text-color) !important;
+    }
+
+    @media (max-width: 991px) {
+      ::ng-deep .user-select .p-select {
+        min-width: 148px;
+        max-width: 46vw;
+      }
+
+      ::ng-deep .user-select-panel {
+        min-width: min(260px, calc(100vw - 24px)) !important;
+      }
+    }
+
+    @media (max-width: 420px) {
+      ::ng-deep .user-select .p-select {
+        min-width: 132px;
+        height: 40px;
+      }
     }
   `]
 })
@@ -83,6 +149,8 @@ export class AppTopbar implements OnInit, OnDestroy {
   private mobileNavOptions = [
     { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
     { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
+    { label: 'Tarix', value: { type: 'route', url: '/sales-history' } as SelectValue },
+    { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue },
     { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
   ];
 
@@ -105,7 +173,7 @@ export class AppTopbar implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (typeof window !== 'undefined' && 'matchMedia' in window) {
-      this.mediaQuery = window.matchMedia('(max-width: 540px)');
+      this.mediaQuery = window.matchMedia('(max-width: 991px)');
       this.isXs = this.mediaQuery.matches;
 
       this.mqListener = (e: MediaQueryListEvent) => {

@@ -1,0 +1,131 @@
+<section class="sales-page">
+    <div class="sales-layout">
+        <section class="products-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Maxsulotlar</h2>
+                    <span>{{ filteredProducts.length }} ta maxsulot</span>
+                </div>
+                <label class="sales-search">
+                    <i class="pi pi-search"></i>
+                    <input
+                        pInputText
+                        [ngModel]="search"
+                        (ngModelChange)="onSearchChange($event)"
+                        placeholder="Nomi yoki narxi bo'yicha qidiring..."
+                    />
+                </label>
+            </div>
+
+            <div class="products-scroll">
+                <div class="products-grid" *ngIf="filteredProducts.length; else emptyProducts">
+                    <button
+                        type="button"
+                        class="product-card"
+                        *ngFor="let product of filteredProducts; trackBy: trackProduct"
+                        [class.is-in-stock]="getAvailableAmount(product) > 0"
+                        [class.is-out-of-stock]="getAvailableAmount(product) <= 0"
+                        [disabled]="getAvailableAmount(product) <= 0"
+                        (click)="addToCart(product)"
+                    >
+                        <span class="product-name">{{ product.name }}</span>
+                        <strong>{{ product.price | money: 'UZS' }}</strong>
+                        <span class="product-footer">
+                            <span class="product-stock" [class.is-empty]="getAvailableAmount(product) <= 0">
+                                {{ getAvailableAmount(product) <= 0 ? 'Tugagan' : getAvailableAmount(product) + ' ta mavjud' }}
+                            </span>
+                            <i class="pi" [ngClass]="getAvailableAmount(product) <= 0 ? 'pi-ban' : 'pi-plus'"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <ng-template #emptyProducts>
+                    <div class="empty-products">
+                        <span class="empty-icon"><i class="pi pi-search"></i></span>
+                        <strong>{{ loading ? 'Yuklanmoqda...' : "Maxsulot topilmadi" }}</strong>
+                        <small *ngIf="!loading">Qidiruv so'zini o'zgartirib ko'ring</small>
+                    </div>
+                </ng-template>
+            </div>
+        </section>
+
+        <aside class="cart-panel">
+            <nav class="cart-tabs" aria-label="Savatlar">
+                <button
+                    type="button"
+                    *ngFor="let cartId of cartIds"
+                    [class.is-active]="activeCart === cartId"
+                    (click)="setActiveCart(cartId)"
+                >
+                    <span>Savat {{ cartId }}</span>
+                    <b>{{ getCartCount(cartId) }}</b>
+                </button>
+            </nav>
+
+            <div class="cart-summary">
+                <div>
+                    <span>Jami summa</span>
+                    <strong>{{ getCartTotal(activeCart) | money: 'UZS' }}</strong>
+                </div>
+                <span class="cart-count">{{ getCartCount(activeCart) }} ta</span>
+            </div>
+
+            <div class="cart-items" *ngIf="carts[activeCart].length; else emptyCart">
+                <article class="cart-item" *ngFor="let item of carts[activeCart]; trackBy: trackCartItem">
+                    <div class="cart-item-info">
+                        <strong>{{ item.name }}</strong>
+                        <span>{{ item.price | money: 'UZS' }}</span>
+                    </div>
+
+                    <div class="quantity-controls">
+                        <button type="button" (click)="decreaseItem(activeCart, item)" aria-label="Kamaytirish">
+                            <i class="pi pi-minus"></i>
+                        </button>
+                        <b>{{ item.quantity }}</b>
+                        <button type="button" (click)="increaseItem(activeCart, item)" aria-label="Ko'paytirish">
+                            <i class="pi pi-plus"></i>
+                        </button>
+                    </div>
+
+                    <strong class="item-total">{{ item.price * item.quantity | money: 'UZS' }}</strong>
+                    <button type="button" class="remove-item" (click)="removeItem(activeCart, item.productId)" aria-label="O'chirish">
+                        <i class="pi pi-trash"></i>
+                    </button>
+                </article>
+            </div>
+
+            <ng-template #emptyCart>
+                <div class="empty-cart">
+                    <span class="empty-icon"><i class="pi pi-shopping-bag"></i></span>
+                    <strong>Savat bo'sh</strong>
+                    <small>Chap tomondan maxsulot tanlang</small>
+                </div>
+            </ng-template>
+
+            <footer class="cart-actions">
+                <button
+                    type="button"
+                    class="clear-btn"
+                    [disabled]="!carts[activeCart].length || sellingCart === activeCart"
+                    (click)="$any(this).confirmClearCart(activeCart)"
+                >
+                    <i class="pi pi-trash"></i>
+                    Tozalash
+                </button>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-check"
+                    label="Sotuvni yakunlash"
+                    class="sold-btn"
+                    [loading]="sellingCart === activeCart"
+                    [disabled]="!carts[activeCart].length || sellingCart === activeCart"
+                    (click)="$any(this).confirmSellCart(activeCart)"
+                ></button>
+            </footer>
+        </aside>
+    </div>
+
+    <p-confirmDialog key="sales-clear" styleClass="paynote-confirm-dialog"></p-confirmDialog>
+    <p-confirmDialog key="sales-complete" styleClass="paynote-confirm-dialog sales-complete-confirm"></p-confirmDialog>
+</section>

@@ -331,9 +331,10 @@ html.app-dark .p-password input {
 }
 
 .layout-topbar {
-  background: color-mix(in srgb, var(--surface-ground), transparent 4%) !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-border), transparent 10%);
-  box-shadow: 0 10px 32px color-mix(in srgb, var(--shadow-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 74%, #0d1b2f 26%) 0%, #0d1b2f 100%) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border), transparent 4%);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--shadow-color) 58%, transparent);
   backdrop-filter: blur(14px);
 }
 
@@ -524,6 +525,13 @@ html.app-dark .p-password input {
   transform: none !important;
 }
 
+.sales-complete-confirm .p-confirmdialog-icon {
+  border-color: color-mix(in srgb, var(--action-primary) 42%, transparent) !important;
+  background: var(--action-primary-soft) !important;
+  color: var(--action-primary-from) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--action-primary) 10%, transparent) !important;
+}
+
 .form-save-btn.p-button {
   min-width: 96px;
   border-color: var(--action-primary) !important;
@@ -625,5 +633,188 @@ html.app-dark .p-password input {
   padding: 0 12px !important;
   display: flex;
   align-items: center;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+@media (max-width: 760px) {
+  prime-datatable .datatable-card.card {
+    padding: 0.75rem !important;
+  }
+
+  prime-datatable .header-content {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  prime-datatable .header-left,
+  prime-datatable .header-right {
+    display: flex;
+    width: 100%;
+  }
+
+  prime-datatable .header-left {
+    justify-content: space-between;
+  }
+
+  prime-datatable .header-right {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  prime-datatable .header-title {
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  prime-datatable .quick-filter-input {
+    grid-area: auto;
+    min-width: 0;
+  }
+
+  prime-datatable .cta-buttons {
+    grid-area: auto;
+  }
+
+  prime-datatable .p-datatable-table-container,
+  prime-datatable .p-datatable-scrollable-body {
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  prime-datatable .empty-table-state {
+    min-height: 42vh;
+  }
+
+  prime-datatable .p-datatable-tbody > tr {
+    margin-bottom: 0.65rem;
+    border-radius: 8px;
+    background: var(--table-bg);
+  }
+
+  prime-datatable .p-paginator {
+    min-height: 48px;
+    padding: 0.35rem 0.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1rem;
+  }
+
+  prime-datatable .p-paginator-page,
+  prime-datatable .p-paginator-first,
+  prime-datatable .p-paginator-prev,
+  prime-datatable .p-paginator-next,
+  prime-datatable .p-paginator-last {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .p-dialog,
+  .paynote-confirm-dialog.p-dialog {
+    width: calc(100vw - 1rem) !important;
+    max-width: calc(100vw - 1rem) !important;
+    max-height: calc(100dvh - 1rem) !important;
+    margin: 0.5rem !important;
+  }
+
+  .p-dialog .p-dialog-header {
+    padding: 0.9rem 1rem !important;
+  }
+
+  .p-dialog .p-dialog-content {
+    padding: 0.8rem 1rem !important;
+    overflow-y: auto;
+  }
+
+  .paynote-confirm-dialog .p-dialog-content {
+    padding: 0.9rem 1rem !important;
+  }
+
+  .paynote-confirm-dialog .p-dialog-footer {
+    padding: 0.25rem 1rem 1rem !important;
+  }
+
+  .datatable-dialog form > .flex.justify-end {
+    flex-wrap: wrap;
+  }
+
+  .datatable-dialog form > .flex.justify-end .p-button {
+    flex: 1 1 120px;
+  }
+
+  .datatable-drawer.p-drawer {
+    width: min(100vw, 420px) !important;
+  }
+
+  .p-toast {
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 420px) {
+  prime-datatable .header-right {
+    grid-template-columns: 1fr;
+  }
+
+  prime-datatable .cta-buttons {
+    width: 100%;
+  }
+
+  prime-datatable .cta-buttons .btn-ctl {
+    flex: 1 1 0;
+    width: auto;
+    padding-inline: 0.65rem;
+  }
+
+  prime-datatable .cta-buttons .p-button-label {
+    display: inline;
+    font-size: 0.82rem;
+  }
+
+  prime-datatable .p-datatable-tbody > tr > td {
+    padding: 0.55rem 0.7rem;
+  }
+
+  prime-datatable .p-paginator-first,
+  prime-datatable .p-paginator-last {
+    display: none;
+  }
+
+  .paynote-confirm-dialog .p-dialog-content {
+    gap: 0.7rem !important;
+  }
+
+  .paynote-confirm-dialog .p-confirmdialog-icon {
+    flex-basis: 40px;
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .paynote-confirm-dialog .p-dialog-footer {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .paynote-confirm-dialog .confirm-reject-btn,
+  .paynote-confirm-dialog .confirm-accept-btn {
+    min-width: 0;
+    width: 100%;
+  }
 }
 

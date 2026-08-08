@@ -25,11 +25,11 @@ import { RouterModule } from '@angular/router';
   `,
   styles: [`
     ul {
-      background: color-mix(in srgb, var(--surface-card), transparent 8%);
-      border: 1px solid color-mix(in srgb, var(--surface-border), transparent 18%);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 70%, #0d1b2f 30%) 0%, color-mix(in srgb, #0d1b2f 88%, var(--action-primary) 12%) 100%);
+      border: 1px solid color-mix(in srgb, var(--surface-border), transparent 8%);
       border-radius: 8px;
       padding: 0.25rem !important;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.20);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
     }
     .topmenu-link {
       color: var(--text-color-secondary);
@@ -66,6 +66,8 @@ export class AppTopMenu implements OnInit {
     this.items = [
       { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'], exact: true },
       { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'], exact: true },
+      { label: 'Tarix', icon: 'pi pi-history', routerLink: ['/sales-history'], exact: true },
+      { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: ['/sales'], exact: true },
       { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true },
     ];
   }

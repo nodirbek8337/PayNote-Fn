@@ -15,10 +15,10 @@ import { AuthService } from '../../shared/services/auth.service';
     standalone: true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule],
     template: `
-        <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
-            <div class="flex flex-col items-center justify-center">
-                <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                    <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
+        <div class="login-page">
+            <div class="login-shell">
+                <div class="login-frame">
+                    <div class="login-card">
                         <div class="text-center mb-8">
                             <div class="login-content">
                                 <img src="assets/images/logo.png" alt="Pay Note" width="100" />
@@ -29,7 +29,7 @@ import { AuthService } from '../../shared/services/auth.service';
 
                         <div>
                             <label for="email1" class="block text-xl font-medium mb-2" style="color: var(--text-color)">Username</label>
-                            <input pInputText id="email1" type="text" placeholder="Username kiriting" class="w-full md:w-[30rem] mb-4" [(ngModel)]="email" />
+                            <input pInputText id="email1" type="text" placeholder="Username kiriting" class="w-full mb-4" [(ngModel)]="email" />
 
                             <label for="password1" class="block font-medium text-xl mb-2" style="color: var(--text-color)">Parol</label>
                             <p-password id="password1" [(ngModel)]="password" placeholder="Parol kiriting" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
@@ -39,7 +39,53 @@ import { AuthService } from '../../shared/services/auth.service';
                 </div>
             </div>
         </div>
-    `
+    `,
+    styles: [`
+        .login-page {
+            min-height: 100dvh;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            overflow: hidden;
+            background: var(--surface-ground);
+        }
+
+        .login-shell {
+            width: min(100%, 560px);
+        }
+
+        .login-frame {
+            padding: 0.3rem;
+            border-radius: 20px;
+            background: linear-gradient(180deg, var(--action-primary) 0%, transparent 38%);
+        }
+
+        .login-card {
+            width: 100%;
+            padding: 3.5rem 4rem;
+            border-radius: 18px;
+            background: var(--surface-card);
+            border: 1px solid var(--surface-border);
+            box-shadow: var(--paynote-shadow);
+        }
+
+        @media (max-width: 600px) {
+            .login-page {
+                align-items: center;
+                padding: 0.75rem;
+            }
+
+            .login-card {
+                padding: 2rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .login-card {
+                padding: 1.5rem 1rem;
+            }
+        }
+    `]
 })
 export class LoginComponenet {
     email: string = '';

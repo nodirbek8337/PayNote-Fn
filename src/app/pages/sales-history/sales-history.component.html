@@ -1,0 +1,56 @@
+<prime-datatable
+    [_defaultService]="_defaultService"
+    [tableTitle]="'Tarix'"
+    [columnDefs]="columnDefs"
+    [customActions]="customActions"
+    [hasCreate]="false"
+    [hasAction]="true"
+    [hasClone]="false"
+    [hasEdit]="false"
+    [hasDelete]="true"
+    [hasRefreshBtn]="true"
+    [showQuickFilterTop]="true"
+    [showDrawerFilters]="false"
+></prime-datatable>
+
+<p-dialog
+    [(visible)]="detailsVisible"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    header="Sotuv tafsilotlari"
+    [style]="{ width: '720px', maxWidth: '95vw' }"
+    styleClass="sales-history-dialog"
+>
+    <div class="sale-summary" *ngIf="selectedSale">
+        <div>
+            <span>Kim sotdi</span>
+            <strong>{{ selectedSale.soldByUsername || '-' }}</strong>
+        </div>
+        <div>
+            <span>Sotilgan vaqt</span>
+            <strong>{{ formatDate(selectedSale.createdAt) }}</strong>
+        </div>
+        <div>
+            <span>Umumiy narxi</span>
+            <strong>{{ selectedTotal | money: 'UZS' }}</strong>
+        </div>
+    </div>
+
+    <div class="sale-items">
+        <div class="sale-item sale-item-head">
+            <span>Maxsulot</span>
+            <span>Narxi</span>
+            <span>Soni</span>
+            <span>Jami</span>
+        </div>
+
+        <div class="sale-item" *ngFor="let item of selectedItems">
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.price | money: 'UZS' }}</span>
+            <span>{{ item.amount }}</span>
+            <strong>{{ item.total | money: 'UZS' }}</strong>
+        </div>
+    </div>
+</p-dialog>

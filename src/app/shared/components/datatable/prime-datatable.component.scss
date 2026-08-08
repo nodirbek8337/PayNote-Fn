@@ -355,46 +355,7 @@
 }
 
 @media (max-width: 760px) {
-    .header-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            'btnsLeft btnsRight'
-            'search    search'
-            'totals    totals';
-        column-gap: 8px;
-        row-gap: 8px;
-        align-items: center;
-    }
-
-    .header-left,
-    .header-right {
-        display: contents;
-    }
-
-    .header-actions {
-        grid-area: btnsLeft;
-        display: flex;
-        gap: 6px;
-        justify-content: flex-start;
-    }
-
-    .cta-buttons {
-        grid-area: btnsRight;
-        display: flex;
-        gap: 6px;
-        justify-content: flex-end;
-    }
-
-    .quick-filter-input {
-        grid-area: search;
-        width: 100%;
-        height: 36px;
-    }
-
     .totals-chips {
-        grid-area: totals;
-        display: flex;
         gap: 6px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -403,20 +364,12 @@
         white-space: nowrap;
     }
 
-    .header-title {
-        display: none;
-    }
-
     .btn-ctl,
     .table-refresh-btn {
         height: 36px;
         width: 36px;
         padding: 0;
     }
-    :host ::ng-deep .btn-ctl .p-button-label {
-        display: none;
-    }
-
     :host ::ng-deep .p-datatable thead {
         display: none !important;
     }

@@ -97,7 +97,7 @@
 
 @media (max-width: 991px) {
     .layout-topbar {
-        padding: 0 2rem;
+        padding: 0 1rem;
 
         .layout-topbar-menu-button {
             display: inline-flex;
@@ -106,11 +106,28 @@
         .layout-topbar-menu-content {
             flex-direction: column;
         }
+
+        .menu-n {
+            display: none !important;
+        }
+
+        .layout-topbar-logo {
+            padding-left: 0;
+        }
     }
 }
 
-@media (max-width: 540px) {
-    .menu-n {
-        display: none !important;
+@media (max-width: 420px) {
+    .layout-topbar {
+        padding: 0 0.75rem;
+
+        .layout-topbar-logo img {
+            max-width: 82px;
+            object-fit: contain;
+        }
+
+        .layout-topbar-actions {
+            column-gap: 0.5rem;
+        }
     }
 }

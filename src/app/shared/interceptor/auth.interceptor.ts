@@ -19,9 +19,11 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const toast = inject(ToastService);
 
-  const token = authService.getAccessToken();
-  const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
   const isAuthLogin = req.url.includes('/auth/login');
+  const token = authService.getAccessToken();
+  const authReq = token && !isAuthLogin
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : req;
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -29,26 +31,30 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
-          show('Kirish rad etildi. Username yoki parol notoʻgʻri.');
-          if (!isAuthLogin) authService.logoutAndRedirect();
+          if (isAuthLogin) {
+            show("Kirish rad etildi. Username yoki parol noto'g'ri.");
+          } else {
+            show('Sessiya muddati tugagan. Qaytadan login qiling.');
+            authService.logoutAndRedirect();
+          }
           break;
         case HttpStatusCode.BadRequest:
-          show('Notog\'ri sorov. Ma\'lumotlarni tekshirib qayta urinib ko\'ring.');
+          show("Noto'g'ri so'rov. Ma'lumotlarni tekshirib qayta urinib ko'ring.");
           break;
         case HttpStatusCode.Forbidden:
-          show('Ruxsat yo\'q. Ushbu amalni bajarishga huquqingiz yo\'q.');
+          show("Ruxsat yo'q. Ushbu amalni bajarishga huquqingiz yo'q.");
           break;
         case HttpStatusCode.NotFound:
-          show('Topilmadi. So\'ralgan ma\'lumot mavjud emas.');
+          show("Topilmadi. So'ralgan ma'lumot mavjud emas.");
           break;
         case HttpStatusCode.Conflict:
           show('Nizoli holat. Ma\'lumot allaqachon mavjud.');
           break;
         case HttpStatusCode.UnprocessableEntity:
-          show('Ma\'lumotlar notog\'ri to\'ldirilgan.');
+          show("Ma'lumotlar noto'g'ri to'ldirilgan.");
           break;
         case 429:
-          show('Juda ko\'p sorov yuborildi. Birozdan so\'ng urinib ko\'ring.');
+          show("Juda ko'p so'rov yuborildi. Birozdan so'ng urinib ko'ring.");
           break;
         case HttpStatusCode.InternalServerError:
           show('Serverda xatolik yuz berdi.');
@@ -63,10 +69,10 @@ export const AuthInterceptor: HttpInterceptorFn = (
           show('Tarmoq kechikishi. Internetni tekshiring.');
           break;
         case 0:
-          show('Internet aloqasi yo\'q. Ulab qayta urinib ko\'ring.');
+          show("Internet aloqasi yo'q. Ulab qayta urinib ko'ring.");
           break;
         default:
-          show('Noma\'lum xatolik yuz berdi.');
+          show("Noma'lum xatolik yuz berdi.");
           break;
       }
 

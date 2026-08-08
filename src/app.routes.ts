@@ -3,6 +3,8 @@ import { AppLayout } from './app/layout/component/app.layout';
 import { UsersComponent } from './app/pages/users/users.component';
 import { InventoryComponent } from './app/pages/inventory/inventory.component';
 import { ProductsComponent } from './app/pages/products/products.component';
+import { SalesComponent } from './app/pages/sales/sales.component';
+import { SalesHistoryComponent } from './app/pages/sales-history/sales-history.component';
 import { LoginComponenet } from './app/pages/login/login';
 import { AuthGuard } from './app/shared/guards/auth.guard';
 import { GuestGuard } from './app/shared/guards/guest.guard';
@@ -17,6 +19,8 @@ export const appRoutes: Routes = [
       { path: '', redirectTo: 'inventory', pathMatch: 'full' },
       { path: 'inventory', component: InventoryComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'sales-history', component: SalesHistoryComponent },
+      { path: 'sales', component: SalesComponent },
       { path: 'users', component: UsersComponent },
     ]
   },

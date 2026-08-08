@@ -52,7 +52,7 @@ export class AuthService {
             })
         );
         this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
-        this.router.navigateByUrl('/', { replaceUrl: true });
+        this.router.navigateByUrl('/sales', { replaceUrl: true });
         });
     }
 

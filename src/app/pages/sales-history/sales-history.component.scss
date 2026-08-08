@@ -1,0 +1,90 @@
+.sale-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+
+    div {
+        padding: 0.85rem;
+        border: 1px solid var(--surface-border);
+        border-radius: 8px;
+        background: #0d1b2f;
+    }
+
+    span,
+    strong {
+        display: block;
+    }
+
+    span {
+        margin-bottom: 0.35rem;
+        color: var(--text-color-secondary);
+        font-weight: 700;
+    }
+}
+
+.sale-items {
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+}
+
+.sale-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) 1fr 0.65fr 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 0.9rem;
+    background: #0d1b2f;
+    border-bottom: 1px solid color-mix(in srgb, var(--surface-border), transparent 20%);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.sale-item-head {
+    background: linear-gradient(180deg, var(--table-head-from) 0%, var(--table-head-to) 100%);
+    color: var(--text-color);
+    font-weight: 800;
+}
+
+@media (max-width: 680px) {
+    .sale-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .sale-item {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+        padding: 0.75rem;
+    }
+
+    .sale-item-head {
+        display: none;
+    }
+
+    .sale-item > *::before {
+        display: block;
+        margin-bottom: 0.15rem;
+        color: var(--text-color-secondary);
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .sale-item > *:nth-child(1)::before {
+        content: 'Maxsulot';
+    }
+
+    .sale-item > *:nth-child(2)::before {
+        content: 'Narxi';
+    }
+
+    .sale-item > *:nth-child(3)::before {
+        content: 'Soni';
+    }
+
+    .sale-item > *:nth-child(4)::before {
+        content: 'Jami';
+    }
+}
