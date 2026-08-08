@@ -147,10 +147,10 @@ export class AppTopbar implements OnInit, OnDestroy {
   ];
 
   private mobileNavOptions = [
+    { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue },
     { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
     { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
     { label: 'Tarix', value: { type: 'route', url: '/sales-history' } as SelectValue },
-    { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue },
     { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
   ];
 

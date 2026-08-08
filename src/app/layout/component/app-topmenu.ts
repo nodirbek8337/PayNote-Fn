@@ -64,10 +64,10 @@ export class AppTopMenu implements OnInit {
 
   ngOnInit(): void {
     this.items = [
+      { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: ['/sales'], exact: true },
       { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'], exact: true },
       { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'], exact: true },
       { label: 'Tarix', icon: 'pi pi-history', routerLink: ['/sales-history'], exact: true },
-      { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: ['/sales'], exact: true },
       { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true },
     ];
   }
