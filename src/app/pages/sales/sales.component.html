@@ -127,5 +127,75 @@
     </div>
 
     <p-confirmDialog key="sales-clear" styleClass="paynote-confirm-dialog"></p-confirmDialog>
-    <p-confirmDialog key="sales-complete" styleClass="paynote-confirm-dialog sales-complete-confirm"></p-confirmDialog>
+
+    <p-dialog
+        [(visible)]="saleDialogVisible"
+        [modal]="true"
+        [draggable]="false"
+        [resizable]="false"
+        [closable]="sellingCart === null"
+        [closeOnEscape]="sellingCart === null"
+        header="Sotuvni yakunlash"
+        [style]="{ width: '520px', maxWidth: '95vw' }"
+        styleClass="sales-payment-dialog"
+        (onHide)="onSaleDialogHide()"
+    >
+        <div class="sale-confirm-summary">
+            <span>Savat {{ saleCartId }}</span>
+            <strong>{{ saleCartTotal | money: 'UZS' }}</strong>
+            <small>{{ saleCartCount }} ta maxsulot</small>
+        </div>
+
+        <fieldset class="payment-methods">
+            <legend>To'lov turi <b>*</b></legend>
+            <label
+                *ngFor="let option of paymentOptions"
+                class="payment-option"
+                [class.is-selected]="paymentMethod === option.value"
+            >
+                <input type="radio" name="paymentMethod" [value]="option.value" [(ngModel)]="paymentMethod" />
+                <i class="pi" [ngClass]="option.icon"></i>
+                <span>{{ option.label }}</span>
+            </label>
+        </fieldset>
+        <small class="field-error" *ngIf="saleFormSubmitted && !paymentMethod">To'lov turini tanlang</small>
+
+        <label class="sale-note-field">
+            <span>Eslatma <b *ngIf="paymentMethod === 'OTHER'">*</b></span>
+            <textarea
+                [(ngModel)]="saleNote"
+                rows="3"
+                maxlength="500"
+                [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'"
+                [disabled]="sellingCart !== null"
+            ></textarea>
+            <small>{{ saleNote.length }}/500</small>
+        </label>
+        <small class="field-hint" *ngIf="paymentMethod === 'OTHER'">
+            Naqd yoki karta orqali to'lanmagan sotuv kimga yoki qaysi xonaga berilganini yozing.
+        </small>
+        <small class="field-error" *ngIf="saleFormSubmitted && paymentMethod === 'OTHER' && !saleNote.trim()">
+            Boshqa usul tanlanganda eslatma majburiy
+        </small>
+
+        <div class="sale-dialog-actions">
+            <button
+                pButton
+                type="button"
+                label="Bekor qilish"
+                class="p-button-outlined"
+                [disabled]="sellingCart !== null"
+                (click)="saleDialogVisible = false"
+            ></button>
+            <button
+                pButton
+                type="button"
+                icon="pi pi-check"
+                label="Tasdiqlash"
+                class="form-save-btn"
+                [loading]="sellingCart !== null"
+                (click)="submitSale()"
+            ></button>
+        </div>
+    </p-dialog>
 </section>

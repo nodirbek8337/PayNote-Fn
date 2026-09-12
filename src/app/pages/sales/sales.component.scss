@@ -473,6 +473,147 @@
     min-width: 180px;
 }
 
+:host ::ng-deep .sales-payment-dialog {
+    .p-dialog-content {
+        display: grid;
+        gap: 1rem;
+    }
+}
+
+.sale-confirm-summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 1rem;
+    padding: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--action-primary) 28%, var(--surface-border));
+    border-radius: 8px;
+    background: var(--table-head-to);
+
+    span,
+    small {
+        color: var(--text-color-secondary);
+    }
+
+    strong {
+        grid-row: span 2;
+        align-self: center;
+        color: var(--action-primary-from);
+        font-size: 1.15rem;
+    }
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    legend {
+        grid-column: 1 / -1;
+        margin-bottom: 0.1rem;
+        color: var(--text-color);
+        font-weight: 800;
+    }
+
+    b {
+        color: var(--action-delete-text);
+    }
+}
+
+.payment-option {
+    min-height: 74px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--field-bg);
+    color: var(--text-color-secondary);
+    cursor: pointer;
+    font-weight: 800;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &:hover,
+    &:focus-within,
+    &.is-selected {
+        border-color: var(--action-primary-from);
+        background: var(--action-primary-soft);
+        color: var(--action-primary-from);
+    }
+
+    &:focus-within {
+        box-shadow: var(--focus-primary);
+    }
+}
+
+.sale-note-field {
+    display: grid;
+    gap: 0.4rem;
+
+    > span {
+        color: var(--text-color);
+        font-weight: 800;
+    }
+
+    b {
+        color: var(--action-delete-text);
+    }
+
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 0.7rem 0.8rem;
+        border: 1px solid var(--surface-border);
+        border-radius: 8px;
+        background: var(--field-bg);
+        color: var(--text-color);
+        font: inherit;
+
+        &:focus {
+            border-color: var(--action-primary-from);
+            box-shadow: var(--focus-primary);
+            outline: none;
+        }
+    }
+
+    > small {
+        justify-self: end;
+        color: var(--text-color-secondary);
+    }
+}
+
+.field-hint,
+.field-error {
+    display: block;
+    margin-top: -0.65rem;
+}
+
+.field-hint {
+    color: var(--text-color-secondary);
+}
+
+.field-error {
+    color: var(--action-delete-text);
+    font-weight: 700;
+}
+
+.sale-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.7rem;
+}
+
 @media (max-width: 1180px) {
     .sales-page {
         height: auto;
@@ -565,6 +706,15 @@
     .sold-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-option {
+        min-height: 48px;
+        flex-direction: row;
     }
 }
 

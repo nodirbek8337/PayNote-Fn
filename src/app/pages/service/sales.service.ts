@@ -16,6 +16,8 @@ export type SalePayloadItem = {
     amount: number;
 };
 
+export type PaymentMethod = 'CASH' | 'CARD' | 'OTHER';
+
 export type SalesPeriodSummary = {
     salesCount: number;
     itemCount: number;
@@ -48,10 +50,12 @@ export class SalesService {
         return this.http.get<{ success: boolean; data: MySalesSummary }>(`${this.baseUrl}/api/sales/me/summary`);
     }
 
-    sell(items: SalePayloadItem[]): Observable<any> {
+    sell(items: SalePayloadItem[], paymentMethod: PaymentMethod, note?: string): Observable<any> {
         return this.http.post(`${this.baseUrl}/api/sales`, {
             requestFrom: 'sales',
-            items
+            items,
+            paymentMethod,
+            ...(note?.trim() ? { note: note.trim() } : {})
         });
     }
 }

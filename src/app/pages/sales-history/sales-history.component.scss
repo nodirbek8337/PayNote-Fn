@@ -23,6 +23,10 @@
     }
 }
 
+.sale-note-summary {
+    grid-column: span 2;
+}
+
 .sale-items {
     overflow: hidden;
     border: 1px solid var(--surface-border);
@@ -52,6 +56,10 @@
 @media (max-width: 680px) {
     .sale-summary {
         grid-template-columns: 1fr;
+    }
+
+    .sale-note-summary {
+        grid-column: auto;
     }
 
     .sale-item {

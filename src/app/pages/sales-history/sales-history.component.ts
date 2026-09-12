@@ -36,21 +36,44 @@ export class SalesHistoryComponent {
             header: 'Maxsulotlar',
             widthClass: 'w-25p',
             sortable: false,
+            searchable: false,
             cellRendererFn: (row: any) => `<span>${this.formatItemsSummary(row.items)}</span>`
         },
         {
             field: 'total',
             header: 'Umumiy narxi',
-            widthClass: 'w-20p',
+            widthClass: 'w-15p',
             sortable: false,
             searchable: false,
             cellRendererFn: (row: any) => `<strong>${this.moneyPipe.transform(row.total, 'UZS')}</strong>`
         },
         {
-            field: 'soldByUsername',
-            header: 'Kim sotdi',
+            field: 'paymentMethod',
+            header: "To'lov turi",
+            widthClass: 'w-15p',
+            sortable: false,
+            filterType: 'dropdown',
+            filterOptions: [
+                { label: "Naqd to'lov", value: 'CASH' },
+                { label: 'Karta orqali', value: 'CARD' },
+                { label: 'Boshqa usul', value: 'OTHER' }
+            ],
+            cellRendererFn: (row: any) => `<span>${this.getPaymentMethodLabel(row.paymentMethod)}</span>`
+        },
+        {
+            field: 'note',
+            header: 'Eslatma',
             widthClass: 'w-20p',
             sortable: false,
+            searchable: false,
+            placeholder: 'Eslatma kiriting'
+        },
+        {
+            field: 'soldByUsername',
+            header: 'Kim sotdi',
+            widthClass: 'w-15p',
+            sortable: false,
+            searchable: false,
             placeholder: 'Username kiriting',
             cellRendererFn: (row: any) => `<span>${row.soldByUsername ?? '-'}</span>`
         },
@@ -76,6 +99,15 @@ export class SalesHistoryComponent {
 
     get selectedTotal(): number {
         return Number(this.selectedSale?.total ?? 0);
+    }
+
+    getPaymentMethodLabel(value: string): string {
+        const labels: Record<string, string> = {
+            CASH: "Naqd to'lov",
+            CARD: 'Karta orqali',
+            OTHER: 'Boshqa usul'
+        };
+        return labels[value] ?? '-';
     }
 
     formatDate(value: string): string {

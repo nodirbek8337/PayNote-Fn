@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { ToastService } from '../../shared/services/toast.service';
-import { SalesProduct, SalesService } from '../service/sales.service';
+import { PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
 
 type CartId = 1 | 2;
 
@@ -22,7 +23,7 @@ type CartItem = {
 @Component({
     selector: 'sales',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, ConfirmDialogModule, InputTextModule, MoneyPipe],
+    imports: [CommonModule, FormsModule, ButtonModule, ConfirmDialogModule, DialogModule, InputTextModule, MoneyPipe],
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.scss'],
     providers: [ConfirmationService]
@@ -39,7 +40,17 @@ export class SalesComponent implements OnInit {
     activeCart: CartId = 1;
     loading = false;
     sellingCart: CartId | null = null;
+    saleDialogVisible = false;
+    saleCartId: CartId | null = null;
+    paymentMethod: PaymentMethod | null = null;
+    saleNote = '';
+    saleFormSubmitted = false;
     readonly cartIds: CartId[] = [1, 2];
+    readonly paymentOptions: { value: PaymentMethod; label: string; icon: string }[] = [
+        { value: 'CASH', label: "Naqd to'lov", icon: 'pi-money-bill' },
+        { value: 'CARD', label: 'Karta orqali', icon: 'pi-credit-card' },
+        { value: 'OTHER', label: 'Boshqa usul', icon: 'pi-user' }
+    ];
 
     carts: Record<CartId, CartItem[]> = {
         1: [],
@@ -165,32 +176,51 @@ export class SalesComponent implements OnInit {
         const itemCount = this.getCartCount(cartId);
         if (!itemCount || this.sellingCart === cartId) return;
 
-        this.confirmationService.confirm({
-            key: 'sales-complete',
-            header: 'Sotuvni yakunlash',
-            message: `Savat ${cartId} dagi ${itemCount} ta maxsulot ${this.formatMoney(this.getCartTotal(cartId))} ga sotilganini tasdiqlaysizmi?`,
-            icon: 'pi pi-check',
-            acceptLabel: 'Tasdiqlash',
-            rejectLabel: 'Bekor qilish',
-            acceptButtonStyleClass: 'form-save-btn',
-            rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
-            accept: () => this.sellCart(cartId)
-        });
+        this.saleCartId = cartId;
+        this.paymentMethod = null;
+        this.saleNote = '';
+        this.saleFormSubmitted = false;
+        this.saleDialogVisible = true;
     }
 
-    sellCart(cartId: CartId): void {
+    submitSale(): void {
+        if (this.sellingCart !== null) return;
+        this.saleFormSubmitted = true;
+        if (!this.saleCartId || !this.paymentMethod || (this.paymentMethod === 'OTHER' && !this.saleNote.trim())) return;
+
+        this.sellCart(this.saleCartId, this.paymentMethod, this.saleNote);
+    }
+
+    sellCart(cartId: CartId, paymentMethod: PaymentMethod, note: string): void {
         const cart = this.carts[cartId];
         if (!cart.length) return;
 
         this.sellingCart = cartId;
         this.salesService
-            .sell(cart.map((item) => ({ productId: item.productId, amount: item.quantity })))
+            .sell(
+                cart.map((item) => ({ productId: item.productId, amount: item.quantity })),
+                paymentMethod,
+                note
+            )
             .pipe(finalize(() => (this.sellingCart = null)))
             .subscribe(() => {
                 this.toast.success(`Savat ${cartId} sotildi`);
                 this.clearCart(cartId);
                 this.loadProducts();
+                this.saleDialogVisible = false;
+                this.resetSaleForm();
             });
+    }
+
+    onSaleDialogHide(): void {
+        if (this.sellingCart === null) this.resetSaleForm();
+    }
+
+    private resetSaleForm(): void {
+        this.saleCartId = null;
+        this.paymentMethod = null;
+        this.saleNote = '';
+        this.saleFormSubmitted = false;
     }
 
     setActiveCart(cartId: CartId): void {
@@ -242,8 +272,12 @@ export class SalesComponent implements OnInit {
         return this.carts[cartId].reduce((sum, item) => sum + item.quantity, 0);
     }
 
-    private formatMoney(value: number): string {
-        return `UZS ${new Intl.NumberFormat('uz-UZ').format(value)}`;
+    get saleCartTotal(): number {
+        return this.saleCartId ? this.getCartTotal(this.saleCartId) : 0;
+    }
+
+    get saleCartCount(): number {
+        return this.saleCartId ? this.getCartCount(this.saleCartId) : 0;
     }
 
     trackProduct(_: number, product: SalesProduct): string {

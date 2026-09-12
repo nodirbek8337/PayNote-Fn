@@ -9,6 +9,8 @@
     [hasEdit]="false"
     [hasDelete]="true"
     [hasRefreshBtn]="true"
+    [hasClearFilterBtn]="true"
+    [showColumnFilterRow]="true"
     [showQuickFilterTop]="true"
     [quickFilterPlaceholder]="'Sotuvchi yoki jami summa...'"
     [showDrawerFilters]="false"
@@ -36,6 +38,14 @@
         <div>
             <span>Umumiy narxi</span>
             <strong>{{ selectedTotal | money: 'UZS' }}</strong>
+        </div>
+        <div>
+            <span>To'lov turi</span>
+            <strong>{{ getPaymentMethodLabel(selectedSale.paymentMethod) }}</strong>
+        </div>
+        <div class="sale-note-summary">
+            <span>Eslatma</span>
+            <strong>{{ selectedSale.note || '-' }}</strong>
         </div>
     </div>
 
