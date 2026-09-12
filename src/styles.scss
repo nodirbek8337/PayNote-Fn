@@ -613,7 +613,9 @@ html.app-dark .p-password input {
 }
 
 .logo-content {
+    width: 77px;
     height: 40px;
+    object-fit: contain;
 }
 
 .login-content {

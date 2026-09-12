@@ -26,7 +26,7 @@ import { AuthService } from '../../shared/services/auth.service';
       <div class="layout-topbar-container">
         <div>
           <a class="layout-topbar-logo" routerLink="/cabinet">
-            <img src="assets/images/logo.png" alt="Pay Note" class="logo-content" />
+            <img src="assets/images/logo.png" alt="Pay Note" class="logo-content" width="77" height="40" />
           </a>
         </div>
 

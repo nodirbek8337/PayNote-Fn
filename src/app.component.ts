@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
@@ -11,4 +11,24 @@ import { ToastModule } from 'primeng/toast';
     <router-outlet></router-outlet>
     `
 })
-export class AppComponent {}
+export class AppComponent implements AfterViewInit {
+    ngAfterViewInit(): void {
+        if (typeof document === 'undefined') return;
+
+        let revealed = false;
+        const reveal = () => {
+            if (revealed) return;
+            revealed = true;
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    document.body.classList.add('app-ready');
+                    setTimeout(() => document.querySelector('.app-boot-loader')?.remove(), 200);
+                });
+            });
+        };
+
+        document.fonts?.ready.then(reveal, reveal);
+        setTimeout(reveal, 1500);
+    }
+}
