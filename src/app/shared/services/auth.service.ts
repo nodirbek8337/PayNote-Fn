@@ -8,7 +8,10 @@ import { finalize } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     public isLoading = signal<boolean>(false);
+    public isServerWaking = signal<boolean>(false);
     private readonly tokenCookieName = 'payNoteToken';
+    private readonly serverWakeNoticeDelayMs = 4000;
+    private serverWakeTimer: ReturnType<typeof setTimeout> | null = null;
 
     constructor(
         private router: Router,
@@ -56,23 +59,45 @@ export class AuthService {
     }
 
     login(data: any) {
-    this.isLoading.set(true);
-    this._httpService.post('/auth/login', data)
-        .pipe(finalize(() => this.isLoading.set(false)))
-        .subscribe((value: any) => {
-        if (!value?.token) return;
-        this.setAccessToken(value.token);
-        localStorage.setItem(
-            'payNoteUser',
-            JSON.stringify({
-            id: value?.user?.id,
-            role: value?.user?.role,
-            username: value?.user?.username
-            })
-        );
-        this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
-        this.router.navigateByUrl('/cabinet', { replaceUrl: true });
-        });
+        if (this.isLoading()) return;
+
+        this.isLoading.set(true);
+        this.isServerWaking.set(false);
+        this.serverWakeTimer = setTimeout(() => this.isServerWaking.set(true), this.serverWakeNoticeDelayMs);
+
+        this._httpService
+            .post('/auth/login', data)
+            .pipe(finalize(() => this.finishLoginRequest()))
+            .subscribe({
+                next: (value: any) => {
+                    if (!value?.token) {
+                        this.toast.error("Serverdan noto'g'ri javob olindi. Qayta urinib ko'ring.");
+                        return;
+                    }
+
+                    this.setAccessToken(value.token);
+                    localStorage.setItem(
+                        'payNoteUser',
+                        JSON.stringify({
+                            id: value?.user?.id,
+                            role: value?.user?.role,
+                            username: value?.user?.username
+                        })
+                    );
+                    this.toast.success('Tizimga muvaffaqiyatli kirdingiz.');
+                    this.router.navigateByUrl('/cabinet', { replaceUrl: true });
+                },
+                error: () => {}
+            });
+    }
+
+    private finishLoginRequest(): void {
+        if (this.serverWakeTimer) {
+            clearTimeout(this.serverWakeTimer);
+            this.serverWakeTimer = null;
+        }
+        this.isLoading.set(false);
+        this.isServerWaking.set(false);
     }
 
     logout(): void {
