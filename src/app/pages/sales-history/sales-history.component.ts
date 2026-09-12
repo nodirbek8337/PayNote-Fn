@@ -5,6 +5,7 @@ import { PrimeDatatableComponent } from '../../shared/components/datatable/prime
 import { ICustomAction } from '../../shared/interfaces/custom-action.interface';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { SalesHistoryService } from '../service/sales-history.service';
+import { UsersFilterComponent } from '../users/filter/users-filter.component';
 
 @Component({
     selector: 'sales-history',
@@ -17,6 +18,7 @@ import { SalesHistoryService } from '../service/sales-history.service';
 export class SalesHistoryComponent {
     _defaultService = inject(SalesHistoryService);
     private moneyPipe = inject(MoneyPipe);
+    FilterComponent = UsersFilterComponent;
 
     selectedSale: any = null;
     detailsVisible = false;
@@ -66,7 +68,8 @@ export class SalesHistoryComponent {
             widthClass: 'w-20p',
             sortable: false,
             searchable: false,
-            placeholder: 'Eslatma kiriting'
+            placeholder: 'Eslatma kiriting',
+            cellRendererFn: (row: any) => `<span>${row.note || '-'}</span>`
         },
         {
             field: 'soldByUsername',

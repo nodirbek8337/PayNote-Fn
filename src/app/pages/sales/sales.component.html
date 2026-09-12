@@ -137,6 +137,8 @@
         [closeOnEscape]="sellingCart === null"
         header="Sotuvni yakunlash"
         [style]="{ width: '520px', maxWidth: '95vw' }"
+        [breakpoints]="{ '640px': 'calc(100vw - 1rem)' }"
+        [contentStyle]="{ maxHeight: 'calc(100dvh - 7rem)', overflow: 'auto' }"
         styleClass="sales-payment-dialog"
         (onHide)="onSaleDialogHide()"
     >
@@ -183,7 +185,7 @@
                 pButton
                 type="button"
                 label="Bekor qilish"
-                class="p-button-outlined"
+                class="p-button-outlined sale-dialog-button"
                 [disabled]="sellingCart !== null"
                 (click)="saleDialogVisible = false"
             ></button>
@@ -192,7 +194,7 @@
                 type="button"
                 icon="pi pi-check"
                 label="Tasdiqlash"
-                class="form-save-btn"
+                class="form-save-btn sale-dialog-button"
                 [loading]="sellingCart !== null"
                 (click)="submitSale()"
             ></button>

@@ -6,7 +6,6 @@
                     <h4 *ngIf="tableTitle" class="header-title">{{ tableTitle }}</h4>
                     <div class="header-actions">
                         <button *ngIf="hasRefreshBtn" pButton icon="pi pi-refresh" class="table-refresh-btn" (click)="triggerRefresh()"></button>
-                        <button *ngIf="hasClearFilterBtn" pButton icon="pi pi-filter-slash" class="table-refresh-btn" (click)="clearAllFilters()" [disabled]="loading || isFilterEmpty()"></button>
                     </div>
                     <div *ngIf="amountTotals as t" class="totals-chips">
                         <span class="chip" [ngClass]="t.UZS | signClass">{{ t.UZS | money: 'UZS' }}</span>
@@ -17,6 +16,18 @@
                     <input *ngIf="showQuickFilterTop" pInputText type="text" class="quick-filter-input" [placeholder]="quickFilterPlaceholder" [(ngModel)]="quickFilterValue" (ngModelChange)="onQuickFilterChange($event)" />
                     <div class="cta-buttons">
                         <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="btn-ctl" label="Filtrlar" (click)="openDrawer()"></button>
+                        <button
+                            *ngIf="hasClearFilterBtn"
+                            pButton
+                            type="button"
+                            icon="pi pi-filter-slash"
+                            class="table-refresh-btn"
+                            aria-label="Filtrlarni tozalash"
+                            pTooltip="Filtrlarni tozalash"
+                            tooltipPosition="bottom"
+                            (click)="clearAllFilters()"
+                            [disabled]="loading || isFilterEmpty()"
+                        ></button>
                         <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="btn-ctl" label="Qo'shish" (click)="triggerAdd()"></button>
                     </div>
                 </div>

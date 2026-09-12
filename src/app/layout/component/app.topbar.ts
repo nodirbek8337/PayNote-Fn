@@ -5,15 +5,10 @@ import { CommonModule } from '@angular/common';
 import { AppTopMenu } from './app-topmenu';
 import { LayoutService } from '../service/layout.service';
 
-import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
-import { SelectModule } from 'primeng/select';
+import { MenuModule } from 'primeng/menu';
 import { AuthService } from '../../shared/services/auth.service';
-
-type SelectValue =
-  | { type: 'logout' }
-  | { type: 'route'; url: string };
 
 @Component({
   selector: 'app-topbar',
@@ -22,9 +17,8 @@ type SelectValue =
     RouterModule,
     CommonModule,
     AppTopMenu,
-    FormsModule,
     ConfirmDialogModule,
-    SelectModule
+    MenuModule
   ],
   providers: [ConfirmationService],
   template: `
@@ -40,27 +34,19 @@ type SelectValue =
 
         <div class="layout-topbar-actions">
           <div class="layout-topbar-menu">
-            <div class="layout-topbar-menu-content flex items-center gap-3">
-              <p-select
-                [options]="selectOptions"
-                optionLabel="label"
-                optionValue="value"
-                [(ngModel)]="selectedOption"
-                [placeholder]="userName"
-                (onChange)="onUserAction($event)"
-                styleClass="user-select"
-                panelStyleClass="user-select-panel"
+            <div class="layout-topbar-menu-content">
+              <button
+                type="button"
+                class="user-menu-trigger"
+                aria-label="Foydalanuvchi menyusini ochish"
+                aria-haspopup="menu"
+                (click)="userMenu.toggle($event)"
               >
-                <ng-template pTemplate="item" let-option>
-                  <span
-                    class="user-menu-option"
-                    [class.logout-option]="option?.value?.type === 'logout'"
-                  >
-                    <i [class]="option?.value?.type === 'logout' ? 'pi pi-sign-out' : 'pi pi-angle-right'"></i>
-                    <span>{{ option.label }}</span>
-                  </span>
-                </ng-template>
-              </p-select>
+                <span class="user-avatar"><i class="pi pi-user"></i></span>
+                <span class="user-name">{{ userName }}</span>
+                <i class="pi pi-chevron-down user-menu-chevron"></i>
+              </button>
+              <p-menu #userMenu [model]="userMenuItems" [popup]="true" appendTo="body" styleClass="user-menu-panel"></p-menu>
             </div>
           </div>
         </div>
@@ -171,39 +157,82 @@ type SelectValue =
         height: 40px;
       }
     }
+
+    .user-menu-trigger {
+      min-width: 142px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .3rem .55rem .3rem .35rem;
+      border: 1px solid color-mix(in srgb, var(--action-primary) 38%, var(--surface-border));
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--table-head-from), var(--table-bg));
+      color: var(--text-color);
+      cursor: pointer;
+    }
+    .user-menu-trigger:hover,
+    .user-menu-trigger:focus-visible {
+      border-color: var(--action-primary-from);
+      box-shadow: var(--focus-primary);
+      outline: none;
+    }
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--action-primary-soft);
+      color: var(--action-primary-from);
+    }
+    .user-name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+    .user-menu-chevron {
+      color: var(--text-color-secondary);
+      font-size: .75rem;
+    }
+    ::ng-deep .user-menu-panel {
+      min-width: 190px !important;
+      margin-top: .4rem;
+      padding: .35rem !important;
+      border: 1px solid var(--surface-border) !important;
+      border-radius: 10px !important;
+      background: var(--surface-card) !important;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, .34) !important;
+    }
+    ::ng-deep .user-menu-panel .p-menu-item-link {
+      gap: .65rem;
+      padding: .72rem .8rem !important;
+      border-radius: 8px;
+    }
+    ::ng-deep .user-menu-panel .logout-menu-item .p-menu-item-link,
+    ::ng-deep .user-menu-panel .logout-menu-item .p-menu-item-icon {
+      color: var(--action-delete-text) !important;
+    }
+    ::ng-deep .user-menu-panel .logout-menu-item .p-menu-item-content:hover {
+      background: var(--action-delete-bg) !important;
+    }
+    @media (max-width: 420px) {
+      .user-menu-trigger {
+        min-width: 128px;
+        max-width: 48vw;
+        height: 40px;
+      }
+    }
   `]
 })
 export class AppTopbar implements OnInit, OnDestroy {
-  items!: MenuItem[];
-
   userName = this.getUserName();
-
-  private baseOptions = [
-    { label: 'Tizimdan chiqish', value: { type: 'logout' } as SelectValue }
-  ];
-
-  private get mobileNavOptions() {
-    const commonOptions = [
-      { label: 'Kabinet', value: { type: 'route', url: '/cabinet' } as SelectValue },
-      { label: 'Sotuv', value: { type: 'route', url: '/sales' } as SelectValue }
-    ];
-
-    if (!this.authService.isAdmin()) return commonOptions;
-
-    return [
-      ...commonOptions,
-      { label: 'Ombor', value: { type: 'route', url: '/inventory' } as SelectValue },
-      { label: 'Maxsulotlar', value: { type: 'route', url: '/products' } as SelectValue },
-      { label: 'Tarix', value: { type: 'route', url: '/sales-history' } as SelectValue },
-      { label: 'Foydalanuvchilar', value: { type: 'route', url: '/users' } as SelectValue }
-    ];
-  }
-
-  get selectOptions() {
-    return this.isXs ? [...this.mobileNavOptions, ...this.baseOptions] : this.baseOptions;
-  }
-
-  selectedOption: SelectValue | null = null;
+  userMenuItems: MenuItem[] = [];
 
   private mediaQuery?: MediaQueryList;
   private mqListener?: (e: MediaQueryListEvent) => void;
@@ -223,9 +252,7 @@ export class AppTopbar implements OnInit, OnDestroy {
 
       this.mqListener = (e: MediaQueryListEvent) => {
         this.isXs = e.matches;
-        if (!this.isXs && this.selectedOption && this.selectedOption.type === 'route') {
-          this.selectedOption = null;
-        }
+        this.refreshUserMenuItems();
       };
 
       if ('addEventListener' in this.mediaQuery) {
@@ -235,6 +262,8 @@ export class AppTopbar implements OnInit, OnDestroy {
         this.mediaQuery.addListener(this.mqListener);
       }
     }
+
+    this.refreshUserMenuItems();
   }
 
   ngOnDestroy(): void {
@@ -248,38 +277,51 @@ export class AppTopbar implements OnInit, OnDestroy {
     }
   }
 
-  onUserAction(event: any) {
-    const val = event?.value as SelectValue | undefined;
-    if (!val) return;
+  private refreshUserMenuItems(): void {
+    const mobileItems: MenuItem[] = this.isXs
+      ? [
+          { label: 'Kabinet', icon: 'pi pi-chart-bar', routerLink: '/cabinet' },
+          { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: '/sales' },
+          ...(this.authService.isAdmin()
+            ? [
+                { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: '/inventory' },
+                { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: '/products' },
+                { label: 'Tarix', icon: 'pi pi-history', routerLink: '/sales-history' },
+                { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: '/users' }
+              ]
+            : []),
+          { separator: true }
+        ]
+      : [];
 
-    if (val.type === 'logout') {
-      this.confirmation.confirm({
-        header: 'Tizimdan chiqish?',
-        message: 'Haqiqatan ham tizimdan chiqasizmi?',
+    this.userMenuItems = [
+      ...mobileItems,
+      {
+        label: 'Tizimdan chiqish',
         icon: 'pi pi-sign-out',
-        acceptLabel: 'Chiqish',
-        rejectLabel: 'Bekor qilish',
-        acceptButtonStyleClass: 'confirm-accept-btn',
-        rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
-        accept: () => this.logout(),
-        reject: () => { this.selectedOption = null; }
-      });
-      return;
-    }
+        styleClass: 'logout-menu-item',
+        command: () => this.confirmLogout()
+      }
+    ];
+  }
 
-    if (val.type === 'route') {
-      this.router.navigate([val.url]).finally(() => {
-        this.selectedOption = null;
-      });
-      return;
-    }
+  private confirmLogout(): void {
+    this.confirmation.confirm({
+      header: 'Tizimdan chiqish?',
+      message: 'Haqiqatan ham tizimdan chiqasizmi?',
+      icon: 'pi pi-sign-out',
+      acceptLabel: 'Chiqish',
+      rejectLabel: 'Bekor qilish',
+      acceptButtonStyleClass: 'confirm-accept-btn',
+      rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
+      accept: () => this.logout()
+    });
   }
 
   logout() {
     try {
       this.authService.logout();
     } finally {
-      this.selectedOption = null;
       this.router.navigate(['/login']);
     }
   }
