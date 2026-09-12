@@ -54,9 +54,25 @@
     letter-spacing: 0;
 }
 
-.quick-filter-input {
+.quick-filter-wrap {
+    position: relative;
     width: 260px;
+
+    > i {
+        position: absolute;
+        z-index: 1;
+        left: 0.85rem;
+        top: 50%;
+        color: var(--action-primary-from);
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+}
+
+.quick-filter-input {
+    width: 100%;
     height: 40px;
+    padding-left: 2.35rem;
     background: var(--field-bg);
 }
 .btn-ctl {
@@ -372,7 +388,7 @@
         gap: 8px;
     }
 
-    .quick-filter-input {
+    .quick-filter-wrap {
         width: 100%;
         min-width: 0;
     }
