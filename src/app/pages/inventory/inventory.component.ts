@@ -4,6 +4,7 @@ import { PrimeDatatableComponent } from '../../shared/components/datatable/prime
 import { InventoryItemsService } from '../service/inventory-items.service';
 import { InventoryFormComponent } from './form/inventory-form.component';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
+import { UsersFilterComponent } from '../users/filter/users-filter.component';
 
 @Component({
     selector: 'inventory',
@@ -17,6 +18,7 @@ export class InventoryComponent {
     private _moneyPipe = inject(MoneyPipe);
 
     FormComponent = InventoryFormComponent;
+    FilterComponent = UsersFilterComponent;
 
     columnDefs = [
         {
@@ -35,13 +37,23 @@ export class InventoryComponent {
             searchable: false,
             cellRendererFn: (row: any) => `<span>${this._moneyPipe.transform(row.price ?? row.productPrice, row.currency === 'USD' ? 'USD' : 'UZS')}</span>`
         },
-        { field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false, searchable: false, cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>` },
+        {
+            field: 'currency',
+            header: 'Valuta',
+            widthClass: 'w-10p',
+            sortable: false,
+            filterType: 'dropdown',
+            filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            placeholder: 'Valutani tanlang',
+            cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>`
+        },
         {
             field: 'amount',
             header: 'Maxsulot soni',
             widthClass: 'w-15p',
             sortable: false,
-            searchable: false,
+            filterType: 'number-range',
+            placeholder: 'Qoldiq miqdorini kiriting',
             cellRendererFn: (row: any) => `<span>${row.amount ?? 0}</span>`
         }
     ];

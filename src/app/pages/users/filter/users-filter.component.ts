@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DatepickerRangeComponent } from '../../../shared/components/datepicker-range/datepicker-range.component';
 
-type FilterType = 'dropdown' | 'date-range' | 'text';
+type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
 
 @Component({
   selector: 'users-filter',
@@ -23,6 +23,8 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
                 optionLabel="label"
                 optionValue="value"
                 styleClass="user-select"
+                panelStyleClass="drawer-select-panel"
+                [appendTo]="'body'"
                 [placeholder]="resolvePlaceholder(col, 'dropdown')"
                 [style.width.%]="100"
                 [(ngModel)]="columnFilters[col.field]"
@@ -37,6 +39,27 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
                 (valueChange)="onColumnFilter($event, col.field)"
                 [placeholder]="resolvePlaceholder(col, 'date-range')">
               </datepicker-range>
+            </ng-container>
+
+            <ng-container *ngIf="col.filterType === 'number-range'">
+              <div class="users-filter__number-range">
+                <input
+                  pInputText
+                  type="number"
+                  min="0"
+                  placeholder="Eng kam miqdor"
+                  [ngModel]="getNumberRangeValue(col.field, 0)"
+                  (ngModelChange)="onNumberRangeChange($event, col.field, 0)"
+                />
+                <input
+                  pInputText
+                  type="number"
+                  min="0"
+                  placeholder="Eng ko'p miqdor"
+                  [ngModel]="getNumberRangeValue(col.field, 1)"
+                  (ngModelChange)="onNumberRangeChange($event, col.field, 1)"
+                />
+              </div>
             </ng-container>
 
             <ng-container *ngIf="!col.filterType || col.filterType === 'text'">
@@ -72,12 +95,31 @@ type FilterType = 'dropdown' | 'date-range' | 'text';
       display: grid;
       grid-template-columns: 1fr;
       gap: 12px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .users-filter > div {
+      min-width: 0;
+      max-width: 100%;
     }
 
     .users-filter__footer {
       display: flex;
       justify-content: stretch;
       padding-top: 0.35rem;
+    }
+
+    .users-filter__number-range {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0.5rem;
+    }
+
+    .users-filter__number-range input {
+      width: 100%;
+      min-width: 0;
+      height: 40px;
     }
 
     :host ::ng-deep .filter-clear-btn.p-button {
@@ -101,6 +143,7 @@ export class UsersFilterComponent {
   @Input() defaultPlaceholders: Record<FilterType, string> = {
     'dropdown':  'Tanlang',
     'date-range':'Vaqt oraligini tanlang',
+    'number-range': 'Miqdor oraligini kiriting',
     'text':      'Qidiring...'
   };
 
@@ -114,6 +157,22 @@ export class UsersFilterComponent {
   onClearFilters(): void {
     this.columnFilters = {};
     this.clearAllFilters?.();
+  }
+
+  getNumberRangeValue(field: string, index: 0 | 1): number | null {
+    const value = this.columnFilters?.[field];
+    return Array.isArray(value) && typeof value[index] === 'number' ? value[index] : null;
+  }
+
+  onNumberRangeChange(value: string | number | null, field: string, index: 0 | 1): void {
+    const current = this.columnFilters?.[field];
+    const range: [number | null, number | null] = Array.isArray(current)
+      ? [current[0] ?? null, current[1] ?? null]
+      : [null, null];
+    const numberValue = value === '' || value === null || value === undefined ? null : Number(value);
+    range[index] = Number.isFinite(numberValue) && Number(numberValue) >= 0 ? Number(numberValue) : null;
+
+    this.onColumnFilter(range[0] === null && range[1] === null ? null : range, field);
   }
 
   resolvePlaceholder(col: any, type: FilterType): string {

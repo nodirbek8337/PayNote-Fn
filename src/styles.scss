@@ -186,6 +186,27 @@ html.app-dark body {
   color: var(--text-color) !important;
 }
 
+/* Drawer filter selectlari drawer ichida kengayib, gorizontal scroll chiqarmasin. */
+.drawer-select-panel {
+  max-width: calc(100vw - 1rem) !important;
+  overflow-x: hidden !important;
+}
+
+.drawer-select-panel .p-select-list-container,
+.drawer-select-panel .p-select-list {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.drawer-select-panel .p-select-option,
+.drawer-select-panel .p-select-option-label {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .p-button.p-button-text {
   color: var(--p-primary-color);
 }
@@ -716,7 +737,7 @@ svg {
 
   prime-datatable .p-datatable-table-container,
   prime-datatable .p-datatable-scrollable-body {
-    min-height: 0 !important;
+    min-height: 22rem !important;
     max-height: none !important;
     overflow: visible !important;
   }

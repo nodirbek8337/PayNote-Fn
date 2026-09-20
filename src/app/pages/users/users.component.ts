@@ -25,7 +25,9 @@ export class UsersComponent {
             header: 'Roli',
             widthClass: 'w-15p',
             sortable: false,
-            placeholder: 'Rol tanlang',
+            filterType: 'dropdown',
+            filterOptions: [{ label: 'Boshliq', value: 'admin' }, { label: 'Ishchi', value: 'user' }],
+            placeholder: 'Rolni tanlang',
             cellRendererFn: (row: any, field: string) => this.formatRole(row[field])
         },
         {
@@ -33,7 +35,9 @@ export class UsersComponent {
             header: 'Holati',
             widthClass: 'w-15p',
             sortable: false,
-            searchable: false,
+            filterType: 'dropdown',
+            filterOptions: [{ label: 'Faol', value: 'true' }, { label: 'Nofaol', value: 'false' }],
+            placeholder: 'Holatni tanlang',
             cellRendererComponent: CustomActiveBadgeComponent
         },
         {

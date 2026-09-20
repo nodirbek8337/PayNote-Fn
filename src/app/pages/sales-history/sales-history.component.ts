@@ -52,6 +52,7 @@ export class SalesHistoryComponent {
         {
             field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
             filterType: 'dropdown', filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            placeholder: 'Valutani tanlang',
             cellRendererFn: (row: any) => `<span class="currency-label">${this.getSaleCurrencies(row).join(' + ')}</span>`
         },
         {
@@ -60,6 +61,7 @@ export class SalesHistoryComponent {
             widthClass: 'w-15p',
             sortable: false,
             filterType: 'dropdown',
+            placeholder: "To'lov turini tanlang",
             filterOptions: [
                 { label: "Naqd to'lov", value: 'CASH' },
                 { label: 'Karta orqali', value: 'CARD' },

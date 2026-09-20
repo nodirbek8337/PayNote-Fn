@@ -5,6 +5,7 @@ import { CustomDateRendererComponent } from '../../shared/components/badge/custo
 import { ProductsService } from '../service/products.service';
 import { ProductsFormComponent } from './form/products-form.component';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
+import { UsersFilterComponent } from '../users/filter/users-filter.component';
 
 @Component({
     selector: 'products',
@@ -18,6 +19,7 @@ export class ProductsComponent {
     private _moneyPipe = inject(MoneyPipe);
 
     FormComponent = ProductsFormComponent;
+    FilterComponent = UsersFilterComponent;
 
     columnDefs = [
         { field: 'name', header: 'Maxsulot nomi', widthClass: 'w-35p', sortable: false, placeholder: 'Maxsulot nomini kiriting' },
@@ -31,13 +33,16 @@ export class ProductsComponent {
         },
         {
             field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
-            filterType: 'dropdown', filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            filterType: 'dropdown',
+            filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            placeholder: 'Valutani tanlang',
             cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>`
         },
         {
             field: 'createdAt',
             header: 'Yaratilgan vaqt',
             filterType: 'date-range',
+            placeholder: 'Yaratilgan vaqtni tanlang',
             widthClass: 'w-20p',
             sortable: false,
             cellRendererComponent: CustomDateRendererComponent

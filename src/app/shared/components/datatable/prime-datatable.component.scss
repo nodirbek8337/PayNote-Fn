@@ -90,7 +90,9 @@
 }
 
 ::ng-deep .p-datatable-table-container {
-    min-height: 0;
+    // Kam yozuv bo'lsa ham jadval sahifadagi asosiy joyni saqlab turadi.
+    // Ma'lumot ko'p bo'lsa, u tabiiy ravishda bundan balandlashadi.
+    min-height: clamp(28rem, 70dvh, 48rem);
     overflow-x: auto !important;
     overflow-y: visible !important;
 }
@@ -102,7 +104,8 @@
 ::ng-deep .datatable-content .p-datatable {
     border: 1px solid var(--surface-border);
     border-radius: 8px;
-    overflow: hidden;
+    // Paginator ichidagi sahifa-soni selecti kesilib qolmasligi kerak.
+    overflow: visible;
     background: var(--surface-card);
     box-shadow: none;
 }
@@ -237,7 +240,10 @@
 ::ng-deep .datatable-drawer .drawer-inner {
     padding: 0.75rem 1rem 1rem;
     max-height: calc(100vh - 3rem);
-    overflow: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -281,7 +287,7 @@
     border-right: 0;
     border-bottom: 0;
     color: var(--text-color-secondary);
-    overflow: hidden;
+    overflow: visible;
     position: static;
     z-index: auto;
     min-height: 52px;
@@ -505,6 +511,10 @@
         padding-left: calc(1rem + env(safe-area-inset-left));
         padding-right: calc(1rem + env(safe-area-inset-right));
         max-height: calc(100dvh - 3rem);
+    }
+
+    ::ng-deep .p-datatable-table-container {
+        min-height: 22rem;
     }
 
     ::ng-deep .datatable-dialog.p-dialog {

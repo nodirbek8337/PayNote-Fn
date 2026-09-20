@@ -123,6 +123,13 @@ export abstract class TableFeatureBaseComponent implements OnInit {
                 formattedFilters[key] = { value, matchMode: 'contains' };
             } else if (typeof value === 'number' || typeof value === 'boolean') {
                 formattedFilters[key] = { value, matchMode: 'equals' };
+            } else if (Array.isArray(value) && value.length === 2 && value.some((item) => typeof item === 'number' && Number.isFinite(item))) {
+                if (typeof value[0] === 'number' && Number.isFinite(value[0])) {
+                    formattedFilters[`${key}_from`] = { value: value[0], matchMode: 'gte' };
+                }
+                if (typeof value[1] === 'number' && Number.isFinite(value[1])) {
+                    formattedFilters[`${key}_to`] = { value: value[1], matchMode: 'lte' };
+                }
             } else if (Array.isArray(value) && value.length === 2 && value[0] && value[1]) {
                 formattedFilters[`${key}_from`] = {
                     value: value[0].toISOString(),
