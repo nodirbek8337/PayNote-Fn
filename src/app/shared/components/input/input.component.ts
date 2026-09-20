@@ -27,6 +27,8 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   @Input() required = false;
   @Input() allowMathExpression = false;
   @Input() allowNegative = false;
+  @Input() autocomplete = '';
+  @Input() inputName = '';
 
   value: any = '';
   isDisabled = false;

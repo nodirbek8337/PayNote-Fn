@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid users-form">
+<form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off" class="p-fluid users-form">
     <div class="form-field">
         <label>Login</label>
         <app-input formControlName="username" placeholder="Login kiriting"> </app-input>
@@ -15,7 +15,7 @@
     </div>
     <div class="form-field">
         <label>Telegram username <small>(ixtiyoriy)</small></label>
-        <app-input formControlName="telegramUsername" placeholder="@username yoki t.me/username"></app-input>
+        <app-input formControlName="telegramUsername" inputName="telegram-username" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
         <small>Saqlangach, aynan shu Telegram akkauntidan botga /start yuboring.</small>
     </div>
 
