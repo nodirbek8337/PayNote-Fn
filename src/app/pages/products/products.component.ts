@@ -27,7 +27,12 @@ export class ProductsComponent {
             widthClass: 'w-20p',
             sortable: false,
             searchable: false,
-            cellRendererFn: (row: any, field: string) => `<span>${this._moneyPipe.transform(row[field], 'UZS')}</span>`
+            cellRendererFn: (row: any, field: string) => `<span>${this._moneyPipe.transform(row[field], row.currency === 'USD' ? 'USD' : 'UZS')}</span>`
+        },
+        {
+            field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
+            filterType: 'dropdown', filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>`
         },
         {
             field: 'createdAt',
@@ -40,7 +45,7 @@ export class ProductsComponent {
         {
             field: 'updatedAt',
             header: 'Yangilangan vaqt',
-            filterType: 'date-range',
+            searchable: false,
             widthClass: 'w-20p',
             sortable: false,
             cellRendererComponent: CustomDateRendererComponent

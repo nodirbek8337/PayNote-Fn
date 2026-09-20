@@ -19,11 +19,11 @@ export class UsersComponent {
     FilterComponent = UsersFilterComponent;
 
     columnDefs = [
-        { field: 'username', header: 'Username', widthClass: 'w-40p', sortable: false, placeholder: 'Username kiriting' },
+        { field: 'username', header: 'Login', widthClass: 'w-25p', sortable: false, placeholder: 'Login kiriting' },
         {
             field: 'role',
             header: 'Roli',
-            widthClass: 'w-20p',
+            widthClass: 'w-15p',
             sortable: false,
             placeholder: 'Rol tanlang',
             cellRendererFn: (row: any, field: string) => this.formatRole(row[field])
@@ -35,6 +35,10 @@ export class UsersComponent {
             sortable: false,
             searchable: false,
             cellRendererComponent: CustomActiveBadgeComponent
+        },
+        {
+            field: 'telegramUsername', header: 'Telegram', widthClass: 'w-20p', sortable: false, searchable: false,
+            cellRendererFn: (row: any) => row.telegramUsername ? `<span class="telegram-cell"><span class="telegram-cell__name">@${row.telegramUsername}</span><span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span></span>` : '<span>-</span>'
         },
         {
             field: 'createdAt',

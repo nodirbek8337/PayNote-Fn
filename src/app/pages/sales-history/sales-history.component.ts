@@ -47,7 +47,12 @@ export class SalesHistoryComponent {
             widthClass: 'w-15p',
             sortable: false,
             searchable: false,
-            cellRendererFn: (row: any) => `<strong>${this.moneyPipe.transform(row.total, 'UZS')}</strong>`
+            cellRendererFn: (row: any) => `<strong>${this.formatTotals(row)}</strong>`
+        },
+        {
+            field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
+            filterType: 'dropdown', filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            cellRendererFn: (row: any) => `<span class="currency-label">${this.getSaleCurrencies(row).join(' + ')}</span>`
         },
         {
             field: 'paymentMethod',
@@ -58,6 +63,7 @@ export class SalesHistoryComponent {
             filterOptions: [
                 { label: "Naqd to'lov", value: 'CASH' },
                 { label: 'Karta orqali', value: 'CARD' },
+                { label: 'Terminal orqali', value: 'TERMINAL' },
                 { label: 'Boshqa usul', value: 'OTHER' }
             ],
             cellRendererFn: (row: any) => `<span>${this.getPaymentMethodLabel(row.paymentMethod)}</span>`
@@ -100,14 +106,19 @@ export class SalesHistoryComponent {
         return Array.isArray(this.selectedSale?.items) ? this.selectedSale.items : [];
     }
 
-    get selectedTotal(): number {
-        return Number(this.selectedSale?.total ?? 0);
+    get selectedTotals(): Record<string, number> {
+        return this.getSaleTotals(this.selectedSale);
+    }
+
+    get selectedCurrencies(): string[] {
+        return this.getSaleCurrencies(this.selectedSale);
     }
 
     getPaymentMethodLabel(value: string): string {
         const labels: Record<string, string> = {
             CASH: "Naqd to'lov",
             CARD: 'Karta orqali',
+            TERMINAL: 'Terminal orqali',
             OTHER: 'Boshqa usul'
         };
         return labels[value] ?? '-';
@@ -126,5 +137,21 @@ export class SalesHistoryComponent {
         if (!Array.isArray(items) || !items.length) return '-';
         const totalAmount = items.reduce((sum, item) => sum + Number(item.amount ?? 0), 0);
         return `${items.length} turdagi maxsulot, ${totalAmount} ta`;
+    }
+
+    getSaleTotals(sale: any): Record<string, number> {
+        if (sale?.totals && typeof sale.totals === 'object') return { UZS: Number(sale.totals.UZS ?? 0), USD: Number(sale.totals.USD ?? 0) };
+        return { UZS: sale?.currency === 'USD' ? 0 : Number(sale?.total ?? 0), USD: sale?.currency === 'USD' ? Number(sale?.total ?? 0) : 0 };
+    }
+
+    getSaleCurrencies(sale: any): string[] {
+        const totals = this.getSaleTotals(sale);
+        const values = ['UZS', 'USD'].filter((currency) => totals[currency] > 0);
+        return values.length ? values : [sale?.currency === 'USD' ? 'USD' : 'UZS'];
+    }
+
+    private formatTotals(sale: any): string {
+        const totals = this.getSaleTotals(sale);
+        return this.getSaleCurrencies(sale).map((currency) => this.moneyPipe.transform(totals[currency], currency)).join(' &middot; ');
     }
 }

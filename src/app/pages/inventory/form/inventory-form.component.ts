@@ -12,6 +12,7 @@ export type InventoryFormModel = {
     productPrice: number;
     name?: string;
     price?: number;
+    currency?: 'UZS' | 'USD';
     amount: number;
 };
 
@@ -78,6 +79,10 @@ export class InventoryFormComponent implements OnInit {
 
     get productPrice(): number {
         return Number(this.model.price ?? this.model.productPrice ?? 0);
+    }
+
+    get productCurrency(): 'UZS' | 'USD' {
+        return this.model.currency === 'USD' ? 'USD' : 'UZS';
     }
 
     private amountExpressionValidator(control: AbstractControl): ValidationErrors | null {

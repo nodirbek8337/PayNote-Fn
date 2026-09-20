@@ -32,7 +32,7 @@
                 </div>
                 <div class="metric">
                     <span>Jami summa</span>
-                    <strong>{{ summary.today.total | money: 'UZS' }}</strong>
+                    <span class="period-totals"><strong *ngIf="summary.today.totals.UZS">{{ summary.today.totals.UZS | money: 'UZS' }}</strong><strong *ngIf="summary.today.totals.USD">{{ summary.today.totals.USD | money: 'USD' }}</strong></span>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                             <strong>{{ product.name }}</strong>
                             <span>{{ product.amount }} ta sotilgan</span>
                         </div>
-                        <strong class="sold-product-total">{{ product.total | money: 'UZS' }}</strong>
+                        <strong class="sold-product-total">{{ product.total | money: product.currency }}</strong>
                     </div>
                 </div>
                 <ng-template #noTodayProducts>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="metric">
                     <span>Jami summa</span>
-                    <strong>{{ summary.month.total | money: 'UZS' }}</strong>
+                    <span class="period-totals"><strong *ngIf="summary.month.totals.UZS">{{ summary.month.totals.UZS | money: 'UZS' }}</strong><strong *ngIf="summary.month.totals.USD">{{ summary.month.totals.USD | money: 'USD' }}</strong></span>
                 </div>
             </div>
 
@@ -85,7 +85,7 @@
                             <strong>{{ product.name }}</strong>
                             <span>{{ product.amount }} ta sotilgan</span>
                         </div>
-                        <strong class="sold-product-total">{{ product.total | money: 'UZS' }}</strong>
+                        <strong class="sold-product-total">{{ product.total | money: product.currency }}</strong>
                     </div>
                 </div>
                 <ng-template #noMonthProducts>

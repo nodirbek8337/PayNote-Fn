@@ -33,8 +33,9 @@ export class InventoryComponent {
             widthClass: 'w-20p',
             sortable: false,
             searchable: false,
-            cellRendererFn: (row: any) => `<span>${this._moneyPipe.transform(row.price ?? row.productPrice, 'UZS')}</span>`
+            cellRendererFn: (row: any) => `<span>${this._moneyPipe.transform(row.price ?? row.productPrice, row.currency === 'USD' ? 'USD' : 'UZS')}</span>`
         },
+        { field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false, searchable: false, cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>` },
         {
             field: 'amount',
             header: 'Maxsulot soni',

@@ -29,7 +29,7 @@
                         (click)="addToCart(product)"
                     >
                         <span class="product-name">{{ product.name }}</span>
-                        <strong>{{ product.price | money: 'UZS' }}</strong>
+                        <strong>{{ product.price | money: product.currency }}</strong>
                         <span class="product-footer">
                             <span class="product-stock" [class.is-empty]="getAvailableAmount(product) <= 0">
                                 {{ getAvailableAmount(product) <= 0 ? 'Tugagan' : getAvailableAmount(product) + ' ta mavjud' }}
@@ -65,7 +65,7 @@
             <div class="cart-summary">
                 <div>
                     <span>Jami summa</span>
-                    <strong>{{ getCartTotal(activeCart) | money: 'UZS' }}</strong>
+                    <span class="cart-totals"><strong *ngFor="let currency of getCartCurrencies(activeCart)">{{ getCartTotals(activeCart)[currency] | money: currency }}</strong></span>
                 </div>
                 <span class="cart-count">{{ getCartCount(activeCart) }} ta</span>
             </div>
@@ -74,7 +74,7 @@
                 <article class="cart-item" *ngFor="let item of carts[activeCart]; trackBy: trackCartItem">
                     <div class="cart-item-info">
                         <strong>{{ item.name }}</strong>
-                        <span>{{ item.price | money: 'UZS' }}</span>
+                        <span>{{ item.price | money: item.currency }}</span>
                     </div>
 
                     <div class="quantity-controls">
@@ -87,7 +87,7 @@
                         </button>
                     </div>
 
-                    <strong class="item-total">{{ item.price * item.quantity | money: 'UZS' }}</strong>
+                    <strong class="item-total">{{ item.price * item.quantity | money: item.currency }}</strong>
                     <button type="button" class="remove-item" (click)="removeItem(activeCart, item.productId)" aria-label="O'chirish">
                         <i class="pi pi-trash"></i>
                     </button>
@@ -144,7 +144,7 @@
     >
         <div class="sale-confirm-summary">
             <span>Savat {{ saleCartId }}</span>
-            <strong>{{ saleCartTotal | money: 'UZS' }}</strong>
+            <span class="cart-totals"><strong *ngFor="let currency of saleCartCurrencies">{{ saleCartTotals[currency] | money: currency }}</strong></span>
             <small>{{ saleCartCount }} ta maxsulot</small>
         </div>
 

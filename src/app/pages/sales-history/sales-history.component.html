@@ -38,7 +38,11 @@
         </div>
         <div>
             <span>Umumiy narxi</span>
-            <strong>{{ selectedTotal | money: 'UZS' }}</strong>
+            <strong *ngFor="let currency of selectedCurrencies">{{ selectedTotals[currency] | money: currency }}</strong>
+        </div>
+        <div>
+            <span>Valuta</span>
+            <strong>{{ selectedCurrencies.join(' + ') }}</strong>
         </div>
         <div>
             <span>To'lov turi</span>
@@ -60,9 +64,9 @@
 
         <div class="sale-item" *ngFor="let item of selectedItems">
             <strong>{{ item.name }}</strong>
-            <span>{{ item.price | money: 'UZS' }}</span>
+            <span>{{ item.price | money: (item.currency || selectedSale.currency || 'UZS') }}</span>
             <span>{{ item.amount }}</span>
-            <strong>{{ item.total | money: 'UZS' }}</strong>
+            <strong>{{ item.total | money: (item.currency || selectedSale.currency || 'UZS') }}</strong>
         </div>
     </div>
 </p-dialog>

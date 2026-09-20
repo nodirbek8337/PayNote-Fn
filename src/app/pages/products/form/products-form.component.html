@@ -1,6 +1,9 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid entity-form">
     <app-input placeholder="Maxsulot nomini kiriting" formControlName="name"></app-input>
     <app-money-input formControlName="price" placeholder="Maxsulot narxini kiriting" [defaultCurrency]="'UZS'" [emitCurrency]="false" [required]="true" [allowNegative]="false"></app-money-input>
+    <label class="currency-field">Valuta
+        <select formControlName="currency"><option value="UZS">So'm (UZS)</option><option value="USD">AQSH dollari (USD)</option></select>
+    </label>
 
     <div class="flex justify-end gap-2 mt-4">
         <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>

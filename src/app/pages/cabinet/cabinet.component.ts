@@ -47,15 +47,15 @@ export class CabinetComponent implements OnInit {
     }
 
     private emptyPeriod(): SalesPeriodSummary {
-        return { salesCount: 0, itemCount: 0, total: 0, products: [] };
+        return { salesCount: 0, itemCount: 0, totals: { UZS: 0, USD: 0 }, products: [] };
     }
 
     private normalizePeriod(period?: Partial<SalesPeriodSummary> | null): SalesPeriodSummary {
         return {
             salesCount: Number(period?.salesCount ?? 0),
             itemCount: Number(period?.itemCount ?? 0),
-            total: Number(period?.total ?? 0),
-            products: Array.isArray(period?.products) ? period.products : []
+            totals: { UZS: Number(period?.totals?.UZS ?? 0), USD: Number(period?.totals?.USD ?? 0) },
+            products: Array.isArray(period?.products) ? period.products.map((product) => ({ ...product, currency: product.currency === 'USD' ? 'USD' : 'UZS' })) : []
         };
     }
 }

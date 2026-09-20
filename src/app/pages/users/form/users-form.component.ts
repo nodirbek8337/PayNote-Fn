@@ -12,6 +12,7 @@ export type UserFormModel = {
   _id?: string;
   username: string;
   role: 'admin' | 'user' | string;
+  telegramUsername?: string | null;
   isActive?: boolean;
   password?: string;
 };
@@ -68,7 +69,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
       username: [this.model.username ?? '', [Validators.required, Validators.maxLength(120)]],
       role:     [this.model.role ?? null, [Validators.required]],
       isActive: [this.model.isActive ?? true],
-      password: ['']
+      password: [''],
+      telegramUsername: ['']
     });
 
     this.setPasswordValidators();
@@ -81,7 +83,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
       username: this.model.username ?? '',
       role: this.model.role ?? null,
       isActive: this.model.isActive ?? true,
-      password: ''
+      password: '',
+      telegramUsername: this.model.telegramUsername ?? ''
     }, { emitEvent: false });
 
     const pwdCtrl = this.form.get('password')!;
@@ -128,6 +131,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
       username: (raw.username ?? '').trim(),
       role: raw.role,
       isActive: !!raw.isActive,
+      telegramUsername: String(raw.telegramUsername ?? '').trim(),
       ...(password ? { password } : {})
     };
 

@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { ToastService } from '../../shared/services/toast.service';
-import { PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
+import { Currency, PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
 
 type CartId = 1 | 2;
 
@@ -17,6 +17,7 @@ type CartItem = {
     productId: string;
     name: string;
     price: number;
+    currency: Currency;
     quantity: number;
 };
 
@@ -49,6 +50,7 @@ export class SalesComponent implements OnInit {
     readonly paymentOptions: { value: PaymentMethod; label: string; icon: string }[] = [
         { value: 'CASH', label: "Naqd to'lov", icon: 'pi-money-bill' },
         { value: 'CARD', label: 'Karta orqali', icon: 'pi-credit-card' },
+        { value: 'TERMINAL', label: 'Terminal orqali', icon: 'pi-desktop' },
         { value: 'OTHER', label: 'Boshqa usul', icon: 'pi-user' }
     ];
 
@@ -74,6 +76,7 @@ export class SalesComponent implements OnInit {
                           productId: String(item.productId ?? item._id),
                           name: item.name ?? item.productName ?? '-',
                           price: Number(item.price ?? item.productPrice ?? 0),
+                          currency: item.currency === 'USD' ? 'USD' : 'UZS',
                           amount: Number(item.amount ?? 0)
                       }))
                     : [];
@@ -123,6 +126,7 @@ export class SalesComponent implements OnInit {
             productId: product.productId ?? product._id,
             name: product.name,
             price: product.price,
+            currency: product.currency,
             quantity: 1
         });
         this.saveCartState();
@@ -244,8 +248,8 @@ export class SalesComponent implements OnInit {
         try {
             const parsed = JSON.parse(storedCarts) as Partial<Record<CartId, CartItem[]>>;
             this.carts = {
-                1: Array.isArray(parsed[1]) ? parsed[1] : [],
-                2: Array.isArray(parsed[2]) ? parsed[2] : []
+                1: this.normalizeCart(parsed[1]),
+                2: this.normalizeCart(parsed[2])
             };
         } catch {
             sessionStorage.removeItem(this.cartStorageKey);
@@ -264,16 +268,28 @@ export class SalesComponent implements OnInit {
         }, 0);
     }
 
-    getCartTotal(cartId: CartId): number {
-        return this.carts[cartId].reduce((sum, item) => sum + item.price * item.quantity, 0);
+    getCartTotals(cartId: CartId): Record<Currency, number> {
+        return this.carts[cartId].reduce<Record<Currency, number>>((totals, item) => {
+            totals[item.currency] += item.price * item.quantity;
+            return totals;
+        }, { UZS: 0, USD: 0 });
+    }
+
+    getCartCurrencies(cartId: CartId): Currency[] {
+        const totals = this.getCartTotals(cartId);
+        return (['UZS', 'USD'] as Currency[]).filter((currency) => totals[currency] > 0);
     }
 
     getCartCount(cartId: CartId): number {
         return this.carts[cartId].reduce((sum, item) => sum + item.quantity, 0);
     }
 
-    get saleCartTotal(): number {
-        return this.saleCartId ? this.getCartTotal(this.saleCartId) : 0;
+    get saleCartCurrencies(): Currency[] {
+        return this.saleCartId ? this.getCartCurrencies(this.saleCartId) : [];
+    }
+
+    get saleCartTotals(): Record<Currency, number> {
+        return this.saleCartId ? this.getCartTotals(this.saleCartId) : { UZS: 0, USD: 0 };
     }
 
     get saleCartCount(): number {
@@ -286,5 +302,19 @@ export class SalesComponent implements OnInit {
 
     trackCartItem(_: number, item: CartItem): string {
         return item.productId;
+    }
+
+    private normalizeCart(value: unknown): CartItem[] {
+        if (!Array.isArray(value)) return [];
+        return value
+            .filter((item): item is Partial<CartItem> => Boolean(item && typeof item === 'object'))
+            .map((item) => ({
+                productId: String(item.productId ?? ''),
+                name: String(item.name ?? '-'),
+                price: Number(item.price ?? 0),
+                currency: (item.currency === 'USD' ? 'USD' : 'UZS') as Currency,
+                quantity: Number(item.quantity ?? 0)
+            }))
+            .filter((item) => item.productId && Number.isFinite(item.price) && Number.isInteger(item.quantity) && item.quantity > 0);
     }
 }

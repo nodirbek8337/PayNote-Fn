@@ -8,6 +8,7 @@ export type SalesProduct = {
     productId?: string;
     name: string;
     price: number;
+    currency: Currency;
     amount: number;
 };
 
@@ -16,12 +17,13 @@ export type SalePayloadItem = {
     amount: number;
 };
 
-export type PaymentMethod = 'CASH' | 'CARD' | 'OTHER';
+export type PaymentMethod = 'CASH' | 'CARD' | 'TERMINAL' | 'OTHER';
+export type Currency = 'UZS' | 'USD';
 
 export type SalesPeriodSummary = {
     salesCount: number;
     itemCount: number;
-    total: number;
+    totals: Record<Currency, number>;
     products: SalesSummaryProduct[];
 };
 
@@ -30,6 +32,7 @@ export type SalesSummaryProduct = {
     name: string;
     amount: number;
     total: number;
+    currency: Currency;
 };
 
 export type MySalesSummary = {

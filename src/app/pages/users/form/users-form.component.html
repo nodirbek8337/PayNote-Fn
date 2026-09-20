@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="p-fluid users-form">
     <div class="form-field">
-        <label>Username</label>
-        <app-input formControlName="username" placeholder="Username kiriting"> </app-input>
+        <label>Login</label>
+        <app-input formControlName="username" placeholder="Login kiriting"> </app-input>
     </div>
 
     <div class="form-field">
@@ -12,6 +12,11 @@
     <div class="form-field">
         <label>Parol</label>
         <app-input formControlName="password" [type]="'password'" [placeholder]="passwordLabel"></app-input>
+    </div>
+    <div class="form-field">
+        <label>Telegram username <small>(ixtiyoriy)</small></label>
+        <app-input formControlName="telegramUsername" placeholder="@username yoki t.me/username"></app-input>
+        <small>Saqlangach, aynan shu Telegram akkauntidan botga /start yuboring.</small>
     </div>
 
     <app-switch-toggle

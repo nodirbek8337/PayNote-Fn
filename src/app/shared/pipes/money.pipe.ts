@@ -21,8 +21,8 @@ export class MoneyPipe implements PipeTransform {
         style: 'currency',
         currency: code,
         currencyDisplay,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: code === 'USD' ? 2 : 0,
+        maximumFractionDigits: code === 'USD' ? 2 : 0,
       }).format(n);
     } catch {
       const formatted = new Intl.NumberFormat(locale, {

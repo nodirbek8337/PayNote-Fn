@@ -9,6 +9,7 @@ export type ProductFormModel = {
     _id?: string;
     name: string;
     price: number;
+    currency: 'UZS' | 'USD';
 };
 
 @Component({
@@ -30,7 +31,8 @@ export class ProductsFormComponent implements OnInit {
     constructor(private fb: FormBuilder) {
         this.form = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(120)]],
-            price: [null, [Validators.required, Validators.min(0)]]
+            price: [null, [Validators.required, Validators.min(0)]],
+            currency: ['UZS', Validators.required]
         });
     }
 
@@ -38,7 +40,8 @@ export class ProductsFormComponent implements OnInit {
         this.form.patchValue(
             {
                 name: this.model.name ?? '',
-                price: this.model.price ?? null
+                price: this.model.price ?? null,
+                currency: this.model.currency === 'USD' ? 'USD' : 'UZS'
             },
             { emitEvent: false }
         );
@@ -53,7 +56,8 @@ export class ProductsFormComponent implements OnInit {
         this.onSubmitted?.({
             _id: this.model._id,
             name: this.form.value.name,
-            price: Number(this.form.value.price ?? 0)
+            price: Number(this.form.value.price ?? 0),
+            currency: this.form.value.currency === 'USD' ? 'USD' : 'UZS'
         });
     }
 

@@ -502,6 +502,13 @@
     }
 }
 
+.cart-totals {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.25rem 0.55rem;
+}
+
 .payment-methods {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
