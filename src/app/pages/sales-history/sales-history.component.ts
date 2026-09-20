@@ -36,7 +36,7 @@ export class SalesHistoryComponent {
         {
             field: 'items',
             header: 'Maxsulotlar',
-            widthClass: 'w-25p',
+            widthClass: 'w-20p',
             sortable: false,
             searchable: false,
             cellRendererFn: (row: any) => `<span>${this.formatItemsSummary(row.items)}</span>`
@@ -80,7 +80,7 @@ export class SalesHistoryComponent {
         {
             field: 'soldByUsername',
             header: 'Kim sotdi',
-            widthClass: 'w-15p',
+            widthClass: 'w-10p',
             sortable: false,
             searchable: false,
             placeholder: 'Username kiriting',
@@ -89,11 +89,11 @@ export class SalesHistoryComponent {
         {
             field: 'createdAt',
             header: 'Sotilgan vaqt',
-            widthClass: 'w-20p',
+            widthClass: 'w-150',
             filterType: 'date-range',
             sortable: false,
             placeholder: 'Sotilgan vaqtni tanlang',
-            cellRendererFn: (row: any) => `<span>${this.formatDate(row.createdAt)}</span>`
+            cellRendererFn: (row: any) => `<span class="sale-date-cell">${this.formatDate(row.createdAt)}</span>`
         }
     ];
 
@@ -129,8 +129,7 @@ export class SalesHistoryComponent {
         const date = new Date(value);
         if (Number.isNaN(date.getTime())) return '-';
 
-        const months = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
-        return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}, ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
     }
 
     private formatItemsSummary(items: any[]): string {

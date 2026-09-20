@@ -19,6 +19,7 @@
 .telegram-cell { display: inline-flex; align-items: center; gap: .35rem; max-width: 100%; min-width: 0; white-space: nowrap; }
 .telegram-cell__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .telegram-cell__status { flex: 0 0 auto; }
+.sale-date-cell { white-space: nowrap; }
 
 :root,
 html.app-dark {
@@ -590,6 +591,12 @@ html.app-dark .p-password input {
         width: 100px !important;
         min-width: 100px !important;
         max-width: 100px !important;
+    }
+
+    .w-150 {
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
     }
 
     .w-5p {

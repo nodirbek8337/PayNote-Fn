@@ -90,18 +90,19 @@
 }
 
 ::ng-deep .p-datatable-table-container {
-    min-height: 72vh;
-    overflow: visible !important;
+    min-height: 0;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
 }
 ::ng-deep .p-datatable-scrollable-body {
-    max-height: 72vh !important;
-    overflow-y: auto;
+    max-height: none !important;
+    overflow: visible;
 }
 
 ::ng-deep .datatable-content .p-datatable {
     border: 1px solid var(--surface-border);
     border-radius: 8px;
-    overflow: visible;
+    overflow: hidden;
     background: var(--surface-card);
     box-shadow: none;
 }
@@ -280,9 +281,9 @@
     border-right: 0;
     border-bottom: 0;
     color: var(--text-color-secondary);
-    overflow: visible;
-    position: relative;
-    z-index: 3;
+    overflow: hidden;
+    position: static;
+    z-index: auto;
     min-height: 52px;
 }
 
