@@ -41,6 +41,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
   form!: FormGroup;
   isEdit = false;
+  changePassword = false;
 
   roleOptions = [
     { label: 'Boshliq', value: 'admin' },
@@ -70,7 +71,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
       role:     [this.model.role ?? null, [Validators.required]],
       isActive: [this.model.isActive ?? true],
       password: [''],
-      telegramUsername: ['']
+      telegramUsername: [this.model.telegramUsername ?? '']
     });
 
     this.setPasswordValidators();
@@ -78,8 +79,9 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
   private patchForm() {
     this.isEdit = !!this.model?._id;
+    this.changePassword = false;
 
-    this.form.patchValue({
+    this.form.reset({
       username: this.model.username ?? '',
       role: this.model.role ?? null,
       isActive: this.model.isActive ?? true,
@@ -92,13 +94,19 @@ export class UsersFormComponent implements OnInit, OnChanges {
   }
 
   private setPasswordValidators(control = this.form.get('password')!) {
-    const validators = this.isEdit
+    const validators = this.isEdit && !this.changePassword
       ? [this.passwordRulesValidator()]
       : [Validators.required, this.passwordRulesValidator()];
 
     control.clearValidators();
     control.setValidators(validators);
     control.updateValueAndValidity({ emitEvent: false });
+  }
+
+  togglePasswordChange(): void {
+    this.changePassword = !this.changePassword;
+    this.form.get('password')!.reset('');
+    this.setPasswordValidators();
   }
 
   private passwordRulesValidator(): ValidatorFn {
@@ -118,21 +126,23 @@ export class UsersFormComponent implements OnInit, OnChanges {
   }
 
   submitForm() {
+    if (this.loading) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     const raw = this.form.value;
-    const password = (raw.password ?? '').trim();
+    const password = raw.password ?? '';
 
     const payload: UserFormModel = {
       _id: this.model._id,
       username: (raw.username ?? '').trim(),
       role: raw.role,
       isActive: !!raw.isActive,
-      telegramUsername: String(raw.telegramUsername ?? '').trim(),
-      ...(password ? { password } : {})
+      ...(!this.isEdit || this.form.get('telegramUsername')!.dirty
+        ? { telegramUsername: String(raw.telegramUsername ?? '').trim() } : {}),
+      ...((!this.isEdit || this.changePassword) && password ? { password } : {})
     };
 
     this.onSubmitted?.(payload);
@@ -143,6 +153,6 @@ export class UsersFormComponent implements OnInit, OnChanges {
   }
 
   get passwordLabel() {
-    return this.isEdit ? 'Yangi parol kiriting (ixtiyoriy)' : 'Parol kiriting';
+    return this.isEdit ? 'Yangi parol kiriting' : 'Parol kiriting';
   }
 }

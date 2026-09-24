@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { digits12, formatUzPhoneDash } from '../../utils/phone.util';
 import { ControlErrorComponent } from '../control-error/control-error.component';
 import { PHONE_ERROR_MESSAGES } from '../../constants/control-error-messages';
+import { NoAutofillDirective } from '../../directives/no-autofill.directive';
 
 @Component({
   selector: 'app-phone-input',
   standalone: true,
-  imports: [NgClass, InputTextModule, FormsModule, ControlErrorComponent],
+  imports: [NgClass, InputTextModule, FormsModule, ControlErrorComponent, NoAutofillDirective],
   templateUrl: './phone-input.component.html',
   styleUrls: ['../input/input.component.scss'],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PhoneInputComponent), multi: true }]

@@ -21,6 +21,7 @@
                             class="quick-filter-input"
                             [placeholder]="quickFilterPlaceholder"
                             [(ngModel)]="quickFilterValue"
+                            [appNoAutofill]="quickFilterValue"
                             (ngModelChange)="onQuickFilterChange($event)"
                             aria-label="Qidiruv"
                         />
@@ -91,7 +92,7 @@
                                 </ng-container>
 
                                 <ng-container *ngIf="!col.filterType || col.filterType === 'text'">
-                                    <input pInputText type="text" [style.width.%]="100" placeholder="Qidiring..." [(ngModel)]="columnFilters[col.field]" (ngModelChange)="onColumnFilter($event, col.field)" />
+                                    <input pInputText type="text" [appNoAutofill]="columnFilters[col.field]" [style.width.%]="100" placeholder="Qidiring..." [(ngModel)]="columnFilters[col.field]" (ngModelChange)="onColumnFilter($event, col.field)" />
                                 </ng-container>
                             </ng-container>
                         </th>

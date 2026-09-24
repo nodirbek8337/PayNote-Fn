@@ -9,13 +9,19 @@
         <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"> </app-select>
     </div>
 
-    <div class="form-field">
-        <label>Parol</label>
+    <div *ngIf="isEdit" class="form-field">
+        <button pButton type="button" class="p-button-outlined" [disabled]="loading"
+            [label]="changePassword ? 'Parolni almashtirishni bekor qilish' : 'Parolni almashtirish'"
+            (click)="togglePasswordChange()"></button>
+        <small *ngIf="!changePassword">Parol o'zgarmaydi. Almashtirish uchun tugmani bosing.</small>
+    </div>
+    <div *ngIf="!isEdit || changePassword" class="form-field">
+        <label>{{ isEdit ? 'Yangi parol' : 'Parol' }}</label>
         <app-input formControlName="password" [type]="'password'" [placeholder]="passwordLabel"></app-input>
     </div>
     <div class="form-field">
         <label>Telegram username <small>(ixtiyoriy)</small></label>
-        <app-input formControlName="telegramUsername" inputName="telegram-username" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
+        <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
         <small>Saqlangach, aynan shu Telegram akkauntidan botga /start yuboring.</small>
     </div>
 

@@ -5,13 +5,14 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DatepickerRangeComponent } from '../../../shared/components/datepicker-range/datepicker-range.component';
+import { NoAutofillDirective } from '../../../shared/directives/no-autofill.directive';
 
 type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
 
 @Component({
   selector: 'users-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, DatepickerRangeComponent],
+  imports: [CommonModule, FormsModule, SelectModule, InputTextModule, ButtonModule, DatepickerRangeComponent, NoAutofillDirective],
   template: `
     <div class="users-filter">
       <ng-container *ngFor="let col of columnDefs">
@@ -49,6 +50,7 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
                   min="0"
                   placeholder="Eng kam miqdor"
                   [ngModel]="getNumberRangeValue(col.field, 0)"
+                  [appNoAutofill]="getNumberRangeValue(col.field, 0)"
                   (ngModelChange)="onNumberRangeChange($event, col.field, 0)"
                 />
                 <input
@@ -57,6 +59,7 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
                   min="0"
                   placeholder="Eng ko'p miqdor"
                   [ngModel]="getNumberRangeValue(col.field, 1)"
+                  [appNoAutofill]="getNumberRangeValue(col.field, 1)"
                   (ngModelChange)="onNumberRangeChange($event, col.field, 1)"
                 />
               </div>
@@ -70,6 +73,7 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
                 [style.width.%]="100"
                 [placeholder]="resolvePlaceholder(col, 'text')"
                 [(ngModel)]="columnFilters[col.field]"
+                [appNoAutofill]="columnFilters[col.field]"
                 (ngModelChange)="onColumnFilter($event, col.field)"
               />
             </ng-container>

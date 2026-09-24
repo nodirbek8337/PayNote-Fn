@@ -9,13 +9,14 @@ import { SelectModule } from 'primeng/select';
 import { MoneyPipe } from '../../pipes/money.pipe';
 import { ControlErrorComponent } from '../control-error/control-error.component';
 import { MONEY_ERROR_MESSAGES } from '../../constants/control-error-messages';
+import { NoAutofillDirective } from '../../directives/no-autofill.directive';
 
 type CurrencyCode = 'UZS' | 'USD';
 
 @Component({
   selector: 'app-money-input',
   standalone: true,
-  imports: [FormsModule, InputTextModule, SelectModule, ControlErrorComponent],
+  imports: [FormsModule, InputTextModule, SelectModule, ControlErrorComponent, NoAutofillDirective],
   providers: [
     MoneyPipe,
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MoneyInputComponent), multi: true },

@@ -19,6 +19,7 @@ import { SignClassPipe } from '../../pipes/sign-class.pipe';
 import { MoneyPipe } from '../../pipes/money.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastService } from '../../services/toast.service';
+import { NoAutofillDirective } from '../../directives/no-autofill.directive';
 
 @Component({
     selector: 'prime-datatable',
@@ -27,6 +28,7 @@ import { ToastService } from '../../services/toast.service';
     standalone: true,
     imports: [
         CommonModule,
+        NoAutofillDirective,
         FormsModule,
         TableModule,
         DialogModule,

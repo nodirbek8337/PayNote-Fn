@@ -10,6 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { ToastService } from '../../shared/services/toast.service';
 import { Currency, PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
+import { NoAutofillDirective } from '../../shared/directives/no-autofill.directive';
 
 type CartId = 1 | 2;
 
@@ -24,7 +25,7 @@ type CartItem = {
 @Component({
     selector: 'sales',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, ConfirmDialogModule, DialogModule, InputTextModule, MoneyPipe],
+    imports: [CommonModule, FormsModule, ButtonModule, ConfirmDialogModule, DialogModule, InputTextModule, MoneyPipe, NoAutofillDirective],
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.scss'],
     providers: [ConfirmationService]

@@ -11,6 +11,7 @@
                     <input
                         pInputText
                         [ngModel]="search"
+                        [appNoAutofill]="search"
                         (ngModelChange)="onSearchChange($event)"
                         placeholder="Nomi yoki narxi bo'yicha qidiring..."
                     />
@@ -166,6 +167,7 @@
             <span>Eslatma <b *ngIf="paymentMethod === 'OTHER'">*</b></span>
             <textarea
                 [(ngModel)]="saleNote"
+                [appNoAutofill]="saleNote"
                 rows="3"
                 maxlength="500"
                 [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'"

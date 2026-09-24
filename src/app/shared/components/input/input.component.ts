@@ -5,11 +5,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ControlErrorComponent } from '../control-error/control-error.component';
 import { INPUT_ERROR_MESSAGES } from '../../constants/control-error-messages';
+import { NoAutofillDirective } from '../../directives/no-autofill.directive';
+
+let nextInputId = 0;
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [NgIf, NgClass, InputTextModule, FormsModule, ControlErrorComponent],
+  imports: [NgIf, NgClass, InputTextModule, FormsModule, ControlErrorComponent, NoAutofillDirective],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   providers: [{
@@ -29,6 +32,11 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   @Input() allowNegative = false;
   @Input() autocomplete = '';
   @Input() inputName = '';
+  @Input() inputId = `paynote-field-${++nextInputId}`;
+
+  get inputAutocomplete(): string {
+    return this.autocomplete || (this.type === 'password' ? 'new-password' : 'off');
+  }
 
   value: any = '';
   isDisabled = false;

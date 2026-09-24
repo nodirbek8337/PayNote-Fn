@@ -29,11 +29,11 @@ import { AuthService } from '../../shared/services/auth.service';
                         </div>
 
                         <div>
-                            <label for="email1" class="block text-xl font-medium mb-2" style="color: var(--text-color)">Foydalanuvchi nomi</label>
-                            <input pInputText id="email1" type="text" placeholder="Foydalanuvchi nomini kiriting" class="w-full mb-4" [(ngModel)]="email" [disabled]="_auth.isLoading()" />
+                            <label for="paynote-entry-name" class="block text-xl font-medium mb-2" style="color: var(--text-color)">Foydalanuvchi nomi</label>
+                            <input pInputText id="paynote-entry-name" name="username" type="text" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full mb-4" [(ngModel)]="email" [disabled]="_auth.isLoading()" />
 
-                            <label for="password1" class="block font-medium text-xl mb-2" style="color: var(--text-color)">Parol</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Parol kiriting" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false" [disabled]="_auth.isLoading()"></p-password>
+                            <label for="paynote-entry-secret" class="block font-medium text-xl mb-2" style="color: var(--text-color)">Parol</label>
+                            <p-password inputId="paynote-entry-secret" name="password" autocomplete="current-password" [(ngModel)]="password" placeholder="Parol kiriting" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false" [disabled]="_auth.isLoading()"></p-password>
 
                             <div class="login-status" [class.is-waking]="_auth.isServerWaking()" *ngIf="_auth.isLoading()" aria-live="polite">
                                 <i class="pi" [ngClass]="_auth.isServerWaking() ? 'pi-server' : 'pi-spin pi-spinner'"></i>
