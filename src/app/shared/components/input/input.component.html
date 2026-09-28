@@ -12,6 +12,7 @@
             [attr.name]="inputName || inputId"
             [attr.inputmode]="inputMode"
             [ngModel]="value"
+            (input)="handleNativeInput($event)"
             (ngModelChange)="handleValueChange($event)"
             (blur)="handleBlur()"
             [ngClass]="{ 'is-invalid': shouldShowErrors() }"

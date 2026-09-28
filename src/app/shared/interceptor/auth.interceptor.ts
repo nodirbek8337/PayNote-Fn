@@ -29,6 +29,8 @@ export const AuthInterceptor: HttpInterceptorFn = (
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       const show = (msg: string) => toast.error(msg);
+      const serverMessage = typeof error.error?.message === 'string' ? error.error.message.trim() : '';
+      const showServerMessage = (fallback: string) => show(serverMessage || fallback);
 
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
@@ -40,25 +42,25 @@ export const AuthInterceptor: HttpInterceptorFn = (
           }
           break;
         case HttpStatusCode.BadRequest:
-          show("Noto'g'ri so'rov. Ma'lumotlarni tekshirib qayta urinib ko'ring.");
+          showServerMessage("Noto'g'ri so'rov. Ma'lumotlarni tekshirib qayta urinib ko'ring.");
           break;
         case HttpStatusCode.Forbidden:
-          show("Ruxsat yo'q. Ushbu amalni bajarishga huquqingiz yo'q.");
+          showServerMessage("Ruxsat yo'q. Ushbu amalni bajarishga huquqingiz yo'q.");
           break;
         case HttpStatusCode.NotFound:
-          show("Topilmadi. So'ralgan ma'lumot mavjud emas.");
+          showServerMessage("Topilmadi. So'ralgan ma'lumot mavjud emas.");
           break;
         case HttpStatusCode.Conflict:
-          show('Nizoli holat. Ma\'lumot allaqachon mavjud.');
+          showServerMessage("Ma'lumot allaqachon mavjud.");
           break;
         case HttpStatusCode.UnprocessableEntity:
-          show("Ma'lumotlar noto'g'ri to'ldirilgan.");
+          showServerMessage("Ma'lumotlar noto'g'ri to'ldirilgan.");
           break;
         case 429:
-          show("Juda ko'p so'rov yuborildi. Birozdan so'ng urinib ko'ring.");
+          showServerMessage("Juda ko'p so'rov yuborildi. Birozdan so'ng urinib ko'ring.");
           break;
         case HttpStatusCode.InternalServerError:
-          show('Serverda xatolik yuz berdi.');
+          showServerMessage('Serverda xatolik yuz berdi.');
           break;
         case 502:
           show('Tashqi xizmat xatolik qaytardi.');
@@ -73,7 +75,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
           show("Internet aloqasi yo'q. Ulab qayta urinib ko'ring.");
           break;
         default:
-          show("Noma'lum xatolik yuz berdi.");
+          showServerMessage("Noma'lum xatolik yuz berdi.");
           break;
       }
 

@@ -100,11 +100,19 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         this.onChange(raw === '' || raw === '-' ? null : Number(raw));
     }
 
+    handleNativeInput(event: Event): void {
+        if (this.type !== 'number') return;
+
+        const input = event.target as HTMLInputElement;
+        this.handleValueChange(input.value);
+        if (input.value !== this.value) input.value = this.value;
+    }
+
     handleBlur(): void {
         if (this.type === 'number' && this.allowMathExpression) {
             const result = this.evaluateNumberExpression(this.value);
 
-            if (result !== null && result >= 0) {
+            if (result !== null && (this.allowNegative || result >= 0)) {
                 this.value = this.formatNumberRaw(String(result));
                 this.onChange(result);
             }
@@ -154,12 +162,12 @@ export class InputComponent implements ControlValueAccessor, OnInit {
 
     private sanitizeNumberExpression(value: any): string {
         let raw = String(value ?? '').replace(/[^\d+\-\s.]/g, '');
-        raw = raw.replace(/[.]/g, ' ');
-        raw = raw.replace(/\s+/g, ' ');
+        raw = raw.replace(/[.\s]/g, '');
+        const isNegative = this.allowNegative && raw.startsWith('-');
         raw = raw.replace(/^[+-]+/, '');
 
         const operatorMatch = raw.match(/[+-]/);
-        if (!operatorMatch) return raw.trim();
+        if (!operatorMatch) return `${isNegative ? '-' : ''}${raw}`;
 
         const operatorIndex = operatorMatch.index ?? -1;
         const left = raw.slice(0, operatorIndex).replace(/[+-]/g, '').trim();
@@ -169,7 +177,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
             .replace(/[+-]/g, '')
             .trim();
 
-        return `${left}${operator}${right}`;
+        return `${isNegative ? '-' : ''}${left}${operator}${right}`;
     }
 
     private formatNumberExpressionValue(value: any): string {
@@ -180,14 +188,19 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     private formatNumberExpression(raw: string): string {
         if (!raw) return '';
 
-        const operatorIndex = raw.search(/[+-]/);
-        if (operatorIndex === -1) return this.formatNumberExpressionPart(raw);
+        const isNegative = raw.startsWith('-');
+        const expression = isNegative ? raw.slice(1) : raw;
+        const operatorIndex = expression.search(/[+-]/);
+        if (operatorIndex === -1) {
+            const value = this.formatNumberExpressionPart(expression);
+            return isNegative ? `-${value}` : value;
+        }
 
-        const left = raw.slice(0, operatorIndex);
-        const operator = raw[operatorIndex];
-        const right = raw.slice(operatorIndex + 1);
+        const left = expression.slice(0, operatorIndex);
+        const operator = expression[operatorIndex];
+        const right = expression.slice(operatorIndex + 1);
 
-        return `${this.formatNumberExpressionPart(left)}${operator}${this.formatNumberExpressionPart(right)}`;
+        return `${isNegative ? '-' : ''}${this.formatNumberExpressionPart(left)}${operator}${this.formatNumberExpressionPart(right)}`;
     }
 
     private formatNumberExpressionPart(part: string): string {
@@ -201,15 +214,17 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         const raw = String(value ?? '')
             .trim()
             .replace(/[.\s]/g, '');
-        if (!raw || !/^\d+(?:[+-]\d+)?$/.test(raw)) return null;
+        const numberPattern = this.allowNegative ? /^-?\d+$/ : /^\d+$/;
+        const expressionPattern = this.allowNegative ? /^(-?\d+)([+-])(\d+)$/ : /^(\d+)([+-])(\d+)$/;
+        if (!raw) return null;
+        if (numberPattern.test(raw)) return Number(raw);
 
-        const operatorIndex = raw.search(/[+-]/);
-        if (operatorIndex === -1) return Number(raw);
+        const match = raw.match(expressionPattern);
+        if (!match) return null;
 
-        const left = Number(raw.slice(0, operatorIndex));
-        const right = Number(raw.slice(operatorIndex + 1));
-        if (!Number.isFinite(left) || !Number.isFinite(right)) return null;
-
-        return raw[operatorIndex] === '+' ? left + right : left - right;
+        const left = Number(match[1]);
+        const right = Number(match[3]);
+        const result = match[2] === '+' ? left + right : left - right;
+        return Number.isFinite(result) && (this.allowNegative || result >= 0) ? result : null;
     }
 }

@@ -511,6 +511,7 @@ html.app-dark .p-multiselect {
 }
 
 .p-dialog {
+  border: 1px solid color-mix(in srgb, var(--surface-border) 90%, var(--action-primary)) !important;
   border-radius: 8px !important;
   overflow: hidden;
   box-shadow: var(--paynote-shadow) !important;
@@ -521,6 +522,34 @@ html.app-dark .p-multiselect {
 .p-dialog .p-dialog-footer {
   background: var(--surface-card) !important;
   color: var(--text-color) !important;
+}
+
+.p-dialog .p-dialog-header {
+  min-height: 56px;
+  padding: 1rem 1.25rem !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border) 82%, transparent) !important;
+}
+
+.p-dialog .p-dialog-title {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+
+.p-dialog .p-dialog-header-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 8px !important;
+  color: var(--action-primary-from) !important;
+}
+
+.p-dialog .p-dialog-header-icon:hover {
+  background: var(--action-primary-soft) !important;
+  color: var(--text-color) !important;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 1.1rem 1.25rem 1.25rem !important;
+  overscroll-behavior: contain;
 }
 
 .p-dialog-mask {
@@ -694,6 +723,26 @@ html.app-dark .p-multiselect {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--action-primary) 10%, transparent) !important;
 }
 
+/* Saqlash/tasdiqlash oynasi o'chirish oynasidan rang orqali ham aniq ajralsin. */
+.hotel-save-confirm .p-confirmdialog-icon {
+  border-color: color-mix(in srgb, #22c55e 48%, transparent) !important;
+  background: color-mix(in srgb, #22c55e 15%, var(--table-bg)) !important;
+  color: #4ade80 !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #22c55e 12%, transparent) !important;
+}
+
+.hotel-save-confirm .confirm-accept-btn {
+  border-color: #22c55e !important;
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, #15803d 24%, transparent) !important;
+}
+
+.hotel-save-confirm .confirm-accept-btn:hover {
+  border-color: #4ade80 !important;
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%) !important;
+}
+
 .form-save-btn.p-button {
   min-width: 96px;
   border-color: var(--action-primary) !important;
@@ -858,13 +907,6 @@ svg {
     grid-area: auto;
   }
 
-  prime-datatable .p-datatable-table-container,
-  prime-datatable .p-datatable-scrollable-body {
-    min-height: 22rem !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
   prime-datatable .empty-table-state {
     min-height: 42vh;
   }
@@ -905,9 +947,18 @@ svg {
     padding: 0.9rem 1rem !important;
   }
 
+  .p-dialog .p-dialog-header-icon {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
   .p-dialog .p-dialog-content {
     padding: 0.8rem 1rem !important;
     overflow-y: auto;
+  }
+
+  .p-dialog .p-dialog-content .p-button {
+    min-height: 44px;
   }
 
   .paynote-confirm-dialog .p-dialog-content {

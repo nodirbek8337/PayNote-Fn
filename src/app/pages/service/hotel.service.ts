@@ -10,7 +10,7 @@ export class HotelService {
   bookings(from: string, to: string) { return this.http.get<any>(`${this.url}/bookings`, { params: { from, to } }); }
   createRoom(body: any) { return this.http.post<any>(`${this.url}/rooms`, body); }
   updateRoom(id: string, body: any) { return this.http.put<any>(`${this.url}/rooms/${id}`, body); }
-  archiveRoom(id: string, body: any) { return this.http.patch<any>(`${this.url}/rooms/${id}/archive`, body); }
+  deleteRoom(id: string) { return this.http.delete<any>(`${this.url}/rooms/${id}`); }
   createBooking(body: any) { return this.http.post<any>(`${this.url}/bookings`, body); }
   updateBooking(id: string, body: any) { return this.http.put<any>(`${this.url}/bookings/${id}`, body); }
   addPayment(id: string, body: any) { return this.http.post<any>(`${this.url}/bookings/${id}/payments`, body); }

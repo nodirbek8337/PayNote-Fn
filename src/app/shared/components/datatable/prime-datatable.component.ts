@@ -7,9 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Table, SortIcon, SortableColumn } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { InputTextModule } from 'primeng/inputtext';
 import { ButtonDirective } from 'primeng/button';
-import { Select } from 'primeng/select';
 import { DatepickerRangeComponent } from '../datepicker-range/datepicker-range.component';
 import { DatatableActionsComponent } from './components/datatable-actions.component';
 import { DatatableColumnRendererComponent } from './components/datatable-column-renderer.component';
@@ -19,7 +17,6 @@ import { SignClassPipe } from '../../pipes/sign-class.pipe';
 import { MoneyPipe } from '../../pipes/money.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastService } from '../../services/toast.service';
-import { NoAutofillDirective } from '../../directives/no-autofill.directive';
 import { InputComponent } from '../input/input.component';
 import { SelectComponent } from '../select/select.component';
 
@@ -30,7 +27,6 @@ import { SelectComponent } from '../select/select.component';
     standalone: true,
     imports: [
         CommonModule,
-        NoAutofillDirective,
         InputComponent,
         SelectComponent,
         FormsModule,
@@ -39,9 +35,7 @@ import { SelectComponent } from '../select/select.component';
         SortableColumn,
         DialogModule,
         ConfirmDialog,
-        InputTextModule,
         ButtonDirective,
-        Select,
         DatepickerRangeComponent,
         DatatableActionsComponent,
         DatatableColumnRendererComponent,
@@ -71,7 +65,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
 
     @Input() showColumnFilterRow = false;
     @Input() showDrawerFilters = true;
-    @Input() showQuickFilterTop = true;
+    @Input() showQuickFilterInDrawer = true;
     @Input() showQuickFilterBottom = false;
     @Input() quickFilterPlaceholder = 'Tezkor qidiruv...';
 
@@ -128,6 +122,9 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
             columnFilters: this.columnFilters,
             loading: this.loading,
             quickText: this.quickFilterValue,
+            showQuickFilter: this.showQuickFilterInDrawer,
+            quickFilterPlaceholder: this.quickFilterPlaceholder,
+            onQuickFilterChange: (value: string) => this.onQuickFilterChange(value),
             onColumnFilter: (val: any, field: string) => this.onColumnFilter(val, field),
             clearAllFilters: () => this.clearAllFilters()
         });

@@ -14,6 +14,14 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
     imports: [FormsModule, ButtonDirective, DatepickerRangeComponent, InputComponent, SelectComponent],
     template: `
         <div class="users-filter">
+            @if (showQuickFilter && onQuickFilterChange) {
+                <app-input
+                    [placeholder]="quickFilterPlaceholder"
+                    [ngModel]="quickText"
+                    (ngModelChange)="onQuickFilterChange($event)"
+                ></app-input>
+            }
+
             @for (col of columnDefs; track col) {
                 @if (col?.searchable !== false) {
                     <div>
@@ -113,6 +121,9 @@ export class UsersFilterComponent {
     @Input() loading = false;
 
     @Input() quickText: string = '';
+    @Input() showQuickFilter = false;
+    @Input() quickFilterPlaceholder = 'Umumiy qidiruv...';
+    @Input() onQuickFilterChange?: (value: string) => void;
 
     @Input() translateFn?: (key: string) => string;
 

@@ -10,9 +10,11 @@ import { TooltipModule } from 'primeng/tooltip';
     template: `
         @if (actions.length) {
             @for (btn of actions; track btn) {
-                <button pButton [class]="'p-button-sm p-button-text datatable-custom-action datatable-custom-action--' + (btn.color || 'secondary')" [title]="btn.tooltip" [disabled]="btn.disabled" (click)="btn.action(row)" [pTooltip]="btn.TooltipTitle || btn.tooltip" tooltipPosition="top">
-                    <i [class]="btn.icon"></i>
-                </button>
+                @if (!isHidden(btn)) {
+                    <button pButton [class]="'p-button-sm p-button-text datatable-custom-action datatable-custom-action--' + (btn.color || 'secondary')" [title]="btn.tooltip" [disabled]="isDisabled(btn)" (click)="btn.action(row)" [pTooltip]="btn.TooltipTitle || btn.tooltip" tooltipPosition="top">
+                        <i [class]="btn.icon"></i>
+                    </button>
+                }
             }
         }
     `,
@@ -22,4 +24,12 @@ import { TooltipModule } from 'primeng/tooltip';
 export class DatatableActionsComponent {
     @Input() row: any;
     @Input() actions: ICustomAction[] = [];
+
+    isDisabled(action: ICustomAction) {
+        return typeof action.disabled === 'function' ? action.disabled(this.row) : !!action.disabled;
+    }
+
+    isHidden(action: ICustomAction) {
+        return typeof action.hidden === 'function' ? action.hidden(this.row) : !!action.hidden;
+    }
 }

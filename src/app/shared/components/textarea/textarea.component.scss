@@ -6,8 +6,38 @@ textarea {
 }
 
 textarea {
-    min-height: 5.75rem;
+    box-sizing: border-box;
+    min-height: calc(var(--paynote-control-height) * 2);
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--field-bg);
+    color: var(--text-color);
+    font: inherit;
+    font-size: 0.96rem;
+    line-height: 1.45;
     resize: vertical;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+textarea::placeholder {
+    color: var(--text-color-secondary);
+    opacity: 0.72;
+}
+
+textarea:hover:enabled {
+    border-color: color-mix(in srgb, var(--action-primary) 50%, var(--surface-border));
+}
+
+textarea:focus:enabled {
+    border-color: var(--action-primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--action-primary), transparent 82%) !important;
+}
+
+textarea:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
 }
 
 textarea.is-invalid {
