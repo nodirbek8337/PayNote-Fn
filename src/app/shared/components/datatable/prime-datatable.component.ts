@@ -172,7 +172,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
             acceptButtonStyleClass: 'confirm-accept-btn',
             rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
             accept: () => {
-                this._defaultService.delete(row._id).subscribe({
+                this._defaultService.delete(row._id).pipe(this.viewUpdates()).subscribe({
                     next: () => {
                         this.toast.success("Ma'lumot o'chirildi");
                         this.reload();
@@ -197,9 +197,11 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
         this.formContainer.clear();
         this.formRef = this.formContainer.createComponent(this.formComponent);
         this.formRef.instance.model = { ...this.editData };
+        this.formRef.changeDetectorRef.markForCheck();
 
         this.formRef.instance.onClose = () => {
             this.showEditDialog = false;
+            this.formRef?.changeDetectorRef.markForCheck();
         };
 
         this.formRef.instance.loading = false;
@@ -208,20 +210,23 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
             if (this.isSubmitting) return;
             this.isSubmitting = true;
             this.formRef!.instance.loading = true;
+            this.formRef!.changeDetectorRef.markForCheck();
 
             const save$ = this.editMode && _id ? this._defaultService.update(formData, _id) : this._defaultService.insert(formData);
 
-            save$.subscribe({
+            save$.pipe(this.viewUpdates()).subscribe({
                 next: () => {
                     this.isSubmitting = false;
                     this.showEditDialog = false;
                     this.formRef!.instance.loading = false;
+                    this.formRef!.changeDetectorRef.markForCheck();
                     this.toast.success(this.editMode ? "Ma'lumot yangilandi" : "Ma'lumot qo'shildi");
                     this.reload();
                 },
                 error: () => {
                     this.isSubmitting = false;
                     this.formRef!.instance.loading = false;
+                    this.formRef!.changeDetectorRef.markForCheck();
                 }
             });
         };

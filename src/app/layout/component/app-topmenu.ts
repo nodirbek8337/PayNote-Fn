@@ -174,7 +174,7 @@ export class AppTopMenu implements OnInit {
             icon: 'pi pi-building',
             items: [
                 { label: 'Xonalar', icon: 'pi pi-building', routerLink: ['/hotel/rooms'], exact: true },
-                { label: 'Buyurtmalar', icon: 'pi pi-calendar-plus', routerLink: ['/hotel'], exact: true },
+                { label: 'Buyurtmalar', icon: 'pi pi-calendar-plus', routerLink: ['/hotel/bookings'], exact: true },
                 { label: 'Hisob-kitob tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true }
             ]
         };

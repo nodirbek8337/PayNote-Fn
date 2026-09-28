@@ -2,7 +2,7 @@
     <header class="hotel-header">
         <div>
             <span>Mehmonxona</span>
-            <h1>{{ canSeeHistory ? 'Band qilishlar tarixi' : isRoomCatalog ? 'Xonalar katalogi' : 'Xonalarni band qilish' }}</h1>
+            <h1>{{ canSeeHistory ? 'Band qilishlar tarixi' : isRoomCatalog ? 'Xonalar katalogi' : 'Buyurtmalar' }}</h1>
             @if (!canSeeHistory) {
                 <p>{{ isRoomCatalog ? 'Xonalarni qo‘shing va ularning sig‘imini boshqaring.' : 'Xonani tanlang, buyurtma va to‘lovlarni bir joydan boshqaring.' }}</p>
             }

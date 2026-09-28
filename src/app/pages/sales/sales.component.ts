@@ -11,6 +11,7 @@ import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { ToastService } from '../../shared/services/toast.service';
 import { Currency, PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
 import { NoAutofillDirective } from '../../shared/directives/no-autofill.directive';
+import { injectViewUpdates } from '../../shared/utils/view-updates';
 
 type CartId = 1 | 2;
 
@@ -31,6 +32,7 @@ type CartItem = {
     providers: [ConfirmationService]
 })
 export class SalesComponent implements OnInit {
+    private readonly viewUpdates = injectViewUpdates();
     private readonly cartStorageKey = 'payNoteSalesCarts';
     private readonly activeCartStorageKey = 'payNoteActiveSalesCart';
     private salesService = inject(SalesService);
@@ -69,7 +71,7 @@ export class SalesComponent implements OnInit {
         this.loading = true;
         this.salesService
             .getProducts({ per_page: 200 })
-            .pipe(finalize(() => (this.loading = false)))
+            .pipe(finalize(() => (this.loading = false)), this.viewUpdates())
             .subscribe((res) => {
                 this.products = Array.isArray(res?.data)
                     ? res.data.map((item: any) => ({
@@ -207,7 +209,7 @@ export class SalesComponent implements OnInit {
                 paymentMethod,
                 note
             )
-            .pipe(finalize(() => (this.sellingCart = null)))
+            .pipe(finalize(() => (this.sellingCart = null)), this.viewUpdates())
             .subscribe(() => {
                 this.toast.success(`Savat ${cartId} sotildi`);
                 this.clearCart(cartId);

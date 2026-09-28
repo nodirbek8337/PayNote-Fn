@@ -20,20 +20,20 @@ import { AuthService } from '../../shared/services/auth.service';
             <div class="login-shell">
                 <div class="login-frame">
                     <div class="login-card">
-                        <div class="text-center mb-8">
+                        <div class="login-intro">
                             <div class="login-content">
                                 <img src="assets/images/logo.png" alt="Pay Note" width="100" />
                             </div>
-                            <div class="text-3xl font-medium mb-4" style="color: var(--text-color)">Pay Note ga xush kelibsiz!</div>
-                            <span class="text-muted-color font-medium">Tizimga kirish</span>
+                            <h1>PayNote’ga xush kelibsiz!</h1>
+                            <span>Tizimga kirish</span>
                         </div>
 
                         <div>
-                            <label for="paynote-entry-name" class="block text-xl font-medium mb-2" style="color: var(--text-color)">Foydalanuvchi nomi</label>
-                            <input pInputText id="paynote-entry-name" name="username" type="text" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full mb-4" [(ngModel)]="email" [disabled]="_auth.isLoading()" />
+                            <label for="paynote-entry-name" class="login-label">Foydalanuvchi nomi</label>
+                            <input pInputText id="paynote-entry-name" name="username" type="text" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full login-field" [(ngModel)]="email" [disabled]="_auth.isLoading()" />
 
-                            <label for="paynote-entry-secret" class="block font-medium text-xl mb-2" style="color: var(--text-color)">Parol</label>
-                            <div class="password-field mb-4">
+                            <label for="paynote-entry-secret" class="login-label">Parol</label>
+                            <div class="password-field login-field">
                                 <input
                                     pInputPassword
                                     id="paynote-entry-secret"
@@ -71,7 +71,7 @@ import { AuthService } from '../../shared/services/auth.service';
                             <button
                                 pButton
                                 type="button"
-                                class="w-full mt-6"
+                                class="w-full login-submit"
                                 (click)="onSubmit()"
                                 [disabled]="_auth.isLoading() || !email.trim() || !password"
                             >
@@ -98,7 +98,7 @@ import { AuthService } from '../../shared/services/auth.service';
             }
 
             .login-shell {
-                width: min(100%, 560px);
+                width: min(100%, 540px);
             }
 
             .login-frame {
@@ -109,12 +109,42 @@ import { AuthService } from '../../shared/services/auth.service';
 
             .login-card {
                 width: 100%;
-                padding: 3.5rem 4rem;
+                padding: 2.75rem 3.5rem;
                 border-radius: 18px;
                 background: var(--surface-card);
                 border: 1px solid var(--surface-border);
                 box-shadow: var(--paynote-shadow);
             }
+
+            .login-intro {
+                margin: 0 0 2rem;
+                text-align: center;
+            }
+
+            .login-intro h1 {
+                margin: 0 0 0.4rem;
+                color: var(--text-color);
+                font-size: clamp(1.35rem, 3vw, 1.6rem);
+                font-weight: 700;
+                letter-spacing: -0.02em;
+            }
+
+            .login-intro span {
+                color: var(--text-color-secondary);
+                font-size: 0.92rem;
+                font-weight: 600;
+            }
+
+            .login-label {
+                display: block;
+                margin: 0 0 0.45rem;
+                color: var(--text-color);
+                font-size: 0.94rem;
+                font-weight: 700;
+            }
+
+            .login-field { margin-bottom: 1.15rem; }
+            .login-submit { margin-top: 0.35rem; }
 
             .login-status {
                 display: flex;
@@ -159,7 +189,7 @@ import { AuthService } from '../../shared/services/auth.service';
 
             .password-toggle {
                 position: absolute;
-                top: 50%;
+                top: calc(50% - 1rem);
                 right: 0.75rem;
                 display: grid;
                 width: 2rem;

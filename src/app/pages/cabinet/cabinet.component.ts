@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { forkJoin } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { injectViewUpdates } from '../../shared/utils/view-updates';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { MySalesSummary, SalesPeriodSummary, SalesService } from '../service/sales.service';
@@ -19,7 +19,10 @@ export class CabinetComponent implements OnInit {
     private hotelService = inject(HotelService);
     private authService = inject(AuthService);
 
-    loading = false;
+    private readonly viewUpdates = injectViewUpdates();
+    private loadingState = signal(false);
+    get loading(): boolean { return this.loadingState(); }
+    errorMessage = '';
     user = this.authService.getCurrentUser();
     summary: MySalesSummary = {
         today: this.emptyPeriod(),
@@ -32,32 +35,35 @@ export class CabinetComponent implements OnInit {
     }
 
     loadSummary(): void {
-        this.loading = true;
-        if (this.isHotelManager) {
-            this.hotelService.summary().pipe(finalize(() => (this.loading = false))).subscribe((response) => this.hotelSummary = response?.data ?? this.hotelSummary);
-            return;
-        }
-        if (this.isAdmin) {
-            forkJoin({ sales: this.salesService.getMySummary(), hotel: this.hotelService.summary() })
-                .pipe(finalize(() => (this.loading = false)))
-                .subscribe(({ sales, hotel }) => {
-                    if (sales?.data) {
-                        this.summary = { today: this.normalizePeriod(sales.data.today), month: this.normalizePeriod(sales.data.month) };
-                    }
-                    this.hotelSummary = hotel?.data ?? this.hotelSummary;
-                });
-            return;
-        }
-        this.salesService
-            .getMySummary()
-            .pipe(finalize(() => (this.loading = false)))
-            .subscribe((response) => {
-                if (response?.data) {
-                    this.summary = {
-                        today: this.normalizePeriod(response.data.today),
-                        month: this.normalizePeriod(response.data.month)
-                    };
-                }
+        if (this.loading) return;
+        this.errorMessage = '';
+        this.loadingState.set(true);
+
+        const sales$ = this.salesService.getMySummary().pipe(tap((response) => {
+            if (response?.success !== true || !response.data) {
+                throw new Error('Sotuvlar hisobini olishda xatolik.');
+            }
+            this.summary = {
+                today: this.normalizePeriod(response.data.today),
+                month: this.normalizePeriod(response.data.month)
+            };
+        }));
+        const hotel$ = this.hotelService.summary().pipe(tap((response) => {
+            if (response?.success !== true || !response.data) {
+                throw new Error('Mehmonxona hisobini olishda xatolik.');
+            }
+            this.hotelSummary = response.data;
+        }));
+
+        // Admin loads sales first, then hotel; each endpoint is subscribed once.
+        const request$ = this.isHotelManager ? hotel$ : this.isAdmin ? sales$.pipe(switchMap(() => hotel$)) : sales$;
+        request$.pipe(
+            finalize(() => this.loadingState.set(false)),
+            this.viewUpdates()
+        ).subscribe({
+            error: () => {
+                this.errorMessage = 'Hisoblarni yuklab bo‘lmadi. Yangilash tugmasini qayta bosing.';
+            }
             });
     }
 

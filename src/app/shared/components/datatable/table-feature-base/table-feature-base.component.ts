@@ -1,9 +1,11 @@
 import { Directive, Input, OnInit } from '@angular/core';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { DefaultService } from '../../../services/default.service';
+import { injectViewUpdates } from '../../../utils/view-updates';
 
 @Directive()
 export abstract class TableFeatureBaseComponent implements OnInit {
+    protected readonly viewUpdates = injectViewUpdates();
     @Input() rows: number = 15;
     @Input() hasRowIndex: boolean = false;
 
@@ -65,7 +67,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
         this.loading = true;
         this.activeLoadSignature = loadSignature;
 
-        this._defaultService.reloadTable().subscribe({
+        this._defaultService.reloadTable().pipe(this.viewUpdates()).subscribe({
             next: (res) => {
                 const items = Array.isArray(res.data) ? res.data : [];
 

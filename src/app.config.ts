@@ -1,6 +1,6 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AuthInterceptor } from './app/shared/interceptor/auth.interceptor';
 
@@ -13,10 +13,12 @@ import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // This app still has many existing components that update plain fields in HTTP callbacks.
+    // Keep the pre-v22 ZoneJS behaviour while those screens are migrated to signals gradually.
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       appRoutes,
-      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
-      withEnabledBlockingInitialNavigation()
+      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })
     ),
     provideHttpClient(
       withInterceptors([AuthInterceptor]),

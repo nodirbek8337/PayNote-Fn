@@ -20,6 +20,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const toast = inject(ToastService);
 
   const isAuthLogin = req.url.includes('/auth/login');
+  const isAuthSessionCheck = req.url.includes('/auth/me');
   const token = authService.getAccessToken();
   const authReq = token && !isAuthLogin
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
@@ -33,7 +34,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
         case HttpStatusCode.Unauthorized:
           if (isAuthLogin) {
             show("Kirish rad etildi. Username yoki parol noto'g'ri.");
-          } else {
+          } else if (!isAuthSessionCheck) {
             show('Sessiya muddati tugagan. Qaytadan login qiling.');
             authService.logoutAndRedirect();
           }

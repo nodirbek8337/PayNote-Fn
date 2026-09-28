@@ -73,7 +73,7 @@
                 class="datatable-content"
                 dataKey="id"
             >
-                <ng-template pTemplate="header" let-columns>
+                <ng-template #header let-columns>
                     <tr class="sort-headers">
                         @for (col of columns; track col) {
                             <th [pSortableColumn]="col.sortable !== false ? col.field : null" class="sort-header" [ngClass]="col.widthClass">
@@ -135,7 +135,7 @@
                     }
                 </ng-template>
 
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <ng-template #body let-rowData let-columns="columns">
                     <tr class="body-contents">
                         @for (col of columns; track col) {
                             <td class="body-content" [ngClass]="col.widthClass" [attr.data-label]="col.header" [attr.data-field]="col.field">
@@ -184,7 +184,7 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="emptymessage">
+                <ng-template #emptymessage>
                     <tr class="empty-table-row">
                         <td class="empty-table-cell" [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
                             <div class="empty-table-state">
@@ -196,7 +196,7 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="loadingbody">
+                <ng-template #loadingbody>
                     <tr class="empty-table-row">
                         <td class="empty-table-cell" [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
                             <div class="empty-table-state"></div>
