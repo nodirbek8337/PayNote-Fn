@@ -27,12 +27,12 @@ import { InputComponent } from '../../shared/components/input/input.component';
                             <span>Tizimga kirish</span>
                         </div>
 
-                        <div>
+                        <form autocomplete="on" (ngSubmit)="onSubmit()">
                             <label for="paynote-entry-name" class="login-label">Foydalanuvchi nomi</label>
-                            <app-input inputId="paynote-entry-name" inputName="username" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full login-field" [(ngModel)]="email" [disabled]="_auth.isLoading()"></app-input>
+                            <app-input inputId="paynote-entry-name" inputName="username" autocomplete="username" [allowAutofill]="true" placeholder="Foydalanuvchi nomini kiriting" class="w-full login-field" [(ngModel)]="email" [ngModelOptions]="{ standalone: true }" [disabled]="_auth.isLoading()"></app-input>
 
                             <label for="paynote-entry-secret" class="login-label">Parol</label>
-                            <app-input inputId="paynote-entry-secret" inputName="password" autocomplete="current-password" [type]="'password'" [(ngModel)]="password" placeholder="Parol kiriting" [disabled]="_auth.isLoading()" class="w-full login-field"></app-input>
+                            <app-input inputId="paynote-entry-secret" inputName="password" autocomplete="current-password" [allowAutofill]="true" [type]="'password'" [(ngModel)]="password" [ngModelOptions]="{ standalone: true }" placeholder="Parol kiriting" [disabled]="_auth.isLoading()" class="w-full login-field"></app-input>
 
                             @if (_auth.isLoading()) {
                                 <div class="login-status" [class.is-waking]="_auth.isServerWaking()" aria-live="polite">
@@ -48,7 +48,7 @@ import { InputComponent } from '../../shared/components/input/input.component';
 
                             <button
                                 pButton
-                                type="button"
+                                type="submit"
                                 class="w-full login-submit"
                                 (click)="onSubmit()"
                                 [disabled]="_auth.isLoading() || !email.trim() || !password"
@@ -58,7 +58,7 @@ import { InputComponent } from '../../shared/components/input/input.component';
                                 }
                                 <span>{{ _auth.isServerWaking() ? 'Server kutilmoqda...' : 'Tizimga kirish' }}</span>
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -193,6 +193,7 @@ export class LoginComponenet implements OnInit {
     }
 
     onSubmit() {
+        if (!this.email.trim() || !this.password) return;
         this._auth.login({ username: this.email, password: this.password });
     }
 

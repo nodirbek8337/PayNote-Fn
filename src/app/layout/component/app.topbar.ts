@@ -228,7 +228,6 @@ export class AppTopbar implements OnInit, OnDestroy {
     private router = inject(Router);
     private authService = inject(AuthService);
 
-    userName = this.getUserName();
     userMenuItems: MenuItem[] = [];
 
     private mediaQuery?: MediaQueryList;
@@ -314,16 +313,8 @@ export class AppTopbar implements OnInit, OnDestroy {
         }
     }
 
-    private getUserName(): string {
-        try {
-            const raw = localStorage.getItem('payNoteUser');
-            if (raw) {
-                const user = JSON.parse(raw);
-                return user?.username || 'Profile';
-            }
-        } catch {
-            // Invalid persisted data is ignored and the fallback name is used.
-        }
-        return 'Profile';
+    /** /auth/me dan yangilanadigan signal ishlatiladi, shuning uchun topbar darhol login nomini ko'rsatadi. */
+    get userName(): string {
+        return this.authService.currentUser()?.username || 'Foydalanuvchi';
     }
 }

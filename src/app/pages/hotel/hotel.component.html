@@ -3,7 +3,7 @@
     <header class="hotel-header">
         <div>
             <span>Mehmonxona</span>
-            <h1>{{ canSeeHistory ? 'Band qilishlar tarixi' : isRoomCatalog ? 'Xonalar katalogi' : 'Buyurtmalar' }}</h1>
+            <h1>{{ canSeeHistory ? 'Buyurtmalar tarixi' : isRoomCatalog ? 'Xonalar katalogi' : 'Buyurtmalar' }}</h1>
             @if (!canSeeHistory) {
                 <p>{{ isRoomCatalog ? 'Xonalarni qo‘shing va ularning sig‘imini boshqaring.' : 'Xonani tanlang, buyurtma va to‘lovlarni bir joydan boshqaring.' }}</p>
             }
@@ -42,7 +42,7 @@
         @if (rooms.length) {
             <div class="room-grid" [class.room-grid--catalog]="isRoomCatalog">
                 @for (room of rooms; track room) {
-                    <article class="room-card" [class.room-card--catalog]="isRoomCatalog" [class.inactive]="!room.isActive" [class.room-card--bookable]="!isRoomCatalog && room.isActive && !activeBooking(room)" [attr.role]="!isRoomCatalog && room.isActive && !activeBooking(room) ? 'button' : null" [attr.tabindex]="!isRoomCatalog && room.isActive && !activeBooking(room) ? 0 : null" (click)="!isRoomCatalog && room.isActive && !activeBooking(room) && openBooking(room)" (keydown.enter)="!isRoomCatalog && room.isActive && !activeBooking(room) && openBooking(room)" (keydown.space)="$event.preventDefault(); !isRoomCatalog && room.isActive && !activeBooking(room) && openBooking(room)">
+                    <article class="room-card" [class.room-card--catalog]="isRoomCatalog" [class.inactive]="!room.isActive" [class.room-card--bookable]="!isRoomCatalog && room.isActive" [attr.role]="!isRoomCatalog && room.isActive ? 'button' : null" [attr.tabindex]="!isRoomCatalog && room.isActive ? 0 : null" (click)="!isRoomCatalog && room.isActive && openBooking(room)" (keydown.enter)="!isRoomCatalog && room.isActive && openBooking(room)" (keydown.space)="$event.preventDefault(); !isRoomCatalog && room.isActive && openBooking(room)">
                         <div class="room-card__head">
                             <div class="room-card__title">
                                 <strong>{{ room.number }}</strong
@@ -60,14 +60,7 @@
                             </div>
                         }
                         @if (!isRoomCatalog) {
-                            @if (activeBooking(room); as booking) {
-                                <div class="room-card__booking">
-                                    <b>{{ booking.guestName }} · {{ booking.guestsCount }} kishi · {{ booking.daysCount }} kun</b><small>Buyurtma olingan: {{ booking.createdAt | date: 'dd.MM.yyyy HH:mm' }}</small>
-                                    <div><button type="button" (click)="openBooking(room, booking)">Tahrirlash</button><button type="button" class="outline" (click)="openPayment(booking)">To‘lov</button></div>
-                                </div>
-                            } @else {
-                                <div class="room-card__book-hint"><i class="pi pi-calendar-plus"></i><span>Band qilish uchun bosing</span></div>
-                            }
+                            <div class="room-card__book-hint"><i class="pi pi-calendar-plus"></i><span>Buyurtma olish uchun bosing</span></div>
                         }
                         @if (canManageRooms && isRoomCatalog) {
                             <footer>
@@ -79,7 +72,7 @@
                 }
             </div>
         } @else {
-            <div class="empty"><i class="pi pi-building"></i><b>Xonalar mavjud emas</b><span>Xona qo‘shilgach band qilish mumkin bo‘ladi.</span></div>
+            <div class="empty"><i class="pi pi-building"></i><b>Xonalar mavjud emas</b><span>Xona qo‘shilgach buyurtma olish mumkin bo‘ladi.</span></div>
         }
     } @else {
         <prime-datatable
@@ -94,13 +87,13 @@
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
             [quickFilterPlaceholder]="'Xona yoki mehmon bo‘yicha qidiring...'"
-            [customActions]="historyActions"
+            [customActions]="isAdmin ? historyActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
     }
 </section>
 
-<p-dialog [visible]="bookingDialog" (visibleChange)="onBookingVisibleChange($event)" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Band qilishni tahrirlash' : 'Xonani band qilish'">
+<p-dialog [visible]="bookingDialog" (visibleChange)="onBookingVisibleChange($event)" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Buyurtmani tahrirlash' : 'Buyurtma olish'">
     <form class="hotel-form" (ngSubmit)="saveBooking()">
         <label [class.field-invalid]="bookingSubmitted && !bookingForm.roomNumber"><span class="field-label">Xona <span class="required-mark">*</span></span><app-select [(ngModel)]="bookingForm.roomNumber" name="roomNumber" [options]="bookingRoomOptions()" placeholder="Xonani tanlang" [showClear]="false" [required]="true"></app-select></label>
         <label [class.field-invalid]="bookingSubmitted && !bookingForm.guestName.trim()"><span class="field-label">Mehmon F.I.Sh. <span class="required-mark">*</span></span><app-input [(ngModel)]="bookingForm.guestName" name="guest" placeholder="Masalan: Ali Valiyev" [required]="true"></app-input></label>

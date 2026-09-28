@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { injectViewUpdates } from '../../shared/utils/view-updates';
 import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
-import { EMPTY, Subscription, catchError, finalize, switchMap, tap } from 'rxjs';
+import { EMPTY, Subscription, catchError, finalize, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
@@ -38,7 +38,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   readonly historyTableService = inject(HotelHistoryTableService);
   @ViewChild('roomsTable') private roomsTable?: PrimeDatatableComponent;
   @ViewChild('historyTable') private historyTable?: PrimeDatatableComponent;
-  rooms: any[] = []; bookings: any[] = []; history: any[] = []; loading = false;
+  rooms: any[] = []; history: any[] = []; loading = false;
   bookingDialog = false; roomDialog = false; paymentDialog = false; section: 'bookings' | 'rooms' | 'history' = 'bookings';
   editingBooking: any | null = null; editingRoom: any | null = null;
   bookingSubmitted = false;
@@ -50,7 +50,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   get isAdmin() { return this.auth.isAdmin(); }
   get canManageRooms() { return this.auth.isAdmin(); }
   get isRoomCatalog() { return this.section === 'rooms'; }
-  get canSeeHistory() { return this.isAdmin && this.section === 'history'; }
+  get canSeeHistory() { return this.section === 'history'; }
   get loadingText() {
     return this.section === 'rooms'
       ? 'Xonalar yuklanmoqda...'
@@ -79,8 +79,8 @@ export class HotelComponent implements OnInit, OnDestroy {
     { field: 'createdAt', header: 'Buyurtma vaqti', widthClass: 'w-20p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
   ];
   readonly historyActions: ICustomAction[] = [
-    { icon: 'pi pi-pencil', tooltip: 'Band qilishni tahrirlash', color: 'secondary', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.openBooking(undefined, booking) },
-    { icon: 'pi pi-trash', tooltip: 'Band qilishni o‘chirish', color: 'danger', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.confirmDeleteBooking(booking) },
+    { icon: 'pi pi-pencil', tooltip: 'Buyurtmani tahrirlash', color: 'secondary', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.openBooking(undefined, booking) },
+    { icon: 'pi pi-trash', tooltip: 'Buyurtmani o‘chirish', color: 'danger', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.confirmDeleteBooking(booking) },
   ];
 
   ngOnInit() {
@@ -103,19 +103,11 @@ export class HotelComponent implements OnInit, OnDestroy {
     }
     if (this.loading) return;
     this.loading = true;
-    const from = new Date();
-    from.setDate(1);
-    const to = new Date(from.getFullYear(), from.getMonth() + 1, 1);
-
     const request = this.section === 'rooms'
       ? this.hotel.rooms().pipe(tap(r => this.rooms = r.data ?? []))
       : this.section === 'history'
         ? this.hotel.history().pipe(tap(r => { this.history = r.data ?? []; this.historyTableService.setRows(this.history); this.historyTable?.reload(); }))
-        : this.hotel.rooms().pipe(
-            tap(r => this.rooms = r.data ?? []),
-            switchMap(() => this.hotel.bookings(this.ymd(from), this.ymd(to))),
-            tap(r => this.bookings = r.data ?? [])
-          );
+        : this.hotel.rooms().pipe(tap(r => this.rooms = r.data ?? []));
 
     this.loadSubscription = request.pipe(
       catchError(() => EMPTY),
@@ -123,13 +115,6 @@ export class HotelComponent implements OnInit, OnDestroy {
       this.viewUpdates()
     ).subscribe();
   }
-  private ymd(d: Date) {
-    const pad = (value: number) => String(value).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
-  roomBookings(room: any) { return this.bookings.filter(b => String(b.roomNumber) === String(room.number)); }
-  activeBooking(room: any) { return this.roomBookings(room)[0]; }
-
   openBooking(room?: any, booking?: any) { this.editingBooking = booking ?? null; this.bookingSubmitted = false; this.bookingForm = booking ? { ...booking, guestsCount: Number(booking.guestsCount ?? 1), daysCount: Number(booking.daysCount ?? this.daysBetween(booking.checkIn, booking.checkOut)), roomNumber: String(booking.roomNumber), checkIn: this.localDateTime(new Date(booking.checkIn)), checkOut: this.localDateTime(new Date(booking.checkOut)), agreedUZS: Number(booking.agreedTotals?.UZS || 0) || null, agreedUSD: Number(booking.agreedTotals?.USD || 0) || null, paymentMethod: booking.payments?.[0]?.method ?? '', paymentNote: booking.payments?.[0]?.note ?? '', additionalPayments: [], changeNote: '' } : { ...this.blankBooking(), roomNumber: String(room?.number ?? '') }; this.updateCheckout(); this.updatePaymentNoteRequirement(); this.bookingSnapshot = this.bookingFingerprint(); this.bookingDialog = true; }
   private bookingFingerprint() { return JSON.stringify(this.bookingForm); }
   private hasBookingChanges() { return this.bookingFingerprint() !== this.bookingSnapshot; }
@@ -155,7 +140,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   }
   private daysBetween(checkIn: string | Date, checkOut: string | Date) { return Math.max(1, Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86_400_000)); }
   updateCheckout() { const start = new Date(this.bookingForm.checkIn); const days = Number(this.bookingForm.daysCount); if (Number.isNaN(start.getTime()) || !Number.isInteger(days) || days < 1) return; start.setDate(start.getDate() + days); this.bookingForm.checkOut = this.localDateTime(start); }
-  availableRooms() { return this.rooms.filter(room => room.isActive && (!this.activeBooking(room) || String(room.number) === String(this.bookingForm.roomNumber))); }
+  availableRooms() { return this.rooms.filter(room => room.isActive); }
   bookingRoomOptions() { return this.availableRooms().map(room => ({ value: String(room.number), label: `${room.number} — ${room.name || `${room.capacity} kishilik`}` })); }
   addAdditionalPayment() { this.bookingForm.additionalPayments.push({ method: '', UZS: null, USD: null }); this.updatePaymentNoteRequirement(); }
   removeAdditionalPayment(index: number) { this.bookingForm.additionalPayments.splice(index, 1); this.updatePaymentNoteRequirement(); }
@@ -227,8 +212,8 @@ export class HotelComponent implements OnInit, OnDestroy {
 
     this.confirmation.confirm({
       key: 'hotel-save-booking',
-      header: this.editingBooking ? 'O‘zgarishlarni tasdiqlash' : 'Bron qilishni tasdiqlash',
-      message: this.editingBooking ? 'Kiritilgan o‘zgarishlar to‘g‘riligini qayta tekshiring. Saqlaysizmi?' : 'Kiritilgan bron ma’lumotlari to‘g‘rimi? Saqlashdan oldin qayta tekshiring.',
+      header: this.editingBooking ? 'O‘zgarishlarni tasdiqlash' : 'Buyurtmani tasdiqlash',
+      message: this.editingBooking ? 'Kiritilgan o‘zgarishlar to‘g‘riligini qayta tekshiring. Saqlaysizmi?' : 'Kiritilgan buyurtma ma’lumotlari to‘g‘rimi? Saqlashdan oldin qayta tekshiring.',
       icon: 'pi pi-check-circle',
       acceptLabel: 'Tasdiqlash',
       rejectLabel: 'Qayta tekshirish',
@@ -254,7 +239,7 @@ export class HotelComponent implements OnInit, OnDestroy {
     const { status: _legacyStatus, ...bookingData } = this.bookingForm;
     const body = { ...bookingData, guestsCount: Number(this.bookingForm.guestsCount), daysCount: Number(this.bookingForm.daysCount), agreedTotals: { UZS: totalUZS, USD: totalUSD }, payments, additionalPayments };
     const request = this.editingBooking ? this.hotel.updateBooking(this.editingBooking._id, body) : this.hotel.createBooking(body);
-    request.pipe(this.viewUpdates()).subscribe({ next: () => { this.bookingDialog = false; this.bookingSnapshot = ''; this.toast.success('Band qilish saqlandi'); this.load(); } });
+    request.pipe(this.viewUpdates()).subscribe({ next: () => { this.bookingDialog = false; this.bookingSnapshot = ''; this.toast.success('Buyurtma tarixga saqlandi'); this.load(); } });
   }
   openPayment(booking: any) { this.editingBooking = booking; this.payment = this.blankPayment(); this.paymentDialog = true; }
   savePayment() { if (!this.editingBooking || !this.payment.method || !Number(this.payment.amount)) { this.toast.error('To‘lov turini tanlang va narxni kiriting.'); return; } if (Number(this.payment.amount) < 0 && !this.payment.note.trim()) { this.toast.error('Minus to‘lov uchun izoh majburiy.'); return; } this.hotel.addPayment(this.editingBooking._id, this.payment).pipe(this.viewUpdates()).subscribe({ next: () => { this.paymentDialog = false; this.toast.success('To‘lov tarixi saqlandi'); this.load(); } }); }
@@ -264,14 +249,14 @@ export class HotelComponent implements OnInit, OnDestroy {
   confirmDeleteBooking(booking: any) {
     this.confirmation.confirm({
       key: 'hotel-delete-booking',
-      header: 'Band qilishni o‘chirish',
-      message: 'Bu bron faol ro‘yxatdan o‘chadi va faqat tarixda saqlanadi. Davom etasizmi?',
+      header: 'Buyurtmani o‘chirish',
+      message: 'Bu buyurtma tarixdan o‘chiriladi. Davom etasizmi?',
       icon: 'pi pi-trash',
       acceptLabel: 'O‘chirish',
       rejectLabel: 'Bekor qilish',
       acceptButtonStyleClass: 'confirm-accept-btn',
       rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
-      accept: () => this.hotel.deleteBooking(booking._id, { confirmation: 'DELETE', note: 'Admin tomonidan o‘chirildi' }).pipe(this.viewUpdates()).subscribe({ next: () => { this.toast.success('Band qilish tarixga o‘tkazildi'); this.load(); } })
+      accept: () => this.hotel.deleteBooking(booking._id, { confirmation: 'DELETE', note: 'Admin tomonidan o‘chirildi' }).pipe(this.viewUpdates()).subscribe({ next: () => { this.toast.success('Buyurtma o‘chirildi'); this.load(); } })
     });
   }
   historyTotalText(booking: any) {

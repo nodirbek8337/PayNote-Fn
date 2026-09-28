@@ -70,7 +70,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
             isActive: [this.model.isActive ?? true],
             password: [''],
             telegramUsername: [this.model.telegramUsername ?? ''],
-            telegramNotifications: [this.model.telegramNotifications ?? ['FRIDGE']]
+            telegramNotifications: [this.model.telegramNotifications ?? []]
         });
 
         this.setPasswordValidators();
@@ -87,7 +87,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
                 isActive: this.model.isActive ?? true,
                 password: '',
                 telegramUsername: this.model.telegramUsername ?? '',
-                telegramNotifications: this.model.telegramNotifications ?? ['FRIDGE']
+                telegramNotifications: this.model.telegramNotifications ?? []
             },
             { emitEvent: false }
         );

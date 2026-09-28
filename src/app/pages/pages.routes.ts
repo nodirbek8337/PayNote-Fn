@@ -21,7 +21,7 @@ export default [
     { path: 'hotel', pathMatch: 'full', redirectTo: 'hotel/bookings' },
     { path: 'hotel/bookings', component: HotelComponent, canActivate: [AuthGuard, HotelGuard], data: { section: 'bookings' } },
     { path: 'hotel/rooms', component: HotelComponent, canActivate: [AuthGuard, HotelGuard, AdminGuard], data: { section: 'rooms' } },
-    { path: 'hotel/history', component: HotelComponent, canActivate: [AuthGuard, HotelGuard, AdminGuard], data: { section: 'history' } },
+    { path: 'hotel/history', component: HotelComponent, canActivate: [AuthGuard, HotelGuard], data: { section: 'history' } },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard, AdminGuard] },
     { path: '**', redirectTo: 'cabinet', canActivate: [AuthGuard] }
 ] as Routes;

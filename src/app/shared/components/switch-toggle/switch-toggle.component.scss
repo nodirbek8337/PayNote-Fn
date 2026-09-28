@@ -1,5 +1,5 @@
 .switch-toggle {
-  min-height: var(--paynote-control-height);
+  min-height: 62px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -45,7 +45,45 @@
 }
 
 :host ::ng-deep .p-toggleswitch {
-  height: var(--paynote-control-height);
+  position: relative;
+  width: 46px;
+  height: 26px;
   display: inline-flex;
   align-items: center;
+}
+
+:host ::ng-deep .p-toggleswitch .p-toggleswitch-slider {
+  box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 88%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--field-bg) 76%, var(--surface-hover));
+}
+
+:host ::ng-deep .p-toggleswitch .p-toggleswitch-handle {
+  width: 20px;
+  height: 20px;
+  inset-inline-start: 2px;
+  margin-block-start: -10px;
+  border-radius: 50%;
+  background: var(--text-color-secondary);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--shadow-color) 50%, transparent);
+}
+
+:host ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  border-color: var(--action-primary) !important;
+  background: color-mix(in srgb, var(--action-primary) 65%, var(--field-bg)) !important;
+}
+
+:host ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-handle {
+  inset-inline-start: 22px;
+  background: var(--action-primary-text);
+}
+
+:host ::ng-deep .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover) .p-toggleswitch-slider {
+  border-color: var(--action-primary);
+}
+
+:host ::ng-deep .p-toggleswitch:has(.p-toggleswitch-input:focus-visible) .p-toggleswitch-slider {
+  outline: 0;
+  box-shadow: var(--focus-primary);
 }

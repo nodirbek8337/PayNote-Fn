@@ -34,6 +34,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() allowNegative = false;
     @Input() disabled = false;
     @Input() autocomplete = '';
+    @Input() allowAutofill = false;
     @Input() inputName = '';
     @Input() inputId = `paynote-field-${++nextInputId}`;
 
@@ -101,9 +102,12 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
 
     handleNativeInput(event: Event): void {
-        if (this.type !== 'number') return;
-
         const input = event.target as HTMLInputElement;
+        if (this.type !== 'number') {
+            this.handleValueChange(input.value);
+            return;
+        }
+
         this.handleValueChange(input.value);
         if (input.value !== this.value) input.value = this.value;
     }
