@@ -91,7 +91,8 @@ button.refresh-summary:focus-visible,
   outline: 0 !important;
   outline-offset: 0 !important;
   box-shadow: none !important;
-  border: 1px solid color-mix(in srgb, var(--action-primary) 58%, var(--surface-border)) !important;
+  border: 1px solid var(--action-primary) !important;
+  border-radius: 8px !important;
   background: color-mix(in srgb, var(--action-primary-soft) 72%, transparent) !important;
   color: var(--action-primary-from) !important;
   cursor: pointer;
@@ -101,7 +102,7 @@ button.refresh-summary:focus-visible,
 
 button.refresh-summary:hover:not(:disabled),
 .p-button.refresh-summary:hover:not(:disabled) {
-  border-color: color-mix(in srgb, var(--action-primary) 76%, var(--surface-border)) !important;
+  border-color: var(--action-primary-hover-from) !important;
   background: color-mix(in srgb, var(--action-primary) 16%, transparent) !important;
 }
 

@@ -35,6 +35,13 @@ export class HotelComponent implements OnInit, OnDestroy {
   get canManageRooms() { return this.auth.isAdmin(); }
   get isRoomCatalog() { return this.section === 'rooms'; }
   get canSeeHistory() { return this.isAdmin && this.section === 'history'; }
+  get loadingText() {
+    return this.section === 'rooms'
+      ? 'Xonalar yuklanmoqda...'
+      : this.section === 'history'
+        ? 'Hisob-kitob tarixi yuklanmoqda...'
+        : 'Buyurtmalar yuklanmoqda...';
+  }
 
   ngOnInit() {
     const section = this.route.snapshot.data['section'];

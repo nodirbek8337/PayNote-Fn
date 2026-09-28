@@ -29,3 +29,23 @@
 :host .room-card__meta span { color: var(--text-color-secondary); font-size: .68rem; }
 :host .room-card__meta b { color: var(--text-color); font-size: .76rem; }
 :host .room-card--catalog footer { justify-content: flex-end; }
+
+:host .hotel-section-loading {
+  min-height: 230px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: .7rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+}
+
+:host .hotel-section-loading i {
+  color: var(--action-primary-from);
+  font-size: 1.8rem;
+}
+
+:host .hotel-section-loading strong {
+  color: var(--text-color);
+  font-size: .92rem;
+}

@@ -15,7 +15,12 @@
         </div>
     </header>
 
-    @if (!canSeeHistory) {
+    @if (loading) {
+        <div class="hotel-section-loading" role="status" aria-live="polite">
+            <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+            <strong>{{ loadingText }}</strong>
+        </div>
+    } @else if (!canSeeHistory) {
         @if (rooms.length) {
             <div class="room-grid" [class.room-grid--catalog]="isRoomCatalog">
                 @for (room of rooms; track room) {
