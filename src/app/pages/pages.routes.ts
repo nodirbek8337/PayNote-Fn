@@ -7,14 +7,19 @@ import { SalesComponent } from './sales/sales.component';
 import { SalesHistoryComponent } from './sales-history/sales-history.component';
 import { CabinetComponent } from './cabinet/cabinet.component';
 import { AdminGuard } from '../shared/guards/admin.guard';
+import { FridgeGuard } from '../shared/guards/fridge.guard';
+import { HotelGuard } from '../shared/guards/hotel.guard';
+import { HotelComponent } from './hotel/hotel.component';
 
 export default [
     { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
     { path: 'cabinet', component: CabinetComponent, canActivate: [AuthGuard] },
-    { path: 'sales', component: SalesComponent, canActivate: [AuthGuard] },
-    { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard, AdminGuard] },
-    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard, AdminGuard] },
-    { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AuthGuard, AdminGuard] },
+    { path: 'sales', component: SalesComponent, canActivate: [AuthGuard, FridgeGuard] },
+    { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
+    { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
+    { path: 'hotel', component: HotelComponent, canActivate: [AuthGuard, HotelGuard] },
+    { path: 'hotel/history', component: HotelComponent, canActivate: [AuthGuard, HotelGuard, AdminGuard], data: { section: 'history' } },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard, AdminGuard] },
     { path: '**', redirectTo: 'cabinet', canActivate: [AuthGuard] }
 ] as Routes;

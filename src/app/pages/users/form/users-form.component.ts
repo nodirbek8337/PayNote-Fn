@@ -11,8 +11,9 @@ import { SwitchToggleComponent } from '../../../shared/components/switch-toggle/
 export type UserFormModel = {
   _id?: string;
   username: string;
-  role: 'admin' | 'user' | string;
+  role: 'admin' | 'user' | 'manager' | string;
   telegramUsername?: string | null;
+  telegramNotifications?: Array<'FRIDGE' | 'HOTEL'>;
   isActive?: boolean;
   password?: string;
 };
@@ -45,7 +46,12 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
   roleOptions = [
     { label: 'Boshliq', value: 'admin' },
-    { label: 'Ishchi',  value: 'user'  }
+    { label: 'Muzlatgich ishchisi', value: 'user' },
+    { label: 'Mehmonxona manageri', value: 'manager' }
+  ];
+  telegramNotificationOptions = [
+    { label: 'Muzlatgich habarlari', value: 'FRIDGE' },
+    { label: 'Mehmonxona habarlari', value: 'HOTEL' }
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -71,7 +77,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
       role:     [this.model.role ?? null, [Validators.required]],
       isActive: [this.model.isActive ?? true],
       password: [''],
-      telegramUsername: [this.model.telegramUsername ?? '']
+      telegramUsername: [this.model.telegramUsername ?? ''],
+      telegramNotifications: [this.model.telegramNotifications ?? ['FRIDGE']]
     });
 
     this.setPasswordValidators();
@@ -86,7 +93,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
       role: this.model.role ?? null,
       isActive: this.model.isActive ?? true,
       password: '',
-      telegramUsername: this.model.telegramUsername ?? ''
+      telegramUsername: this.model.telegramUsername ?? '',
+      telegramNotifications: this.model.telegramNotifications ?? ['FRIDGE']
     }, { emitEvent: false });
 
     const pwdCtrl = this.form.get('password')!;
@@ -142,6 +150,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
       isActive: !!raw.isActive,
       ...(!this.isEdit || this.form.get('telegramUsername')!.dirty
         ? { telegramUsername: String(raw.telegramUsername ?? '').trim() } : {}),
+      ...(!this.isEdit || this.form.get('telegramNotifications')!.dirty
+        ? { telegramNotifications: Array.isArray(raw.telegramNotifications) ? raw.telegramNotifications : [] } : {}),
       ...((!this.isEdit || this.changePassword) && password ? { password } : {})
     };
 

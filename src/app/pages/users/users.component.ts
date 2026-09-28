@@ -26,7 +26,7 @@ export class UsersComponent {
             widthClass: 'w-15p',
             sortable: false,
             filterType: 'dropdown',
-            filterOptions: [{ label: 'Boshliq', value: 'admin' }, { label: 'Ishchi', value: 'user' }],
+            filterOptions: [{ label: 'Boshliq', value: 'admin' }, { label: 'Muzlatgich ishchisi', value: 'user' }, { label: 'Mehmonxona manageri', value: 'manager' }],
             placeholder: 'Rolni tanlang',
             cellRendererFn: (row: any, field: string) => this.formatRole(row[field])
         },
@@ -56,7 +56,7 @@ export class UsersComponent {
     ];
 
     private formatRole(role: string): string {
-        const label = role === 'admin' ? 'Boshliq' : role === 'user' ? 'Ishchi' : role || '-';
+        const label = role === 'admin' ? 'Boshliq' : role === 'manager' ? 'Mehmonxona manageri' : role === 'user' ? 'Muzlatgich ishchisi' : role || '-';
         return `<span>${label}</span>`;
     }
 

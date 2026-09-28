@@ -24,6 +24,11 @@
         <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
         <small>Saqlangach, aynan shu Telegram akkauntidan botga /start yuboring.</small>
     </div>
+    <div class="form-field">
+        <label>Telegram bildirishnomalari</label>
+        <app-select style="width: 100%" formControlName="telegramNotifications" [options]="telegramNotificationOptions" optionLabel="label" optionValue="value" [multiple]="true" placeholder="Habar bo‘limlarini tanlang" [showClear]="true" [filter]="false"></app-select>
+        <small>Ikkalasini tanlasangiz ikkala bo‘limdan ham, bittasini tanlasangiz faqat o‘sha bo‘limdan xabar keladi.</small>
+    </div>
 
     <app-switch-toggle
         formControlName="isActive"

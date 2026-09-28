@@ -4,6 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { MySalesSummary, SalesPeriodSummary, SalesService } from '../service/sales.service';
+import { HotelService } from '../service/hotel.service';
 
 @Component({
     selector: 'app-cabinet',
@@ -14,6 +15,7 @@ import { MySalesSummary, SalesPeriodSummary, SalesService } from '../service/sal
 })
 export class CabinetComponent implements OnInit {
     private salesService = inject(SalesService);
+    private hotelService = inject(HotelService);
     private authService = inject(AuthService);
 
     loading = false;
@@ -22,6 +24,7 @@ export class CabinetComponent implements OnInit {
         today: this.emptyPeriod(),
         month: this.emptyPeriod()
     };
+    hotelSummary: any = { today: { bookingCount: 0, paid: { UZS: 0, USD: 0 }, paymentByMethod: {} }, month: { bookingCount: 0, paid: { UZS: 0, USD: 0 }, paymentByMethod: {} } };
 
     ngOnInit(): void {
         this.loadSummary();
@@ -29,6 +32,10 @@ export class CabinetComponent implements OnInit {
 
     loadSummary(): void {
         this.loading = true;
+        if (this.isHotelManager) {
+            this.hotelService.summary().pipe(finalize(() => (this.loading = false))).subscribe((response) => this.hotelSummary = response?.data ?? this.hotelSummary);
+            return;
+        }
         this.salesService
             .getMySummary()
             .pipe(finalize(() => (this.loading = false)))
@@ -43,7 +50,17 @@ export class CabinetComponent implements OnInit {
     }
 
     get roleLabel(): string {
-        return this.user?.role === 'admin' ? 'Boshliq' : 'Ishchi';
+        return this.user?.role === 'admin' ? 'Boshliq' : this.user?.role === 'manager' ? 'Mehmonxona manageri' : 'Muzlatgich ishchisi';
+    }
+
+    get isHotelManager(): boolean { return this.authService.isHotelManager(); }
+
+    hotelMethods(period: string): Array<{ method: string; totals: any }> {
+        return Object.entries(this.hotelSummary?.[period]?.paymentByMethod ?? {}).map(([method, totals]) => ({ method, totals }));
+    }
+
+    paymentMethodLabel(method: string): string {
+        return ({ CASH: 'Naqd', TERMINAL: 'Terminal', CARD: 'Karta', EXPEDIA: 'Expedia', BOOKING: 'Booking' } as Record<string, string>)[method] ?? method;
     }
 
     private emptyPeriod(): SalesPeriodSummary {

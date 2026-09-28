@@ -65,15 +65,21 @@ export class AppTopMenu implements OnInit {
   items: Array<{ label: string; icon: string; routerLink: any[]; exact: boolean }> = [];
 
   ngOnInit(): void {
-    const allItems = [
+    const fridgeItems = [
       { label: 'Kabinet', icon: 'pi pi-chart-bar', routerLink: ['/cabinet'], exact: true },
       { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: ['/sales'], exact: true },
       { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: ['/inventory'], exact: true },
       { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: ['/products'], exact: true },
       { label: 'Tarix', icon: 'pi pi-history', routerLink: ['/sales-history'], exact: true },
-      { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true },
     ];
-
-    this.items = this.authService.isAdmin() ? allItems : allItems.slice(0, 2);
+    const hotelItems = [
+      { label: 'Kabinet', icon: 'pi pi-chart-bar', routerLink: ['/cabinet'], exact: true },
+      { label: 'Mehmonxona', icon: 'pi pi-building', routerLink: ['/hotel'], exact: true },
+    ];
+    if (this.authService.isAdmin()) {
+      this.items = [...fridgeItems, { label: 'Mehmonxona', icon: 'pi pi-building', routerLink: ['/hotel'], exact: true }, { label: 'Mehmonxona tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true }, { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true }];
+    } else {
+      this.items = this.authService.canUseHotel() ? hotelItems : fridgeItems.slice(0, 2);
+    }
   }
 }

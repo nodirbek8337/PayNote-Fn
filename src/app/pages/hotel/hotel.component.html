@@ -1,0 +1,49 @@
+<section class="hotel-page">
+  <header class="hotel-header">
+    <div><span>Mehmonxona</span><h1>{{ canSeeHistory ? 'Band qilishlar tarixi' : 'Xonalar va band qilishlar' }}</h1><p *ngIf="!canSeeHistory">Xonani tanlang, band qilish va to‘lovlarni bir joydan boshqaring.</p></div>
+    <div class="hotel-actions"><button *ngIf="canManageRooms && !canSeeHistory" type="button" (click)="openRoom()"><i class="pi pi-plus"></i> Xona qo‘shish</button><button type="button" class="outline" (click)="load()" [disabled]="loading"><i class="pi pi-refresh" [class.pi-spin]="loading"></i> Yangilash</button></div>
+  </header>
+
+  <ng-container *ngIf="!canSeeHistory; else historyView">
+    <div class="room-grid" *ngIf="rooms.length; else emptyRooms">
+      <article *ngFor="let room of rooms" class="room-card" [class.inactive]="!room.isActive">
+        <div class="room-card__head"><div><strong>{{ room.number }}</strong><span>{{ room.name || room.capacity + ' kishilik' }}</span></div><em [class.busy]="activeBooking(room)" [class.free]="!activeBooking(room)">{{ roomState(room) }}</em></div>
+        <div class="room-card__price" *ngIf="room.suggestedRate">Tavsiya: {{ room.suggestedRate | money: room.currency }}</div>
+        <div class="room-card__booking" *ngIf="activeBooking(room) as booking; else freeRoom"><b>{{ booking.guestName }} · {{ booking.guestsCount }} kishi · {{ booking.daysCount }} kun</b><small>Buyurtma olingan: {{ booking.createdAt | date:'dd.MM.yyyy HH:mm' }}</small><div><button type="button" (click)="openBooking(room, booking)">Tahrirlash</button><button type="button" class="outline" (click)="openPayment(booking)">To‘lov</button></div></div>
+        <ng-template #freeRoom><button class="book-room" type="button" [disabled]="!room.isActive" (click)="openBooking(room)"><i class="pi pi-calendar-plus"></i> Band qilish</button></ng-template>
+        <footer *ngIf="canManageRooms"><button type="button" (click)="openRoom(room)">Xonani tahrirlash</button><button *ngIf="room.isActive" type="button" class="danger" (click)="archiveRoom(room)">Faolsizlantirish</button></footer>
+      </article>
+    </div>
+    <ng-template #emptyRooms><div class="empty"><i class="pi pi-building"></i><b>Xonalar mavjud emas</b><span>Xona qo‘shilgach band qilish mumkin bo‘ladi.</span></div></ng-template>
+  </ng-container>
+
+  <ng-template #historyView>
+    <div class="history-list" *ngIf="history.length; else noHistory">
+      <article *ngFor="let booking of history"><div><strong>{{ booking.roomNumber }} · {{ booking.guestName }} · {{ booking.guestsCount }} kishi · {{ booking.daysCount }} kun</strong><span>Buyurtma olingan: {{ booking.createdAt | date:'dd.MM.yyyy HH:mm' }}</span><small *ngFor="let record of booking.audit">{{ record.action }} · {{ record.byUsername }} · {{ record.at | date:'dd.MM.yyyy HH:mm' }}<ng-container *ngIf="record.note"> · {{ record.note }}</ng-container></small></div><div class="history-actions"><em [class.deleted]="booking.isDeleted">{{ booking.isDeleted ? 'O‘chirilgan' : statusLabel(booking.status) }}</em><button *ngIf="!booking.isDeleted" type="button" class="outline" (click)="openBooking(undefined, booking)">Tahrirlash</button><button *ngIf="!booking.isDeleted" type="button" class="danger" (click)="deleteBooking(booking)">O‘chirish</button></div></article>
+    </div>
+    <ng-template #noHistory><div class="empty">Tarix hali bo‘sh.</div></ng-template>
+  </ng-template>
+</section>
+
+<p-dialog [(visible)]="bookingDialog" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width:'820px',maxWidth:'96vw'}" [header]="editingBooking ? 'Band qilishni tahrirlash' : 'Xonani band qilish'">
+  <form class="hotel-form" (ngSubmit)="saveBooking()">
+    <label>Xona<select [(ngModel)]="bookingForm.roomId" name="room" required><option value="">Xonani tanlang</option><option *ngFor="let room of availableRooms()" [value]="room._id">{{ room.number }} — {{ room.name || room.capacity + ' kishilik' }}</option></select></label>
+    <label>Mehmon F.I.Sh.<input [(ngModel)]="bookingForm.guestName" name="guest" placeholder="Masalan: Ali Valiyev" required></label>
+    <label>Telefon <input [(ngModel)]="bookingForm.guestPhone" name="phone" placeholder="Masalan: +998 91 423 83 37"></label>
+    <label>Mehmonlar soni<input [(ngModel)]="bookingForm.guestsCount" name="guestsCount" type="number" min="1" placeholder="Masalan: 2" required></label>
+    <label>Holati<select [(ngModel)]="bookingForm.status" name="status"><option *ngFor="let status of statuses" [value]="status.value">{{ status.label }}</option></select></label>
+    <label>Necha kunga oldi<input [(ngModel)]="bookingForm.daysCount" (ngModelChange)="updateCheckout()" name="daysCount" type="number" min="1" max="365" placeholder="Masalan: 2" required></label>
+    <fieldset class="form-wide agreed"><legend>Kelishilgan jami narx</legend><label>UZS<input [(ngModel)]="bookingForm.agreedUZS" name="agreedUZS" type="number" min="0" placeholder="Masalan: 500000"></label><label>USD<input [(ngModel)]="bookingForm.agreedUSD" name="agreedUSD" type="number" min="0" step="0.01" placeholder="Masalan: 45"></label><small>Ikki valutani aralashtirmaymiz: qaysi valutada kelishilsa, o‘shani kiriting.</small></fieldset>
+    <section class="form-wide payments"><div class="payments__head"><b>Dastlabki to‘lovlar</b><button type="button" class="outline" (click)="addPaymentRow()"><i class="pi pi-plus"></i> To‘lov qo‘shish</button></div><p *ngIf="!bookingForm.payments.length">To‘lov bo‘lmasa bo‘sh qoldiring. Keyin ham alohida qo‘shish mumkin.</p><div class="payment-row" *ngFor="let payment of bookingForm.payments; let i=index"><input [(ngModel)]="payment.amount" [name]="'amount'+i" type="number" step="0.01" placeholder="Summa (+ yoki -)"><select [(ngModel)]="payment.currency" [name]="'currency'+i"><option value="UZS">UZS</option><option value="USD">USD</option></select><select [(ngModel)]="payment.method" [name]="'method'+i"><option *ngFor="let method of methods" [value]="method.value">{{ method.label }}</option></select><input [(ngModel)]="payment.note" [name]="'paymentNote'+i" placeholder="Minus bo‘lsa izoh majburiy"><button type="button" class="danger icon" (click)="removePaymentRow(i)"><i class="pi pi-times"></i></button></div></section>
+    <label *ngIf="editingBooking" class="form-wide">Tahrirlash izohi <input [(ngModel)]="bookingForm.changeNote" name="changeNote" placeholder="Nima uchun o‘zgartirilganini yozing" required></label>
+    <footer class="form-wide"><button type="button" class="outline" (click)="bookingDialog=false">Bekor qilish</button><button type="submit">Saqlash</button></footer>
+  </form>
+</p-dialog>
+
+<p-dialog [(visible)]="paymentDialog" [modal]="true" [draggable]="false" [resizable]="false" header="To‘lov qo‘shish" [style]="{width:'520px',maxWidth:'96vw'}">
+  <form class="hotel-form one-column" (ngSubmit)="savePayment()"><label>Summa (+ yoki -)<input [(ngModel)]="payment.amount" name="amount" type="number" step="0.01" placeholder="Masalan: 100000 yoki -50000" required></label><label>Valuta<select [(ngModel)]="payment.currency" name="currency"><option value="UZS">UZS</option><option value="USD">USD</option></select></label><label>To‘lov usuli<select [(ngModel)]="payment.method" name="method"><option *ngFor="let method of methods" [value]="method.value">{{ method.label }}</option></select></label><label>Izoh <input [(ngModel)]="payment.note" name="note" placeholder="Minus kiritilganda majburiy"></label><footer><button type="button" class="outline" (click)="paymentDialog=false">Bekor qilish</button><button type="submit">Saqlash</button></footer></form>
+</p-dialog>
+
+<p-dialog [(visible)]="roomDialog" [modal]="true" [draggable]="false" [resizable]="false" [header]="editingRoom ? 'Xonani tahrirlash' : 'Xona qo‘shish'" [style]="{width:'520px',maxWidth:'96vw'}">
+  <form class="hotel-form one-column" (ngSubmit)="saveRoom()"><label>Xona raqami<input [(ngModel)]="roomForm.number" name="number" placeholder="Masalan: 101" required></label><label>Nomi<input [(ngModel)]="roomForm.name" name="name" placeholder="Masalan: Lyuks"></label><label>Sig‘imi<input [(ngModel)]="roomForm.capacity" name="capacity" type="number" min="1" required></label><label>Tavsiya narxi<input [(ngModel)]="roomForm.suggestedRate" name="rate" type="number" min="0" placeholder="Masalan: 500000"></label><label>Valuta<select [(ngModel)]="roomForm.currency" name="currency"><option value="UZS">UZS</option><option value="USD">USD</option></select></label><label>Tahrirlash izohi (ixtiyoriy)<input [(ngModel)]="roomForm.note" name="roomnote" placeholder="Masalan: narxi yangilandi"></label><footer><button type="button" class="outline" (click)="roomDialog=false">Bekor qilish</button><button type="submit">Saqlash</button></footer></form>
+</p-dialog>

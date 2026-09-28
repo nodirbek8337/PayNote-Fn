@@ -47,6 +47,10 @@ export class AuthService {
         return this.getRole() === 'admin';
     }
 
+    canUseFridge(): boolean { return ['admin', 'user'].includes(this.getRole() ?? ''); }
+    canUseHotel(): boolean { return ['admin', 'manager'].includes(this.getRole() ?? ''); }
+    isHotelManager(): boolean { return this.getRole() === 'manager'; }
+
     getAccessToken(): string | null {
         if (typeof document === 'undefined') return null;
 

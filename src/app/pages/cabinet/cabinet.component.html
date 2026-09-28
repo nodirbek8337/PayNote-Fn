@@ -1,4 +1,18 @@
-<section class="cabinet-page">
+<section class="cabinet-page" *ngIf="isHotelManager; else fridgeCabinet">
+    <header class="cabinet-header">
+        <div><span class="cabinet-eyebrow">Mehmonxona kabineti</span><h1>{{ user?.username || 'Manager' }}</h1><p>Faqat o‘zingiz kiritgan band qilish va to‘lovlar.</p></div>
+        <button type="button" class="refresh-summary" (click)="loadSummary()" [disabled]="loading"><i class="pi" [ngClass]="loading ? 'pi-spin pi-spinner' : 'pi-refresh'"></i><span>Yangilash</span></button>
+    </header>
+    <div class="period-grid">
+        <article class="period-card" *ngFor="let period of ['today', 'month']">
+            <div class="period-title"><span class="period-icon"><i [class]="period === 'today' ? 'pi pi-sun' : 'pi pi-calendar'"></i></span><div><h2>{{ period === 'today' ? 'Bugungi natija' : 'Shu oydagi natija' }}</h2><p>Qabul qilingan to‘lovlar alohida valutada</p></div></div>
+            <div class="metric-list"><div class="metric primary-metric"><span>Band qilishlar</span><strong>{{ hotelSummary[period].bookingCount }} ta</strong></div><div class="metric"><span>Jami UZS</span><strong>{{ hotelSummary[period].paid.UZS | money:'UZS' }}</strong></div><div class="metric"><span>Jami USD</span><strong>{{ hotelSummary[period].paid.USD | money:'USD' }}</strong></div></div>
+            <div class="sold-products"><h3>To‘lov usullari</h3><div class="sold-products-list" *ngIf="hotelMethods(period).length; else noHotelPayment"><div class="sold-product" *ngFor="let payment of hotelMethods(period)"><strong>{{ paymentMethodLabel(payment.method) }}</strong><span class="period-totals"><strong *ngIf="payment.totals.UZS">{{ payment.totals.UZS | money:'UZS' }}</strong><strong *ngIf="payment.totals.USD">{{ payment.totals.USD | money:'USD' }}</strong></span></div></div><ng-template #noHotelPayment><div class="products-empty">Hali to‘lov yo‘q</div></ng-template></div>
+        </article>
+    </div>
+</section>
+
+<ng-template #fridgeCabinet><section class="cabinet-page">
     <header class="cabinet-header">
         <div>
             <span class="cabinet-eyebrow">Shaxsiy kabinet</span>
@@ -94,4 +108,4 @@
             </div>
         </article>
     </div>
-</section>
+</section></ng-template>
