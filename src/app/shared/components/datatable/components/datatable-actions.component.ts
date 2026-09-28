@@ -10,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
     template: `
         @if (actions.length) {
             @for (btn of actions; track btn) {
-                <button pButton [class]="'p-button-sm p-button-text me-2 p-button-' + (btn.color || 'secondary')" [title]="btn.tooltip" [disabled]="btn.disabled" (click)="btn.action(row)" [pTooltip]="btn.TooltipTitle" tooltipPosition="top">
+                <button pButton [class]="'p-button-sm p-button-text datatable-custom-action datatable-custom-action--' + (btn.color || 'secondary')" [title]="btn.tooltip" [disabled]="btn.disabled" (click)="btn.action(row)" [pTooltip]="btn.TooltipTitle || btn.tooltip" tooltipPosition="top">
                     <i [class]="btn.icon"></i>
                 </button>
             }

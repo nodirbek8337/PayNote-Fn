@@ -1,74 +1,58 @@
 import { Component, Input } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { Select } from 'primeng/select';
-import { InputTextModule } from 'primeng/inputtext';
 import { ButtonDirective } from 'primeng/button';
 import { DatepickerRangeComponent } from '../../../shared/components/datepicker-range/datepicker-range.component';
-import { NoAutofillDirective } from '../../../shared/directives/no-autofill.directive';
+import { InputComponent } from '../../../shared/components/input/input.component';
+import { SelectComponent } from '../../../shared/components/select/select.component';
 
 type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
 
 @Component({
     selector: 'users-filter',
     standalone: true,
-    imports: [FormsModule, Select, InputTextModule, ButtonDirective, DatepickerRangeComponent, NoAutofillDirective],
+    imports: [FormsModule, ButtonDirective, DatepickerRangeComponent, InputComponent, SelectComponent],
     template: `
         <div class="users-filter">
             @for (col of columnDefs; track col) {
                 @if (col?.searchable !== false) {
                     <div>
                         @if (col.filterType === 'dropdown') {
-                            <p-select
+                            <app-select
                                 [options]="col.filterOptions"
                                 optionLabel="label"
                                 optionValue="value"
-                                styleClass="user-select"
-                                panelStyleClass="drawer-select-panel"
-                                [appendTo]="'body'"
                                 [placeholder]="resolvePlaceholder(col, 'dropdown')"
-                                [style.width.%]="100"
                                 [(ngModel)]="columnFilters[col.field]"
-                                (onChange)="onColumnFilter($event.value, col.field)"
+                                (ngModelChange)="onColumnFilter($event, col.field)"
                                 [showClear]="true"
-                            ></p-select>
+                            ></app-select>
                         }
                         @if (col.filterType === 'date-range') {
                             <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="resolvePlaceholder(col, 'date-range')"> </datepicker-range>
                         }
                         @if (col.filterType === 'number-range') {
                             <div class="users-filter__number-range">
-                                <input
-                                    pInputText
+                                <app-input
                                     type="number"
-                                    min="0"
                                     placeholder="Eng kam miqdor"
                                     [ngModel]="getNumberRangeValue(col.field, 0)"
-                                    [appNoAutofill]="getNumberRangeValue(col.field, 0)"
                                     (ngModelChange)="onNumberRangeChange($event, col.field, 0)"
-                                />
-                                <input
-                                    pInputText
+                                ></app-input>
+                                <app-input
                                     type="number"
-                                    min="0"
                                     placeholder="Eng ko'p miqdor"
                                     [ngModel]="getNumberRangeValue(col.field, 1)"
-                                    [appNoAutofill]="getNumberRangeValue(col.field, 1)"
                                     (ngModelChange)="onNumberRangeChange($event, col.field, 1)"
-                                />
+                                ></app-input>
                             </div>
                         }
                         @if (!col.filterType || col.filterType === 'text') {
-                            <input
-                                pInputText
-                                type="text"
-                                style="height: 40px;"
-                                [style.width.%]="100"
+                            <app-input
                                 [placeholder]="resolvePlaceholder(col, 'text')"
                                 [(ngModel)]="columnFilters[col.field]"
-                                [appNoAutofill]="columnFilters[col.field]"
                                 (ngModelChange)="onColumnFilter($event, col.field)"
-                            />
+                            ></app-input>
                         }
                     </div>
                 }
@@ -94,6 +78,11 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
                 max-width: 100%;
             }
 
+            .users-filter app-input {
+                display: block;
+                width: 100%;
+            }
+
             .users-filter__footer {
                 display: flex;
                 justify-content: stretch;
@@ -106,10 +95,9 @@ type FilterType = 'dropdown' | 'date-range' | 'number-range' | 'text';
                 gap: 0.5rem;
             }
 
-            .users-filter__number-range input {
+            .users-filter__number-range app-input {
                 width: 100%;
                 min-width: 0;
-                height: 40px;
             }
 
             :host ::ng-deep .filter-clear-btn.p-button {

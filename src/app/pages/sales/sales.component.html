@@ -8,7 +8,7 @@
                 </div>
                 <label class="sales-search">
                     <i class="pi pi-search"></i>
-                    <input pInputText [ngModel]="search" [appNoAutofill]="search" (ngModelChange)="onSearchChange($event)" placeholder="Nomi yoki narxi bo'yicha qidiring..." />
+                    <app-input [ngModel]="search" (ngModelChange)="onSearchChange($event)" placeholder="Nomi yoki narxi bo'yicha qidiring..."></app-input>
                 </label>
             </div>
 
@@ -129,6 +129,7 @@
     <p-dialog
         [(visible)]="saleDialogVisible"
         [modal]="true"
+        [focusOnShow]="false"
         [draggable]="false"
         [resizable]="false"
         [closable]="sellingCart === null"
@@ -171,7 +172,7 @@
                     <b>*</b>
                 }
             </span>
-            <textarea [(ngModel)]="saleNote" [appNoAutofill]="saleNote" rows="3" maxlength="500" [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'" [disabled]="sellingCart !== null"></textarea>
+            <app-textarea [(ngModel)]="saleNote" inputName="saleNote" [rows]="3" [maxlength]="500" [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'" [disabled]="sellingCart !== null"></app-textarea>
             <small>{{ saleNote.length }}/500</small>
         </label>
         @if (paymentMethod === 'OTHER') {

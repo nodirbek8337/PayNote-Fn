@@ -1,0 +1,19 @@
+<div class="app-textarea-container">
+    <textarea
+        pTextarea
+        [id]="inputId"
+        [attr.name]="inputName || inputId"
+        [attr.autocomplete]="autocomplete"
+        [rows]="rows"
+        [attr.maxlength]="maxlength ?? null"
+        [placeholder]="placeholder"
+        [disabled]="disabled || isDisabled"
+        [appNoAutofill]="value"
+        [ngModel]="value"
+        (ngModelChange)="updateValue($event)"
+        (blur)="onTouched()"
+        [class.is-invalid]="shouldShowErrors()"
+    ></textarea>
+
+    <app-control-error [control]="control" [messages]="errorMessages"></app-control-error>
+</div>

@@ -5,13 +5,13 @@ import { ButtonDirective } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
 import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { ToastService } from '../../shared/services/toast.service';
 import { Currency, PaymentMethod, SalesProduct, SalesService } from '../service/sales.service';
-import { NoAutofillDirective } from '../../shared/directives/no-autofill.directive';
 import { injectViewUpdates } from '../../shared/utils/view-updates';
+import { InputComponent } from '../../shared/components/input/input.component';
+import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 
 type CartId = 1 | 2;
 
@@ -26,7 +26,7 @@ type CartItem = {
 @Component({
     selector: 'sales',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonDirective, ConfirmDialog, DialogModule, InputTextModule, MoneyPipe, NoAutofillDirective],
+    imports: [CommonModule, FormsModule, ButtonDirective, ConfirmDialog, DialogModule, MoneyPipe, InputComponent, TextareaComponent],
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.scss'],
     providers: [ConfirmationService]

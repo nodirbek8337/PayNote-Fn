@@ -32,6 +32,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     @Input() required = false;
     @Input() allowMathExpression = false;
     @Input() allowNegative = false;
+    @Input() disabled = false;
     @Input() autocomplete = '';
     @Input() inputName = '';
     @Input() inputId = `paynote-field-${++nextInputId}`;
@@ -121,7 +122,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
 
     togglePasswordVisibility(): void {
-        if (this.isDisabled) return;
+        if (this.isDisabled || this.disabled) return;
         this.showPassword = !this.showPassword;
     }
 

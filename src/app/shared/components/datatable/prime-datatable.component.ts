@@ -20,6 +20,8 @@ import { MoneyPipe } from '../../pipes/money.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastService } from '../../services/toast.service';
 import { NoAutofillDirective } from '../../directives/no-autofill.directive';
+import { InputComponent } from '../input/input.component';
+import { SelectComponent } from '../select/select.component';
 
 @Component({
     selector: 'prime-datatable',
@@ -29,6 +31,8 @@ import { NoAutofillDirective } from '../../directives/no-autofill.directive';
     imports: [
         CommonModule,
         NoAutofillDirective,
+        InputComponent,
+        SelectComponent,
         FormsModule,
         Table,
         SortIcon,
@@ -76,6 +80,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     private drawerRef?: ComponentRef<any>;
 
     @Output() onRefresh = new EventEmitter<void>();
+    @Output() onCreate = new EventEmitter<void>();
     @Output() onRowClick = new EventEmitter<any>();
 
     confirmationService = inject(ConfirmationService);
@@ -148,6 +153,11 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     }
 
     triggerAdd() {
+        // Ota komponent `(onCreate)` ni tinglayotgan bo'lsa, uning modalini ochadi.
+        if (this.onCreate.observed) {
+            this.onCreate.emit();
+            return;
+        }
         this.editData = {};
         this.editMode = false;
         this.showEditDialog = true;

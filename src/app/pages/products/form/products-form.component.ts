@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { MoneyInputComponent } from '../../../shared/components/money-input/money-input.component';
+import { SelectComponent } from '../../../shared/components/select/select.component';
 
 export type ProductFormModel = {
     _id?: string;
@@ -17,10 +18,14 @@ export type ProductFormModel = {
     standalone: true,
     templateUrl: './products-form.component.html',
     styleUrls: ['./products-form.component.scss'],
-    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, MoneyInputComponent]
+    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, MoneyInputComponent, SelectComponent]
 })
 export class ProductsFormComponent implements OnInit {
     private fb = inject(FormBuilder);
+    readonly currencyOptions = [
+        { label: "So'm (UZS)", value: 'UZS' },
+        { label: 'AQSH dollari (USD)', value: 'USD' }
+    ];
 
     @Input() model: Partial<ProductFormModel> = {};
     @Input() loading = false;

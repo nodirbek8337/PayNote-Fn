@@ -1,0 +1,16 @@
+:host,
+.app-textarea-container,
+textarea {
+    display: block;
+    width: 100%;
+}
+
+textarea {
+    min-height: 5.75rem;
+    resize: vertical;
+}
+
+textarea.is-invalid {
+    border-color: var(--error-border) !important;
+    box-shadow: 0 0 0 1px var(--error-ring);
+}

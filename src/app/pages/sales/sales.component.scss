@@ -49,12 +49,17 @@
         transform: translateY(-50%);
     }
 
-    input {
+    app-input {
         width: 100%;
-        height: 42px;
-        padding-left: 2.45rem;
-        background: var(--field-bg);
+        display: block;
     }
+
+}
+
+:host ::ng-deep .sales-search app-input input {
+    height: 42px;
+    padding-left: 2.45rem;
+    background: var(--field-bg);
 }
 
 .sales-layout {

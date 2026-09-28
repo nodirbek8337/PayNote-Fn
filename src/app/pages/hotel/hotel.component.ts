@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { injectViewUpdates } from '../../shared/utils/view-updates';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { EMPTY, Subscription, catchError, finalize, switchMap, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -8,22 +8,30 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../shared/components/input/input.component';
 import { SelectComponent } from '../../shared/components/select/select.component';
+import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
+import { ICustomAction } from '../../shared/interfaces/custom-action.interface';
 import { ToastService } from '../../shared/services/toast.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { HotelService } from '../service/hotel.service';
+import { HotelRoomsTableService } from '../service/hotel-rooms-table.service';
+import { UsersFilterComponent } from '../users/filter/users-filter.component';
+import { CustomDateRendererComponent } from '../../shared/components/badge/custom-date-renderer.component';
 
 type Currency = 'UZS' | 'USD';
 type Payment = { amount: number | null; currency: Currency; method: string; note: string };
 
 @Component({
   selector: 'app-hotel', standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, InputComponent, SelectComponent],
+  imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, PrimeDatatableComponent, InputComponent, SelectComponent],
+  providers: [HotelRoomsTableService],
   templateUrl: './hotel.component.html', styleUrl: './hotel.component.scss',
 })
 export class HotelComponent implements OnInit, OnDestroy {
   private readonly viewUpdates = injectViewUpdates();
   private loadSubscription?: Subscription;
   private hotel = inject(HotelService); private toast = inject(ToastService); private auth = inject(AuthService); private route = inject(ActivatedRoute);
+  readonly roomTableService = inject(HotelRoomsTableService);
+  @ViewChild('roomsTable') private roomsTable?: PrimeDatatableComponent;
   rooms: any[] = []; bookings: any[] = []; history: any[] = []; loading = false;
   bookingDialog = false; roomDialog = false; paymentDialog = false; section: 'bookings' | 'rooms' | 'history' = 'bookings';
   editingBooking: any | null = null; editingRoom: any | null = null;
@@ -42,11 +50,22 @@ export class HotelComponent implements OnInit, OnDestroy {
         ? 'Hisob-kitob tarixi yuklanmoqda...'
         : 'Buyurtmalar yuklanmoqda...';
   }
+  readonly roomColumnDefs = [
+    { field: 'number', header: 'Xona raqami', widthClass: 'w-20p', sortable: false, filterType: 'text', placeholder: 'Xona raqamini qidiring' },
+    { field: 'name', header: 'Turi', widthClass: 'w-25p', sortable: false, filterType: 'text', placeholder: 'Xona turini qidiring' },
+    { field: 'capacity', header: 'Sig‘imi', widthClass: 'w-20p', sortable: false, searchable: false, cellRendererFn: (room: any) => `<span>${Number(room.capacity) || 0} kishi</span>` },
+    { field: 'createdAt', header: 'Yaratilgan vaqt', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererComponent: CustomDateRendererComponent },
+  ];
+  readonly roomFilterComponent = UsersFilterComponent;
+  readonly roomActions: ICustomAction[] = [
+    { icon: 'pi pi-pencil', tooltip: 'Xonani tahrirlash', color: 'secondary', action: (room) => this.openRoom(room) },
+    { icon: 'pi pi-trash', tooltip: 'Xonani faolsizlantirish', color: 'danger', action: (room) => this.archiveRoom(room) },
+  ];
 
   ngOnInit() {
     const section = this.route.snapshot.data['section'];
     this.section = section === 'rooms' ? 'rooms' : section === 'history' ? 'history' : 'bookings';
-    this.load();
+    if (!this.isRoomCatalog) this.load();
   }
 
   ngOnDestroy() { this.loadSubscription?.unsubscribe(); }
@@ -57,6 +76,10 @@ export class HotelComponent implements OnInit, OnDestroy {
   private blankRoom() { return { number: '', name: '', capacity: 1, note: '' }; }
 
   load() {
+    if (this.isRoomCatalog) {
+      this.roomsTable?.reload();
+      return;
+    }
     if (this.loading) return;
     this.loading = true;
     const from = new Date();

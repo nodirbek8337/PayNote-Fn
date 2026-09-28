@@ -1,4 +1,5 @@
 <section class="hotel-page">
+    @if (!isRoomCatalog) {
     <header class="hotel-header">
         <div>
             <span>Mehmonxona</span>
@@ -14,12 +15,30 @@
             <button type="button" class="refresh-summary" (click)="load()" [disabled]="loading"><i class="pi pi-refresh" [class.pi-spin]="loading"></i> Yangilash</button>
         </div>
     </header>
+    }
 
     @if (loading) {
         <div class="hotel-section-loading" role="status" aria-live="polite">
             <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
             <strong>{{ loadingText }}</strong>
         </div>
+    } @else if (isRoomCatalog) {
+        <prime-datatable
+            #roomsTable
+            [_defaultService]="roomTableService"
+            [columnDefs]="roomColumnDefs"
+            [tableTitle]="'Xonalar'"
+            [hasCreate]="true"
+            [hasAction]="false"
+            [hasRefreshBtn]="true"
+            [hasClearFilterBtn]="true"
+            [showQuickFilterTop]="true"
+            [showDrawerFilters]="true"
+            [drawerFilterComponent]="roomFilterComponent"
+        [quickFilterPlaceholder]="'Xona raqami yoki turi bo\'yicha qidiring...'"
+            [customActions]="roomActions"
+            (onCreate)="openRoom()"
+        ></prime-datatable>
     } @else if (!canSeeHistory) {
         @if (rooms.length) {
             <div class="room-grid" [class.room-grid--catalog]="isRoomCatalog">
@@ -36,11 +55,8 @@
                         </div>
                         @if (isRoomCatalog) {
                             <div class="room-card__meta">
-                                <div>
+                                <div class="room-card__capacity-card">
                                     <i class="pi pi-users"></i><span>Sig‘imi</span><b>{{ room.capacity }} kishi</b>
-                                </div>
-                                <div>
-                                    <i class="pi pi-calendar"></i><span>Qo‘shilgan sana</span><b>{{ room.createdAt | date: 'dd.MM.yyyy' }}</b>
                                 </div>
                             </div>
                         }
@@ -102,7 +118,7 @@
     }
 </section>
 
-<p-dialog [(visible)]="bookingDialog" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Band qilishni tahrirlash' : 'Xonani band qilish'">
+<p-dialog [(visible)]="bookingDialog" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Band qilishni tahrirlash' : 'Xonani band qilish'">
     <form class="hotel-form" (ngSubmit)="saveBooking()">
         <label>Xona<app-select [(ngModel)]="bookingForm.roomId" name="room" [options]="bookingRoomOptions()" placeholder="Xonani tanlang" [showClear]="false" [required]="true"></app-select></label>
         <label>Mehmon F.I.Sh.<app-input [(ngModel)]="bookingForm.guestName" name="guest" placeholder="Masalan: Ali Valiyev" [required]="true"></app-input></label>
@@ -138,26 +154,17 @@
     </form>
 </p-dialog>
 
-<p-dialog [(visible)]="paymentDialog" [modal]="true" [draggable]="false" [resizable]="false" header="To‘lov qo‘shish" [style]="{ width: '520px', maxWidth: '96vw' }">
+<p-dialog [(visible)]="paymentDialog" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" header="To‘lov qo‘shish" [style]="{ width: '520px', maxWidth: '96vw' }">
     <form class="hotel-form one-column" (ngSubmit)="savePayment()">
-        <label>Summa (+ yoki -)<input [(ngModel)]="payment.amount" name="amount" type="number" step="0.01" placeholder="Masalan: 100000 yoki -50000" required /></label
-        ><label
-            >Valuta<select [(ngModel)]="payment.currency" name="currency">
-                <option value="UZS">UZS</option>
-                <option value="USD">USD</option>
-            </select></label
-        ><label
-            >To‘lov usuli<select [(ngModel)]="payment.method" name="method">
-                @for (method of methods; track method) {
-                    <option [value]="method.value">{{ method.label }}</option>
-                }
-            </select></label
-        ><label>Izoh <input [(ngModel)]="payment.note" name="note" placeholder="Minus kiritilganda majburiy" /></label>
-        <footer><button type="button" class="outline" (click)="paymentDialog = false">Bekor qilish</button><button type="submit">Saqlash</button></footer>
+        <label>Summa (+ yoki -)<app-input [(ngModel)]="payment.amount" name="amount" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 100000 yoki -50000" [required]="true"></app-input></label>
+        <label>Valuta<app-select [(ngModel)]="payment.currency" name="currency" [options]="currencies" [showClear]="false"></app-select></label>
+        <label>To‘lov usuli<app-select [(ngModel)]="payment.method" name="method" [options]="methods" [showClear]="false"></app-select></label>
+        <label>Izoh <app-input [(ngModel)]="payment.note" name="note" placeholder="Minus kiritilganda majburiy"></app-input></label>
+        <footer><button pButton type="button" class="p-button-outlined" (click)="paymentDialog = false"><span>Bekor qilish</span></button><button pButton type="submit"><span>Saqlash</span></button></footer>
     </form>
 </p-dialog>
 
-<p-dialog [(visible)]="roomDialog" [modal]="true" [draggable]="false" [resizable]="false" [header]="editingRoom ? 'Xonani tahrirlash' : 'Xona qo‘shish'" [style]="{ width: '520px', maxWidth: '96vw' }">
+<p-dialog [(visible)]="roomDialog" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [header]="editingRoom ? 'Xonani tahrirlash' : 'Xona qo‘shish'" [style]="{ width: '520px', maxWidth: '96vw' }">
     <form class="hotel-form one-column room-form" (ngSubmit)="saveRoom()">
         <label>Xona raqami<app-input [(ngModel)]="roomForm.number" name="number" placeholder="Masalan: 101" [required]="true"></app-input></label>
         <label>Nomi<app-input [(ngModel)]="roomForm.name" name="name" placeholder="Masalan: Lyuks"></app-input></label>

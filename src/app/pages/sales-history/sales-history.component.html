@@ -17,7 +17,7 @@
     [drawerFilterComponent]="FilterComponent"
 ></prime-datatable>
 
-<p-dialog [(visible)]="detailsVisible" [modal]="true" [closable]="true" [draggable]="false" [resizable]="false" header="Sotuv tafsilotlari" [style]="{ width: '720px', maxWidth: '95vw' }" styleClass="sales-history-dialog">
+<p-dialog [(visible)]="detailsVisible" [modal]="true" [focusOnShow]="false" [closable]="true" [draggable]="false" [resizable]="false" header="Sotuv tafsilotlari" [style]="{ width: '720px', maxWidth: '95vw' }" styleClass="sales-history-dialog">
     @if (selectedSale) {
         <div class="sale-summary">
             <div>

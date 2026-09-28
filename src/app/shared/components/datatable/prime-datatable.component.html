@@ -22,16 +22,13 @@
                     @if (showQuickFilterTop) {
                         <label class="quick-filter-wrap">
                             <i class="pi pi-search" aria-hidden="true"></i>
-                            <input
-                                pInputText
-                                type="text"
+                            <app-input
                                 class="quick-filter-input"
                                 [placeholder]="quickFilterPlaceholder"
                                 [(ngModel)]="quickFilterValue"
-                                [appNoAutofill]="quickFilterValue"
                                 (ngModelChange)="onQuickFilterChange($event)"
                                 aria-label="Qidiruv"
-                            />
+                            ></app-input>
                         </label>
                     }
                     <div class="cta-buttons">
@@ -84,7 +81,7 @@
                             </th>
                         }
                         @if (customActions.length) {
-                            <th class="sort-header">Harakat+</th>
+                            <th class="sort-header">Amallar</th>
                         }
                         @if (hasAction) {
                             <th class="sort-header">Harakat</th>
@@ -97,30 +94,25 @@
                                 <th class="filter-header" [ngClass]="col.widthClass">
                                     @if (col.searchable !== false) {
                                         @if (col.filterType === 'dropdown') {
-                                            <p-select
+                                            <app-select
                                                 [options]="col.filterOptions"
                                                 optionLabel="label"
                                                 optionValue="value"
                                                 placeholder="Tanlang"
-                                                [style.width.%]="100"
                                                 [(ngModel)]="columnFilters[col.field]"
-                                                (onChange)="onColumnFilter($event.value, col.field)"
+                                                (ngModelChange)="onColumnFilter($event, col.field)"
                                                 [showClear]="true"
-                                            ></p-select>
+                                            ></app-select>
                                         }
                                         @if (col.filterType === 'date-range') {
                                             <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="'Vaqt oraligini tanlang'"> </datepicker-range>
                                         }
                                         @if (!col.filterType || col.filterType === 'text') {
-                                            <input
-                                                pInputText
-                                                type="text"
-                                                [appNoAutofill]="columnFilters[col.field]"
-                                                [style.width.%]="100"
+                                            <app-input
                                                 placeholder="Qidiring..."
                                                 [(ngModel)]="columnFilters[col.field]"
                                                 (ngModelChange)="onColumnFilter($event, col.field)"
-                                            />
+                                            ></app-input>
                                         }
                                     }
                                 </th>
@@ -199,7 +191,10 @@
                 <ng-template #loadingbody>
                     <tr class="empty-table-row">
                         <td class="empty-table-cell" [attr.colspan]="columnDefs.length + (hasAction ? 1 : 0) + (customActions.length > 0 ? 1 : 0)">
-                            <div class="empty-table-state"></div>
+                            <div class="empty-table-state table-loading-state" role="status" aria-live="polite">
+                                <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+                                <span>Ma’lumotlar yuklanmoqda...</span>
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
@@ -218,6 +213,7 @@
     <p-dialog
         [(visible)]="showEditDialog"
         [modal]="true"
+        [focusOnShow]="false"
         [closable]="true"
         [draggable]="false"
         [resizable]="false"

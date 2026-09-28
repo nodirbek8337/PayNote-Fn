@@ -4,17 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputPassword } from 'primeng/inputpassword';
 import { RippleModule } from 'primeng/ripple';
 import { HttpClient } from '@angular/common/http';
 import { LayoutService } from '../../layout/service/layout.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { InputComponent } from '../../shared/components/input/input.component';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [CommonModule, ButtonDirective, CheckboxModule, InputTextModule, InputPassword, FormsModule, RouterModule, RippleModule],
+    imports: [CommonModule, ButtonDirective, CheckboxModule, FormsModule, RouterModule, RippleModule, InputComponent],
     template: `
         <div class="login-page">
             <div class="login-shell">
@@ -30,31 +29,10 @@ import { AuthService } from '../../shared/services/auth.service';
 
                         <div>
                             <label for="paynote-entry-name" class="login-label">Foydalanuvchi nomi</label>
-                            <input pInputText id="paynote-entry-name" name="username" type="text" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full login-field" [(ngModel)]="email" [disabled]="_auth.isLoading()" />
+                            <app-input inputId="paynote-entry-name" inputName="username" autocomplete="username" placeholder="Foydalanuvchi nomini kiriting" class="w-full login-field" [(ngModel)]="email" [disabled]="_auth.isLoading()"></app-input>
 
                             <label for="paynote-entry-secret" class="login-label">Parol</label>
-                            <div class="password-field login-field">
-                                <input
-                                    pInputPassword
-                                    id="paynote-entry-secret"
-                                    name="password"
-                                    autocomplete="current-password"
-                                    [(ngModel)]="password"
-                                    placeholder="Parol kiriting"
-                                    [mask]="passwordMasked"
-                                    [disabled]="_auth.isLoading()"
-                                    class="w-full"
-                                />
-                                <button
-                                    type="button"
-                                    class="password-toggle"
-                                    (click)="togglePasswordMask()"
-                                    [disabled]="_auth.isLoading()"
-                                    [attr.aria-label]="passwordMasked ? 'Parolni ko‘rsatish' : 'Parolni yashirish'"
-                                >
-                                    <i class="pi" [ngClass]="passwordMasked ? 'pi-eye' : 'pi-eye-slash'" aria-hidden="true"></i>
-                                </button>
-                            </div>
+                            <app-input inputId="paynote-entry-secret" inputName="password" autocomplete="current-password" [type]="'password'" [(ngModel)]="password" placeholder="Parol kiriting" [disabled]="_auth.isLoading()" class="w-full login-field"></app-input>
 
                             @if (_auth.isLoading()) {
                                 <div class="login-status" [class.is-waking]="_auth.isServerWaking()" aria-live="polite">
@@ -144,6 +122,7 @@ import { AuthService } from '../../shared/services/auth.service';
             }
 
             .login-field { margin-bottom: 1.15rem; }
+            app-input.login-field { display: block; }
             .login-submit { margin-top: 0.35rem; }
 
             .login-status {
@@ -179,39 +158,6 @@ import { AuthService } from '../../shared/services/auth.service';
                 background: color-mix(in srgb, #f59e0b 12%, var(--surface-card));
             }
 
-            .password-field {
-                position: relative;
-            }
-
-            .password-field input {
-                padding-right: 3.25rem;
-            }
-
-            .password-toggle {
-                position: absolute;
-                top: calc(50% - 1rem);
-                right: 0.75rem;
-                display: grid;
-                width: 2rem;
-                height: 2rem;
-                place-items: center;
-                border: 0;
-                border-radius: 0.5rem;
-                color: var(--text-color-secondary);
-                background: transparent;
-                cursor: pointer;
-            }
-
-            .password-toggle:hover:not(:disabled) {
-                color: var(--action-primary-from);
-                background: var(--action-primary-soft);
-            }
-
-            .password-toggle:disabled {
-                cursor: not-allowed;
-                opacity: 0.6;
-            }
-
             @media (max-width: 600px) {
                 .login-page {
                     align-items: center;
@@ -236,8 +182,6 @@ export class LoginComponenet implements OnInit {
 
     password: string = '';
 
-    passwordMasked = true;
-
     checked: boolean = false;
 
     _http = inject(HttpClient);
@@ -252,7 +196,4 @@ export class LoginComponenet implements OnInit {
         this._auth.login({ username: this.email, password: this.password });
     }
 
-    togglePasswordMask() {
-        this.passwordMasked = !this.passwordMasked;
-    }
 }
