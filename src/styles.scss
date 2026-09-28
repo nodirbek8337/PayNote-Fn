@@ -9,6 +9,108 @@
   to { opacity: 1; }
 }
 
+// Cabinetdagi admin umumiy ko'rinishi komponent ichidagi template almashtirilganda
+// ham bir xil uslubda chiqishi uchun global qoidalar.
+.admin-cabinet .admin-overview {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.admin-cabinet .admin-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--table-bg) 92%, var(--surface-hover) 8%);
+}
+
+.admin-cabinet .admin-panel > header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+  background: linear-gradient(110deg, rgba(60, 110, 190, .16), transparent);
+}
+
+.admin-cabinet .admin-panel--hotel > header { background: linear-gradient(110deg, rgba(66, 157, 132, .16), transparent); }
+.admin-cabinet .admin-panel--hotel { order: -1; }
+.admin-cabinet .admin-panel h2 { margin: 0; color: var(--text-color); font-size: 1.08rem; }
+.admin-cabinet .admin-panel p { margin: .2rem 0 0; color: var(--text-color-secondary); font-size: .82rem; }
+
+.admin-cabinet .admin-panel__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  flex: 0 0 40px;
+  place-items: center;
+  border: 1px solid rgba(117, 166, 255, .4);
+  border-radius: 8px;
+  background: rgba(79, 140, 255, .12);
+  color: #83adf7;
+}
+
+.admin-cabinet .admin-panel--hotel .admin-panel__icon { border-color: rgba(88, 200, 165, .4); background: rgba(55, 158, 126, .13); color: #6ed6b8; }
+
+.admin-cabinet .admin-periods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; padding: 1rem; }
+.admin-cabinet .admin-period { display: grid; gap: .35rem; min-width: 0; min-height: 122px; padding: .85rem; border: 1px solid color-mix(in srgb, var(--surface-border), transparent 10%); border-radius: 8px; background: var(--field-bg); }
+.admin-cabinet .admin-period b { color: var(--text-color); font-size: .9rem; }
+.admin-cabinet .admin-period span, .admin-cabinet .admin-period em { color: var(--text-color-secondary); font-size: .78rem; font-style: normal; }
+.admin-cabinet .admin-period strong { color: var(--action-primary-from); font-size: .92rem; overflow-wrap: anywhere; }
+
+/* Bir qatordagi sahifa harakatlari: butun ilovada bir xil oralig'. */
+.paynote-action-group { display: flex; align-items: center; gap: .8rem; }
+
+/* Oddiy tugmalarda brauzerning qalin ko'k focus ramkasini ishlatmaymiz. */
+button:not(.p-button):focus,
+button:not(.p-button):focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Yangilash tugmasining yagona, sokin ko'rinishi.
+   PrimeNG va oddiy button ikkalasi ham shu variantdan foydalanadi. */
+button.refresh-summary,
+.p-button.refresh-summary,
+button.refresh-summary:hover,
+.p-button.refresh-summary:hover,
+button.refresh-summary:focus,
+.p-button.refresh-summary:focus,
+button.refresh-summary:focus-visible,
+.p-button.refresh-summary:focus-visible {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 0 .9rem;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  outline: 0 !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid color-mix(in srgb, var(--action-primary) 58%, var(--surface-border)) !important;
+  background: color-mix(in srgb, var(--action-primary-soft) 72%, transparent) !important;
+  color: var(--action-primary-from) !important;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+button.refresh-summary:hover:not(:disabled),
+.p-button.refresh-summary:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--action-primary) 76%, var(--surface-border)) !important;
+  background: color-mix(in srgb, var(--action-primary) 16%, transparent) !important;
+}
+
+button.refresh-summary:disabled,
+.p-button.refresh-summary:disabled { cursor: wait; opacity: .65; }
+
+@media (max-width: 900px) { .admin-cabinet .admin-overview { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .admin-cabinet .admin-periods { grid-template-columns: 1fr; } }
+
 [data-paynote-no-autofill]:autofill {
   animation-name: paynote-autofill;
   animation-duration: 0.001s;
@@ -179,6 +281,7 @@ html.app-dark body {
 
 .p-select-overlay,
 .p-dropdown-panel,
+.p-multiselect-overlay,
 .p-multiselect-panel {
   border: 1px solid var(--surface-border) !important;
   border-radius: 8px !important;
@@ -200,6 +303,37 @@ html.app-dark body {
 .p-multiselect-option:not(.p-disabled):hover {
   background: var(--action-primary-soft) !important;
   color: var(--text-color) !important;
+}
+
+/* Multi-select ichki ro'yxati umumiy ko'k dizaynda bo'lsin.
+   Bu faqat ochiladigan panelga tegadi, maydon atrofida qo'shimcha fon yo'q. */
+.p-multiselect-overlay .p-multiselect-list,
+.p-multiselect-panel .p-multiselect-list {
+  padding: .35rem !important;
+  background: var(--table-bg) !important;
+}
+
+.p-multiselect-overlay .p-multiselect-option,
+.p-multiselect-panel .p-multiselect-option {
+  border-radius: 6px;
+}
+
+.p-multiselect-overlay .p-multiselect-option.p-multiselect-option-selected,
+.p-multiselect-panel .p-multiselect-option.p-multiselect-option-selected {
+  background: color-mix(in srgb, var(--action-primary) 22%, var(--field-bg)) !important;
+  color: var(--text-color) !important;
+}
+
+.p-multiselect-overlay .p-checkbox-box,
+.p-multiselect-panel .p-checkbox-box {
+  border-color: var(--surface-border) !important;
+  background: var(--field-bg) !important;
+}
+
+.p-multiselect-overlay .p-checkbox-checked .p-checkbox-box,
+.p-multiselect-panel .p-checkbox-checked .p-checkbox-box {
+  border-color: var(--action-primary) !important;
+  background: var(--action-primary) !important;
 }
 
 /* Drawer filter selectlari drawer ichida kengayib, gorizontal scroll chiqarmasin. */

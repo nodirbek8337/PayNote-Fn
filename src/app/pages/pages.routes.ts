@@ -18,7 +18,8 @@ export default [
     { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
     { path: 'products', component: ProductsComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
     { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AuthGuard, FridgeGuard, AdminGuard] },
-    { path: 'hotel', component: HotelComponent, canActivate: [AuthGuard, HotelGuard] },
+    { path: 'hotel', component: HotelComponent, canActivate: [AuthGuard, HotelGuard], data: { section: 'bookings' } },
+    { path: 'hotel/rooms', component: HotelComponent, canActivate: [AuthGuard, HotelGuard, AdminGuard], data: { section: 'rooms' } },
     { path: 'hotel/history', component: HotelComponent, canActivate: [AuthGuard, HotelGuard, AdminGuard], data: { section: 'history' } },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard, AdminGuard] },
     { path: '**', redirectTo: 'cabinet', canActivate: [AuthGuard] }

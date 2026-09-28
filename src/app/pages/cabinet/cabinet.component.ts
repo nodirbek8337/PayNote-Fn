@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { MoneyPipe } from '../../shared/pipes/money.pipe';
 import { AuthService } from '../../shared/services/auth.service';
@@ -36,6 +37,17 @@ export class CabinetComponent implements OnInit {
             this.hotelService.summary().pipe(finalize(() => (this.loading = false))).subscribe((response) => this.hotelSummary = response?.data ?? this.hotelSummary);
             return;
         }
+        if (this.isAdmin) {
+            forkJoin({ sales: this.salesService.getMySummary(), hotel: this.hotelService.summary() })
+                .pipe(finalize(() => (this.loading = false)))
+                .subscribe(({ sales, hotel }) => {
+                    if (sales?.data) {
+                        this.summary = { today: this.normalizePeriod(sales.data.today), month: this.normalizePeriod(sales.data.month) };
+                    }
+                    this.hotelSummary = hotel?.data ?? this.hotelSummary;
+                });
+            return;
+        }
         this.salesService
             .getMySummary()
             .pipe(finalize(() => (this.loading = false)))
@@ -54,6 +66,7 @@ export class CabinetComponent implements OnInit {
     }
 
     get isHotelManager(): boolean { return this.authService.isHotelManager(); }
+    get isAdmin(): boolean { return this.authService.isAdmin(); }
 
     hotelMethods(period: string): Array<{ method: string; totals: any }> {
         return Object.entries(this.hotelSummary?.[period]?.paymentByMethod ?? {}).map(([method, totals]) => ({ method, totals }));

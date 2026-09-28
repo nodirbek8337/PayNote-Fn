@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, Optional } from '@angular/core';
+import { Component, EventEmitter, Output, forwardRef, Input, Optional } from '@angular/core';
 import {
   ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer,
   Validator, NG_VALIDATORS, AbstractControl, ValidationErrors
@@ -35,6 +35,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
   @Input() placeholder = 'Miqdor';
   @Input() defaultCurrency: CurrencyCode = 'UZS';
   @Input() emitCurrency = false;
+  @Output() currencyChanged = new EventEmitter<CurrencyCode>();
 
   @Input() required = false;
   @Input() min?: number;
@@ -119,6 +120,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
     this.currency = newCur;
     this.refreshDisplay();
     this.emitValue();
+    this.currencyChanged.emit(newCur);
   }
 
   private emitValue() {

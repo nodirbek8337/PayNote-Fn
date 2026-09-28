@@ -1,12 +1,35 @@
-<section class="cabinet-page" *ngIf="isHotelManager; else fridgeCabinet">
+<section class="cabinet-page admin-cabinet" *ngIf="isAdmin; else roleCabinet">
+    <header class="cabinet-header admin-header">
+        <div><span class="cabinet-eyebrow">Boshqaruv markazi</span><h1>{{ user?.username || 'Boshliq' }}</h1><p>Muzlatgich va mehmonxona hisoblari bir ekranda.</p></div>
+        <button type="button" class="refresh-summary" (click)="loadSummary()" [disabled]="loading"><i class="pi" [ngClass]="loading ? 'pi-spin pi-spinner' : 'pi-refresh'"></i><span>Yangilash</span></button>
+    </header>
+    <div class="admin-overview">
+        <article class="admin-panel admin-panel--fridge">
+            <header><span class="admin-panel__icon"><i class="pi pi-box"></i></span><div><h2>Muzlatgich</h2><p>Sotuvlar va mahsulotlar harakati</p></div></header>
+            <div class="admin-periods">
+                <div class="admin-period"><b>Bugun</b><span>{{ summary.today.salesCount }} ta sotuv · {{ summary.today.itemCount }} ta mahsulot</span><strong *ngIf="summary.today.totals.UZS">{{ summary.today.totals.UZS | money:'UZS' }}</strong><strong *ngIf="summary.today.totals.USD">{{ summary.today.totals.USD | money:'USD' }}</strong><em *ngIf="!summary.today.totals.UZS && !summary.today.totals.USD">Hali sotuv yo'q</em></div>
+                <div class="admin-period"><b>Shu oy</b><span>{{ summary.month.salesCount }} ta sotuv · {{ summary.month.itemCount }} ta mahsulot</span><strong *ngIf="summary.month.totals.UZS">{{ summary.month.totals.UZS | money:'UZS' }}</strong><strong *ngIf="summary.month.totals.USD">{{ summary.month.totals.USD | money:'USD' }}</strong><em *ngIf="!summary.month.totals.UZS && !summary.month.totals.USD">Hali sotuv yo'q</em></div>
+            </div>
+        </article>
+        <article class="admin-panel admin-panel--hotel">
+            <header><span class="admin-panel__icon"><i class="pi pi-building"></i></span><div><h2>Mehmonxona</h2><p>Xona hisoblari va qabul qilingan to'lovlar</p></div></header>
+            <div class="admin-periods">
+                <div class="admin-period"><b>Bugun</b><span>{{ hotelSummary.today.bookingCount }} ta hisob yozuvi</span><strong *ngIf="hotelSummary.today.paid.UZS">{{ hotelSummary.today.paid.UZS | money:'UZS' }}</strong><strong *ngIf="hotelSummary.today.paid.USD">{{ hotelSummary.today.paid.USD | money:'USD' }}</strong><em *ngIf="!hotelSummary.today.paid.UZS && !hotelSummary.today.paid.USD">Hali to'lov yo'q</em></div>
+                <div class="admin-period"><b>Shu oy</b><span>{{ hotelSummary.month.bookingCount }} ta hisob yozuvi</span><strong *ngIf="hotelSummary.month.paid.UZS">{{ hotelSummary.month.paid.UZS | money:'UZS' }}</strong><strong *ngIf="hotelSummary.month.paid.USD">{{ hotelSummary.month.paid.USD | money:'USD' }}</strong><em *ngIf="!hotelSummary.month.paid.UZS && !hotelSummary.month.paid.USD">Hali to'lov yo'q</em></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<ng-template #roleCabinet><section class="cabinet-page" *ngIf="isHotelManager; else fridgeCabinet">
     <header class="cabinet-header">
-        <div><span class="cabinet-eyebrow">Mehmonxona kabineti</span><h1>{{ user?.username || 'Manager' }}</h1><p>Faqat o‘zingiz kiritgan band qilish va to‘lovlar.</p></div>
+        <div><span class="cabinet-eyebrow">Mehmonxona kabineti</span><h1>{{ user?.username || 'Manager' }}</h1><p>Mehmonxona bo'yicha kunlik va oylik hisoblar.</p></div>
         <button type="button" class="refresh-summary" (click)="loadSummary()" [disabled]="loading"><i class="pi" [ngClass]="loading ? 'pi-spin pi-spinner' : 'pi-refresh'"></i><span>Yangilash</span></button>
     </header>
     <div class="period-grid">
         <article class="period-card" *ngFor="let period of ['today', 'month']">
             <div class="period-title"><span class="period-icon"><i [class]="period === 'today' ? 'pi pi-sun' : 'pi pi-calendar'"></i></span><div><h2>{{ period === 'today' ? 'Bugungi natija' : 'Shu oydagi natija' }}</h2><p>Qabul qilingan to‘lovlar alohida valutada</p></div></div>
-            <div class="metric-list"><div class="metric primary-metric"><span>Band qilishlar</span><strong>{{ hotelSummary[period].bookingCount }} ta</strong></div><div class="metric"><span>Jami UZS</span><strong>{{ hotelSummary[period].paid.UZS | money:'UZS' }}</strong></div><div class="metric"><span>Jami USD</span><strong>{{ hotelSummary[period].paid.USD | money:'USD' }}</strong></div></div>
+            <div class="metric-list"><div class="metric primary-metric"><span>Hisob yozuvlari</span><strong>{{ hotelSummary[period].bookingCount }} ta</strong></div><div class="metric"><span>Jami UZS</span><strong>{{ hotelSummary[period].paid.UZS | money:'UZS' }}</strong></div><div class="metric"><span>Jami USD</span><strong>{{ hotelSummary[period].paid.USD | money:'USD' }}</strong></div></div>
             <div class="sold-products"><h3>To‘lov usullari</h3><div class="sold-products-list" *ngIf="hotelMethods(period).length; else noHotelPayment"><div class="sold-product" *ngFor="let payment of hotelMethods(period)"><strong>{{ paymentMethodLabel(payment.method) }}</strong><span class="period-totals"><strong *ngIf="payment.totals.UZS">{{ payment.totals.UZS | money:'UZS' }}</strong><strong *ngIf="payment.totals.USD">{{ payment.totals.USD | money:'USD' }}</strong></span></div></div><ng-template #noHotelPayment><div class="products-empty">Hali to‘lov yo‘q</div></ng-template></div>
         </article>
     </div>
@@ -108,4 +131,4 @@
             </div>
         </article>
     </div>
-</section></ng-template>
+</section></ng-template></ng-template>

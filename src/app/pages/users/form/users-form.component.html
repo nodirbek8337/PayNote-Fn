@@ -1,33 +1,35 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off" class="p-fluid users-form">
     <div class="form-field">
         <label>Login</label>
-        <app-input formControlName="username" placeholder="Login kiriting"> </app-input>
+        <app-input formControlName="username" placeholder="Login kiriting"></app-input>
     </div>
 
     <div class="form-field">
         <label>Rol tanlash</label>
-        <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"> </app-select>
+        <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"></app-select>
     </div>
 
-    <div *ngIf="isEdit" class="form-field">
+    <div *ngIf="isEdit" class="form-field password-action">
         <button pButton type="button" class="p-button-outlined" [disabled]="loading"
             [label]="changePassword ? 'Parolni almashtirishni bekor qilish' : 'Parolni almashtirish'"
             (click)="togglePasswordChange()"></button>
-        <small *ngIf="!changePassword">Parol o'zgarmaydi. Almashtirish uchun tugmani bosing.</small>
+        <small class="field-help" *ngIf="!changePassword">Parol o'zgarmaydi. Almashtirish uchun tugmani bosing.</small>
     </div>
     <div *ngIf="!isEdit || changePassword" class="form-field">
         <label>{{ isEdit ? 'Yangi parol' : 'Parol' }}</label>
         <app-input formControlName="password" [type]="'password'" [placeholder]="passwordLabel"></app-input>
     </div>
-    <div class="form-field">
+
+    <div class="form-field form-field--telegram">
         <label>Telegram username <small>(ixtiyoriy)</small></label>
         <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
-        <small>Saqlangach, aynan shu Telegram akkauntidan botga /start yuboring.</small>
+        <small class="field-help">Saqlangach, aynan shu Telegram akkauntidan botga <b>/start</b> yuboring.</small>
     </div>
+
     <div class="form-field">
-        <label>Telegram bildirishnomalari</label>
-        <app-select style="width: 100%" formControlName="telegramNotifications" [options]="telegramNotificationOptions" optionLabel="label" optionValue="value" [multiple]="true" placeholder="Habar bo‘limlarini tanlang" [showClear]="true" [filter]="false"></app-select>
-        <small>Ikkalasini tanlasangiz ikkala bo‘limdan ham, bittasini tanlasangiz faqat o‘sha bo‘limdan xabar keladi.</small>
+        <div class="field-heading"><label>Telegram bildirishnomalari</label><span>Bir yoki ikkalasini tanlang</span></div>
+        <app-select style="width: 100%" formControlName="telegramNotifications" [options]="telegramNotificationOptions" optionLabel="label" optionValue="value" [multiple]="true" placeholder="Habar bo'limlarini tanlang" [showClear]="false" [showToggleAll]="false" [filter]="false"></app-select>
+        <small class="field-help">Tanlangan bo'limlar bo'yicha xabar aynan shu Telegram akkauntiga boradi.</small>
     </div>
 
     <app-switch-toggle
@@ -40,7 +42,7 @@
         [showStateText]="true">
     </app-switch-toggle>
 
-    <div class="flex justify-end gap-2 mt-4">
+    <div class="flex justify-end gap-2 mt-3">
         <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>
         <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="form-save-btn"></button>
     </div>

@@ -9,7 +9,10 @@ import { LoginComponenet } from './app/pages/login/login';
 import { AuthGuard } from './app/shared/guards/auth.guard';
 import { GuestGuard } from './app/shared/guards/guest.guard';
 import { AdminGuard } from './app/shared/guards/admin.guard';
+import { FridgeGuard } from './app/shared/guards/fridge.guard';
+import { HotelGuard } from './app/shared/guards/hotel.guard';
 import { CabinetComponent } from './app/pages/cabinet/cabinet.component';
+import { HotelComponent } from './app/pages/hotel/hotel.component';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponenet, canMatch: [GuestGuard] },
@@ -20,10 +23,13 @@ export const appRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
       { path: 'cabinet', component: CabinetComponent },
-      { path: 'sales', component: SalesComponent },
-      { path: 'inventory', component: InventoryComponent, canActivate: [AdminGuard] },
-      { path: 'products', component: ProductsComponent, canActivate: [AdminGuard] },
-      { path: 'sales-history', component: SalesHistoryComponent, canActivate: [AdminGuard] },
+      { path: 'sales', component: SalesComponent, canActivate: [FridgeGuard] },
+      { path: 'inventory', component: InventoryComponent, canActivate: [FridgeGuard, AdminGuard] },
+      { path: 'products', component: ProductsComponent, canActivate: [FridgeGuard, AdminGuard] },
+      { path: 'sales-history', component: SalesHistoryComponent, canActivate: [FridgeGuard, AdminGuard] },
+      { path: 'hotel', component: HotelComponent, canActivate: [HotelGuard], data: { section: 'bookings' } },
+      { path: 'hotel/rooms', component: HotelComponent, canActivate: [HotelGuard, AdminGuard], data: { section: 'rooms' } },
+      { path: 'hotel/history', component: HotelComponent, canActivate: [HotelGuard, AdminGuard], data: { section: 'history' } },
       { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
     ]
   },

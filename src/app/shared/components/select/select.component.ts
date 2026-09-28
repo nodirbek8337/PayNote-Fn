@@ -33,6 +33,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
   @Input() filter: boolean = false;
 
   @Input() multiple: boolean = false;
+  @Input() showToggleAll: boolean = true;
 
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
