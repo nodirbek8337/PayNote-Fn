@@ -1,17 +1,18 @@
-<prime-datatable
-  *ngIf="_defaultService"
-  [_defaultService]="_defaultService"
-  [columnDefs]="columnDefs"
-  [formComponent]="FormComponent"
-  [tableTitle]="'Foydalanuvchilar'"
-  [hasCreate]="true"
-  [hasAction]="true"
-  [hasClone]="false"
-  [hasRefreshBtn]="true"
-  [hasClearFilterBtn]="true"
-  [hasRowIndex]="true"
-  [showColumnFilterRow]="false"
-  [showQuickFilterTop]="true"
-  [showDrawerFilters]="true"
-  [drawerFilterComponent]="FilterComponent"
-></prime-datatable>
+@if (_defaultService) {
+    <prime-datatable
+        [_defaultService]="_defaultService"
+        [columnDefs]="columnDefs"
+        [formComponent]="FormComponent"
+        [tableTitle]="'Foydalanuvchilar'"
+        [hasCreate]="true"
+        [hasAction]="true"
+        [hasClone]="false"
+        [hasRefreshBtn]="true"
+        [hasClearFilterBtn]="true"
+        [hasRowIndex]="true"
+        [showColumnFilterRow]="false"
+        [showQuickFilterTop]="true"
+        [showDrawerFilters]="true"
+        [drawerFilterComponent]="FilterComponent"
+    ></prime-datatable>
+}

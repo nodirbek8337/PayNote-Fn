@@ -1,52 +1,42 @@
 <div class="app-input-container">
-  <ng-container *ngIf="type !== 'password'; else passwordTpl">
-    <input
-      pInputText
-      [type]="nativeInputType"
-      class="w-full"
-      style="height: 40px;"
-      [placeholder]="placeholder"
-      [disabled]="isDisabled"
-      [appNoAutofill]="value"
-      [id]="inputId"
-      [attr.autocomplete]="inputAutocomplete"
-      [attr.name]="inputName || inputId"
-      [attr.inputmode]="inputMode"
-      [ngModel]="value"
-      (ngModelChange)="handleValueChange($event)"
-      (blur)="handleBlur()"
-      [ngClass]="{ 'is-invalid': shouldShowErrors() }"
-    />
-  </ng-container>
+    @if (type !== 'password') {
+        <input
+            pInputText
+            [type]="nativeInputType"
+            class="w-full"
+            [placeholder]="placeholder"
+            [disabled]="isDisabled"
+            [appNoAutofill]="value"
+            [id]="inputId"
+            [attr.autocomplete]="inputAutocomplete"
+            [attr.name]="inputName || inputId"
+            [attr.inputmode]="inputMode"
+            [ngModel]="value"
+            (ngModelChange)="handleValueChange($event)"
+            (blur)="handleBlur()"
+            [ngClass]="{ 'is-invalid': shouldShowErrors() }"
+        />
+    } @else {
+        <div class="password-field" [class.is-disabled]="isDisabled" [class.is-invalid]="shouldShowErrors()">
+            <input
+                pInputText
+                [type]="showPassword ? 'text' : 'password'"
+                class="password-field__input"
+                [placeholder]="placeholder"
+                [disabled]="isDisabled"
+                [appNoAutofill]="value"
+                [id]="inputId"
+                [attr.autocomplete]="inputAutocomplete"
+                [attr.name]="inputName || inputId"
+                [ngModel]="value"
+                (ngModelChange)="handleValueChange($event)"
+                (blur)="onTouched()"
+            />
+            <button type="button" class="password-field__toggle" [disabled]="isDisabled" (click)="togglePasswordVisibility()" [attr.aria-label]="passwordToggleLabel" [title]="passwordToggleLabel">
+                <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
+            </button>
+        </div>
+    }
 
-  <ng-template #passwordTpl>
-    <div class="password-field" [class.is-disabled]="isDisabled" [class.is-invalid]="shouldShowErrors()">
-      <input
-        pInputText
-        [type]="showPassword ? 'text' : 'password'"
-        class="password-field__input"
-        [placeholder]="placeholder"
-        [disabled]="isDisabled"
-        [appNoAutofill]="value"
-        [id]="inputId"
-        [attr.autocomplete]="inputAutocomplete"
-        [attr.name]="inputName || inputId"
-        [ngModel]="value"
-        (ngModelChange)="handleValueChange($event)"
-        (blur)="onTouched()"
-      />
-      <button
-        type="button"
-        class="password-field__toggle"
-        [disabled]="isDisabled"
-        (click)="togglePasswordVisibility()"
-        [attr.aria-label]="passwordToggleLabel"
-        [title]="passwordToggleLabel"
-      >
-        <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
-      </button>
-    </div>
-  </ng-template>
-
-  <app-control-error [control]="control" [messages]="errorMessages" />
+    <app-control-error [control]="control" [messages]="errorMessages" />
 </div>

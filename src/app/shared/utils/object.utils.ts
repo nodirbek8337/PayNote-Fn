@@ -29,7 +29,7 @@ export function removeEmptyProperties(obj: any) {
 
 export function jsonToFormData(data: Record<string, any>, formData: FormData = new FormData(), parentKey?: string): FormData {
     for (const key in data) {
-        if (data.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
             const fullKey = parentKey ? `${parentKey}[${key}]` : key;
 
             if (data[key] instanceof Blob) {

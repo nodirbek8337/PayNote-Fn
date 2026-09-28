@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, inject } from '@angular/core';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { MoneyInputComponent } from '../../../shared/components/money-input/money-input.component';
 
@@ -17,9 +17,11 @@ export type ProductFormModel = {
     standalone: true,
     templateUrl: './products-form.component.html',
     styleUrls: ['./products-form.component.scss'],
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputComponent, MoneyInputComponent]
+    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, MoneyInputComponent]
 })
 export class ProductsFormComponent implements OnInit {
+    private fb = inject(FormBuilder);
+
     @Input() model: Partial<ProductFormModel> = {};
     @Input() loading = false;
 
@@ -28,7 +30,7 @@ export class ProductsFormComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor() {
         this.form = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(120)]],
             price: [null, [Validators.required, Validators.min(0)]],

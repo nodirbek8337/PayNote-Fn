@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { DialogModule } from 'primeng/dialog';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { ICustomAction } from '../../shared/interfaces/custom-action.interface';
@@ -10,7 +10,7 @@ import { UsersFilterComponent } from '../users/filter/users-filter.component';
 @Component({
     selector: 'sales-history',
     standalone: true,
-    imports: [CommonModule, DialogModule, PrimeDatatableComponent, MoneyPipe],
+    imports: [DialogModule, PrimeDatatableComponent, MoneyPipe],
     templateUrl: './sales-history.component.html',
     styleUrls: ['./sales-history.component.scss'],
     providers: [MoneyPipe]
@@ -50,8 +50,15 @@ export class SalesHistoryComponent {
             cellRendererFn: (row: any) => `<strong>${this.formatTotals(row)}</strong>`
         },
         {
-            field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
-            filterType: 'dropdown', filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            field: 'currency',
+            header: 'Valuta',
+            widthClass: 'w-10p',
+            sortable: false,
+            filterType: 'dropdown',
+            filterOptions: [
+                { label: "So'm (UZS)", value: 'UZS' },
+                { label: 'AQSH dollari (USD)', value: 'USD' }
+            ],
             placeholder: 'Valutani tanlang',
             cellRendererFn: (row: any) => `<span class="currency-label">${this.getSaleCurrencies(row).join(' + ')}</span>`
         },
@@ -153,6 +160,8 @@ export class SalesHistoryComponent {
 
     private formatTotals(sale: any): string {
         const totals = this.getSaleTotals(sale);
-        return this.getSaleCurrencies(sale).map((currency) => this.moneyPipe.transform(totals[currency], currency)).join(' &middot; ');
+        return this.getSaleCurrencies(sale)
+            .map((currency) => this.moneyPipe.transform(totals[currency], currency))
+            .join(' &middot; ');
     }
 }

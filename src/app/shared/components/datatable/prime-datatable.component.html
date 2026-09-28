@@ -3,44 +3,56 @@
         <div class="card-body">
             <div class="header-content mb-3">
                 <div class="header-left">
-                    <h4 *ngIf="tableTitle" class="header-title">{{ tableTitle }}</h4>
+                    @if (tableTitle) {
+                        <h4 class="header-title">{{ tableTitle }}</h4>
+                    }
                     <div class="header-actions">
-                        <button *ngIf="hasRefreshBtn" pButton icon="pi pi-refresh" class="refresh-summary table-control-btn" (click)="triggerRefresh()" aria-label="Yangilash"></button>
+                        @if (hasRefreshBtn) {
+                            <button pButton class="refresh-summary table-control-btn" (click)="triggerRefresh()" aria-label="Yangilash"><i class="pi pi-refresh" aria-hidden="true"></i></button>
+                        }
                     </div>
-                    <div *ngIf="amountTotals as t" class="totals-chips">
-                        <span class="chip" [ngClass]="t.UZS | signClass">{{ t.UZS | money: 'UZS' }}</span>
-                        <span class="chip" [ngClass]="t.USD | signClass">{{ t.USD | money: 'USD' }}</span>
-                    </div>
+                    @if (amountTotals; as t) {
+                        <div class="totals-chips">
+                            <span class="chip" [ngClass]="t.UZS | signClass">{{ t.UZS | money: 'UZS' }}</span>
+                            <span class="chip" [ngClass]="t.USD | signClass">{{ t.USD | money: 'USD' }}</span>
+                        </div>
+                    }
                 </div>
                 <div class="header-right">
-                    <label *ngIf="showQuickFilterTop" class="quick-filter-wrap">
-                        <i class="pi pi-search" aria-hidden="true"></i>
-                        <input
-                            pInputText
-                            type="text"
-                            class="quick-filter-input"
-                            [placeholder]="quickFilterPlaceholder"
-                            [(ngModel)]="quickFilterValue"
-                            [appNoAutofill]="quickFilterValue"
-                            (ngModelChange)="onQuickFilterChange($event)"
-                            aria-label="Qidiruv"
-                        />
-                    </label>
+                    @if (showQuickFilterTop) {
+                        <label class="quick-filter-wrap">
+                            <i class="pi pi-search" aria-hidden="true"></i>
+                            <input
+                                pInputText
+                                type="text"
+                                class="quick-filter-input"
+                                [placeholder]="quickFilterPlaceholder"
+                                [(ngModel)]="quickFilterValue"
+                                [appNoAutofill]="quickFilterValue"
+                                (ngModelChange)="onQuickFilterChange($event)"
+                                aria-label="Qidiruv"
+                            />
+                        </label>
+                    }
                     <div class="cta-buttons">
-                        <button *ngIf="showDrawerFilters && drawerFilterComponent" pButton icon="pi pi-sliders-h" class="btn-ctl" label="Filtrlar" (click)="openDrawer()"></button>
-                        <button
-                            *ngIf="hasClearFilterBtn"
-                            pButton
-                            type="button"
-                            icon="pi pi-filter-slash"
-                            class="table-control-btn"
-                            aria-label="Filtrlarni tozalash"
-                            pTooltip="Filtrlarni tozalash"
-                            tooltipPosition="bottom"
-                            (click)="clearAllFilters()"
-                            [disabled]="loading || isFilterEmpty()"
-                        ></button>
-                        <button *ngIf="hasCreate" pButton icon="pi pi-plus" class="btn-ctl" label="Qo'shish" (click)="triggerAdd()"></button>
+                        @if (showDrawerFilters && drawerFilterComponent) {
+                            <button pButton class="btn-ctl" (click)="openDrawer()"><i class="pi pi-sliders-h" aria-hidden="true"></i><span>Filtrlar</span></button>
+                        }
+                        @if (hasClearFilterBtn) {
+                            <button
+                                pButton
+                                type="button"
+                                class="table-control-btn"
+                                aria-label="Filtrlarni tozalash"
+                                pTooltip="Filtrlarni tozalash"
+                                tooltipPosition="bottom"
+                                (click)="clearAllFilters()"
+                                [disabled]="loading || isFilterEmpty()"
+                            ><i class="pi pi-filter-slash" aria-hidden="true"></i></button>
+                        }
+                        @if (hasCreate) {
+                            <button pButton class="btn-ctl" (click)="triggerAdd()"><i class="pi pi-plus" aria-hidden="true"></i><span>Qo'shish</span></button>
+                        }
                     </div>
                 </div>
             </div>
@@ -63,69 +75,112 @@
             >
                 <ng-template pTemplate="header" let-columns>
                     <tr class="sort-headers">
-                        <th *ngFor="let col of columns" [pSortableColumn]="col.sortable !== false ? col.field : null" class="sort-header" [ngClass]="col.widthClass">
-                            {{ col.header }}
-                            <p-sortIcon *ngIf="col.sortable !== false" [field]="col.field"></p-sortIcon>
-                        </th>
-                        <th *ngIf="customActions?.length" class="sort-header">Harakat+</th>
-                        <th *ngIf="hasAction" class="sort-header">Harakat</th>
+                        @for (col of columns; track col) {
+                            <th [pSortableColumn]="col.sortable !== false ? col.field : null" class="sort-header" [ngClass]="col.widthClass">
+                                {{ col.header }}
+                                @if (col.sortable !== false) {
+                                    <p-sorticon [field]="col.field"></p-sorticon>
+                                }
+                            </th>
+                        }
+                        @if (customActions.length) {
+                            <th class="sort-header">Harakat+</th>
+                        }
+                        @if (hasAction) {
+                            <th class="sort-header">Harakat</th>
+                        }
                     </tr>
 
-                    <tr class="filter-headers" *ngIf="showColumnFilterRow">
-                        <th *ngFor="let col of columns" class="filter-header" [ngClass]="col.widthClass">
-                            <ng-container *ngIf="col.searchable !== false">
-                                <ng-container *ngIf="col.filterType === 'dropdown'">
-                                    <p-select
-                                        [options]="col.filterOptions"
-                                        optionLabel="label"
-                                        optionValue="value"
-                                        placeholder="Tanlang"
-                                        [style.width.%]="100"
-                                        [(ngModel)]="columnFilters[col.field]"
-                                        (onChange)="onColumnFilter($event.value, col.field)"
-                                        [showClear]="true"
-                                    ></p-select>
-                                </ng-container>
-
-                                <ng-container *ngIf="col.filterType === 'date-range'">
-                                    <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="'Vaqt oraligini tanlang'"> </datepicker-range>
-                                </ng-container>
-
-                                <ng-container *ngIf="!col.filterType || col.filterType === 'text'">
-                                    <input pInputText type="text" [appNoAutofill]="columnFilters[col.field]" [style.width.%]="100" placeholder="Qidiring..." [(ngModel)]="columnFilters[col.field]" (ngModelChange)="onColumnFilter($event, col.field)" />
-                                </ng-container>
-                            </ng-container>
-                        </th>
-
-                        <th *ngIf="customActions?.length" class="filter-header"></th>
-                        <th *ngIf="hasAction" class="filter-header"></th>
-                    </tr>
+                    @if (showColumnFilterRow) {
+                        <tr class="filter-headers">
+                            @for (col of columns; track col) {
+                                <th class="filter-header" [ngClass]="col.widthClass">
+                                    @if (col.searchable !== false) {
+                                        @if (col.filterType === 'dropdown') {
+                                            <p-select
+                                                [options]="col.filterOptions"
+                                                optionLabel="label"
+                                                optionValue="value"
+                                                placeholder="Tanlang"
+                                                [style.width.%]="100"
+                                                [(ngModel)]="columnFilters[col.field]"
+                                                (onChange)="onColumnFilter($event.value, col.field)"
+                                                [showClear]="true"
+                                            ></p-select>
+                                        }
+                                        @if (col.filterType === 'date-range') {
+                                            <datepicker-range [value]="columnFilters[col.field]" (valueChange)="onColumnFilter($event, col.field)" [placeholder]="'Vaqt oraligini tanlang'"> </datepicker-range>
+                                        }
+                                        @if (!col.filterType || col.filterType === 'text') {
+                                            <input
+                                                pInputText
+                                                type="text"
+                                                [appNoAutofill]="columnFilters[col.field]"
+                                                [style.width.%]="100"
+                                                placeholder="Qidiring..."
+                                                [(ngModel)]="columnFilters[col.field]"
+                                                (ngModelChange)="onColumnFilter($event, col.field)"
+                                            />
+                                        }
+                                    }
+                                </th>
+                            }
+                            @if (customActions.length) {
+                                <th class="filter-header"></th>
+                            }
+                            @if (hasAction) {
+                                <th class="filter-header"></th>
+                            }
+                        </tr>
+                    }
                 </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr class="body-contents">
-                        <td *ngFor="let col of columns" class="body-content" [ngClass]="col.widthClass" [attr.data-label]="col.header" [attr.data-field]="col.field">
-                            <datatable-column-renderer [field]="col.field" [row]="rowData" [cellRendererComponent]="col.cellRendererComponent" [cellRendererFn]="col.cellRendererFn"> </datatable-column-renderer>
-                        </td>
-                        <td *ngIf="customActions?.length" class="center-content">
-                            <datatable-actions [row]="rowData" [actions]="customActions"></datatable-actions>
-                        </td>
-                        <td *ngIf="hasAction" class="center-content">
-                            <div class="action-buttons">
-                                <button *ngIf="hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)" pTooltip="Nusxalash" tooltipPosition="top"></button>
-                                <button *ngIf="hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"></button>
-                                <button *ngIf="hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"></button>
-                            </div>
-                        </td>
+                        @for (col of columns; track col) {
+                            <td class="body-content" [ngClass]="col.widthClass" [attr.data-label]="col.header" [attr.data-field]="col.field">
+                                <datatable-column-renderer [field]="col.field" [row]="rowData" [cellRendererComponent]="col.cellRendererComponent" [cellRendererFn]="col.cellRendererFn"> </datatable-column-renderer>
+                            </td>
+                        }
+                        @if (customActions.length) {
+                            <td class="center-content">
+                                <datatable-actions [row]="rowData" [actions]="customActions"></datatable-actions>
+                            </td>
+                        }
+                        @if (hasAction) {
+                            <td class="center-content">
+                                <div class="action-buttons">
+                                    @if (hasClone) {
+                                        <button pButton class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)" pTooltip="Nusxalash" tooltipPosition="top"><i class="pi pi-copy" aria-hidden="true"></i></button>
+                                    }
+                                    @if (hasEdit) {
+                                        <button pButton class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)" pTooltip="Yangilash" tooltipPosition="top"><i class="pi pi-pencil" aria-hidden="true"></i></button>
+                                    }
+                                    @if (hasDelete) {
+                                        <button pButton class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)" pTooltip="O'chirish" tooltipPosition="top"><i class="pi pi-trash" aria-hidden="true"></i></button>
+                                    }
+                                </div>
+                            </td>
+                        }
 
-                        <td *ngIf="customActions?.length || hasAction" class="actions-merged">
-                            <div class="action-buttons">
-                                <datatable-actions *ngIf="customActions?.length" [row]="rowData" [actions]="customActions"></datatable-actions>
-                                <button *ngIf="hasAction && hasClone" pButton icon="pi pi-copy" class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)"></button>
-                                <button *ngIf="hasAction && hasEdit" pButton icon="pi pi-pencil" class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)"></button>
-                                <button *ngIf="hasAction && hasDelete" pButton icon="pi pi-trash" class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)"></button>
-                            </div>
-                        </td>
+                        @if (customActions.length || hasAction) {
+                            <td class="actions-merged">
+                                <div class="action-buttons">
+                                    @if (customActions.length) {
+                                        <datatable-actions [row]="rowData" [actions]="customActions"></datatable-actions>
+                                    }
+                                    @if (hasAction && hasClone) {
+                                        <button pButton class="p-button-sm p-button-text action-copy me-2" (click)="triggerClone(rowData)"><i class="pi pi-copy" aria-hidden="true"></i></button>
+                                    }
+                                    @if (hasAction && hasEdit) {
+                                        <button pButton class="p-button-sm p-button-text action-edit me-2" (click)="triggerEdit(rowData)"><i class="pi pi-pencil" aria-hidden="true"></i></button>
+                                    }
+                                    @if (hasAction && hasDelete) {
+                                        <button pButton class="p-button-sm p-button-text action-delete" (click)="triggerDelete(rowData)"><i class="pi pi-trash" aria-hidden="true"></i></button>
+                                    }
+                                </div>
+                            </td>
+                        }
                     </tr>
                 </ng-template>
 
@@ -152,22 +207,13 @@
         </div>
     </div>
 
-    <p-drawer
-        *ngIf="showDrawerFilters && drawerFilterComponent"
-        [(visible)]="filterDrawerVisible"
-        (visibleChange)="onDrawerVisibleChange($event)"
-        position="right"
-        header="Filtrlar"
-        [dismissible]="true"
-        [modal]="true"
-        [showCloseIcon]="true"
-        [blockScroll]="true"
-        styleClass="datatable-drawer"
-    >
-        <div class="drawer-inner">
-            <ng-template #drawerHost></ng-template>
-        </div>
-    </p-drawer>
+    @if (showDrawerFilters && drawerFilterComponent) {
+        <p-drawer [(visible)]="filterDrawerVisible" (visibleChange)="onDrawerVisibleChange($event)" position="right" header="Filtrlar" [dismissible]="true" [modal]="true" [closable]="true" [blockScroll]="true" styleClass="datatable-drawer">
+            <div class="drawer-inner">
+                <ng-template #drawerHost></ng-template>
+            </div>
+        </p-drawer>
+    }
 
     <p-dialog
         [(visible)]="showEditDialog"
@@ -184,5 +230,5 @@
         <ng-template #formContainer></ng-template>
     </p-dialog>
 
-    <p-confirmDialog styleClass="paynote-confirm-dialog"></p-confirmDialog>
+    <p-confirmdialog styleClass="paynote-confirm-dialog"></p-confirmdialog>
 </div>

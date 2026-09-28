@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { finalize } from 'rxjs/operators';
@@ -25,7 +25,7 @@ type CartItem = {
 @Component({
     selector: 'sales',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, ConfirmDialogModule, DialogModule, InputTextModule, MoneyPipe, NoAutofillDirective],
+    imports: [CommonModule, FormsModule, ButtonDirective, ConfirmDialog, DialogModule, InputTextModule, MoneyPipe, NoAutofillDirective],
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.scss'],
     providers: [ConfirmationService]

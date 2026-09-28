@@ -1,23 +1,15 @@
 <div class="switch-toggle">
-  <div class="switch-toggle__text">
-    <div class="switch-toggle__heading">
-      <label>{{ label }}</label>
-      <app-custom-active-badge
-        *ngIf="showStateText"
-        [rowData]="badgeRow"
-        field="value"
-        [trueLabel]="trueLabel"
-        [falseLabel]="falseLabel">
-      </app-custom-active-badge>
+    <div class="switch-toggle__text">
+        <div class="switch-toggle__heading">
+            <label>{{ label }}</label>
+            @if (showStateText) {
+                <app-custom-active-badge [rowData]="badgeRow" field="value" [trueLabel]="trueLabel" [falseLabel]="falseLabel"> </app-custom-active-badge>
+            }
+        </div>
+        <span>{{ value ? activeDescription : inactiveDescription }}</span>
     </div>
-    <span>{{ value ? activeDescription : inactiveDescription }}</span>
-  </div>
 
-  <div class="switch-toggle__ctrl">
-    <p-inputSwitch
-      [ngModel]="value"
-      (ngModelChange)="onToggle($event)"
-      [disabled]="effectiveDisabled">
-    </p-inputSwitch>
-  </div>
+    <div class="switch-toggle__ctrl">
+        <p-toggleswitch [ngModel]="value" (ngModelChange)="onToggle($event)" [disabled]="effectiveDisabled"> </p-toggleswitch>
+    </div>
 </div>

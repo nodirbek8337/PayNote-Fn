@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
     hmr: false,
-    apiUrl: 'https://pay-note.koyeb.app',
+    apiUrl: 'https://paynote-bc.onrender.com',
 };

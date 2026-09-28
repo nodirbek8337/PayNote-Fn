@@ -1,7 +1,7 @@
 <div class="money-input" [class.is-invalid]="shouldShowErrors()">
     <input pInputText [appNoAutofill]="displayValue" class="flex-1" [placeholder]="placeholder" [disabled]="isDisabled" [value]="displayValue" inputmode="numeric" pattern="\d*" (focus)="onFocus()" (blur)="onBlur()" (input)="onInput($any($event.target).value)" />
 
-    <p-select styleClass="w-28" [options]="currencyOptions" [ngModel]="currency" (ngModelChange)="onCurrencyChange($event)" [disabled]="isDisabled"> </p-select>
+    <p-select class="w-28" [options]="currencyOptions" [ngModel]="currency" (ngModelChange)="onCurrencyChange($event)" [disabled]="isDisabled"> </p-select>
 </div>
 
 <app-control-error [control]="control" [messages]="errorMessages" />

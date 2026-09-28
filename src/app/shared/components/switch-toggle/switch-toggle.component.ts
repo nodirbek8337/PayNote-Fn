@@ -1,50 +1,57 @@
-import { CommonModule } from '@angular/common';
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { CustomActiveBadgeComponent } from '../badge/custom-active-renderer.component';
 
 @Component({
-  selector: 'app-switch-toggle',
-  standalone: true,
-  imports: [CommonModule, InputSwitchModule, FormsModule, CustomActiveBadgeComponent],
-  providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SwitchToggleComponent), multi: true }
-  ],
-  templateUrl: './switch-toggle.component.html',
-  styleUrls: ['./switch-toggle.component.scss']
+    selector: 'app-switch-toggle',
+    standalone: true,
+    imports: [ToggleSwitch, FormsModule, CustomActiveBadgeComponent],
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SwitchToggleComponent), multi: true }],
+    templateUrl: './switch-toggle.component.html',
+    styleUrls: ['./switch-toggle.component.scss']
 })
 export class SwitchToggleComponent implements ControlValueAccessor {
-  @Input() label = 'Faol holat';
-  @Input() trueLabel = 'Faol';
-  @Input() falseLabel = 'Faol emas';
-  @Input() activeDescription = 'Yoqilgan holatda ishlaydi';
-  @Input() inactiveDescription = "O'chirilgan holatda ishlamaydi";
-  @Input() showStateText = true;
-  @Input() disabled = false;
+    @Input() label = 'Faol holat';
+    @Input() trueLabel = 'Faol';
+    @Input() falseLabel = 'Faol emas';
+    @Input() activeDescription = 'Yoqilgan holatda ishlaydi';
+    @Input() inactiveDescription = "O'chirilgan holatda ishlamaydi";
+    @Input() showStateText = true;
+    @Input() disabled = false;
 
-  value = false;
-  isDisabled = false;
+    value = false;
+    isDisabled = false;
 
-  private onChange: (v: boolean) => void = () => {};
-  private onTouched: () => void = () => {};
+    private onChange: (v: boolean) => void = () => {};
+    private onTouched: () => void = () => {};
 
-  writeValue(v: boolean): void { this.value = !!v; }
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
-  setDisabledState(disabled: boolean): void { this.isDisabled = disabled; }
+    writeValue(v: boolean): void {
+        this.value = !!v;
+    }
+    registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+    setDisabledState(disabled: boolean): void {
+        this.isDisabled = disabled;
+    }
 
-  onToggle(v: boolean) {
-    if (this.disabled || this.isDisabled) return;
-    this.value = !!v;
-    this.onChange(this.value);
-    this.onTouched();
-  }
+    onToggle(v: boolean) {
+        if (this.disabled || this.isDisabled) return;
+        this.value = !!v;
+        this.onChange(this.value);
+        this.onTouched();
+    }
 
-  get effectiveDisabled() { return this.disabled || this.isDisabled; }
+    get effectiveDisabled() {
+        return this.disabled || this.isDisabled;
+    }
 
-  get badgeRow() {
-    return { value: this.value };
-  }
+    get badgeRow() {
+        return { value: this.value };
+    }
 }

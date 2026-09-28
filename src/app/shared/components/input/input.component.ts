@@ -1,6 +1,6 @@
-import { Component, forwardRef, Input, OnInit, Optional } from '@angular/core';
+import { Component, forwardRef, Input, OnInit, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ControlErrorComponent } from '../control-error/control-error.component';
@@ -10,194 +10,205 @@ import { NoAutofillDirective } from '../../directives/no-autofill.directive';
 let nextInputId = 0;
 
 @Component({
-  selector: 'app-input',
-  standalone: true,
-  imports: [NgIf, NgClass, InputTextModule, FormsModule, ControlErrorComponent, NoAutofillDirective],
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => InputComponent),
-    multi: true
-  }]
+    selector: 'app-input',
+    standalone: true,
+    imports: [NgClass, InputTextModule, FormsModule, ControlErrorComponent, NoAutofillDirective],
+    templateUrl: './input.component.html',
+    styleUrls: ['./input.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => InputComponent),
+            multi: true
+        }
+    ]
 })
 export class InputComponent implements ControlValueAccessor, OnInit {
-  constructor(@Optional() private controlContainer: ControlContainer) {}
+    private controlContainer = inject(ControlContainer, { optional: true });
 
-  @Input() type: 'text' | 'password' | 'email' | 'number' = 'text';
-  @Input() placeholder = '';
-  @Input() formControlName!: string;
-  @Input() required = false;
-  @Input() allowMathExpression = false;
-  @Input() allowNegative = false;
-  @Input() autocomplete = '';
-  @Input() inputName = '';
-  @Input() inputId = `paynote-field-${++nextInputId}`;
+    @Input() type: 'text' | 'password' | 'email' | 'number' = 'text';
+    @Input() placeholder = '';
+    @Input() formControlName!: string;
+    @Input() required = false;
+    @Input() allowMathExpression = false;
+    @Input() allowNegative = false;
+    @Input() autocomplete = '';
+    @Input() inputName = '';
+    @Input() inputId = `paynote-field-${++nextInputId}`;
 
-  get inputAutocomplete(): string {
-    return this.autocomplete || (this.type === 'password' ? 'new-password' : 'off');
-  }
-
-  value: any = '';
-  isDisabled = false;
-  showPassword = false;
-  readonly errorMessages = INPUT_ERROR_MESSAGES;
-
-  onChange = (_: any) => {};
-  onTouched = () => {};
-
-  ngOnInit(): void {
-    const validator = this.control?.validator?.({} as any);
-    this.required ||= !!validator?.['required'];
-  }
-
-  writeValue(val: any): void {
-    if (this.type !== 'number') {
-      this.value = val;
-      return;
+    get inputAutocomplete(): string {
+        return this.autocomplete || (this.type === 'password' ? 'new-password' : 'off');
     }
 
-    this.value = this.allowMathExpression
-      ? this.formatNumberExpressionValue(val)
-      : this.formatNumberValue(val);
-  }
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
-  setDisabledState(disabled: boolean): void { this.isDisabled = disabled; }
+    value: any = '';
+    isDisabled = false;
+    showPassword = false;
+    readonly errorMessages = INPUT_ERROR_MESSAGES;
 
-  get control() {
-    return this.controlContainer?.control?.get?.(this.formControlName);
-  }
+  onChange = (_value?: any) => {};
+    onTouched = () => {};
 
-  shouldShowErrors(): boolean {
-    const c = this.control;
-    return !!c && c.invalid && (c.dirty || c.touched);
-  }
-
-  handleValueChange(value: any): void {
-    if (this.type !== 'number') {
-      this.value = value;
-      this.onChange(value);
-      return;
+    ngOnInit(): void {
+        const validator = this.control?.validator?.({} as any);
+        this.required ||= !!validator?.['required'];
     }
 
-    if (this.allowMathExpression) {
-      const raw = this.sanitizeNumberExpression(value);
-      this.value = this.formatNumberExpression(raw);
-      this.onChange(raw);
-      return;
+    writeValue(val: any): void {
+        if (this.type !== 'number') {
+            this.value = val;
+            return;
+        }
+
+        this.value = this.allowMathExpression ? this.formatNumberExpressionValue(val) : this.formatNumberValue(val);
+    }
+    registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
+    registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+    setDisabledState(disabled: boolean): void {
+        this.isDisabled = disabled;
     }
 
-    const raw = this.sanitizeNumber(value);
-    this.value = this.formatNumberRaw(raw);
-    this.onChange(raw === '' || raw === '-' ? null : Number(raw));
-  }
-
-  handleBlur(): void {
-    if (this.type === 'number' && this.allowMathExpression) {
-      const result = this.evaluateNumberExpression(this.value);
-
-      if (result !== null && result >= 0) {
-        this.value = this.formatNumberRaw(String(result));
-        this.onChange(result);
-      }
+    get control() {
+        return this.controlContainer?.control?.get?.(this.formControlName);
     }
 
-    this.onTouched();
-  }
+    shouldShowErrors(): boolean {
+        const c = this.control;
+        return !!c && c.invalid && (c.dirty || c.touched);
+    }
 
-  get nativeInputType(): string {
-    return this.type === 'number' ? 'text' : this.type;
-  }
+    handleValueChange(value: any): void {
+        if (this.type !== 'number') {
+            this.value = value;
+            this.onChange(value);
+            return;
+        }
 
-  get inputMode(): string | null {
-    return this.type === 'number' ? (this.allowMathExpression ? 'text' : 'numeric') : null;
-  }
+        if (this.allowMathExpression) {
+            const raw = this.sanitizeNumberExpression(value);
+            this.value = this.formatNumberExpression(raw);
+            this.onChange(raw);
+            return;
+        }
 
-  togglePasswordVisibility(): void {
-    if (this.isDisabled) return;
-    this.showPassword = !this.showPassword;
-  }
+        const raw = this.sanitizeNumber(value);
+        this.value = this.formatNumberRaw(raw);
+        this.onChange(raw === '' || raw === '-' ? null : Number(raw));
+    }
 
-  get passwordToggleLabel(): string {
-    return this.showPassword ? 'Parolni yashirish' : "Parolni ko'rsatish";
-  }
+    handleBlur(): void {
+        if (this.type === 'number' && this.allowMathExpression) {
+            const result = this.evaluateNumberExpression(this.value);
 
-  private sanitizeNumber(value: any): string {
-    let raw = String(value ?? '').replace(/[^\d-]/g, '');
-    raw = this.allowNegative ? raw.replace(/(?!^)-/g, '') : raw.replace(/-/g, '');
-    raw = raw.replace(/^(-?)0+(?=\d)/, '$1');
-    return raw;
-  }
+            if (result !== null && result >= 0) {
+                this.value = this.formatNumberRaw(String(result));
+                this.onChange(result);
+            }
+        }
 
-  private formatNumberValue(value: any): string {
-    if (value === null || value === undefined || value === '') return '';
-    return this.formatNumberRaw(this.sanitizeNumber(value));
-  }
+        this.onTouched();
+    }
 
-  private formatNumberRaw(raw: string): string {
-    if (!raw || raw === '-') return raw;
+    get nativeInputType(): string {
+        return this.type === 'number' ? 'text' : this.type;
+    }
 
-    const isNegative = raw.startsWith('-');
-    const digits = raw.replace(/[^\d]/g, '');
-    const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    get inputMode(): string | null {
+        return this.type === 'number' ? (this.allowMathExpression ? 'text' : 'numeric') : null;
+    }
 
-    return `${isNegative ? '-' : ''}${formatted}`;
-  }
+    togglePasswordVisibility(): void {
+        if (this.isDisabled) return;
+        this.showPassword = !this.showPassword;
+    }
 
-  private sanitizeNumberExpression(value: any): string {
-    let raw = String(value ?? '').replace(/[^\d+\-\s.]/g, '');
-    raw = raw.replace(/[.]/g, ' ');
-    raw = raw.replace(/\s+/g, ' ');
-    raw = raw.replace(/^[+-]+/, '');
+    get passwordToggleLabel(): string {
+        return this.showPassword ? 'Parolni yashirish' : "Parolni ko'rsatish";
+    }
 
-    const operatorMatch = raw.match(/[+-]/);
-    if (!operatorMatch) return raw.trim();
+    private sanitizeNumber(value: any): string {
+        let raw = String(value ?? '').replace(/[^\d-]/g, '');
+        raw = this.allowNegative ? raw.replace(/(?!^)-/g, '') : raw.replace(/-/g, '');
+        raw = raw.replace(/^(-?)0+(?=\d)/, '$1');
+        return raw;
+    }
 
-    const operatorIndex = operatorMatch.index ?? -1;
-    const left = raw.slice(0, operatorIndex).replace(/[+-]/g, '').trim();
-    const operator = operatorMatch[0];
-    const right = raw.slice(operatorIndex + 1).replace(/[+-]/g, '').trim();
+    private formatNumberValue(value: any): string {
+        if (value === null || value === undefined || value === '') return '';
+        return this.formatNumberRaw(this.sanitizeNumber(value));
+    }
 
-    return `${left}${operator}${right}`;
-  }
+    private formatNumberRaw(raw: string): string {
+        if (!raw || raw === '-') return raw;
 
-  private formatNumberExpressionValue(value: any): string {
-    if (value === null || value === undefined || value === '') return '';
-    return this.formatNumberExpression(this.sanitizeNumberExpression(value));
-  }
+        const isNegative = raw.startsWith('-');
+        const digits = raw.replace(/[^\d]/g, '');
+        const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-  private formatNumberExpression(raw: string): string {
-    if (!raw) return '';
+        return `${isNegative ? '-' : ''}${formatted}`;
+    }
 
-    const operatorIndex = raw.search(/[+-]/);
-    if (operatorIndex === -1) return this.formatNumberExpressionPart(raw);
+    private sanitizeNumberExpression(value: any): string {
+        let raw = String(value ?? '').replace(/[^\d+\-\s.]/g, '');
+        raw = raw.replace(/[.]/g, ' ');
+        raw = raw.replace(/\s+/g, ' ');
+        raw = raw.replace(/^[+-]+/, '');
 
-    const left = raw.slice(0, operatorIndex);
-    const operator = raw[operatorIndex];
-    const right = raw.slice(operatorIndex + 1);
+        const operatorMatch = raw.match(/[+-]/);
+        if (!operatorMatch) return raw.trim();
 
-    return `${this.formatNumberExpressionPart(left)}${operator}${this.formatNumberExpressionPart(right)}`;
-  }
+        const operatorIndex = operatorMatch.index ?? -1;
+        const left = raw.slice(0, operatorIndex).replace(/[+-]/g, '').trim();
+        const operator = operatorMatch[0];
+        const right = raw
+            .slice(operatorIndex + 1)
+            .replace(/[+-]/g, '')
+            .trim();
 
-  private formatNumberExpressionPart(part: string): string {
-    const digits = part.replace(/[^\d]/g, '');
-    if (!digits) return '';
+        return `${left}${operator}${right}`;
+    }
 
-    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
+    private formatNumberExpressionValue(value: any): string {
+        if (value === null || value === undefined || value === '') return '';
+        return this.formatNumberExpression(this.sanitizeNumberExpression(value));
+    }
 
-  private evaluateNumberExpression(value: any): number | null {
-    const raw = String(value ?? '').trim().replace(/[.\s]/g, '');
-    if (!raw || !/^\d+(?:[+-]\d+)?$/.test(raw)) return null;
+    private formatNumberExpression(raw: string): string {
+        if (!raw) return '';
 
-    const operatorIndex = raw.search(/[+-]/);
-    if (operatorIndex === -1) return Number(raw);
+        const operatorIndex = raw.search(/[+-]/);
+        if (operatorIndex === -1) return this.formatNumberExpressionPart(raw);
 
-    const left = Number(raw.slice(0, operatorIndex));
-    const right = Number(raw.slice(operatorIndex + 1));
-    if (!Number.isFinite(left) || !Number.isFinite(right)) return null;
+        const left = raw.slice(0, operatorIndex);
+        const operator = raw[operatorIndex];
+        const right = raw.slice(operatorIndex + 1);
 
-    return raw[operatorIndex] === '+' ? left + right : left - right;
-  }
+        return `${this.formatNumberExpressionPart(left)}${operator}${this.formatNumberExpressionPart(right)}`;
+    }
+
+    private formatNumberExpressionPart(part: string): string {
+        const digits = part.replace(/[^\d]/g, '');
+        if (!digits) return '';
+
+        return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    private evaluateNumberExpression(value: any): number | null {
+        const raw = String(value ?? '')
+            .trim()
+            .replace(/[.\s]/g, '');
+        if (!raw || !/^\d+(?:[+-]\d+)?$/.test(raw)) return null;
+
+        const operatorIndex = raw.search(/[+-]/);
+        if (operatorIndex === -1) return Number(raw);
+
+        const left = Number(raw.slice(0, operatorIndex));
+        const right = Number(raw.slice(operatorIndex + 1));
+        if (!Number.isFinite(left) || !Number.isFinite(right)) return null;
+
+        return raw[operatorIndex] === '+' ? left + right : left - right;
+    }
 }

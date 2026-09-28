@@ -238,6 +238,29 @@ html.app-dark body {
   box-shadow: none;
 }
 
+/* PayNote form-control standarti: yangi va mavjud sahifalarda bir xil balandlik. */
+:root {
+  --paynote-control-height: 40px;
+}
+
+input.p-inputtext,
+.p-inputnumber-input,
+.p-autocomplete-input,
+.p-select,
+.p-multiselect {
+  box-sizing: border-box;
+  height: var(--paynote-control-height);
+}
+
+.p-select-label,
+.p-multiselect-label,
+.p-select-dropdown,
+.p-multiselect-dropdown {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+
 .p-button:not(.p-button-text):not(.p-button-outlined) {
   border-color: var(--p-primary-color) !important;
   background: linear-gradient(180deg, var(--action-primary-from) 0%, var(--action-primary-to) 100%) !important;
@@ -418,8 +441,7 @@ html.app-dark body {
 
 .p-inputtext,
 .p-select,
-.p-multiselect,
-.p-password input {
+.p-multiselect {
   border-radius: 8px !important;
   border-color: var(--surface-border) !important;
   background: var(--field-bg) !important;
@@ -430,7 +452,6 @@ html.app-dark body {
 
 .p-select-label,
 .p-multiselect-label,
-.p-password input::placeholder,
 .p-inputtext::placeholder {
   font-size: 0.96rem !important;
 }
@@ -438,64 +459,15 @@ html.app-dark body {
 html.app-dark .p-inputtext,
 html.app-dark .p-select,
 html.app-dark .p-multiselect,
-html.app-dark .p-password input {
+html.app-dark .p-multiselect {
   background: var(--field-bg) !important;
 }
 
 .p-inputtext:enabled:focus,
 .p-select:not(.p-disabled).p-focus,
-.p-multiselect:not(.p-disabled).p-focus,
-.p-password input:enabled:focus {
+.p-multiselect:not(.p-disabled).p-focus {
   border-color: var(--p-primary-color) !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-color), transparent 82%) !important;
-}
-
-.p-password .p-password-toggle-mask,
-.p-password .p-password-icon,
-.p-password i {
-  cursor: pointer !important;
-}
-
-.p-password {
-  position: relative;
-}
-
-.p-password .p-password-toggle-mask {
-  right: 0.35rem !important;
-  width: 32px !important;
-  height: 32px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 8px !important;
-  color: var(--text-color-secondary) !important;
-  background: transparent !important;
-  transition: background-color .15s ease, color .15s ease, box-shadow .15s ease;
-}
-
-.p-password .p-password-toggle-mask:hover {
-  color: var(--text-color) !important;
-  background: var(--action-primary-soft) !important;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--action-primary) 18%, transparent) !important;
-}
-
-.p-password .p-password-toggle-mask:focus-visible {
-  outline: 0 !important;
-  color: var(--text-color) !important;
-  background: var(--action-primary-soft) !important;
-  box-shadow: var(--focus-primary) !important;
-}
-
-.p-password .p-password-toggle-mask svg,
-.p-password .p-password-toggle-mask .p-icon,
-.p-password .p-password-toggle-mask i {
-  width: 1rem !important;
-  height: 1rem !important;
-  font-size: 1rem !important;
-}
-
-.p-password input {
-  padding-right: 2.8rem !important;
 }
 
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider,

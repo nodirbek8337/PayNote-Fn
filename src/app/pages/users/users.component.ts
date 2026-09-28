@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { UsersService } from '../service/users.service';
-import { NgIf } from '@angular/common';
+
 import { UsersFormComponent } from './form/users-form.component';
 import { UsersFilterComponent } from './filter/users-filter.component';
 import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom-active-renderer.component';
@@ -9,7 +9,7 @@ import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom
 @Component({
     selector: 'users',
     standalone: true,
-    imports: [PrimeDatatableComponent, NgIf],
+    imports: [PrimeDatatableComponent],
     templateUrl: './users.component.html'
 })
 export class UsersComponent {
@@ -26,7 +26,11 @@ export class UsersComponent {
             widthClass: 'w-15p',
             sortable: false,
             filterType: 'dropdown',
-            filterOptions: [{ label: 'Boshliq', value: 'admin' }, { label: 'Muzlatgich ishchisi', value: 'user' }, { label: 'Mehmonxona manageri', value: 'manager' }],
+            filterOptions: [
+                { label: 'Boshliq', value: 'admin' },
+                { label: 'Muzlatgich ishchisi', value: 'user' },
+                { label: 'Mehmonxona manageri', value: 'manager' }
+            ],
             placeholder: 'Rolni tanlang',
             cellRendererFn: (row: any, field: string) => this.formatRole(row[field])
         },
@@ -36,13 +40,23 @@ export class UsersComponent {
             widthClass: 'w-15p',
             sortable: false,
             filterType: 'dropdown',
-            filterOptions: [{ label: 'Faol', value: 'true' }, { label: 'Nofaol', value: 'false' }],
+            filterOptions: [
+                { label: 'Faol', value: 'true' },
+                { label: 'Nofaol', value: 'false' }
+            ],
             placeholder: 'Holatni tanlang',
             cellRendererComponent: CustomActiveBadgeComponent
         },
         {
-            field: 'telegramUsername', header: 'Telegram', widthClass: 'w-20p', sortable: false, searchable: false,
-            cellRendererFn: (row: any) => row.telegramUsername ? `<span class="telegram-cell"><span class="telegram-cell__name">@${row.telegramUsername}</span><span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span></span>` : '<span>-</span>'
+            field: 'telegramUsername',
+            header: 'Telegram',
+            widthClass: 'w-20p',
+            sortable: false,
+            searchable: false,
+            cellRendererFn: (row: any) =>
+                row.telegramUsername
+                    ? `<span class="telegram-cell"><span class="telegram-cell__name">@${row.telegramUsername}</span><span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span></span>`
+                    : '<span>-</span>'
         },
         {
             field: 'createdAt',
@@ -65,20 +79,7 @@ export class UsersComponent {
         const date = new Date(value);
         if (Number.isNaN(date.getTime())) return '<span>-</span>';
 
-        const months = [
-            'yanvar',
-            'fevral',
-            'mart',
-            'aprel',
-            'may',
-            'iyun',
-            'iyul',
-            'avgust',
-            'sentabr',
-            'oktabr',
-            'noyabr',
-            'dekabr'
-        ];
+        const months = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
         const dateText = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
         const timeText = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 

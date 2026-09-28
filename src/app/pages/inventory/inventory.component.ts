@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { InventoryItemsService } from '../service/inventory-items.service';
 import { InventoryFormComponent } from './form/inventory-form.component';
@@ -9,7 +9,7 @@ import { UsersFilterComponent } from '../users/filter/users-filter.component';
 @Component({
     selector: 'inventory',
     standalone: true,
-    imports: [PrimeDatatableComponent, NgIf],
+    imports: [PrimeDatatableComponent],
     templateUrl: './inventory.component.html',
     providers: [MoneyPipe]
 })
@@ -43,7 +43,10 @@ export class InventoryComponent {
             widthClass: 'w-10p',
             sortable: false,
             filterType: 'dropdown',
-            filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            filterOptions: [
+                { label: "So'm (UZS)", value: 'UZS' },
+                { label: 'AQSH dollari (USD)', value: 'USD' }
+            ],
             placeholder: 'Valutani tanlang',
             cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>`
         },

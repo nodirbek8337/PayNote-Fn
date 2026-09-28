@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AppTopbar } from './app.topbar';
@@ -21,7 +21,7 @@ import { LayoutService } from '../service/layout.service';
     `
 })
 export class AppLayout {
-    constructor(public layoutService: LayoutService) {}
+    layoutService = inject(LayoutService);
 
     get containerClass() {
         return { 'layout-full': true };

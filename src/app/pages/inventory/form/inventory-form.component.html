@@ -16,7 +16,10 @@
     </div>
 
     <div class="flex justify-end gap-2 mt-4">
-        <button pButton type="button" label="Ortga" (click)="closeModal()" class="p-button-outlined"></button>
-        <button pButton type="submit" label="Saqlash" [loading]="loading" [disabled]="loading || form.invalid" class="form-save-btn"></button>
+        <button pButton type="button" (click)="closeModal()" class="p-button-outlined"><span>Ortga</span></button>
+        <button pButton type="submit" [disabled]="loading || form.invalid" class="form-save-btn">
+            @if (loading) { <i class="pi pi-spinner pi-spin" aria-hidden="true"></i> }
+            <span>Saqlash</span>
+        </button>
     </div>
 </form>

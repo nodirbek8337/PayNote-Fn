@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, inject } from '@angular/core';
+
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { MoneyPipe } from '../../../shared/pipes/money.pipe';
 
@@ -21,9 +21,11 @@ export type InventoryFormModel = {
     standalone: true,
     templateUrl: './inventory-form.component.html',
     styleUrls: ['./inventory-form.component.scss'],
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputComponent, MoneyPipe]
+    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, MoneyPipe]
 })
 export class InventoryFormComponent implements OnInit {
+    private fb = inject(FormBuilder);
+
     @Input() model: Partial<InventoryFormModel> = {};
     @Input() loading = false;
 
@@ -32,7 +34,7 @@ export class InventoryFormComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor() {
         this.form = this.fb.group({
             amount: [null, [Validators.required, this.amountExpressionValidator.bind(this)]]
         });

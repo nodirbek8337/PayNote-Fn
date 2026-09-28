@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, Optional } from '@angular/core';
+import { Component, forwardRef, inject, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,7 +17,7 @@ import { NoAutofillDirective } from '../../directives/no-autofill.directive';
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PhoneInputComponent), multi: true }]
 })
 export class PhoneInputComponent implements ControlValueAccessor {
-  constructor(@Optional() private controlContainer: ControlContainer) {}
+  private readonly controlContainer = inject(ControlContainer, { optional: true });
 
   @Input() placeholder = '998-__-___-__-__';
   @Input() formControlName!: string;
@@ -28,7 +28,7 @@ export class PhoneInputComponent implements ControlValueAccessor {
   isDisabled = false;
   readonly errorMessages = PHONE_ERROR_MESSAGES;
 
-  onChange = (_: any) => {};
+  onChange = (_value?: any) => {};
   onTouched = () => {};
 
   writeValue(val: any): void {

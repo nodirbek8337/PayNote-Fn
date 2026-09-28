@@ -4,12 +4,12 @@ import { DefaultService } from '../../services/default.service';
 import { CommonModule } from '@angular/common';
 import { TableFeatureBaseComponent } from './table-feature-base/table-feature-base.component';
 import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
+import { Table, SortIcon, SortableColumn } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
+import { ButtonDirective } from 'primeng/button';
+import { Select } from 'primeng/select';
 import { DatepickerRangeComponent } from '../datepicker-range/datepicker-range.component';
 import { DatatableActionsComponent } from './components/datatable-actions.component';
 import { DatatableColumnRendererComponent } from './components/datatable-column-renderer.component';
@@ -30,12 +30,14 @@ import { NoAutofillDirective } from '../../directives/no-autofill.directive';
         CommonModule,
         NoAutofillDirective,
         FormsModule,
-        TableModule,
+        Table,
+        SortIcon,
+        SortableColumn,
         DialogModule,
-        ConfirmDialogModule,
+        ConfirmDialog,
         InputTextModule,
-        ButtonModule,
-        SelectModule,
+        ButtonDirective,
+        Select,
         DatepickerRangeComponent,
         DatatableActionsComponent,
         DatatableColumnRendererComponent,
@@ -137,8 +139,12 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
     }
 
     private sanitizeForClone(src: any) {
-        const { _id, id, createdAt, updatedAt, ...rest } = src ?? {};
-        return { ...rest };
+        const result = { ...(src ?? {}) };
+        delete result._id;
+        delete result.id;
+        delete result.createdAt;
+        delete result.updatedAt;
+        return result;
     }
 
     triggerAdd() {

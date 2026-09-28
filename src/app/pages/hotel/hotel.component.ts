@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../shared/components/input/input.component';
 import { SelectComponent } from '../../shared/components/select/select.component';
 import { ToastService } from '../../shared/services/toast.service';
@@ -15,7 +15,7 @@ type Payment = { amount: number | null; currency: Currency; method: string; note
 
 @Component({
   selector: 'app-hotel', standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputComponent, SelectComponent],
+  imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, InputComponent, SelectComponent],
   templateUrl: './hotel.component.html', styleUrl: './hotel.component.scss',
 })
 export class HotelComponent implements OnInit {

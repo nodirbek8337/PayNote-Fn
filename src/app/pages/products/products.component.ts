@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { CustomDateRendererComponent } from '../../shared/components/badge/custom-date-renderer.component';
 import { ProductsService } from '../service/products.service';
@@ -10,7 +10,7 @@ import { UsersFilterComponent } from '../users/filter/users-filter.component';
 @Component({
     selector: 'products',
     standalone: true,
-    imports: [PrimeDatatableComponent, NgIf],
+    imports: [PrimeDatatableComponent],
     templateUrl: './products.component.html',
     providers: [MoneyPipe]
 })
@@ -32,9 +32,15 @@ export class ProductsComponent {
             cellRendererFn: (row: any, field: string) => `<span>${this._moneyPipe.transform(row[field], row.currency === 'USD' ? 'USD' : 'UZS')}</span>`
         },
         {
-            field: 'currency', header: 'Valuta', widthClass: 'w-10p', sortable: false,
+            field: 'currency',
+            header: 'Valuta',
+            widthClass: 'w-10p',
+            sortable: false,
             filterType: 'dropdown',
-            filterOptions: [{ label: "So'm (UZS)", value: 'UZS' }, { label: 'AQSH dollari (USD)', value: 'USD' }],
+            filterOptions: [
+                { label: "So'm (UZS)", value: 'UZS' },
+                { label: 'AQSH dollari (USD)', value: 'USD' }
+            ],
             placeholder: 'Valutani tanlang',
             cellRendererFn: (row: any) => `<span class="currency-label">${row.currency === 'USD' ? 'USD' : 'UZS'}</span>`
         },

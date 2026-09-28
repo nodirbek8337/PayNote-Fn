@@ -8,126 +8,123 @@
                 </div>
                 <label class="sales-search">
                     <i class="pi pi-search"></i>
-                    <input
-                        pInputText
-                        [ngModel]="search"
-                        [appNoAutofill]="search"
-                        (ngModelChange)="onSearchChange($event)"
-                        placeholder="Nomi yoki narxi bo'yicha qidiring..."
-                    />
+                    <input pInputText [ngModel]="search" [appNoAutofill]="search" (ngModelChange)="onSearchChange($event)" placeholder="Nomi yoki narxi bo'yicha qidiring..." />
                 </label>
             </div>
 
             <div class="products-scroll">
-                <div class="products-grid" *ngIf="filteredProducts.length; else emptyProducts">
-                    <button
-                        type="button"
-                        class="product-card"
-                        *ngFor="let product of filteredProducts; trackBy: trackProduct"
-                        [class.is-in-stock]="getAvailableAmount(product) > 0"
-                        [class.is-out-of-stock]="getAvailableAmount(product) <= 0"
-                        [disabled]="getAvailableAmount(product) <= 0"
-                        (click)="addToCart(product)"
-                    >
-                        <span class="product-name">{{ product.name }}</span>
-                        <strong>{{ product.price | money: product.currency }}</strong>
-                        <span class="product-footer">
-                            <span class="product-stock" [class.is-empty]="getAvailableAmount(product) <= 0">
-                                {{ getAvailableAmount(product) <= 0 ? 'Tugagan' : getAvailableAmount(product) + ' ta mavjud' }}
-                            </span>
-                            <i class="pi" [ngClass]="getAvailableAmount(product) <= 0 ? 'pi-ban' : 'pi-plus'"></i>
-                        </span>
-                    </button>
-                </div>
-
-                <ng-template #emptyProducts>
+                @if (filteredProducts.length) {
+                    <div class="products-grid">
+                        @for (product of filteredProducts; track trackProduct($index, product)) {
+                            <button
+                                type="button"
+                                class="product-card"
+                                [class.is-in-stock]="getAvailableAmount(product) > 0"
+                                [class.is-out-of-stock]="getAvailableAmount(product) <= 0"
+                                [disabled]="getAvailableAmount(product) <= 0"
+                                (click)="addToCart(product)"
+                            >
+                                <span class="product-name">{{ product.name }}</span>
+                                <strong>{{ product.price | money: product.currency }}</strong>
+                                <span class="product-footer">
+                                    <span class="product-stock" [class.is-empty]="getAvailableAmount(product) <= 0">
+                                        {{ getAvailableAmount(product) <= 0 ? 'Tugagan' : getAvailableAmount(product) + ' ta mavjud' }}
+                                    </span>
+                                    <i class="pi" [ngClass]="getAvailableAmount(product) <= 0 ? 'pi-ban' : 'pi-plus'"></i>
+                                </span>
+                            </button>
+                        }
+                    </div>
+                } @else {
                     <div class="empty-products">
                         <span class="empty-icon"><i class="pi pi-search"></i></span>
-                        <strong>{{ loading ? 'Yuklanmoqda...' : "Maxsulot topilmadi" }}</strong>
-                        <small *ngIf="!loading">Qidiruv so'zini o'zgartirib ko'ring</small>
+                        <strong>{{ loading ? 'Yuklanmoqda...' : 'Maxsulot topilmadi' }}</strong>
+                        @if (!loading) {
+                            <small>Qidiruv so'zini o'zgartirib ko'ring</small>
+                        }
                     </div>
-                </ng-template>
+                }
             </div>
         </section>
 
         <aside class="cart-panel">
             <nav class="cart-tabs" aria-label="Savatlar">
-                <button
-                    type="button"
-                    *ngFor="let cartId of cartIds"
-                    [class.is-active]="activeCart === cartId"
-                    (click)="setActiveCart(cartId)"
-                >
-                    <span>Savat {{ cartId }}</span>
-                    <b>{{ getCartCount(cartId) }}</b>
-                </button>
+                @for (cartId of cartIds; track cartId) {
+                    <button type="button" [class.is-active]="activeCart === cartId" (click)="setActiveCart(cartId)">
+                        <span>Savat {{ cartId }}</span>
+                        <b>{{ getCartCount(cartId) }}</b>
+                    </button>
+                }
             </nav>
 
             <div class="cart-summary">
                 <div>
                     <span>Jami summa</span>
-                    <span class="cart-totals"><strong *ngFor="let currency of getCartCurrencies(activeCart)">{{ getCartTotals(activeCart)[currency] | money: currency }}</strong></span>
+                    <span class="cart-totals">
+                        @for (currency of getCartCurrencies(activeCart); track currency) {
+                            <strong>{{ getCartTotals(activeCart)[currency] | money: currency }}</strong>
+                        }
+                    </span>
                 </div>
                 <span class="cart-count">{{ getCartCount(activeCart) }} ta</span>
             </div>
 
-            <div class="cart-items" *ngIf="carts[activeCart].length; else emptyCart">
-                <article class="cart-item" *ngFor="let item of carts[activeCart]; trackBy: trackCartItem">
-                    <div class="cart-item-info">
-                        <strong>{{ item.name }}</strong>
-                        <span>{{ item.price | money: item.currency }}</span>
-                    </div>
-
-                    <div class="quantity-controls">
-                        <button type="button" (click)="decreaseItem(activeCart, item)" aria-label="Kamaytirish">
-                            <i class="pi pi-minus"></i>
-                        </button>
-                        <b>{{ item.quantity }}</b>
-                        <button type="button" (click)="increaseItem(activeCart, item)" aria-label="Ko'paytirish">
-                            <i class="pi pi-plus"></i>
-                        </button>
-                    </div>
-
-                    <strong class="item-total">{{ item.price * item.quantity | money: item.currency }}</strong>
-                    <button type="button" class="remove-item" (click)="removeItem(activeCart, item.productId)" aria-label="O'chirish">
-                        <i class="pi pi-trash"></i>
-                    </button>
-                </article>
-            </div>
-
-            <ng-template #emptyCart>
+            @if (carts[activeCart].length) {
+                <div class="cart-items">
+                    @for (item of carts[activeCart]; track trackCartItem($index, item)) {
+                        <article class="cart-item">
+                            <div class="cart-item-info">
+                                <strong>{{ item.name }}</strong>
+                                <span>{{ item.price | money: item.currency }}</span>
+                            </div>
+                            <div class="quantity-controls">
+                                <button type="button" (click)="decreaseItem(activeCart, item)" aria-label="Kamaytirish">
+                                    <i class="pi pi-minus"></i>
+                                </button>
+                                <b>{{ item.quantity }}</b>
+                                <button type="button" (click)="increaseItem(activeCart, item)" aria-label="Ko'paytirish">
+                                    <i class="pi pi-plus"></i>
+                                </button>
+                            </div>
+                            <strong class="item-total">{{ item.price * item.quantity | money: item.currency }}</strong>
+                            <button type="button" class="remove-item" (click)="removeItem(activeCart, item.productId)" aria-label="O'chirish">
+                                <i class="pi pi-trash"></i>
+                            </button>
+                        </article>
+                    }
+                </div>
+            } @else {
                 <div class="empty-cart">
                     <span class="empty-icon"><i class="pi pi-shopping-bag"></i></span>
                     <strong>Savat bo'sh</strong>
                     <small>Chap tomondan maxsulot tanlang</small>
                 </div>
-            </ng-template>
+            }
 
             <footer class="cart-actions">
-                <button
-                    type="button"
-                    class="clear-btn"
-                    [disabled]="!carts[activeCart].length || sellingCart === activeCart"
-                    (click)="$any(this).confirmClearCart(activeCart)"
-                >
+                <button type="button" class="clear-btn" [disabled]="!carts[activeCart].length || sellingCart === activeCart" (click)="$any(this).confirmClearCart(activeCart)">
                     <i class="pi pi-trash"></i>
                     Tozalash
                 </button>
                 <button
                     pButton
                     type="button"
-                    icon="pi pi-check"
-                    label="Sotuvni yakunlash"
                     class="sold-btn"
-                    [loading]="sellingCart === activeCart"
                     [disabled]="!carts[activeCart].length || sellingCart === activeCart"
                     (click)="$any(this).confirmSellCart(activeCart)"
-                ></button>
+                >
+                    @if (sellingCart === activeCart) {
+                        <i class="pi pi-spinner pi-spin" aria-hidden="true"></i>
+                    } @else {
+                        <i class="pi pi-check" aria-hidden="true"></i>
+                    }
+                    <span>Sotuvni yakunlash</span>
+                </button>
             </footer>
         </aside>
     </div>
 
-    <p-confirmDialog key="sales-clear" styleClass="paynote-confirm-dialog"></p-confirmDialog>
+    <p-confirmdialog key="sales-clear" styleClass="paynote-confirm-dialog"></p-confirmdialog>
 
     <p-dialog
         [(visible)]="saleDialogVisible"
@@ -145,61 +142,55 @@
     >
         <div class="sale-confirm-summary">
             <span>Savat {{ saleCartId }}</span>
-            <span class="cart-totals"><strong *ngFor="let currency of saleCartCurrencies">{{ saleCartTotals[currency] | money: currency }}</strong></span>
+            <span class="cart-totals">
+                @for (currency of saleCartCurrencies; track currency) {
+                    <strong>{{ saleCartTotals[currency] | money: currency }}</strong>
+                }
+            </span>
             <small>{{ saleCartCount }} ta maxsulot</small>
         </div>
 
         <fieldset class="payment-methods">
             <legend>To'lov turi <b>*</b></legend>
-            <label
-                *ngFor="let option of paymentOptions"
-                class="payment-option"
-                [class.is-selected]="paymentMethod === option.value"
-            >
-                <input type="radio" name="paymentMethod" [value]="option.value" [(ngModel)]="paymentMethod" />
-                <i class="pi" [ngClass]="option.icon"></i>
-                <span>{{ option.label }}</span>
-            </label>
+            @for (option of paymentOptions; track option) {
+                <label class="payment-option" [class.is-selected]="paymentMethod === option.value">
+                    <input type="radio" name="paymentMethod" [value]="option.value" [(ngModel)]="paymentMethod" />
+                    <i class="pi" [ngClass]="option.icon"></i>
+                    <span>{{ option.label }}</span>
+                </label>
+            }
         </fieldset>
-        <small class="field-error" *ngIf="saleFormSubmitted && !paymentMethod">To'lov turini tanlang</small>
+        @if (saleFormSubmitted && !paymentMethod) {
+            <small class="field-error">To'lov turini tanlang</small>
+        }
 
         <label class="sale-note-field">
-            <span>Eslatma <b *ngIf="paymentMethod === 'OTHER'">*</b></span>
-            <textarea
-                [(ngModel)]="saleNote"
-                [appNoAutofill]="saleNote"
-                rows="3"
-                maxlength="500"
-                [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'"
-                [disabled]="sellingCart !== null"
-            ></textarea>
+            <span
+                >Eslatma
+                @if (paymentMethod === 'OTHER') {
+                    <b>*</b>
+                }
+            </span>
+            <textarea [(ngModel)]="saleNote" [appNoAutofill]="saleNote" rows="3" maxlength="500" [placeholder]="paymentMethod === 'OTHER' ? 'Masalan: Ahmad aka 2 shisha oldi' : 'Ixtiyoriy eslatma'" [disabled]="sellingCart !== null"></textarea>
             <small>{{ saleNote.length }}/500</small>
         </label>
-        <small class="field-hint" *ngIf="paymentMethod === 'OTHER'">
-            Naqd yoki karta orqali to'lanmagan sotuv kimga yoki qaysi xonaga berilganini yozing.
-        </small>
-        <small class="field-error" *ngIf="saleFormSubmitted && paymentMethod === 'OTHER' && !saleNote.trim()">
-            Boshqa usul tanlanganda eslatma majburiy
-        </small>
+        @if (paymentMethod === 'OTHER') {
+            <small class="field-hint"> Naqd yoki karta orqali to'lanmagan sotuv kimga yoki qaysi xonaga berilganini yozing. </small>
+        }
+        @if (saleFormSubmitted && paymentMethod === 'OTHER' && !saleNote.trim()) {
+            <small class="field-error"> Boshqa usul tanlanganda eslatma majburiy </small>
+        }
 
         <div class="sale-dialog-actions">
-            <button
-                pButton
-                type="button"
-                label="Bekor qilish"
-                class="p-button-outlined sale-dialog-button"
-                [disabled]="sellingCart !== null"
-                (click)="saleDialogVisible = false"
-            ></button>
-            <button
-                pButton
-                type="button"
-                icon="pi pi-check"
-                label="Tasdiqlash"
-                class="form-save-btn sale-dialog-button"
-                [loading]="sellingCart !== null"
-                (click)="submitSale()"
-            ></button>
+            <button pButton type="button" class="p-button-outlined sale-dialog-button" [disabled]="sellingCart !== null" (click)="saleDialogVisible = false"><span>Bekor qilish</span></button>
+            <button pButton type="button" class="form-save-btn sale-dialog-button" [disabled]="sellingCart !== null" (click)="submitSale()">
+                @if (sellingCart !== null) {
+                    <i class="pi pi-spinner pi-spin" aria-hidden="true"></i>
+                } @else {
+                    <i class="pi pi-check" aria-hidden="true"></i>
+                }
+                <span>Tasdiqlash</span>
+            </button>
         </div>
     </p-dialog>
 </section>

@@ -2,9 +2,8 @@
   width: 100%;
 }
 
-:host ::ng-deep .app-select .p-select,
-:host ::ng-deep .app-multi .p-multiselect {
-  height: 40px;
+:host ::ng-deep .app-select {
+  height: var(--paynote-control-height);
   display: flex;
   align-items: center;
   width: 100%;
@@ -16,7 +15,7 @@
   height: 100%;
 }
 
-.is-invalid :where(.p-select, .p-multiselect, .p-inputtext) {
+.is-invalid :where(.p-select, .p-inputtext) {
   border-color: var(--error-border) !important;
   box-shadow: 0 0 0 1px var(--error-ring);
 }
