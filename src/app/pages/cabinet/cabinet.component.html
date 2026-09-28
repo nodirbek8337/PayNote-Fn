@@ -122,13 +122,13 @@
                                 <div class="sold-products-list">
                                     @for (payment of hotelMethods(period); track payment) {
                                         <div class="sold-product">
-                                            <strong>{{ paymentMethodLabel(payment.method) }}</strong
-                                            ><span class="period-totals">
+                                            <strong>{{ paymentMethodLabel(payment.method) }}</strong>
+                                            <span class="period-totals">
                                                 @if (payment.totals.UZS) {
-                                                    <strong>{{ payment.totals.UZS | money: 'UZS' }}</strong>
+                                                    <span class="period-total">{{ payment.totals.UZS | money: 'UZS' }}</span>
                                                 }
                                                 @if (payment.totals.USD) {
-                                                    <strong>{{ payment.totals.USD | money: 'USD' }}</strong>
+                                                    <span class="period-total">{{ payment.totals.USD | money: 'USD' }}</span>
                                                 }
                                             </span>
                                         </div>

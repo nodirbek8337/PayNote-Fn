@@ -160,6 +160,21 @@
     background: var(--field-bg);
 }
 
+.period-totals {
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.45rem;
+}
+
+.period-total {
+    color: var(--action-primary-from);
+    font-size: 0.92rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .sold-product-name {
     min-width: 0;
 

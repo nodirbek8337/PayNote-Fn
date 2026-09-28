@@ -30,7 +30,7 @@ export const appRoutes: Routes = [
       { path: 'hotel', pathMatch: 'full', redirectTo: 'hotel/bookings' },
       { path: 'hotel/bookings', component: HotelComponent, canActivate: [HotelGuard], data: { section: 'bookings' } },
       { path: 'hotel/rooms', component: HotelComponent, canActivate: [HotelGuard, AdminGuard], data: { section: 'rooms' } },
-      { path: 'hotel/history', component: HotelComponent, canActivate: [HotelGuard, AdminGuard], data: { section: 'history' } },
+      { path: 'hotel/history', component: HotelComponent, canActivate: [HotelGuard], data: { section: 'history' } },
       { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
     ]
   },
