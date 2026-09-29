@@ -235,10 +235,11 @@ export class HotelComponent implements OnInit, OnDestroy {
       { amount: totalUSD, currency: 'USD' as Currency, method: this.bookingForm.paymentMethod, note: this.bookingForm.paymentNote },
       ...additionalPayments
     ].filter((payment) => Number(payment.amount) !== 0);
-    const { status: _legacyStatus, ...bookingData } = this.bookingForm;
+    const bookingData = { ...this.bookingForm };
+    delete bookingData.status;
     const body = { ...bookingData, guestsCount: Number(this.bookingForm.guestsCount), daysCount: Number(this.bookingForm.daysCount), agreedTotals: { UZS: totalUZS, USD: totalUSD }, payments, additionalPayments };
     const request = this.editingBooking ? this.hotel.updateBooking(this.editingBooking._id, body) : this.hotel.createBooking(body);
-    request.pipe(this.viewUpdates()).subscribe({ next: () => { this.bookingDialog = false; this.bookingSnapshot = ''; this.toast.success('Buyurtma tarixga saqlandi'); this.load(); } });
+    request.pipe(this.viewUpdates()).subscribe({ next: () => { this.bookingSnapshot = this.bookingFingerprint(); this.bookingSubmitted = false; this.bookingDialog = false; this.toast.success('Buyurtma tarixga saqlandi'); this.load(); } });
   }
   openPayment(booking: any) { this.editingBooking = booking; this.payment = this.blankPayment(); this.paymentDialog = true; }
   savePayment() { if (!this.editingBooking || !this.payment.method || !Number(this.payment.amount)) { this.toast.error('To‘lov turini tanlang va narxni kiriting.'); return; } if (Number(this.payment.amount) < 0 && !this.payment.note.trim()) { this.toast.error('Minus to‘lov uchun izoh majburiy.'); return; } this.hotel.addPayment(this.editingBooking._id, this.payment).pipe(this.viewUpdates()).subscribe({ next: () => { this.paymentDialog = false; this.toast.success('To‘lov tarixi saqlandi'); this.load(); } }); }
