@@ -86,7 +86,7 @@
             [showQuickFilterInDrawer]="false"
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
-            [quickFilterPlaceholder]="'Xona yoki mehmon bo‘yicha qidiring...'"
+            [quickFilterPlaceholder]="'Xona bo‘yicha qidiring...'"
             [customActions]="isAdmin ? historyActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
@@ -95,8 +95,7 @@
 
 <p-dialog [visible]="bookingDialog" (visibleChange)="onBookingVisibleChange($event)" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Buyurtmani tahrirlash' : 'Buyurtma olish'">
     <form class="hotel-form" (ngSubmit)="saveBooking()">
-        <label [class.field-invalid]="bookingSubmitted && !bookingForm.roomNumber"><span class="field-label">Xona <span class="required-mark">*</span></span><app-select [(ngModel)]="bookingForm.roomNumber" name="roomNumber" [options]="bookingRoomOptions()" placeholder="Xonani tanlang" [showClear]="false" [required]="true"></app-select></label>
-        <label [class.field-invalid]="bookingSubmitted && !bookingForm.guestName.trim()"><span class="field-label">Mehmon F.I.Sh. <span class="required-mark">*</span></span><app-input [(ngModel)]="bookingForm.guestName" name="guest" placeholder="Masalan: Ali Valiyev" [required]="true"></app-input></label>
+        <label class="form-wide" [class.field-invalid]="bookingSubmitted && !bookingForm.roomNumber"><span class="field-label">Xona <span class="required-mark">*</span></span><app-select [(ngModel)]="bookingForm.roomNumber" name="roomNumber" [options]="bookingRoomOptions()" placeholder="Xonani tanlang" [showClear]="false" [required]="true"></app-select></label>
         <label>Mehmonlar soni<app-input [(ngModel)]="bookingForm.guestsCount" name="guestsCount" type="number" placeholder="Masalan: 2"></app-input></label>
         <label>Necha kunga oldi<app-input [(ngModel)]="bookingForm.daysCount" (ngModelChange)="updateCheckout()" name="daysCount" type="number" placeholder="Masalan: 2"></app-input></label>
         <fieldset class="form-wide agreed" [class.validation-invalid]="bookingSubmitted && (!bookingForm.paymentMethod || primaryAmountMissing())">

@@ -71,12 +71,11 @@ export class HotelComponent implements OnInit, OnDestroy {
     { icon: 'pi pi-trash', tooltip: "Xonani o'chirish", color: 'danger', action: (room) => this.deleteRoom(room) },
   ];
   readonly historyColumnDefs = [
-    { field: 'roomNumber', header: 'Xona', widthClass: 'w-10p', sortable: false, filterType: 'text', placeholder: 'Xona raqamini qidiring' },
-    { field: 'guestName', header: 'Mehmon', widthClass: 'w-20p', sortable: false, filterType: 'text', placeholder: 'Mehmonni qidiring' },
+    { field: 'roomNumber', header: 'Xona', widthClass: 'w-15p', sortable: false, filterType: 'text', placeholder: 'Xona raqamini qidiring' },
     { field: 'guestsCount', header: 'Mehmonlar', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.guestsCount) || 0} kishi` },
-    { field: 'daysCount', header: 'Muddat', widthClass: 'w-10p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.daysCount) || 0} kun` },
-    { field: 'total', header: 'Jami narx', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (booking: any) => this.historyTotalText(booking) },
-    { field: 'createdAt', header: 'Buyurtma vaqti', widthClass: 'w-20p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
+    { field: 'daysCount', header: 'Muddat', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.daysCount) || 0} kun` },
+    { field: 'total', header: 'Jami narx', widthClass: 'w-30p', sortable: false, searchable: false, cellRendererFn: (booking: any) => this.historyTotalText(booking) },
+    { field: 'createdAt', header: 'Buyurtma vaqti', widthClass: 'w-25p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
   ];
   readonly historyActions: ICustomAction[] = [
     { icon: 'pi pi-pencil', tooltip: 'Buyurtmani tahrirlash', color: 'secondary', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.openBooking(undefined, booking) },
@@ -93,7 +92,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   private defaultDate(days = 0) { const d = new Date(); d.setDate(d.getDate() + days); d.setHours(12, 0, 0, 0); return this.localDateTime(d); }
   private localDateTime(d: Date) { const pad = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; }
   private blankPayment(): Payment { return { amount: null, currency: 'UZS', method: '', note: '' }; }
-  private blankBooking() { return { roomNumber: '', guestName: '', guestsCount: 1, daysCount: 1, checkIn: this.defaultDate(), checkOut: this.defaultDate(1), agreedUZS: null, agreedUSD: null, paymentMethod: '', paymentNote: '', additionalPayments: [] as { method: string; UZS: number | null; USD: number | null }[], changeNote: '' }; }
+  private blankBooking() { return { roomNumber: '', guestsCount: 1, daysCount: 1, checkIn: this.defaultDate(), checkOut: this.defaultDate(1), agreedUZS: null, agreedUSD: null, paymentMethod: '', paymentNote: '', additionalPayments: [] as { method: string; UZS: number | null; USD: number | null }[], changeNote: '' }; }
   private blankRoom() { return { number: '', name: '', capacity: 1, note: '' }; }
 
   load() {
@@ -189,8 +188,8 @@ export class HotelComponent implements OnInit, OnDestroy {
     ]).filter((payment: Payment) => payment.amount !== 0);
     const hasMinus = totalUZS < 0 || totalUSD < 0 || additionalPayments.some((payment: Payment) => Number(payment.amount) < 0);
 
-    if (!this.bookingForm.roomNumber || !this.bookingForm.guestName.trim() || !Number.isInteger(Number(this.bookingForm.guestsCount)) || Number(this.bookingForm.guestsCount) < 1 || !Number.isInteger(Number(this.bookingForm.daysCount)) || Number(this.bookingForm.daysCount) < 1) {
-      this.toast.error('Xona va mehmon ma’lumotlarini kiriting.');
+    if (!this.bookingForm.roomNumber || !Number.isInteger(Number(this.bookingForm.guestsCount)) || Number(this.bookingForm.guestsCount) < 1 || !Number.isInteger(Number(this.bookingForm.daysCount)) || Number(this.bookingForm.daysCount) < 1) {
+      this.toast.error('Xona va buyurtma ma’lumotlarini kiriting.');
       return;
     }
     if (!this.bookingForm.paymentMethod || (!totalUZS && !totalUSD)) {
