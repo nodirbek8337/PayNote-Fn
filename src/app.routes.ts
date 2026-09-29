@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { mapToCanActivate, mapToCanActivateChild, mapToCanMatch, Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
 import { UsersComponent } from './app/pages/users/users.component';
 import { InventoryComponent } from './app/pages/inventory/inventory.component';
@@ -13,25 +13,30 @@ import { FridgeGuard } from './app/shared/guards/fridge.guard';
 import { HotelGuard } from './app/shared/guards/hotel.guard';
 import { CabinetComponent } from './app/pages/cabinet/cabinet.component';
 import { HotelComponent } from './app/pages/hotel/hotel.component';
+import { HotelReportsComponent } from './app/pages/hotel-reports/hotel-reports.component';
 
 export const appRoutes: Routes = [
-  { path: 'login', component: LoginComponenet, canMatch: [GuestGuard] },
+  { path: 'login', component: LoginComponenet, canMatch: mapToCanMatch([GuestGuard]) },
+  // Root URL hech qachon bo'sh holatda qolmasin: avval Cabinet yo'liga o'tadi,
+  // keyin AuthGuard sessiyaga qarab Cabinet yoki Login sahifasini tanlaydi.
+  { path: '', pathMatch: 'full', redirectTo: 'cabinet' },
   {
     path: '',
     component: AppLayout,
-    canMatch: [AuthGuard],
+    canActivate: mapToCanActivate([AuthGuard]),
+    canActivateChild: mapToCanActivateChild([AuthGuard]),
     children: [
-      { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
       { path: 'cabinet', component: CabinetComponent },
-      { path: 'sales', component: SalesComponent, canActivate: [FridgeGuard] },
-      { path: 'inventory', component: InventoryComponent, canActivate: [FridgeGuard, AdminGuard] },
-      { path: 'products', component: ProductsComponent, canActivate: [FridgeGuard, AdminGuard] },
-      { path: 'sales-history', component: SalesHistoryComponent, canActivate: [FridgeGuard, AdminGuard] },
+      { path: 'sales', component: SalesComponent, canActivate: mapToCanActivate([FridgeGuard]) },
+      { path: 'inventory', component: InventoryComponent, canActivate: mapToCanActivate([FridgeGuard, AdminGuard]) },
+      { path: 'products', component: ProductsComponent, canActivate: mapToCanActivate([FridgeGuard, AdminGuard]) },
+      { path: 'sales-history', component: SalesHistoryComponent, canActivate: mapToCanActivate([FridgeGuard, AdminGuard]) },
       { path: 'hotel', pathMatch: 'full', redirectTo: 'hotel/bookings' },
-      { path: 'hotel/bookings', component: HotelComponent, canActivate: [HotelGuard], data: { section: 'bookings' } },
-      { path: 'hotel/rooms', component: HotelComponent, canActivate: [HotelGuard, AdminGuard], data: { section: 'rooms' } },
-      { path: 'hotel/history', component: HotelComponent, canActivate: [HotelGuard], data: { section: 'history' } },
-      { path: 'users', component: UsersComponent, canActivate: [AdminGuard] },
+      { path: 'hotel/bookings', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'bookings' } },
+      { path: 'hotel/rooms', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]), data: { section: 'rooms' } },
+      { path: 'hotel/history', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'history' } },
+      { path: 'hotel/reports', component: HotelReportsComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]) },
+      { path: 'users', component: UsersComponent, canActivate: mapToCanActivate([AdminGuard]) },
     ]
   },
   { path: '**', redirectTo: '' }

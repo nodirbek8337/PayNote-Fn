@@ -175,7 +175,8 @@ export class AppTopMenu implements OnInit {
             items: [
                 { label: 'Xonalar', icon: 'pi pi-building', routerLink: ['/hotel/rooms'], exact: true },
                 { label: 'Buyurtmalar', icon: 'pi pi-calendar-plus', routerLink: ['/hotel/bookings'], exact: true },
-                { label: 'Hisob-kitob tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true }
+                { label: 'Hisob-kitob tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true },
+                { label: 'Telegram hisobotlari', icon: 'pi pi-send', routerLink: ['/hotel/reports'], exact: true }
             ]
         };
         if (this.authService.isAdmin()) {
@@ -185,7 +186,7 @@ export class AppTopMenu implements OnInit {
             return;
         }
         this.items = [cabinet];
-        this.groups = this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1) }] : [{ ...fridge, items: fridge.items.slice(0, 1) }];
+        this.groups = this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 3) }] : [{ ...fridge, items: fridge.items.slice(0, 1) }];
     }
 
     toggleGroup(key: string) {

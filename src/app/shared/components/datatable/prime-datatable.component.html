@@ -198,7 +198,7 @@
         [header]="editMode ? 'Yangilash' : 'Qo\'shish'"
         [style]="{ width: '600px', maxWidth: '95vw' }"
         [breakpoints]="{ '760px': '90vw' }"
-        [contentStyle]="{ 'max-height': 'calc(100dvh - 9rem)', overflow: 'auto', padding: '1rem' }"
+        [contentStyle]="{ 'max-height': 'calc(100dvh - 9rem)', overflowY: 'auto', overflowX: 'visible', scrollbarGutter: 'stable', padding: '1rem' }"
         styleClass="datatable-dialog"
     >
         <ng-template #formContainer></ng-template>

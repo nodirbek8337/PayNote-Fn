@@ -1,0 +1,29 @@
+:host { display: block; width: 100%; }
+.time-input { position: relative; width: 100%; }
+.time-input__trigger { display: flex; width: 100%; height: 42px; align-items: center; justify-content: space-between; gap: .7rem; padding: 0 .75rem; border: 1px solid var(--surface-border); border-radius: 7px; background: var(--field-bg); color: var(--text-color); font: inherit; font-weight: 750; cursor: pointer; transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
+.time-input__trigger > span { display: inline-flex; align-items: center; gap: .55rem; }
+.time-input__trigger > span .pi { color: var(--action-primary-from); font-size: .9rem; }
+.time-input__trigger:hover { border-color: color-mix(in srgb, var(--action-primary-from) 68%, var(--surface-border)); background: color-mix(in srgb, var(--action-primary-soft) 32%, var(--field-bg)); }
+.time-input__trigger:focus-visible, .time-input--open .time-input__trigger { border-color: var(--action-primary-from); box-shadow: var(--focus-primary); outline: none; }
+.time-input__trigger:disabled { cursor: not-allowed; opacity: .55; }
+.time-input__chevron { color: var(--text-color-secondary); font-size: .72rem; transition: transform .22s ease; }
+.time-input--open .time-input__chevron { transform: rotate(180deg); }
+.time-input__panel { position: absolute; z-index: 50; top: calc(100% + .5rem); right: 0; width: min(330px, calc(100vw - 3rem)); box-sizing: border-box; padding: .75rem; border: 1px solid color-mix(in srgb, var(--action-primary) 42%, var(--surface-border)); border-radius: 10px; background: linear-gradient(155deg, var(--table-head-from), var(--field-bg)); box-shadow: 0 18px 38px rgba(0, 0, 0, .4); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-.45rem) scale(.98); transform-origin: top right; transition: opacity .18s ease, transform .22s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .22s; }
+.time-input--open .time-input__panel { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); transition-delay: 0s; }
+.time-input__panel--portal { position: fixed; z-index: 2000; overflow-y: auto; overscroll-behavior: contain; }
+.time-input__panel--portal.time-input__panel--visible { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); transition-delay: 0s; }
+.time-input__heading { display: flex; align-items: center; justify-content: space-between; padding: .1rem .1rem .65rem; border-bottom: 1px solid var(--surface-border); color: var(--text-color-secondary); font-size: .78rem; }
+.time-input__heading strong { color: var(--action-primary-from); font-size: 1rem; letter-spacing: .04em; }
+.time-input__choices { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: .75rem; padding: .7rem .1rem; }
+.time-input__choices section > span { display: block; margin: 0 0 .4rem .1rem; color: var(--text-color-secondary); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.time-input__grid { display: grid; gap: .28rem; }
+.time-input__grid--hours { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.time-input__grid--minutes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.time-input__grid button { min-height: 32px; padding: .2rem; border: 1px solid transparent; border-radius: 6px; background: color-mix(in srgb, var(--table-bg) 65%, transparent); color: var(--text-color-secondary); font: inherit; font-size: .76rem; font-weight: 750; cursor: pointer; transition: color .16s ease, border-color .16s ease, background-color .16s ease; }
+.time-input__grid button:hover { border-color: color-mix(in srgb, var(--action-primary-from) 55%, var(--surface-border)); color: var(--text-color); background: color-mix(in srgb, var(--action-primary-soft) 32%, var(--table-bg)); }
+.time-input__grid button.is-selected { border-color: var(--action-primary-from); background: linear-gradient(135deg, var(--action-primary-from), var(--action-primary-to)); color: var(--action-primary-text); box-shadow: 0 4px 10px color-mix(in srgb, var(--action-primary) 30%, transparent); }
+.time-input__footer { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .6rem .1rem .05rem; border-top: 1px solid var(--surface-border); }
+.time-input__footer small { color: var(--text-color-secondary); font-size: .7rem; font-weight: 600; }
+.time-input__footer button { padding: .36rem .68rem; border: 1px solid color-mix(in srgb, var(--action-primary-from) 50%, var(--surface-border)); border-radius: 6px; background: var(--action-primary-soft); color: var(--action-primary-from); font: inherit; font-size: .75rem; font-weight: 800; cursor: pointer; }
+.time-input__footer button:hover { background: color-mix(in srgb, var(--action-primary) 28%, var(--action-primary-soft)); }
+@media (max-width: 700px) { .time-input__panel { left: 0; right: auto; transform-origin: top left; } }

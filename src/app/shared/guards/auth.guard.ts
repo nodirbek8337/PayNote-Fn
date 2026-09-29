@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { CanActivate, CanMatch, Router, UrlTree, Route, UrlSegment } from '@angular/router';
+import { CanActivate, CanActivateChild, CanMatch, Router, UrlTree, Route, UrlSegment } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanMatch, CanActivate {
+export class AuthGuard implements CanMatch, CanActivate, CanActivateChild {
     private router = inject(Router);
     private authService = inject(AuthService);
 
@@ -13,6 +13,10 @@ export class AuthGuard implements CanMatch, CanActivate {
     }
 
     canActivate(): Observable<boolean | UrlTree> {
+        return this.authorize();
+    }
+
+    canActivateChild(): Observable<boolean | UrlTree> {
         return this.authorize();
     }
 

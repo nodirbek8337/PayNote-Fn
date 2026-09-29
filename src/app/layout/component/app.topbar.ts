@@ -24,7 +24,14 @@ import { AuthService } from '../../shared/services/auth.service';
                     </a>
                 </div>
 
-                <app-topmenu class="menu-n"></app-topmenu>
+                <app-topmenu class="desktop-topmenu"></app-topmenu>
+
+                <div class="mobile-navigation">
+                    <button type="button" class="mobile-navigation__trigger" aria-label="Asosiy menyuni ochish" aria-haspopup="menu" (click)="mobileMenu.toggle($event)">
+                        <i class="pi pi-bars"></i><span>Menyu</span>
+                    </button>
+                    <p-menu #mobileMenu [model]="mobileMenuItems" [popup]="true" appendTo="body" styleClass="mobile-navigation__panel"></p-menu>
+                </div>
 
                 <div class="layout-topbar-actions">
                     <div class="layout-topbar-menu">
@@ -212,7 +219,65 @@ import { AuthService } from '../../shared/services/auth.service';
             ::ng-deep .user-menu-panel .logout-menu-item .p-menu-item-content:hover {
                 background: var(--action-delete-bg) !important;
             }
+            .mobile-navigation {
+                display: none;
+            }
+            .mobile-navigation__trigger {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                min-width: 92px;
+                height: 40px;
+                padding: 0 0.75rem;
+                border: 1px solid color-mix(in srgb, var(--action-primary) 38%, var(--surface-border));
+                border-radius: 9px;
+                background: var(--table-head-from);
+                color: var(--text-color);
+                font-weight: 700;
+                cursor: pointer;
+            }
+            .mobile-navigation__trigger:hover,
+            .mobile-navigation__trigger:focus-visible {
+                border-color: var(--action-primary-from);
+                box-shadow: var(--focus-primary);
+                outline: none;
+            }
+            ::ng-deep .mobile-navigation__panel {
+                width: min(300px, calc(100vw - 24px)) !important;
+                padding: 0.4rem !important;
+                border: 1px solid var(--surface-border) !important;
+                border-radius: 10px !important;
+                background: var(--surface-card) !important;
+                box-shadow: 0 18px 36px rgba(0, 0, 0, 0.34) !important;
+            }
+            ::ng-deep .mobile-navigation__panel .p-menu-item-link {
+                gap: 0.75rem;
+                padding: 0.8rem 0.85rem !important;
+                border-radius: 7px;
+                font-weight: 650;
+            }
+            ::ng-deep .mobile-navigation__panel .p-menu-item-link:focus-visible {
+                outline: 2px solid var(--action-primary-from);
+                outline-offset: -2px;
+            }
+            @media (max-width: 991px) {
+                :host ::ng-deep .desktop-topmenu {
+                    display: none;
+                }
+                .mobile-navigation {
+                    display: block;
+                    margin-left: auto;
+                }
+            }
             @media (max-width: 420px) {
+                .mobile-navigation__trigger {
+                    min-width: 40px;
+                    padding: 0;
+                }
+                .mobile-navigation__trigger span {
+                    display: none;
+                }
                 .user-menu-trigger {
                     min-width: 128px;
                     max-width: 48vw;
@@ -229,6 +294,7 @@ export class AppTopbar implements OnInit, OnDestroy {
     private authService = inject(AuthService);
 
     userMenuItems: MenuItem[] = [];
+    mobileMenuItems: MenuItem[] = [];
 
     private mediaQuery?: MediaQueryList;
     private mqListener?: (e: MediaQueryListEvent) => void;
@@ -242,6 +308,7 @@ export class AppTopbar implements OnInit, OnDestroy {
             this.mqListener = (e: MediaQueryListEvent) => {
                 this.isXs = e.matches;
                 this.refreshUserMenuItems();
+                this.refreshMobileMenuItems();
             };
 
             if ('addEventListener' in this.mediaQuery) {
@@ -252,6 +319,7 @@ export class AppTopbar implements OnInit, OnDestroy {
         }
 
         this.refreshUserMenuItems();
+        this.refreshMobileMenuItems();
     }
 
     ngOnDestroy(): void {
@@ -265,24 +333,7 @@ export class AppTopbar implements OnInit, OnDestroy {
     }
 
     private refreshUserMenuItems(): void {
-        const mobileItems: MenuItem[] = this.isXs
-            ? [
-                  { label: 'Kabinet', icon: 'pi pi-chart-bar', routerLink: '/cabinet' },
-                  { label: 'Sotuv', icon: 'pi pi-shopping-cart', routerLink: '/sales' },
-                  ...(this.authService.isAdmin()
-                      ? [
-                            { label: 'Ombor', icon: 'pi pi-warehouse', routerLink: '/inventory' },
-                            { label: 'Maxsulotlar', icon: 'pi pi-box', routerLink: '/products' },
-                            { label: 'Tarix', icon: 'pi pi-history', routerLink: '/sales-history' },
-                            { label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: '/users' }
-                        ]
-                      : []),
-                  { separator: true }
-              ]
-            : [];
-
         this.userMenuItems = [
-            ...mobileItems,
             {
                 label: 'Tizimdan chiqish',
                 icon: 'pi pi-sign-out',
@@ -290,6 +341,36 @@ export class AppTopbar implements OnInit, OnDestroy {
                 command: () => this.confirmLogout()
             }
         ];
+    }
+
+    private refreshMobileMenuItems(): void {
+        const item = (label: string, icon: string, route: string): MenuItem => ({
+            label,
+            icon,
+            command: () => void this.router.navigateByUrl(route)
+        });
+        const cabinet = item('Kabinet', 'pi pi-chart-bar', '/cabinet');
+        const hotel = [
+            item('Xonalar', 'pi pi-building', '/hotel/rooms'),
+            item('Buyurtmalar', 'pi pi-calendar-plus', '/hotel/bookings'),
+            item('Hisob-kitob tarixi', 'pi pi-history', '/hotel/history'),
+            item('Telegram hisobotlari', 'pi pi-send', '/hotel/reports')
+        ];
+        const fridge = [
+            item('Sotuv', 'pi pi-shopping-cart', '/sales'),
+            item('Ombor', 'pi pi-warehouse', '/inventory'),
+            item('Mahsulotlar', 'pi pi-box', '/products'),
+            item('Sotuv tarixi', 'pi pi-history', '/sales-history')
+        ];
+
+        if (this.authService.isAdmin()) {
+            this.mobileMenuItems = [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')];
+            return;
+        }
+
+        this.mobileMenuItems = this.authService.canUseHotel()
+            ? [cabinet, { separator: true }, ...hotel.slice(1, 3)]
+            : [cabinet, { separator: true }, fridge[0]];
     }
 
     private confirmLogout(): void {

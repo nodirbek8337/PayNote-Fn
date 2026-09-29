@@ -1,0 +1,25 @@
+<div class="time-input" [class.time-input--open]="open" [class.time-input--disabled]="effectiveDisabled">
+    <button type="button" class="time-input__trigger" [attr.aria-label]="ariaLabel" [attr.aria-expanded]="open" aria-haspopup="dialog" [disabled]="effectiveDisabled" (click)="toggle()">
+        <span><i class="pi pi-clock"></i>{{ value || '--:--' }}</span>
+        <i class="pi pi-chevron-down time-input__chevron"></i>
+    </button>
+
+    <div #panel class="time-input__panel" [class.time-input__panel--portal]="isPortaled" [class.time-input__panel--visible]="open" role="dialog" [attr.aria-label]="ariaLabel">
+        <div class="time-input__heading"><span>Vaqtni tanlang</span><strong>{{ value || '--:--' }}</strong></div>
+        <div class="time-input__choices">
+            <section class="time-input__hours">
+                <span>Soat</span>
+                <div class="time-input__grid time-input__grid--hours">
+                    @for (hour of hours; track hour) { <button type="button" [class.is-selected]="selectedHour === hour" (click)="selectHour(hour)">{{ hour }}</button> }
+                </div>
+            </section>
+            <section class="time-input__minutes">
+                <span>Daqiqa</span>
+                <div class="time-input__grid time-input__grid--minutes">
+                    @for (minute of minutes; track minute) { <button type="button" [class.is-selected]="selectedMinute === minute" (click)="selectMinute(minute)">{{ minute }}</button> }
+                </div>
+            </section>
+        </div>
+        <div class="time-input__footer"><small>24 soatlik format</small><button type="button" (click)="close()">Tayyor</button></div>
+    </div>
+</div>
