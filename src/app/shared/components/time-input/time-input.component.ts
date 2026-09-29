@@ -100,6 +100,10 @@ export class TimeInputComponent implements ControlValueAccessor, AfterViewInit, 
         this.panelPlaceholder = document.createComment('time-input-panel');
         this.originalPanelParent.insertBefore(this.panelPlaceholder, panel);
         document.body.appendChild(panel);
+        panel.style.display = 'block';
+        panel.style.position = 'fixed';
+        panel.style.right = 'auto';
+        panel.style.zIndex = '2000';
         this.isPortaled = true;
     }
 
@@ -113,7 +117,11 @@ export class TimeInputComponent implements ControlValueAccessor, AfterViewInit, 
         this.isPortaled = false;
         panel.style.removeProperty('top');
         panel.style.removeProperty('left');
+        panel.style.removeProperty('right');
         panel.style.removeProperty('max-height');
+        panel.style.removeProperty('display');
+        panel.style.removeProperty('position');
+        panel.style.removeProperty('z-index');
     }
 
     private positionPanel(): void {

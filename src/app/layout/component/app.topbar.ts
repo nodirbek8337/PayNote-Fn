@@ -261,6 +261,27 @@ import { AuthService } from '../../shared/services/auth.service';
                 outline: 2px solid var(--action-primary-from);
                 outline-offset: -2px;
             }
+            ::ng-deep .mobile-navigation__panel .mobile-logout-item {
+                margin-top: 0;
+            }
+            ::ng-deep .mobile-navigation__panel .mobile-logout-item .p-menu-item-link,
+            ::ng-deep .mobile-navigation__panel .mobile-logout-item .p-menu-item-icon {
+                color: var(--action-delete-text) !important;
+            }
+            ::ng-deep .mobile-navigation__panel .mobile-logout-item .p-menu-item-content:hover {
+                background: var(--action-delete-bg) !important;
+            }
+            ::ng-deep .mobile-navigation__panel .mobile-user-item,
+            ::ng-deep .mobile-navigation__panel .mobile-user-item .p-menu-item-link,
+            ::ng-deep .mobile-navigation__panel .mobile-user-item .p-menu-item-icon,
+            ::ng-deep .mobile-navigation__panel .mobile-user-item.p-disabled {
+                opacity: 1 !important;
+                color: var(--action-primary-from) !important;
+            }
+            ::ng-deep .mobile-navigation__panel .mobile-user-item .p-menu-item-link {
+                background: color-mix(in srgb, var(--action-primary-soft) 60%, transparent);
+                font-weight: 800;
+            }
             @media (max-width: 991px) {
                 :host ::ng-deep .desktop-topmenu {
                     display: none;
@@ -268,6 +289,12 @@ import { AuthService } from '../../shared/services/auth.service';
                 .mobile-navigation {
                     display: block;
                     margin-left: auto;
+                }
+                .layout-topbar-actions {
+                    display: none;
+                }
+                .layout-topbar-container {
+                    justify-content: flex-start;
                 }
             }
             @media (max-width: 420px) {
@@ -363,14 +390,19 @@ export class AppTopbar implements OnInit, OnDestroy {
             item('Sotuv tarixi', 'pi pi-history', '/sales-history')
         ];
 
-        if (this.authService.isAdmin()) {
-            this.mobileMenuItems = [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')];
-            return;
-        }
+        const navigationItems = this.authService.isAdmin()
+            ? [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')]
+            : this.authService.canUseHotel()
+                ? [cabinet, { separator: true }, ...hotel.slice(1, 3)]
+                : [cabinet, { separator: true }, fridge[0]];
 
-        this.mobileMenuItems = this.authService.canUseHotel()
-            ? [cabinet, { separator: true }, ...hotel.slice(1, 3)]
-            : [cabinet, { separator: true }, fridge[0]];
+        this.mobileMenuItems = [
+            ...navigationItems,
+            { separator: true },
+            { label: this.userName, icon: 'pi pi-user', disabled: true, styleClass: 'mobile-user-item' },
+            { separator: true },
+            { label: 'Tizimdan chiqish', icon: 'pi pi-sign-out', styleClass: 'mobile-logout-item', command: () => this.confirmLogout() }
+        ];
     }
 
     private confirmLogout(): void {

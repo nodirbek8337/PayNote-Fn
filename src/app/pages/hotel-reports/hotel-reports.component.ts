@@ -1,21 +1,36 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
+import { DialogModule } from 'primeng/dialog';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom-active-renderer.component';
 import { UsersFilterComponent } from '../users/filter/users-filter.component';
 import { HotelReportSchedulesService } from '../service/hotel-report-schedules.service';
-import { HotelReportFormComponent } from './form/hotel-report-form.component';
+import { HotelReportFormComponent, HotelReportFormModel } from './form/hotel-report-form.component';
+import { ICustomAction } from '../../shared/interfaces/custom-action.interface';
+import { ToastService } from '../../shared/services/toast.service';
+import { injectViewUpdates } from '../../shared/utils/view-updates';
 
 @Component({
     selector: 'app-hotel-reports',
     standalone: true,
-    imports: [PrimeDatatableComponent],
+    imports: [PrimeDatatableComponent, DialogModule, HotelReportFormComponent],
     templateUrl: './hotel-reports.component.html',
     styleUrl: './hotel-reports.component.scss'
 })
 export class HotelReportsComponent {
+    private readonly viewUpdates = injectViewUpdates();
     readonly _defaultService = inject(HotelReportSchedulesService);
-    readonly FormComponent = HotelReportFormComponent;
+    private readonly toast = inject(ToastService);
     readonly FilterComponent = UsersFilterComponent;
+    @ViewChild('reportsTable') private reportsTable?: PrimeDatatableComponent;
+
+    reportDialog = false;
+    reportSaving = false;
+    editingReport: any | null = null;
+
+    readonly reportActions: ICustomAction[] = [
+        { icon: 'pi pi-pencil', tooltip: 'Hisobotni tahrirlash', color: 'secondary', action: (report) => this.openReport(report) },
+        { icon: 'pi pi-trash', tooltip: "Hisobotni o'chirish", color: 'danger', action: (report) => this.deleteReport(report) }
+    ];
 
     readonly columnDefs = [
         { field: 'name', header: 'Hisobot nomi', widthClass: 'w-25p', sortable: false, placeholder: 'Hisobot nomini qidiring' },
@@ -38,6 +53,44 @@ export class HotelReportsComponent {
             placeholder: 'Holatni tanlang', cellRendererComponent: CustomActiveBadgeComponent
         }
     ];
+
+    openReport(report?: any): void {
+        this.editingReport = report ? { ...report } : null;
+        this.reportSaving = false;
+        this.reportDialog = true;
+    }
+
+    closeReport(): void {
+        if (!this.reportSaving) this.reportDialog = false;
+    }
+
+    saveReport(payload: HotelReportFormModel): void {
+        if (this.reportSaving) return;
+        this.reportSaving = true;
+        const request = this.editingReport?._id
+            ? this._defaultService.update(payload, this.editingReport._id)
+            : this._defaultService.insert(payload);
+
+        request.pipe(this.viewUpdates()).subscribe({
+            next: () => {
+                this.reportSaving = false;
+                this.reportDialog = false;
+                this.toast.success(this.editingReport ? 'Hisobot yangilandi' : "Hisobot qo'shildi");
+                this.reportsTable?.reload();
+            },
+            error: () => this.reportSaving = false
+        });
+    }
+
+    deleteReport(report: any): void {
+        if (!confirm(`“${report.name}” hisobotini o‘chirasizmi?`)) return;
+        this._defaultService.delete(report._id).pipe(this.viewUpdates()).subscribe({
+            next: () => {
+                this.toast.success("Hisobot o'chirildi");
+                this.reportsTable?.reload();
+            }
+        });
+    }
 
     private typeLabel(type: string): string {
         return type === 'DAILY' ? 'Kunlik' : type === 'WEEKLY' ? 'Haftalik' : type === 'MONTHLY' ? 'Oylik' : '-';

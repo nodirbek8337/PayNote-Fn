@@ -29,8 +29,8 @@ export class HotelReportFormComponent implements OnInit, OnChanges {
 
     @Input() model: Partial<HotelReportFormModel> = {};
     @Input() loading = false;
-    onClose!: () => void;
-    onSubmitted!: (payload: HotelReportFormModel) => void;
+    @Input() onClose: () => void = () => {};
+    @Input() onSubmitted: (payload: HotelReportFormModel) => void = () => {};
     form!: FormGroup;
 
     readonly typeOptions = [

@@ -1,15 +1,34 @@
 <prime-datatable
+    #reportsTable
     [_defaultService]="_defaultService"
     [columnDefs]="columnDefs"
-    [formComponent]="FormComponent"
     [tableTitle]="'Telegram hisobotlari'"
     [hasCreate]="true"
-    [hasAction]="true"
-    [hasClone]="false"
+    [hasAction]="false"
     [hasRefreshBtn]="true"
     [hasClearFilterBtn]="true"
     [showColumnFilterRow]="false"
     [showDrawerFilters]="true"
     [showQuickFilterInDrawer]="false"
     [drawerFilterComponent]="FilterComponent"
+    [customActions]="reportActions"
+    (onCreate)="openReport()"
 ></prime-datatable>
+
+<p-dialog
+    [visible]="reportDialog"
+    (visibleChange)="closeReport()"
+    [modal]="true"
+    [focusOnShow]="false"
+    [draggable]="false"
+    [resizable]="false"
+    [header]="editingReport ? 'Yangilash' : 'Qo‘shish'"
+    [style]="{ width: '520px', maxWidth: '96vw' }"
+>
+    <hotel-report-form
+        [model]="editingReport ?? {}"
+        [loading]="reportSaving"
+        [onClose]="closeReport.bind(this)"
+        [onSubmitted]="saveReport.bind(this)"
+    ></hotel-report-form>
+</p-dialog>
