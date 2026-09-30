@@ -136,7 +136,7 @@
     [modal]="true" [closable]="!deleteBusy" [closeOnEscape]="!deleteBusy" [draggable]="false" [resizable]="false" [focusOnShow]="false" [style]="{ width: '520px', maxWidth: '95vw' }">
     <form class="hotel-form one-column" (ngSubmit)="deleteBookingWithReason()">
         <p>{{ deletingBooking?.roomNumber }}-xona buyurtmasi tarixdan o‘chiriladi. Telegramga o‘chirish haqida xabar yuboriladi.</p>
-        <label>O‘chirish sababi @if (reasonRequired) { <span class="required-mark">*</span> } @else { <small>(ixtiyoriy)</small> }
+        <label><span class="field-label">O‘chirish sababi <span class="required-mark">*</span></span>
             <app-textarea [(ngModel)]="deleteReason" name="deleteReason" [maxlength]="500" [disabled]="deleteBusy" placeholder="Nima uchun o‘chirilayotganini yozing"></app-textarea>
         </label>
         <footer><button pButton type="button" class="p-button-outlined" [disabled]="deleteBusy" (click)="deletingBooking = null">Bekor qilish</button>
