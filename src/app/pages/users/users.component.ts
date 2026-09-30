@@ -6,11 +6,12 @@ import { UsersFormComponent } from './form/users-form.component';
 import { UsersFilterComponent } from './filter/users-filter.component';
 import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom-active-renderer.component';
 import { formatUzPhonePretty } from '../../shared/utils/phone.util';
+import { TelegramSettingsComponent } from './telegram-settings/telegram-settings.component';
 
 @Component({
     selector: 'users',
     standalone: true,
-    imports: [PrimeDatatableComponent],
+    imports: [PrimeDatatableComponent, TelegramSettingsComponent],
     templateUrl: './users.component.html'
 })
 export class UsersComponent {

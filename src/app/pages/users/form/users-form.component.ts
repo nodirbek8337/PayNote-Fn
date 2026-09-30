@@ -14,7 +14,7 @@ export type UserFormModel = {
     role: 'admin' | 'user' | 'manager' | string;
     telegramUsername?: string | null;
     telegramPhone?: string | null;
-    telegramNotifications?: Array<'FRIDGE' | 'HOTEL'>;
+    telegramNotifications?: Array<'FRIDGE' | 'HOTEL' | 'HOTEL_BOOKING' | 'HOTEL_REPORT'> | null;
     isActive?: boolean;
     password?: string;
 };
@@ -44,10 +44,16 @@ export class UsersFormComponent implements OnInit, OnChanges {
         { label: 'Muzlatgich ishchisi', value: 'user' },
         { label: 'Mehmonxona manageri', value: 'manager' }
     ];
-    telegramNotificationOptions = [
-        { label: 'Muzlatgich habarlari', value: 'FRIDGE' },
-        { label: 'Mehmonxona habarlari', value: 'HOTEL' }
-    ];
+    private notificationValues() {
+        const values = this.model.telegramNotifications === undefined
+            ? (this.model._id ? ['FRIDGE'] : [])
+            : this.model.telegramNotifications ?? [];
+        return {
+            hotelBookings: values.includes('HOTEL') || values.includes('HOTEL_BOOKING'),
+            hotelReports: values.includes('HOTEL') || values.includes('HOTEL_REPORT'),
+            fridgeSales: values.includes('FRIDGE')
+        };
+    }
 
     ngOnInit() {
         this.buildForm();
@@ -73,7 +79,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
             password: [''],
             telegramUsername: [this.model.telegramUsername ?? ''],
             telegramPhone: [this.model.telegramPhone ?? '', [Validators.pattern(/^$|^998\d{9}$/)]],
-            telegramNotifications: [this.model.telegramNotifications ?? []]
+            ...this.notificationValues()
         });
 
         this.setPasswordValidators();
@@ -91,7 +97,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
                 password: '',
                 telegramUsername: this.model.telegramUsername ?? '',
                 telegramPhone: this.model.telegramPhone ?? '',
-                telegramNotifications: this.model.telegramNotifications ?? []
+                ...this.notificationValues()
             },
             { emitEvent: false }
         );
@@ -142,12 +148,18 @@ export class UsersFormComponent implements OnInit, OnChanges {
 
         const payload: UserFormModel = {
             _id: this.model._id,
-            username: (raw.username ?? '').trim(),
-            role: raw.role,
-            isActive: !!raw.isActive,
+            username: this.isEdit && !this.form.get('username')!.dirty ? this.model.username! : (raw.username ?? '').trim(),
+            role: this.isEdit && !this.form.get('role')!.dirty ? this.model.role! : raw.role,
+            ...(!this.isEdit || this.form.get('isActive')!.dirty ? { isActive: !!raw.isActive } : {}),
             ...(!this.isEdit || this.form.get('telegramUsername')!.dirty ? { telegramUsername: String(raw.telegramUsername ?? '').trim() } : {}),
             ...(!this.isEdit || this.form.get('telegramPhone')!.dirty ? { telegramPhone: String(raw.telegramPhone ?? '').trim() } : {}),
-            ...(!this.isEdit || this.form.get('telegramNotifications')!.dirty ? { telegramNotifications: Array.isArray(raw.telegramNotifications) ? raw.telegramNotifications : [] } : {}),
+            ...(!this.isEdit || ['hotelBookings', 'hotelReports', 'fridgeSales'].some((key) => this.form.get(key)!.dirty) ? {
+                telegramNotifications: [
+                    ...(raw.hotelBookings ? ['HOTEL_BOOKING' as const] : []),
+                    ...(raw.hotelReports ? ['HOTEL_REPORT' as const] : []),
+                    ...(raw.fridgeSales ? ['FRIDGE' as const] : [])
+                ]
+            } : {}),
             ...((!this.isEdit || this.changePassword) && password ? { password } : {})
         };
 

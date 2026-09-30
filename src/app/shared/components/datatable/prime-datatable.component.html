@@ -20,6 +20,7 @@
                 </div>
                 <div class="header-right">
                     <div class="cta-buttons">
+                        <ng-content select="[tableActions]"></ng-content>
                         @if (showDrawerFilters && drawerFilterComponent) {
                             <button pButton class="btn-ctl" (click)="openDrawer()"><i class="pi pi-sliders-h" aria-hidden="true"></i><span>Filtrlar</span></button>
                         }

@@ -87,7 +87,7 @@
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
             [quickFilterPlaceholder]="'Xona bo‘yicha qidiring...'"
-            [customActions]="isAdmin ? historyActions : []"
+            [customActions]="canManageBookings ? historyActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
     }
@@ -125,14 +125,24 @@
         <button pButton type="button" class="form-wide additional-payment-button" (click)="addAdditionalPayment()"><span>+ Qo‘shimcha narx qo‘shish</span></button>
         <label class="form-wide" [class.field-invalid]="bookingNoteInvalid"><span class="field-label">Izoh <small>(minus qiymatda majburiy)</small><span class="required-mark required-mark--conditional" [class.required-mark--visible]="paymentNoteRequired">*</span></span><app-textarea [(ngModel)]="bookingForm.paymentNote" name="paymentNote" [rows]="2" placeholder="Minus bo‘lsa sababini yozing"></app-textarea></label>
         @if (editingBooking) {
-            <label class="form-wide" [class.field-invalid]="bookingSubmitted && !bookingForm.changeNote.trim()"><span class="field-label">Tahrirlash izohi <span class="required-mark">*</span></span><app-input [(ngModel)]="bookingForm.changeNote" name="changeNote" placeholder="Nima uchun o‘zgartirilganini yozing" [required]="true"></app-input></label>
+            <label class="form-wide" [class.field-invalid]="bookingSubmitted && reasonRequired && !bookingForm.changeNote.trim()"><span class="field-label">O‘zgartirish sababi @if (reasonRequired) { <span class="required-mark">*</span> } @else { <small>(ixtiyoriy)</small> }</span><app-textarea [(ngModel)]="bookingForm.changeNote" name="changeNote" placeholder="Nima uchun o‘zgartirilganini yozing" [maxlength]="500"></app-textarea></label>
         }
-        <footer class="form-wide"><button pButton type="button" class="p-button-outlined" (click)="requestCloseBooking()"><span>Bekor qilish</span></button><button pButton type="submit"><span>Saqlash</span></button></footer>
+        <footer class="form-wide"><button pButton type="button" class="p-button-outlined" [disabled]="savingBooking" (click)="requestCloseBooking()"><span>Bekor qilish</span></button><button pButton type="submit" [disabled]="savingBooking || (editingBooking && reasonRequired && !bookingForm.changeNote.trim())"><span>{{ savingBooking ? 'Saqlanmoqda...' : 'Saqlash' }}</span></button></footer>
     </form>
 </p-dialog>
 
 <p-confirmdialog key="hotel-additional-payment" styleClass="paynote-confirm-dialog" [baseZIndex]="1300"></p-confirmdialog>
-<p-confirmdialog key="hotel-delete-booking" styleClass="paynote-confirm-dialog" [baseZIndex]="1300"></p-confirmdialog>
+<p-dialog [visible]="!!deletingBooking" (visibleChange)="!$event && !deleteBusy && (deletingBooking = null)" header="Buyurtmani o‘chirish"
+    [modal]="true" [closable]="!deleteBusy" [closeOnEscape]="!deleteBusy" [draggable]="false" [resizable]="false" [focusOnShow]="false" [style]="{ width: '520px', maxWidth: '95vw' }">
+    <form class="hotel-form one-column" (ngSubmit)="deleteBookingWithReason()">
+        <p>{{ deletingBooking?.roomNumber }}-xona buyurtmasi tarixdan o‘chiriladi. Telegramga o‘chirish haqida xabar yuboriladi.</p>
+        <label>O‘chirish sababi @if (reasonRequired) { <span class="required-mark">*</span> } @else { <small>(ixtiyoriy)</small> }
+            <app-textarea [(ngModel)]="deleteReason" name="deleteReason" [maxlength]="500" [disabled]="deleteBusy" placeholder="Nima uchun o‘chirilayotganini yozing"></app-textarea>
+        </label>
+        <footer><button pButton type="button" class="p-button-outlined" [disabled]="deleteBusy" (click)="deletingBooking = null">Bekor qilish</button>
+            <button pButton type="submit" severity="danger" [disabled]="deleteBusy || (reasonRequired && !deleteReason.trim())">{{ deleteBusy ? 'O‘chirilmoqda...' : 'O‘chirish' }}</button></footer>
+    </form>
+</p-dialog>
 <p-confirmdialog key="hotel-save-booking" styleClass="paynote-confirm-dialog hotel-save-confirm" [baseZIndex]="1300"></p-confirmdialog>
 <p-confirmdialog key="hotel-discard-booking" styleClass="paynote-confirm-dialog" [baseZIndex]="1300"></p-confirmdialog>
 

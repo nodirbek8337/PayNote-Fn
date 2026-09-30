@@ -1,12 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off" class="p-fluid users-form">
-    <div class="form-field">
-        <label>Login</label>
-        <app-input formControlName="username" placeholder="Login kiriting"></app-input>
-    </div>
-
-    <div class="form-field">
-        <label>Rol tanlash</label>
-        <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"></app-select>
+    <div class="form-row">
+        <div class="form-field">
+            <label>Login</label>
+            <app-input formControlName="username" placeholder="Login kiriting"></app-input>
+        </div>
+        <div class="form-field">
+            <label>Rol tanlash</label>
+            <app-select style="width: 100%" formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" placeholder="Rol tanlang" [showClear]="false" [filter]="false"></app-select>
+        </div>
     </div>
 
     @if (isEdit) {
@@ -24,37 +25,34 @@
         </div>
     }
 
-    <div class="form-field form-field--telegram">
-        <label>Telegram telefon raqami <small>(ixtiyoriy)</small></label>
-        <app-phone-input formControlName="telegramPhone" [allowEmpty]="true"></app-phone-input>
-        <small class="field-help">Telegram username mos kelmasa, bot <b>/start</b>dan so'ng shu raqamni so'raydi. Faqat akkauntning o'z raqami qabul qilinadi.</small>
+    <div class="form-row">
+        <div class="form-field form-field--telegram">
+            <label>Telegram telefon <small>(ixtiyoriy)</small></label>
+            <app-phone-input formControlName="telegramPhone" [allowEmpty]="true"></app-phone-input>
+        </div>
+        <div class="form-field form-field--telegram">
+            <label>Telegram username <small>(ixtiyoriy)</small></label>
+            <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
+        </div>
     </div>
 
-    <div class="form-field form-field--telegram">
-        <label>Telegram username <small>(ixtiyoriy)</small></label>
-        <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
-        <small class="field-help">Bot <b>/start</b>da avval shu username'ni tekshiradi. Topilmasa telefon raqami orqali ulanish mumkin.</small>
-    </div>
-
-    <div class="form-field">
-        <div class="field-heading"><label>Telegram bildirishnomalari</label><span>Bir yoki ikkalasini tanlang</span></div>
-        <app-select
-            style="width: 100%"
-            formControlName="telegramNotifications"
-            [options]="telegramNotificationOptions"
-            optionLabel="label"
-            optionValue="value"
-            [multiple]="true"
-            placeholder="Habar bo'limlarini tanlang"
-            [showClear]="false"
-            [filter]="false"
-        ></app-select>
-        <small class="field-help">Tanlangan bo'limlar bo'yicha xabar aynan shu Telegram akkauntiga boradi.</small>
-    </div>
+    <div class="notification-switches">
+        <app-switch-toggle formControlName="hotelBookings" label="Mehmonxona buyurtmalari"
+            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+            activeDescription="Har bir yangi buyurtma Telegramga keladi"
+            inactiveDescription="Yangi buyurtma xabarlari kelmaydi"></app-switch-toggle>
+        <app-switch-toggle formControlName="hotelReports" label="Davriy hisobotlar"
+            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+            activeDescription="Kunlik, haftalik va oylik hisobotlar keladi"
+            inactiveDescription="Kunlik, haftalik va oylik hisobotlar kelmaydi"></app-switch-toggle>
+        <app-switch-toggle formControlName="fridgeSales" label="Muzlatgich sotuvlari"
+            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+            activeDescription="Har bir yangi sotuv Telegramga keladi"
+            inactiveDescription="Yangi sotuv xabarlari kelmaydi"></app-switch-toggle>
 
     <app-switch-toggle
         formControlName="isActive"
-        label="Holati"
+        label="Foydalanuvchi holati"
         [trueLabel]="'Faol'"
         [falseLabel]="'Faol emas'"
         [activeDescription]="'Foydalanuvchi tizimga kira oladi'"
@@ -62,6 +60,7 @@
         [showStateText]="true"
     >
     </app-switch-toggle>
+    </div>
 
     <div class="flex justify-end gap-2 mt-3">
         <button pButton type="button" (click)="closeModal()" class="p-button-outlined"><span>Ortga</span></button>
