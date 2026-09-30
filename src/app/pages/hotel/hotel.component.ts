@@ -53,7 +53,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   readonly currencies = [{ value: 'UZS', label: 'UZS' }, { value: 'USD', label: 'USD' }];
   bookingForm: any = this.blankBooking(); roomForm: any = this.blankRoom(); payment: Payment = this.blankPayment();
   get isAdmin() { return this.auth.isAdmin(); }
-  get reasonRequired() { return this.auth.isHotelManager(); }
+  readonly reasonRequired = true;
   get canManageBookings() { return this.auth.canUseHotel(); }
   get canManageRooms() { return this.auth.isAdmin(); }
   get isRoomCatalog() { return this.section === 'rooms'; }
