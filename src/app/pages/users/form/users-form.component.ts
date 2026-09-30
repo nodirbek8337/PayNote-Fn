@@ -6,12 +6,14 @@ import { ButtonDirective } from 'primeng/button';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { SelectComponent } from '../../../shared/components/select/select.component';
 import { SwitchToggleComponent } from '../../../shared/components/switch-toggle/switch-toggle.component';
+import { PhoneInputComponent } from '../../../shared/components/phone-input/phone-input.component';
 
 export type UserFormModel = {
     _id?: string;
     username: string;
     role: 'admin' | 'user' | 'manager' | string;
     telegramUsername?: string | null;
+    telegramPhone?: string | null;
     telegramNotifications?: Array<'FRIDGE' | 'HOTEL'>;
     isActive?: boolean;
     password?: string;
@@ -22,7 +24,7 @@ export type UserFormModel = {
     standalone: true,
     templateUrl: './users-form.component.html',
     styleUrls: ['./users-form.component.scss'],
-    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, SelectComponent, SwitchToggleComponent]
+    imports: [ReactiveFormsModule, ButtonDirective, InputComponent, SelectComponent, SwitchToggleComponent, PhoneInputComponent]
 })
 export class UsersFormComponent implements OnInit, OnChanges {
     private fb = inject(FormBuilder);
@@ -70,6 +72,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
             isActive: [this.model.isActive ?? true],
             password: [''],
             telegramUsername: [this.model.telegramUsername ?? ''],
+            telegramPhone: [this.model.telegramPhone ?? '', [Validators.pattern(/^$|^998\d{9}$/)]],
             telegramNotifications: [this.model.telegramNotifications ?? []]
         });
 
@@ -87,6 +90,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
                 isActive: this.model.isActive ?? true,
                 password: '',
                 telegramUsername: this.model.telegramUsername ?? '',
+                telegramPhone: this.model.telegramPhone ?? '',
                 telegramNotifications: this.model.telegramNotifications ?? []
             },
             { emitEvent: false }
@@ -142,6 +146,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
             role: raw.role,
             isActive: !!raw.isActive,
             ...(!this.isEdit || this.form.get('telegramUsername')!.dirty ? { telegramUsername: String(raw.telegramUsername ?? '').trim() } : {}),
+            ...(!this.isEdit || this.form.get('telegramPhone')!.dirty ? { telegramPhone: String(raw.telegramPhone ?? '').trim() } : {}),
             ...(!this.isEdit || this.form.get('telegramNotifications')!.dirty ? { telegramNotifications: Array.isArray(raw.telegramNotifications) ? raw.telegramNotifications : [] } : {}),
             ...((!this.isEdit || this.changePassword) && password ? { password } : {})
         };

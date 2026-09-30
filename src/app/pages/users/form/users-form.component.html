@@ -25,9 +25,15 @@
     }
 
     <div class="form-field form-field--telegram">
+        <label>Telegram telefon raqami <small>(ixtiyoriy)</small></label>
+        <app-phone-input formControlName="telegramPhone" [allowEmpty]="true"></app-phone-input>
+        <small class="field-help">Telegram username mos kelmasa, bot <b>/start</b>dan so'ng shu raqamni so'raydi. Faqat akkauntning o'z raqami qabul qilinadi.</small>
+    </div>
+
+    <div class="form-field form-field--telegram">
         <label>Telegram username <small>(ixtiyoriy)</small></label>
         <app-input formControlName="telegramUsername" autocomplete="off" placeholder="@username yoki t.me/username"></app-input>
-        <small class="field-help">Saqlangach, aynan shu Telegram akkauntidan botga <b>/start</b> yuboring.</small>
+        <small class="field-help">Bot <b>/start</b>da avval shu username'ni tekshiradi. Topilmasa telefon raqami orqali ulanish mumkin.</small>
     </div>
 
     <div class="form-field">

@@ -5,6 +5,7 @@ import { UsersService } from '../service/users.service';
 import { UsersFormComponent } from './form/users-form.component';
 import { UsersFilterComponent } from './filter/users-filter.component';
 import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom-active-renderer.component';
+import { formatUzPhonePretty } from '../../shared/utils/phone.util';
 
 @Component({
     selector: 'users',
@@ -19,11 +20,11 @@ export class UsersComponent {
     FilterComponent = UsersFilterComponent;
 
     columnDefs = [
-        { field: 'username', header: 'Login', widthClass: 'w-25p', sortable: false, placeholder: 'Login kiriting' },
+        { field: 'username', header: 'Login', widthClass: 'w-15p', sortable: false, placeholder: 'Login kiriting' },
         {
             field: 'role',
             header: 'Roli',
-            widthClass: 'w-15p',
+            widthClass: 'w-10p',
             sortable: false,
             filterType: 'dropdown',
             filterOptions: [
@@ -37,7 +38,7 @@ export class UsersComponent {
         {
             field: 'isActive',
             header: 'Holati',
-            widthClass: 'w-15p',
+            widthClass: 'w-10p',
             sortable: false,
             filterType: 'dropdown',
             filterOptions: [
@@ -48,15 +49,31 @@ export class UsersComponent {
             cellRendererComponent: CustomActiveBadgeComponent
         },
         {
-            field: 'telegramUsername',
-            header: 'Telegram',
-            widthClass: 'w-20p',
+            field: 'telegramPhone',
+            header: 'Telegram telefon',
+            widthClass: 'w-15p',
             sortable: false,
             searchable: false,
             cellRendererFn: (row: any) =>
-                row.telegramUsername
-                    ? `<span class="telegram-cell"><span class="telegram-cell__name">@${row.telegramUsername}</span><span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span></span>`
-                    : '<span>-</span>'
+                `<span>${row.telegramPhone ? formatUzPhonePretty(row.telegramPhone) : '-'}</span>`
+        },
+        {
+            field: 'telegramUsername',
+            header: 'Telegram username',
+            widthClass: 'w-15p',
+            sortable: false,
+            searchable: false,
+            cellRendererFn: (row: any) => `<span>${row.telegramUsername ? '@' + row.telegramUsername : '-'}</span>`
+        },
+        {
+            field: 'telegramChatId',
+            header: 'Telegram holati',
+            widthClass: 'w-10p',
+            sortable: false,
+            searchable: false,
+            cellRendererFn: (row: any) => row.telegramPhone || row.telegramUsername
+                ? `<span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span>`
+                : '<span>-</span>'
         },
         {
             field: 'createdAt',

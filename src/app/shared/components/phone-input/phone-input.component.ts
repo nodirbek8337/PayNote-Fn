@@ -22,6 +22,7 @@ export class PhoneInputComponent implements ControlValueAccessor {
   @Input() placeholder = '998-__-___-__-__';
   @Input() formControlName!: string;
   @Input() required = false;
+  @Input() allowEmpty = false;
 
   rawValue = '';
   displayValue = '998-';
@@ -42,6 +43,13 @@ export class PhoneInputComponent implements ControlValueAccessor {
 
   onInput(event: any) {
     let d = digits12(event.target.value);
+    if (this.allowEmpty && (!d || d === '998')) {
+      this.rawValue = '';
+      this.displayValue = '998-';
+      this.onChange('');
+      this.onTouched();
+      return;
+    }
     if (!d.startsWith('998')) d = ('998' + d).slice(0, 12);
     this.rawValue = d;
     this.displayValue = formatUzPhoneDash(d);
