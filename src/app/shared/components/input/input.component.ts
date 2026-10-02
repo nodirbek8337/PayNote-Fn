@@ -26,12 +26,13 @@ let nextInputId = 0;
 export class InputComponent implements ControlValueAccessor, OnInit {
     private controlContainer = inject(ControlContainer, { optional: true });
 
-    @Input() type: 'text' | 'password' | 'email' | 'number' = 'text';
+    @Input() type: 'text' | 'password' | 'email' | 'number' | 'datetime-local' = 'text';
     @Input() placeholder = '';
     @Input() formControlName!: string;
     @Input() required = false;
     @Input() allowMathExpression = false;
     @Input() allowNegative = false;
+    @Input() decimalPlaces = 0;
     @Input() disabled = false;
     @Input() autocomplete = '';
     @Input() allowAutofill = false;
@@ -58,6 +59,11 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     writeValue(val: any): void {
         if (this.type !== 'number') {
             this.value = val;
+            return;
+        }
+
+        if (this.decimalPlaces > 0) {
+            this.value = this.sanitizeDecimalExpression(val);
             return;
         }
 
@@ -89,6 +95,13 @@ export class InputComponent implements ControlValueAccessor, OnInit {
             return;
         }
 
+        if (this.decimalPlaces > 0) {
+            const raw = this.sanitizeDecimalExpression(value);
+            this.value = raw;
+            this.onChange(raw);
+            return;
+        }
+
         if (this.allowMathExpression) {
             const raw = this.sanitizeNumberExpression(value);
             this.value = this.formatNumberExpression(raw);
@@ -113,7 +126,17 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
 
     handleBlur(): void {
-        if (this.type === 'number' && this.allowMathExpression) {
+        if (this.type === 'number' && this.decimalPlaces > 0) {
+            const match = String(this.value ?? '').match(/^(-?\d+(?:\.\d+)?)(?:([+-])(\d+(?:\.\d+)?))?$/);
+            if (match) {
+                const result = Number(match[1]) + (match[2] === '+' ? Number(match[3]) : match[2] === '-' ? -Number(match[3]) : 0);
+                if (Number.isFinite(result) && (this.allowNegative || result >= 0)) {
+                    const rounded = Number(result.toFixed(this.decimalPlaces));
+                    this.value = String(rounded);
+                    this.onChange(rounded);
+                }
+            }
+        } else if (this.type === 'number' && this.allowMathExpression) {
             const result = this.evaluateNumberExpression(this.value);
 
             if (result !== null && (this.allowNegative || result >= 0)) {
@@ -130,7 +153,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
 
     get inputMode(): string | null {
-        return this.type === 'number' ? (this.allowMathExpression ? 'text' : 'numeric') : null;
+        return this.type === 'number' ? (this.decimalPlaces > 0 ? 'decimal' : this.allowMathExpression ? 'text' : 'numeric') : null;
     }
 
     togglePasswordVisibility(): void {
@@ -147,6 +170,21 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         raw = this.allowNegative ? raw.replace(/(?!^)-/g, '') : raw.replace(/-/g, '');
         raw = raw.replace(/^(-?)0+(?=\d)/, '$1');
         return raw;
+    }
+
+    private sanitizeDecimalExpression(value: any): string {
+        if (value === null || value === undefined || value === '') return '';
+        let raw = String(value).replace(/[,\s]/g, '').replace(/[^\d.+-]/g, '');
+        const negative = this.allowNegative && raw.startsWith('-');
+        raw = raw.replace(/^[+-]+/, '');
+        const operatorIndex = this.allowMathExpression ? raw.search(/[+-]/) : -1;
+        const part = (value: string) => {
+            const [whole, ...fraction] = value.replace(/[^\d.]/g, '').split('.');
+            return fraction.length ? `${whole || '0'}.${fraction.join('').slice(0, this.decimalPlaces)}` : whole;
+        };
+        const left = operatorIndex < 0 ? raw : raw.slice(0, operatorIndex);
+        const right = operatorIndex < 0 ? '' : raw.slice(operatorIndex + 1);
+        return `${negative ? '-' : ''}${part(left)}${operatorIndex < 0 ? '' : raw[operatorIndex] + part(right)}`;
     }
 
     private formatNumberValue(value: any): string {

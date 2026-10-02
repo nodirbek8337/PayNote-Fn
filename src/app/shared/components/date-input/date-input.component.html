@@ -1,0 +1,21 @@
+<div class="date-input" [class.date-input--open]="open" [class.date-input--disabled]="effectiveDisabled">
+    <button type="button" class="date-input__trigger" [attr.aria-label]="ariaLabel" [attr.aria-expanded]="open" aria-haspopup="dialog" [disabled]="effectiveDisabled" (click)="toggle()">
+        <span><i class="pi pi-calendar"></i>{{ displayValue }}</span>
+        <i class="pi pi-chevron-down date-input__chevron"></i>
+    </button>
+
+    <div #panel class="date-input__panel" [class.date-input__panel--portal]="isPortaled" [class.date-input__panel--visible]="open" role="dialog" [attr.aria-label]="ariaLabel">
+        <div class="date-input__heading">
+            <button type="button" aria-label="Oldingi oy" (click)="changeMonth(-1)"><i class="pi pi-chevron-left"></i></button>
+            <strong>{{ months[viewMonth.getMonth()] }} {{ viewMonth.getFullYear() }}</strong>
+            <button type="button" aria-label="Keyingi oy" (click)="changeMonth(1)"><i class="pi pi-chevron-right"></i></button>
+        </div>
+        <div class="date-input__grid">
+            @for (weekday of weekdays; track weekday) { <span class="date-input__weekday">{{ weekday }}</span> }
+            @for (day of days; track day.getTime()) {
+                <button type="button" class="date-input__day" [class.is-outside]="day.getMonth() !== viewMonth.getMonth()" [class.is-today]="isToday(day)" [class.is-selected]="isSelected(day)" [attr.aria-label]="day.getDate() + '.' + (day.getMonth() + 1) + '.' + day.getFullYear()" [attr.aria-pressed]="isSelected(day)" (click)="select(day)">{{ day.getDate() }}</button>
+            }
+        </div>
+        <div class="date-input__footer"><span>Sanani tanlang</span><button type="button" (click)="selectToday()">Bugun</button></div>
+    </div>
+</div>

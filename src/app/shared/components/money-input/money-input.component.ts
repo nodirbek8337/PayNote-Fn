@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, forwardRef, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Output, forwardRef, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, Validator, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,7 +18,7 @@ type CurrencyCode = 'UZS' | 'USD';
     templateUrl: './money-input.component.html',
     styleUrls: ['./money-input.component.scss']
 })
-export class MoneyInputComponent implements ControlValueAccessor, Validator {
+export class MoneyInputComponent implements ControlValueAccessor, Validator, OnChanges {
     private controlContainer = inject(ControlContainer, { optional: true });
     private money = inject(MoneyPipe);
 
@@ -52,6 +52,17 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
         { label: 'UZS', value: 'UZS' as CurrencyCode },
         { label: 'USD', value: 'USD' as CurrencyCode }
     ];
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['defaultCurrency'] && !this.emitCurrency) {
+            this.currency = this.defaultCurrency;
+            if (this.currency === 'UZS' && this.amount !== null && !Number.isInteger(this.amount)) {
+                this.amount = Math.trunc(this.amount);
+                this.emitValue();
+            }
+            this.refreshDisplay();
+        }
+    }
 
     writeValue(v: any): void {
         if (v && typeof v === 'object' && 'amount' in v) {
@@ -117,6 +128,7 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
 
     onCurrencyChange(newCur: CurrencyCode) {
         this.currency = newCur;
+        if (newCur === 'UZS' && this.amount !== null) this.amount = Math.trunc(this.amount);
         this.refreshDisplay();
         this.emitValue();
         this.currencyChanged.emit(newCur);
@@ -130,17 +142,24 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
     private toNumber(v: any): number | null {
         if (v === null || v === undefined || v === '') return null;
         if (v === '-') return null;
-        const n = Number(String(v).replace(/\./g, ''));
+        const n = typeof v === 'number' ? v : Number(this.currency === 'USD' ? String(v).replace(/,/g, '') : String(v).replace(/\./g, ''));
         if (!Number.isFinite(n)) return null;
-        return Math.trunc(n);
+        return this.currency === 'USD' ? Number(n.toFixed(2)) : Math.trunc(n);
     }
 
     private toRawString(amount: number | null): string {
         if (amount === null) return '';
-        return String(Math.trunc(amount));
+        return String(this.currency === 'USD' ? amount : Math.trunc(amount));
     }
 
     private sanitize(raw: string, allowNeg: boolean): string {
+        if (this.currency === 'USD') {
+            let value = (raw ?? '').replace(/,/g, '').replace(/[^\d.\-]/g, '');
+            value = allowNeg ? value.replace(/(?!^)-/g, '') : value.replace(/-/g, '');
+            const negative = value.startsWith('-');
+            const [whole, ...fraction] = value.replace(/^-/, '').split('.');
+            return `${negative ? '-' : ''}${fraction.length ? `${whole || '0'}.${fraction.join('').slice(0, 2)}` : whole}`;
+        }
         let s = (raw ?? '').replace(/[^\d-]/g, '');
         s = allowNeg ? s.replace(/(?!^)-/g, '') : s.replace(/-/g, '');
         s = s.replace(/^(-?)0+(?=\d)/, '$1');
@@ -153,6 +172,8 @@ export class MoneyInputComponent implements ControlValueAccessor, Validator {
 
     private formatRawString(raw: string): string {
         if (!raw || raw === '-') return raw;
+
+        if (this.currency === 'USD') return raw;
 
         const isNegative = raw.startsWith('-');
         const digits = raw.replace(/[^\d]/g, '');

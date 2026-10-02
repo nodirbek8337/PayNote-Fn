@@ -9,6 +9,8 @@ import { ButtonDirective } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputComponent } from '../../shared/components/input/input.component';
+import { DateInputComponent } from '../../shared/components/date-input/date-input.component';
+import { TimeInputComponent } from '../../shared/components/time-input/time-input.component';
 import { SelectComponent } from '../../shared/components/select/select.component';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
@@ -26,7 +28,7 @@ type Payment = { amount: number | null; currency: Currency; method: string; note
 
 @Component({
   selector: 'app-hotel', standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, ConfirmDialog, PrimeDatatableComponent, InputComponent, SelectComponent, TextareaComponent],
+  imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, ConfirmDialog, PrimeDatatableComponent, InputComponent, DateInputComponent, TimeInputComponent, SelectComponent, TextareaComponent],
   providers: [HotelRoomsTableService, HotelHistoryTableService, ConfirmationService],
   templateUrl: './hotel.component.html', styleUrl: './hotel.component.scss',
 })
@@ -47,11 +49,16 @@ export class HotelComponent implements OnInit, OnDestroy {
   deleteBusy = false;
   savingBooking = false;
   private paymentSnapshot = '';
+  private createdAtSnapshot = '';
+  private checkInSnapshot = '';
+  private checkOutSnapshot = '';
   paymentNoteRequired = false;
   private bookingSnapshot = '';
   readonly methods = [{ value: 'CASH', label: 'Naqd' }, { value: 'TERMINAL', label: 'Terminal' }, { value: 'CARD', label: 'Karta' }, { value: 'EXPEDIA', label: 'Expedia' }, { value: 'BOOKING', label: 'Booking' }];
   readonly currencies = [{ value: 'UZS', label: 'UZS' }, { value: 'USD', label: 'USD' }];
   bookingForm: any = this.blankBooking(); roomForm: any = this.blankRoom(); payment: Payment = this.blankPayment();
+  bookingDate: Date | null = null;
+  bookingTime = '';
   get isAdmin() { return this.auth.isAdmin(); }
   readonly reasonRequired = true;
   get canManageBookings() { return this.auth.canUseHotel(); }
@@ -99,7 +106,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   private defaultDate(days = 0) { const d = new Date(); d.setDate(d.getDate() + days); d.setHours(12, 0, 0, 0); return this.localDateTime(d); }
   private localDateTime(d: Date) { const pad = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; }
   private blankPayment(): Payment { return { amount: null, currency: 'UZS', method: '', note: '' }; }
-  private blankBooking() { return { roomNumber: '', guestsCount: 1, daysCount: 1, checkIn: this.defaultDate(), checkOut: this.defaultDate(1), agreedUZS: null, agreedUSD: null, paymentMethod: '', paymentNote: '', additionalPayments: [] as { method: string; UZS: number | null; USD: number | null }[], changeNote: '' }; }
+  private blankBooking() { return { roomNumber: '', guestsCount: 1, daysCount: 1, createdAt: this.localDateTime(new Date()), checkIn: this.defaultDate(), checkOut: this.defaultDate(1), agreedUZS: null, agreedUSD: null, paymentMethod: '', paymentNote: '', additionalPayments: [] as { method: string; UZS: number | null; USD: number | null }[], changeNote: '' }; }
   private blankRoom() { return { number: '', name: '', capacity: 1, note: '' }; }
 
   load() {
@@ -124,7 +131,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   openBooking(room?: any, booking?: any) {
     this.editingBooking = booking ?? null;
     this.bookingSubmitted = false;
-    this.bookingForm = booking ? { ...booking, guestsCount: Number(booking.guestsCount ?? 1), daysCount: Number(booking.daysCount ?? this.daysBetween(booking.checkIn, booking.checkOut)), roomNumber: String(booking.roomNumber), checkIn: this.localDateTime(new Date(booking.checkIn)), checkOut: this.localDateTime(new Date(booking.checkOut)), agreedUZS: Number(booking.agreedTotals?.UZS || 0) || null, agreedUSD: Number(booking.agreedTotals?.USD || 0) || null, paymentMethod: booking.payments?.[0]?.method ?? '', paymentNote: booking.payments?.[0]?.note ?? '', additionalPayments: [], changeNote: '' } : { ...this.blankBooking(), roomNumber: String(room?.number ?? '') };
+    this.bookingForm = booking ? { ...booking, guestsCount: Number(booking.guestsCount ?? 1), daysCount: Number(booking.daysCount ?? this.daysBetween(booking.checkIn, booking.checkOut)), roomNumber: String(booking.roomNumber), createdAt: this.localDateTime(new Date(booking.createdAt)), checkIn: this.localDateTime(new Date(booking.checkIn)), checkOut: this.localDateTime(new Date(booking.checkOut)), agreedUZS: Number(booking.agreedTotals?.UZS || 0) || null, agreedUSD: Number(booking.agreedTotals?.USD || 0) || null, paymentMethod: booking.payments?.[0]?.method ?? '', paymentNote: booking.payments?.[0]?.note ?? '', additionalPayments: [], changeNote: '' } : { ...this.blankBooking(), roomNumber: String(room?.number ?? '') };
     if (booking?.payments?.length) {
       const groups = new Map<string, { method: string; UZS: number; USD: number }>();
       for (const p of booking.payments) {
@@ -139,7 +146,14 @@ export class HotelComponent implements OnInit, OnDestroy {
       }
       this.bookingForm.additionalPayments = [...groups.values()].filter(p => p.UZS || p.USD);
     }
-    this.updateCheckout(); this.updatePaymentNoteRequirement();
+    if (!booking) this.updateCheckout();
+    const bookingDateTime = new Date(this.bookingForm.createdAt);
+    this.bookingDate = Number.isNaN(bookingDateTime.getTime()) ? null : bookingDateTime;
+    this.bookingTime = this.bookingDate ? this.localDateTime(bookingDateTime).slice(11) : '';
+    this.updatePaymentNoteRequirement();
+    this.createdAtSnapshot = this.bookingForm.createdAt;
+    this.checkInSnapshot = this.bookingForm.checkIn;
+    this.checkOutSnapshot = this.bookingForm.checkOut;
     this.paymentSnapshot = this.paymentFingerprint();
     this.bookingSnapshot = this.bookingFingerprint(); this.bookingDialog = true;
     if (!this.rooms.length) this.hotel.rooms().pipe(this.viewUpdates()).subscribe({ next: response => this.rooms = response.data ?? [] });
@@ -172,8 +186,22 @@ export class HotelComponent implements OnInit, OnDestroy {
   }
   private daysBetween(checkIn: string | Date, checkOut: string | Date) { return Math.max(1, Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86_400_000)); }
   updateCheckout() { const start = new Date(this.bookingForm.checkIn); const days = Number(this.bookingForm.daysCount); if (Number.isNaN(start.getTime()) || !Number.isInteger(days) || days < 1) return; start.setDate(start.getDate() + days); this.bookingForm.checkOut = this.localDateTime(start); }
+  syncBookingDateTime() {
+    if (!this.bookingDate || Number.isNaN(this.bookingDate.getTime()) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(this.bookingTime)) {
+      this.bookingForm.createdAt = '';
+      return;
+    }
+    const date = new Date(this.bookingDate);
+    const [hours, minutes] = this.bookingTime.split(':').map(Number);
+    date.setHours(hours, minutes, 0, 0);
+    this.bookingForm.createdAt = this.localDateTime(date);
+  }
   availableRooms() { return this.rooms.filter(room => room.isActive); }
-  bookingRoomOptions() { return this.availableRooms().map(room => ({ value: String(room.number), label: `${room.number} — ${room.name || `${room.capacity} kishilik`}` })); }
+  bookingRoomOptions() {
+    return this.rooms
+      .filter(room => room.isActive || (this.editingBooking && String(room.number) === String(this.editingBooking.roomNumber)))
+      .map(room => ({ value: String(room.number), label: `${room.number} — ${room.name || `${room.capacity} kishilik`}` }));
+  }
   addAdditionalPayment() { this.bookingForm.additionalPayments.push({ method: '', UZS: null, USD: null }); this.updatePaymentNoteRequirement(); }
   removeAdditionalPayment(index: number) { this.bookingForm.additionalPayments.splice(index, 1); this.updatePaymentNoteRequirement(); }
   primaryAmountMissing() { return !Number(this.bookingForm.agreedUZS ?? 0) && !Number(this.bookingForm.agreedUSD ?? 0); }
@@ -226,6 +254,10 @@ export class HotelComponent implements OnInit, OnDestroy {
       this.toast.error('Xona va buyurtma ma’lumotlarini kiriting.');
       return;
     }
+    if (!this.bookingForm.createdAt || Number.isNaN(new Date(this.bookingForm.createdAt).getTime())) {
+      this.toast.error('Buyurtma sanasi va vaqtini kiriting.');
+      return;
+    }
     if (!this.bookingForm.paymentMethod || (!totalUZS && !totalUSD)) {
       this.toast.error('To‘lov turini tanlang va UZS yoki USD narxidan kamida bittasini kiriting.');
       return;
@@ -264,7 +296,6 @@ export class HotelComponent implements OnInit, OnDestroy {
       { amount: Number(payment.UZS ?? 0), currency: 'UZS' as Currency, method: payment.method, note: this.bookingForm.paymentNote },
       { amount: Number(payment.USD ?? 0), currency: 'USD' as Currency, method: payment.method, note: this.bookingForm.paymentNote }
     ]).filter((payment: Payment) => payment.amount !== 0);
-    this.updateCheckout();
     const payments: Payment[] = [
       { amount: totalUZS, currency: 'UZS' as Currency, method: this.bookingForm.paymentMethod, note: this.bookingForm.paymentNote },
       { amount: totalUSD, currency: 'USD' as Currency, method: this.bookingForm.paymentMethod, note: this.bookingForm.paymentNote },
@@ -272,7 +303,10 @@ export class HotelComponent implements OnInit, OnDestroy {
     ].filter((payment) => Number(payment.amount) !== 0);
     const bookingData = { ...this.bookingForm };
     delete bookingData.status;
-    const body: any = { ...bookingData, guestsCount: Number(this.bookingForm.guestsCount), daysCount: Number(this.bookingForm.daysCount), agreedTotals: { UZS: totalUZS, USD: totalUSD }, payments, additionalPayments };
+    const body: any = { ...bookingData, createdAt: new Date(this.bookingForm.createdAt).toISOString(), checkIn: new Date(this.bookingForm.checkIn).toISOString(), checkOut: new Date(this.bookingForm.checkOut).toISOString(), guestsCount: Number(this.bookingForm.guestsCount), daysCount: Number(this.bookingForm.daysCount), agreedTotals: { UZS: totalUZS, USD: totalUSD }, payments, additionalPayments };
+    if (this.editingBooking && this.bookingForm.createdAt === this.createdAtSnapshot) delete body.createdAt;
+    if (this.editingBooking && this.bookingForm.checkIn === this.checkInSnapshot) delete body.checkIn;
+    if (this.editingBooking && this.bookingForm.checkOut === this.checkOutSnapshot) delete body.checkOut;
     if (this.editingBooking && this.paymentFingerprint() === this.paymentSnapshot) {
       delete body.payments;
       delete body.additionalPayments;

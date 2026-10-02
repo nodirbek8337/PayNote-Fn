@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off" class="p-fluid entity-form">
     <app-input placeholder="Maxsulot nomini kiriting" formControlName="name"></app-input>
-    <app-money-input formControlName="price" placeholder="Maxsulot narxini kiriting" [defaultCurrency]="'UZS'" [emitCurrency]="false" [required]="true" [allowNegative]="false"></app-money-input>
+    <app-money-input formControlName="price" placeholder="Maxsulot narxini kiriting" [defaultCurrency]="form.value.currency === 'USD' ? 'USD' : 'UZS'" (currencyChanged)="form.get('currency')?.setValue($event)" [emitCurrency]="false" [required]="true" [allowNegative]="false"></app-money-input>
     <label class="currency-field">Valuta
         <app-select formControlName="currency" [options]="currencyOptions" [showClear]="false"></app-select>
     </label>

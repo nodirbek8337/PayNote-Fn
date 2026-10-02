@@ -98,11 +98,13 @@
         <label class="form-wide" [class.field-invalid]="bookingSubmitted && !bookingForm.roomNumber"><span class="field-label">Xona <span class="required-mark">*</span></span><app-select [(ngModel)]="bookingForm.roomNumber" name="roomNumber" [options]="bookingRoomOptions()" placeholder="Xonani tanlang" [showClear]="false" [required]="true"></app-select></label>
         <label>Mehmonlar soni<app-input [(ngModel)]="bookingForm.guestsCount" name="guestsCount" type="number" placeholder="Masalan: 2"></app-input></label>
         <label>Necha kunga oldi<app-input [(ngModel)]="bookingForm.daysCount" (ngModelChange)="updateCheckout()" name="daysCount" type="number" placeholder="Masalan: 2"></app-input></label>
+        <label [class.field-invalid]="bookingSubmitted && !bookingForm.createdAt"><span class="field-label">Buyurtma sanasi <span class="required-mark">*</span></span><app-date-input [(ngModel)]="bookingDate" (ngModelChange)="syncBookingDateTime()" name="bookingDate" ariaLabel="Buyurtma sanasini tanlash"></app-date-input></label>
+        <label [class.field-invalid]="bookingSubmitted && !bookingForm.createdAt"><span class="field-label">Buyurtma vaqti <span class="required-mark">*</span></span><app-time-input [(ngModel)]="bookingTime" (ngModelChange)="syncBookingDateTime()" name="bookingTime" ariaLabel="Buyurtma vaqtini tanlash"></app-time-input></label>
         <fieldset class="form-wide agreed" [class.validation-invalid]="bookingSubmitted && (!bookingForm.paymentMethod || primaryAmountMissing())">
             <legend>Kelishilgan narx <span class="required-mark">*</span></legend>
             <label [class.field-invalid]="bookingSubmitted && !bookingForm.paymentMethod"><span class="field-label">To‘lov turi <span class="required-mark">*</span></span><app-select [(ngModel)]="bookingForm.paymentMethod" name="paymentMethod" [options]="methods" placeholder="To‘lov turini tanlang" [showClear]="false" [required]="true"></app-select></label>
             <label [class.field-invalid]="bookingSubmitted && primaryAmountMissing()">UZS<app-input [(ngModel)]="bookingForm.agreedUZS" (ngModelChange)="updatePaymentNoteRequirement()" name="agreedUZS" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 500000 yoki -50000"></app-input></label>
-            <label [class.field-invalid]="bookingSubmitted && primaryAmountMissing()">USD<app-input [(ngModel)]="bookingForm.agreedUSD" (ngModelChange)="updatePaymentNoteRequirement()" name="agreedUSD" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 45 yoki -5"></app-input></label>
+            <label [class.field-invalid]="bookingSubmitted && primaryAmountMissing()">USD<app-input [(ngModel)]="bookingForm.agreedUSD" (ngModelChange)="updatePaymentNoteRequirement()" name="agreedUSD" type="number" [decimalPlaces]="2" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 45, -5, 12.34 yoki -12.34"></app-input></label>
         </fieldset>
         @for (payment of bookingForm.additionalPayments; track $index) {
             <fieldset class="form-wide agreed additional-payment" [class.validation-invalid]="bookingSubmitted && isAdditionalPaymentInvalid(payment)">
@@ -110,7 +112,7 @@
                 <div class="additional-payment__fields">
                     <label [class.field-invalid]="bookingSubmitted && !payment.method"><span class="field-label">To‘lov turi <span class="required-mark">*</span></span><app-select [(ngModel)]="payment.method" [name]="'additionalMethod' + $index" [options]="methods" placeholder="To‘lov turini tanlang" [showClear]="false" [required]="true"></app-select></label>
                     <label [class.field-invalid]="bookingSubmitted && additionalAmountMissing(payment)">UZS<app-input [(ngModel)]="payment.UZS" (ngModelChange)="updatePaymentNoteRequirement()" [name]="'additionalUzs' + $index" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 500000 yoki -50000"></app-input></label>
-                    <label [class.field-invalid]="bookingSubmitted && additionalAmountMissing(payment)">USD<app-input [(ngModel)]="payment.USD" (ngModelChange)="updatePaymentNoteRequirement()" [name]="'additionalUsd' + $index" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 45 yoki -5"></app-input></label>
+                    <label [class.field-invalid]="bookingSubmitted && additionalAmountMissing(payment)">USD<app-input [(ngModel)]="payment.USD" (ngModelChange)="updatePaymentNoteRequirement()" [name]="'additionalUsd' + $index" type="number" [decimalPlaces]="2" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 45, -5, 12.34 yoki -12.34"></app-input></label>
                 </div>
                 <button pButton type="button" class="p-button-outlined remove-additional-payment" (click)="confirmRemoveAdditionalPayment($index)" aria-label="Qo‘shimcha narxni o‘chirish" title="Qo‘shimcha narxni o‘chirish"><i class="pi pi-trash"></i><span>O‘chirish</span></button>
             </fieldset>
@@ -123,7 +125,7 @@
             </div>
         </section>
         <button pButton type="button" class="form-wide additional-payment-button" (click)="addAdditionalPayment()"><span>+ Qo‘shimcha narx qo‘shish</span></button>
-        <label class="form-wide" [class.field-invalid]="bookingNoteInvalid"><span class="field-label">Izoh <small>(minus qiymatda majburiy)</small><span class="required-mark required-mark--conditional" [class.required-mark--visible]="paymentNoteRequired">*</span></span><app-textarea [(ngModel)]="bookingForm.paymentNote" name="paymentNote" [rows]="2" placeholder="Minus bo‘lsa sababini yozing"></app-textarea></label>
+        <label class="form-wide" [class.field-invalid]="bookingNoteInvalid"><span class="field-label">Izoh <small>(minus qiymatda majburiy)</small><span class="required-mark required-mark--conditional" [class.required-mark--visible]="paymentNoteRequired">*</span></span><app-textarea [(ngModel)]="bookingForm.paymentNote" name="paymentNote" [rows]="2" [maxlength]="500" placeholder="Minus bo‘lsa sababini yozing"></app-textarea></label>
         @if (editingBooking) {
             <label class="form-wide" [class.field-invalid]="bookingSubmitted && reasonRequired && !bookingForm.changeNote.trim()"><span class="field-label">O‘zgartirish sababi @if (reasonRequired) { <span class="required-mark">*</span> } @else { <small>(ixtiyoriy)</small> }</span><app-textarea [(ngModel)]="bookingForm.changeNote" name="changeNote" placeholder="Nima uchun o‘zgartirilganini yozing" [maxlength]="500"></app-textarea></label>
         }
@@ -148,7 +150,7 @@
 
 <p-dialog [(visible)]="paymentDialog" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" header="To‘lov qo‘shish" [style]="{ width: '520px', maxWidth: '96vw' }">
     <form class="hotel-form one-column" (ngSubmit)="savePayment()">
-        <label>Narx (+ yoki -)<app-input [(ngModel)]="payment.amount" name="amount" type="number" [allowMathExpression]="true" [allowNegative]="true" placeholder="Masalan: 100000 yoki -50000" [required]="true"></app-input></label>
+        <label>Narx (+ yoki -)<app-input [(ngModel)]="payment.amount" name="amount" type="number" [decimalPlaces]="payment.currency === 'USD' ? 2 : 0" [allowMathExpression]="true" [allowNegative]="true" [placeholder]="payment.currency === 'USD' ? 'Masalan: 45, -5, 12.34 yoki -12.34' : 'Masalan: 100000 yoki -50000'" [required]="true"></app-input></label>
         <label>Valuta<app-select [(ngModel)]="payment.currency" name="currency" [options]="currencies" [showClear]="false"></app-select></label>
         <label>To‘lov usuli<app-select [(ngModel)]="payment.method" name="method" [options]="methods" placeholder="To‘lov turini tanlang" [showClear]="false" [required]="true"></app-select></label>
         <label>Izoh <app-input [(ngModel)]="payment.note" name="note" placeholder="Minus kiritilganda majburiy"></app-input></label>
