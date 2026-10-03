@@ -86,6 +86,11 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
 
     quickFilterValue = '';
 
+    override ngOnInit(): void {
+        super.ngOnInit();
+        if (this.persistStateInUrl) this.quickFilterValue = String(this.columnFilters['search'] ?? '');
+    }
+
     ngAfterViewInit(): void {
         if (this.filterDrawerVisible) this.renderDrawerFilters();
     }

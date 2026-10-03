@@ -73,7 +73,8 @@ export class SalesHistoryComponent {
                 { label: "Naqd to'lov", value: 'CASH' },
                 { label: 'Karta orqali', value: 'CARD' },
                 { label: 'Terminal orqali', value: 'TERMINAL' },
-                { label: 'Boshqa usul', value: 'OTHER' }
+                { label: 'Boshqa usul', value: 'OTHER' },
+                { label: 'Belgilanmagan (eski sotuvlar)', value: 'UNSPECIFIED' }
             ],
             cellRendererFn: (row: any) => `<span>${this.getPaymentMethodLabel(row.paymentMethod)}</span>`
         },

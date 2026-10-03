@@ -1,4 +1,5 @@
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, Input, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { DefaultService } from '../../../services/default.service';
 import { injectViewUpdates } from '../../../utils/view-updates';
@@ -6,8 +7,11 @@ import { injectViewUpdates } from '../../../utils/view-updates';
 @Directive()
 export abstract class TableFeatureBaseComponent implements OnInit {
     protected readonly viewUpdates = injectViewUpdates();
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     @Input() rows: number = 15;
     @Input() hasRowIndex: boolean = false;
+    @Input() persistStateInUrl = false;
 
     value: any[] = [];
     totalRecords: number = 0;
@@ -18,16 +22,18 @@ export abstract class TableFeatureBaseComponent implements OnInit {
     editData: any = {};
     showEditDialog = false;
 
-    protected currentPageStartIndex = 0;
+    currentPageStartIndex = 0;
     protected filterTimeout: any;
     protected dataLoadedOnce = false;
     private lastLoadSignature = '';
     private activeLoadSignature = '';
+    private loadSequence = 0;
 
     abstract _defaultService: DefaultService;
     abstract columnDefs: any[];
 
     ngOnInit(): void {
+        if (this.persistStateInUrl) this.restoreUrlState();
         if (!this.dataLoadedOnce && this._defaultService?.tableRequest) {
             this.dataLoadedOnce = true;
             if (this.hasRowIndex) this.addRowIndexColumn();
@@ -44,14 +50,16 @@ export abstract class TableFeatureBaseComponent implements OnInit {
     }
 
     loadData(event: TableLazyLoadEvent, force = false) {
-        const loadSignature = this.getLoadSignature(event);
+        const activeFilters = this.persistStateInUrl ? this.formatColumnFilters() : event.filters;
+        const loadSignature = this.getLoadSignature({ ...event, filters: activeFilters });
 
         if (!force && (loadSignature === this.lastLoadSignature || loadSignature === this.activeLoadSignature)) {
             return;
         }
 
         const request = this._defaultService.tableRequest;
-        request.setPageParamsPrimeNg(event.first ?? 0, event.rows ?? this.rows);
+        this.rows = event.rows ?? this.rows;
+        request.setPageParamsPrimeNg(event.first ?? 0, this.rows);
         this.currentPageStartIndex = event.first ?? 0;
 
         if (event.sortField && event.sortOrder !== null && event.sortOrder !== undefined) {
@@ -60,15 +68,19 @@ export abstract class TableFeatureBaseComponent implements OnInit {
             request.setSortParamsPrimeNg({ field: sortField, order: sortOrder });
         }
 
-        if (event.filters) {
-            request.setFilterParams(event.filters);
+        if (activeFilters) {
+            request.setFilterParams(activeFilters);
         }
+        if (this.persistStateInUrl) this.syncUrlState();
 
         this.loading = true;
+        this.amountTotals = null;
         this.activeLoadSignature = loadSignature;
+        const sequence = ++this.loadSequence;
 
         this._defaultService.reloadTable().pipe(this.viewUpdates()).subscribe({
             next: (res) => {
+                if (sequence !== this.loadSequence) return;
                 const items = Array.isArray(res.data) ? res.data : [];
 
                 this.value = items.map((item: any, index: number) => ({
@@ -83,8 +95,10 @@ export abstract class TableFeatureBaseComponent implements OnInit {
                 this.activeLoadSignature = '';
             },
             error: () => {
+                if (sequence !== this.loadSequence) return;
                 this.value = [];
                 this.totalRecords = 0;
+                this.amountTotals = null;
                 this.loading = false;
                 this.activeLoadSignature = '';
             }
@@ -115,7 +129,7 @@ export abstract class TableFeatureBaseComponent implements OnInit {
         }, 500);
     }
 
-    applyFilters() {
+    protected formatColumnFilters(): Record<string, { value: unknown; matchMode: string }> {
         const formattedFilters: any = {};
 
         for (const key in this.columnFilters) {
@@ -146,7 +160,57 @@ export abstract class TableFeatureBaseComponent implements OnInit {
             }
         }
 
-        this.reload(formattedFilters);
+        return formattedFilters;
+    }
+
+    applyFilters() {
+        this.reload(this.formatColumnFilters());
+    }
+
+    private restoreUrlState(): void {
+        const params = this.route.snapshot.queryParamMap;
+        const perPage = Number(params.get('per_page'));
+        const page = Number(params.get('page'));
+        if (Number.isInteger(perPage) && perPage > 0 && perPage <= 100) this.rows = perPage;
+        if (Number.isInteger(page) && page > 1) this.currentPageStartIndex = (page - 1) * this.rows;
+
+        const search = params.get('search');
+        if (search) this.columnFilters['search'] = search;
+        for (const column of this.columnDefs) {
+            if (column.searchable === false) continue;
+            if (column.filterType === 'date-range') {
+                const from = params.get(`${column.field}_from`);
+                const to = params.get(`${column.field}_to`);
+                if (!from || !to) continue;
+                const start = new Date(from);
+                const end = new Date(to);
+                if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())) this.columnFilters[column.field] = [start, end];
+            } else {
+                const value = params.get(column.field);
+                if (value) this.columnFilters[column.field] = value;
+            }
+        }
+    }
+
+    private syncUrlState(): void {
+        const filters = this.formatColumnFilters();
+        const managedKeys = new Set(['page', 'per_page', 'search']);
+        for (const column of this.columnDefs) {
+            if (column.searchable === false) continue;
+            managedKeys.add(column.field);
+            if (column.filterType === 'date-range') {
+                managedKeys.add(`${column.field}_from`);
+                managedKeys.add(`${column.field}_to`);
+            }
+        }
+        const queryParams: Record<string, string | number | null> = {};
+        for (const key of managedKeys) queryParams[key] = null;
+        for (const [key, filter] of Object.entries(filters)) queryParams[key] = String(filter.value);
+        queryParams['page'] = Math.floor(this.currentPageStartIndex / this.rows) + 1;
+        queryParams['per_page'] = this.rows;
+        const current = this.route.snapshot.queryParamMap;
+        if ([...managedKeys].every(key => (current.get(key) ?? null) === (queryParams[key] === null ? null : String(queryParams[key])))) return;
+        void this.router.navigate([], { relativeTo: this.route, queryParams, queryParamsHandling: 'merge', replaceUrl: true });
     }
 
     isFilterEmpty(): boolean {
