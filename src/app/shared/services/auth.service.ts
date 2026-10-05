@@ -37,7 +37,7 @@ export class AuthService {
     getRole(): string | null { return this.currentUser()?.role ?? null; }
     isAdmin(): boolean { return this.getRole() === 'admin'; }
     canUseFridge(): boolean { return ['admin', 'user'].includes(this.getRole() ?? ''); }
-    canUseHotel(): boolean { return ['admin', 'manager'].includes(this.getRole() ?? ''); }
+    canUseHotel(): boolean { return ['admin', 'manager', 'user'].includes(this.getRole() ?? ''); }
     isHotelManager(): boolean { return this.getRole() === 'manager'; }
 
     /** Bir reload davomida barcha guardlar bitta /auth/me javobidan foydalanadi. */

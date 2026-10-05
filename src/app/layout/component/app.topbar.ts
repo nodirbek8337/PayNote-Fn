@@ -283,6 +283,13 @@ import { AuthService } from '../../shared/services/auth.service';
                 font-weight: 800;
             }
             @media (max-width: 991px) {
+                ::ng-deep .mobile-navigation__panel {
+                    position: fixed !important;
+                    inset: 4.5rem 0.5rem auto !important;
+                    width: auto !important;
+                    max-height: calc(100dvh - 5rem);
+                    overflow-y: auto;
+                }
                 :host ::ng-deep .desktop-topmenu {
                     display: none;
                 }
@@ -299,7 +306,8 @@ import { AuthService } from '../../shared/services/auth.service';
             }
             @media (max-width: 420px) {
                 .mobile-navigation__trigger {
-                    min-width: 40px;
+                    min-width: 44px;
+                    min-height: 44px;
                     padding: 0;
                 }
                 .mobile-navigation__trigger span {
@@ -378,23 +386,25 @@ export class AppTopbar implements OnInit, OnDestroy {
         });
         const cabinet = item('Kabinet', 'pi pi-chart-bar', '/cabinet');
         const hotel = [
-            item('Xonalar', 'pi pi-building', '/hotel/rooms'),
-            item('Buyurtmalar', 'pi pi-calendar-plus', '/hotel/bookings'),
-            item('Hisob-kitob tarixi', 'pi pi-history', '/hotel/history'),
-            item('Telegram hisobotlari', 'pi pi-send', '/hotel/reports')
+            item('Mehmonxona — Xonalar', 'pi pi-building', '/hotel/rooms'),
+            item('Mehmonxona — Buyurtmalar', 'pi pi-calendar-plus', '/hotel/bookings'),
+            item('Mehmonxona — Hisob-kitob tarixi', 'pi pi-history', '/hotel/history'),
+            item('Mehmonxona — Telegram hisobotlari', 'pi pi-send', '/hotel/reports')
         ];
         const fridge = [
-            item('Sotuv', 'pi pi-shopping-cart', '/sales'),
-            item('Ombor', 'pi pi-warehouse', '/inventory'),
-            item('Mahsulotlar', 'pi pi-box', '/products'),
-            item('Sotuv tarixi', 'pi pi-history', '/sales-history')
+            item('Muzlatgich — Sotuv', 'pi pi-shopping-cart', '/sales'),
+            item('Muzlatgich — Ombor', 'pi pi-warehouse', '/inventory'),
+            item('Muzlatgich — Mahsulotlar', 'pi pi-box', '/products'),
+            item('Muzlatgich — Sotuv tarixi', 'pi pi-history', '/sales-history')
         ];
 
         const navigationItems = this.authService.isAdmin()
             ? [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')]
-            : this.authService.canUseHotel()
-                ? [cabinet, { separator: true }, ...hotel.slice(1, 3)]
-                : [cabinet, { separator: true }, fridge[0]];
+            : [
+                cabinet,
+                ...(this.authService.canUseHotel() ? [{ separator: true }, ...hotel.slice(1, 3)] : []),
+                ...(this.authService.canUseFridge() ? [{ separator: true }, fridge[0]] : [])
+            ];
 
         this.mobileMenuItems = [
             ...navigationItems,

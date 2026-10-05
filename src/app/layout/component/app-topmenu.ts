@@ -186,7 +186,10 @@ export class AppTopMenu implements OnInit {
             return;
         }
         this.items = [cabinet];
-        this.groups = this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 3) }] : [{ ...fridge, items: fridge.items.slice(0, 1) }];
+        this.groups = [
+            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 3) }] : []),
+            ...(this.authService.canUseFridge() ? [{ ...fridge, items: fridge.items.slice(0, 1) }] : [])
+        ];
     }
 
     toggleGroup(key: string) {
