@@ -67,12 +67,22 @@ export class UsersComponent {
         },
         {
             field: 'telegramChatId',
-            header: 'Telegram holati',
+            header: 'Asosiy bot',
             widthClass: 'w-10p',
             sortable: false,
             searchable: false,
             cellRendererFn: (row: any) => row.telegramPhone || row.telegramUsername
                 ? `<span class="currency-label telegram-cell__status">${row.telegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span>`
+                : '<span>-</span>'
+        },
+        {
+            field: 'cleaningTelegramChatId',
+            header: 'Tozalash boti',
+            widthClass: 'w-10p',
+            sortable: false,
+            searchable: false,
+            cellRendererFn: (row: any) => row.telegramPhone || row.telegramUsername
+                ? `<span class="currency-label telegram-cell__status">${row.cleaningTelegramChatId ? 'Ulangan' : 'Kutilmoqda'}</span>`
                 : '<span>-</span>'
         },
         {
