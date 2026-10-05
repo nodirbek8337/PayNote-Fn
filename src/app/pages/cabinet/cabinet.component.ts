@@ -68,7 +68,7 @@ export class CabinetComponent implements OnInit {
     }
 
     get roleLabel(): string {
-        return this.user?.role === 'admin' ? 'Boshliq' : this.user?.role === 'manager' ? 'Mehmonxona manageri' : 'Muzlatgich ishchisi';
+        return this.user?.role === 'admin' ? 'Boshliq' : this.user?.role === 'manager' ? 'Mehmonxona manageri' : this.user?.role === 'cleaner' ? 'Tozalovchi xodim' : 'Muzlatgich ishchisi';
     }
 
     get isHotelManager(): boolean { return this.authService.isHotelManager(); }

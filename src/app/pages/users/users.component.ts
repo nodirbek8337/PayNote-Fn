@@ -87,7 +87,7 @@ export class UsersComponent {
     ];
 
     private formatRole(role: string): string {
-        const label = role === 'admin' ? 'Boshliq' : role === 'manager' ? 'Mehmonxona manageri' : role === 'user' ? 'Muzlatgich ishchisi' : role || '-';
+        const label = role === 'admin' ? 'Boshliq' : role === 'manager' ? 'Mehmonxona manageri' : role === 'user' ? 'Muzlatgich ishchisi' : role === 'cleaner' ? 'Tozalovchi xodim' : role || '-';
         return `<span>${label}</span>`;
     }
 

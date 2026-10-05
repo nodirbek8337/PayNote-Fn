@@ -5,7 +5,7 @@ import { Observable, catchError, finalize, map, of, shareReplay, switchMap, tap 
 import { environment } from '../../../environments/environment';
 import { ToastService } from './toast.service';
 
-export type SessionUser = { id: string; username: string; role: 'admin' | 'user' | 'manager' };
+export type SessionUser = { id: string; username: string; role: 'admin' | 'user' | 'manager' | 'cleaner' };
 type LoginResponse = { token?: string };
 type MeResponse = { success?: boolean; data?: SessionUser };
 

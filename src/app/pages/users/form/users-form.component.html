@@ -37,6 +37,7 @@
     </div>
 
     <div class="notification-switches">
+        @if (!isCleanerRole) {
         <app-switch-toggle formControlName="hotelBookings" label="Mehmonxona buyurtmalari"
             trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
             activeDescription="Har bir yangi buyurtma Telegramga keladi"
@@ -49,6 +50,11 @@
             trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
             activeDescription="Har bir yangi sotuv Telegramga keladi"
             inactiveDescription="Yangi sotuv xabarlari kelmaydi"></app-switch-toggle>
+        }
+        <app-switch-toggle formControlName="cleaningTasks" label="Tozalash topshiriqlari"
+            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+            activeDescription="Yangi tozalash topshiriqlari Telegramga keladi"
+            inactiveDescription="Tozalash topshiriqlari Telegramga kelmaydi"></app-switch-toggle>
 
     <app-switch-toggle
         formControlName="isActive"
