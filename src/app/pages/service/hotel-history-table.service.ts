@@ -26,13 +26,15 @@ export class HotelHistoryTableService extends DefaultService {
       const normalize = (value: unknown) => String(value ?? '').trim().toLocaleLowerCase('uz');
       const search = normalize(params['search']);
       const roomNumber = normalize(params['roomNumber']);
+      const paymentMethod = normalize(params['payments']);
       const from = params['createdAt_from'] ? new Date(String(params['createdAt_from'])) : null;
       const to = params['createdAt_to'] ? new Date(String(params['createdAt_to'])) : null;
       const filtered = this.sourceRows.filter((booking: any) => {
         const matchesSearch = !search || [booking.roomNumber, booking.guestsCount, booking.daysCount].some((value) => normalize(value).includes(search));
+        const matchesPaymentMethod = !paymentMethod || (booking.payments ?? []).some((payment: any) => normalize(payment.method) === paymentMethod);
         const createdAt = new Date(booking.createdAt);
         const matchesDate = (!from || Number.isNaN(from.getTime()) || createdAt >= from) && (!to || Number.isNaN(to.getTime()) || createdAt <= to);
-        return matchesSearch && matchesDate && (!roomNumber || normalize(booking.roomNumber).includes(roomNumber));
+        return matchesSearch && matchesPaymentMethod && matchesDate && (!roomNumber || normalize(booking.roomNumber).includes(roomNumber));
       });
       const amountTotals = filtered.reduce((totals: { UZS: number; USD: number }, booking: any) => {
         const payments = Array.isArray(booking.payments) && booking.payments.length ? booking.payments : [

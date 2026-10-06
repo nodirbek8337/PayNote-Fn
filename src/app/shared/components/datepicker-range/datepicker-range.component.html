@@ -1,18 +1,31 @@
-<p-datepicker
-  selectionMode="range"
-  [(ngModel)]="value"
-  [dateFormat]="dateFormat"
-  [showTime]="showTime"
-  [showClear]="true"
-  [showIcon]="true"
-  [placeholder]="placeholder"
-  iconDisplay="input"
-  [readonlyInput]="true"
-  (onSelect)="onSelect()"
-  (onClear)="clear()"
-  [style]="{ width: '100%' }"
-  [inputStyle]="{ width: '100%' }"
-  [appendTo]="'body'"
-  [autoZIndex]="true"
-  [baseZIndex]="2000" 
-/>
+<div class="datepicker-range" [class.datepicker-range--open]="open">
+  <button type="button" class="datepicker-range__trigger" aria-label="Sana oralig‘ini tanlash" [attr.aria-expanded]="open" aria-haspopup="dialog" (click)="toggle()">
+    <span><i class="pi pi-calendar"></i>{{ displayValue }}</span>
+    <i class="pi pi-chevron-down datepicker-range__chevron"></i>
+  </button>
+  @if (startDate && endDate) {
+    <button type="button" class="datepicker-range__clear" aria-label="Sana filtrini tozalash" title="Tozalash" (click)="clear($event)"><i class="pi pi-times"></i></button>
+  }
+
+  <div #panel class="datepicker-range__panel" [class.datepicker-range__panel--portal]="isPortaled" role="dialog" aria-label="Sana oralig‘ini tanlash">
+    <div class="datepicker-range__heading">
+      <button type="button" aria-label="Oldingi oy" (click)="changeMonth(-1)"><i class="pi pi-chevron-left"></i></button>
+      <strong>{{ months[viewMonth.getMonth()] }} {{ viewMonth.getFullYear() }}</strong>
+      <button type="button" aria-label="Keyingi oy" (click)="changeMonth(1)"><i class="pi pi-chevron-right"></i></button>
+    </div>
+    <div class="datepicker-range__grid">
+      @for (weekday of weekdays; track weekday) { <span class="datepicker-range__weekday">{{ weekday }}</span> }
+      @for (day of days; track day.getTime()) {
+        <button type="button" class="datepicker-range__day"
+          [class.is-outside]="day.getMonth() !== viewMonth.getMonth()"
+          [class.is-today]="isToday(day)"
+          [class.is-range-start]="isRangeStart(day)"
+          [class.is-range-end]="isRangeEnd(day)"
+          [class.is-in-range]="isInRange(day)"
+          [attr.aria-label]="day.getDate() + '.' + (day.getMonth() + 1) + '.' + day.getFullYear()"
+          (click)="select(day)">{{ day.getDate() }}</button>
+      }
+    </div>
+    <div class="datepicker-range__footer"><span>{{ selectionHint }}</span><button type="button" (click)="selectToday()">Bugun</button></div>
+  </div>
+</div>

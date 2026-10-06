@@ -14,6 +14,7 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit, 
 
     @Input() disabled = false;
     @Input() ariaLabel = 'Sanani tanlash';
+    @Input() placeholder = 'Sanani tanlang';
 
     readonly months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
     readonly weekdays = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'];
@@ -39,7 +40,7 @@ export class DateInputComponent implements ControlValueAccessor, AfterViewInit, 
     get effectiveDisabled(): boolean { return this.disabled || this.isDisabled; }
 
     get displayValue(): string {
-        if (!this.value) return 'Sanani tanlang';
+        if (!this.value) return this.placeholder;
         const pad = (part: number) => String(part).padStart(2, '0');
         return `${pad(this.value.getDate())}.${pad(this.value.getMonth() + 1)}.${this.value.getFullYear()}`;
     }

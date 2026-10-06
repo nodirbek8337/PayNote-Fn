@@ -54,7 +54,8 @@ export class HotelComponent implements OnInit, OnDestroy {
   private checkOutSnapshot = '';
   paymentNoteRequired = false;
   private bookingSnapshot = '';
-  readonly methods = [{ value: 'CASH', label: 'Naqd' }, { value: 'TERMINAL', label: 'Terminal' }, { value: 'CARD', label: 'Karta' }, { value: 'EXPEDIA', label: 'Expedia' }, { value: 'BOOKING', label: 'Booking' }];
+  readonly methods = [{ value: 'CASH', label: 'Naqd' }, { value: 'TERMINAL', label: 'Terminal' }, { value: 'EXPEDIA', label: 'Expedia' }, { value: 'BOOKING', label: 'Booking' }];
+  readonly historyMethods = [...this.methods, { value: 'CARD', label: 'Karta' }];
   readonly currencies = [{ value: 'UZS', label: 'UZS' }, { value: 'USD', label: 'USD' }];
   bookingForm: any = this.blankBooking(); roomForm: any = this.blankRoom(); payment: Payment = this.blankPayment();
   bookingDate: Date | null = null;
@@ -86,9 +87,10 @@ export class HotelComponent implements OnInit, OnDestroy {
   ];
   readonly historyColumnDefs = [
     { field: 'roomNumber', header: 'Xona', widthClass: 'w-15p', sortable: false, filterType: 'text', placeholder: 'Xona raqamini qidiring' },
-    { field: 'guestsCount', header: 'Mehmonlar', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.guestsCount) || 0} kishi` },
-    { field: 'daysCount', header: 'Muddat', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.daysCount) || 0} kun` },
-    { field: 'total', header: 'Jami narx', widthClass: 'w-30p', sortable: false, searchable: false, cellRendererFn: (booking: any) => this.historyTotalText(booking) },
+    { field: 'guestsCount', header: 'Mehmonlar', widthClass: 'w-10p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.guestsCount) || 0} kishi` },
+    { field: 'daysCount', header: 'Muddat', widthClass: 'w-10p', sortable: false, searchable: false, cellRendererFn: (booking: any) => `${Number(booking.daysCount) || 0} kun` },
+    { field: 'total', header: 'Jami narx', widthClass: 'w-20p', sortable: false, searchable: false, cellRendererFn: (booking: any) => this.historyTotalText(booking) },
+    { field: 'payments', header: 'To‘lov turi', widthClass: 'w-20p', sortable: false, filterType: 'dropdown', filterOptions: this.historyMethods, placeholder: 'To‘lov turini tanlang', cellRendererFn: (booking: any) => this.historyPaymentMethodsText(booking) },
     { field: 'createdAt', header: 'Buyurtma vaqti', widthClass: 'w-25p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
   ];
   readonly historyActions: ICustomAction[] = [
@@ -345,6 +347,10 @@ export class HotelComponent implements OnInit, OnDestroy {
     const uzs = Math.round(total.UZS).toLocaleString('uz-UZ');
     const usd = Number(total.USD).toLocaleString('en-US', { maximumFractionDigits: 2 });
     return `UZS ${uzs} · USD ${usd}`;
+  }
+  historyPaymentMethodsText(booking: any) {
+    const methods = [...new Set((booking.payments ?? []).map((payment: any) => String(payment.method ?? '').trim()).filter(Boolean))];
+    return methods.map((method) => this.historyMethods.find((option) => option.value === method)?.label ?? 'Boshqa').join(' · ') || '—';
   }
   bookingAgreedTotals(booking: any): Record<Currency,number> {
     return { UZS: Number(booking.agreedTotals?.UZS ?? 0), USD: Number(booking.agreedTotals?.USD ?? 0) };
