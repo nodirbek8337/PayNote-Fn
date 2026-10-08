@@ -416,7 +416,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   }
   expenseTotalText(expense: any) {
     const UZS = Number(expense.totals?.UZS ?? 0);
-    const USD = Number(expense.totals?.USD ?? 0);
+    const USD = Math.trunc((Number(expense.totals?.USD ?? 0) + Number.EPSILON) * 100) / 100;
     const values = [
       ...(UZS ? [`UZS ${Math.round(UZS).toLocaleString('uz-UZ')}`] : []),
       ...(USD ? [`USD ${USD.toLocaleString('en-US', { maximumFractionDigits: 2 })}`] : []),
