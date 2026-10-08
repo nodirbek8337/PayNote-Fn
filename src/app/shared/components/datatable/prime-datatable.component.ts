@@ -53,6 +53,7 @@ export class PrimeDatatableComponent extends TableFeatureBaseComponent implement
 
     @Input() formComponent!: Type<any>;
     @Input() tableTitle?: string;
+    @Input() amountTotalsTone: 'default' | 'income' | 'expense' = 'default';
     @Input() columnDefs: any[] = [];
     @Input() rowsPerPageOptions: number[] = [15, 30, 50];
     @Input() hasCreate = false;

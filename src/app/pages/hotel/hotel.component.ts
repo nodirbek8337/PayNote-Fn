@@ -20,6 +20,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { HotelService } from '../service/hotel.service';
 import { HotelRoomsTableService } from '../service/hotel-rooms-table.service';
 import { HotelHistoryTableService } from '../service/hotel-history-table.service';
+import { ExpenseTableService } from '../service/expense-table.service';
 import { UsersFilterComponent } from '../users/filter/users-filter.component';
 import { CustomDateRendererComponent } from '../../shared/components/badge/custom-date-renderer.component';
 
@@ -29,7 +30,7 @@ type Payment = { amount: number | null; currency: Currency; method: string; note
 @Component({
   selector: 'app-hotel', standalone: true,
   imports: [CommonModule, FormsModule, DialogModule, ButtonDirective, ConfirmDialog, PrimeDatatableComponent, InputComponent, DateInputComponent, TimeInputComponent, SelectComponent, TextareaComponent],
-  providers: [HotelRoomsTableService, HotelHistoryTableService, ConfirmationService],
+  providers: [HotelRoomsTableService, HotelHistoryTableService, ExpenseTableService, ConfirmationService],
   templateUrl: './hotel.component.html', styleUrl: './hotel.component.scss',
 })
 export class HotelComponent implements OnInit, OnDestroy {
@@ -38,10 +39,12 @@ export class HotelComponent implements OnInit, OnDestroy {
   private hotel = inject(HotelService); private toast = inject(ToastService); private auth = inject(AuthService); private route = inject(ActivatedRoute); private confirmation = inject(ConfirmationService);
   readonly roomTableService = inject(HotelRoomsTableService);
   readonly historyTableService = inject(HotelHistoryTableService);
+  readonly expenseTableService = inject(ExpenseTableService);
   @ViewChild('roomsTable') private roomsTable?: PrimeDatatableComponent;
   @ViewChild('historyTable') private historyTable?: PrimeDatatableComponent;
+  @ViewChild('expenseTable') private expenseTable?: PrimeDatatableComponent;
   rooms: any[] = []; history: any[] = []; loading = false;
-  bookingDialog = false; roomDialog = false; paymentDialog = false; section: 'bookings' | 'rooms' | 'history' = 'bookings';
+  bookingDialog = false; roomDialog = false; paymentDialog = false; section: 'bookings' | 'rooms' | 'history' | 'expenses' = 'bookings';
   editingBooking: any | null = null; editingRoom: any | null = null;
   bookingSubmitted = false;
   deletingBooking: any | null = null;
@@ -66,11 +69,14 @@ export class HotelComponent implements OnInit, OnDestroy {
   get canManageRooms() { return this.auth.isAdmin(); }
   get isRoomCatalog() { return this.section === 'rooms'; }
   get canSeeHistory() { return this.section === 'history'; }
+  get isExpenseHistory() { return this.section === 'expenses'; }
   get loadingText() {
     return this.section === 'rooms'
       ? 'Xonalar yuklanmoqda...'
       : this.section === 'history'
-        ? 'Hisob-kitob tarixi yuklanmoqda...'
+        ? 'Buyurtmalar tarixi yuklanmoqda...'
+        : this.section === 'expenses'
+          ? 'Chiqimlar tarixi yuklanmoqda...'
         : 'Buyurtmalar yuklanmoqda...';
   }
   readonly roomColumnDefs = [
@@ -97,10 +103,16 @@ export class HotelComponent implements OnInit, OnDestroy {
     { icon: 'pi pi-pencil', tooltip: 'Buyurtmani tahrirlash', color: 'secondary', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.openBooking(undefined, booking) },
     { icon: 'pi pi-trash', tooltip: 'Buyurtmani o‘chirish', color: 'danger', hidden: (booking) => !!booking.isDeleted, action: (booking) => this.confirmDeleteBooking(booking) },
   ];
+  readonly expenseColumnDefs = [
+    { field: 'createdByUsername', header: 'Kiritgan', widthClass: 'w-25p', sortable: false, filterType: 'text', placeholder: 'Xodimni qidiring' },
+    { field: 'receiptCount', header: 'Cheklar', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (expense: any) => `${Number(expense.receiptCount) || 0} ta` },
+    { field: 'totals', header: 'Jami chiqim', widthClass: 'w-30p', sortable: false, searchable: false, cellRendererFn: (expense: any) => this.expenseTotalText(expense) },
+    { field: 'createdAt', header: 'Chiqim vaqti', widthClass: 'w-30p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
+  ];
 
   ngOnInit() {
     const section = this.route.snapshot.data['section'];
-    this.section = section === 'rooms' ? 'rooms' : section === 'history' ? 'history' : 'bookings';
+    this.section = section === 'rooms' ? 'rooms' : section === 'history' ? 'history' : section === 'expenses' ? 'expenses' : 'bookings';
     if (!this.isRoomCatalog) this.load();
   }
 
@@ -114,6 +126,10 @@ export class HotelComponent implements OnInit, OnDestroy {
   load() {
     if (this.isRoomCatalog) {
       this.roomsTable?.reload();
+      return;
+    }
+    if (this.isExpenseHistory) {
+      this.expenseTable?.reload();
       return;
     }
     if (this.loading) return;
@@ -346,7 +362,12 @@ export class HotelComponent implements OnInit, OnDestroy {
     const total = this.paymentTotals(booking);
     const uzs = Math.round(total.UZS).toLocaleString('uz-UZ');
     const usd = Number(total.USD).toLocaleString('en-US', { maximumFractionDigits: 2 });
-    return `UZS ${uzs} · USD ${usd}`;
+    return `<span class="history-income">UZS ${uzs} · USD ${usd}</span>`;
+  }
+  expenseTotalText(expense: any) {
+    const uzs = Math.round(Number(expense.totals?.UZS ?? 0)).toLocaleString('uz-UZ');
+    const usd = Number(expense.totals?.USD ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    return `<span class="history-expense">UZS ${uzs} · USD ${usd}</span>`;
   }
   historyPaymentMethodsText(booking: any) {
     const methods = [...new Set((booking.payments ?? []).map((payment: any) => String(payment.method ?? '').trim()).filter(Boolean))];

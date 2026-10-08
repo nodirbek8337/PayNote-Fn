@@ -388,7 +388,8 @@ export class AppTopbar implements OnInit, OnDestroy {
         const hotel = [
             item('Mehmonxona — Xonalar', 'pi pi-building', '/hotel/rooms'),
             item('Mehmonxona — Buyurtmalar', 'pi pi-calendar-plus', '/hotel/bookings'),
-            item('Mehmonxona — Hisob-kitob tarixi', 'pi pi-history', '/hotel/history'),
+            item('Mehmonxona — Buyurtmalar tarixi', 'pi pi-history', '/hotel/history'),
+            item('Mehmonxona — Chiqimlar tarixi', 'pi pi-wallet', '/hotel/expenses'),
             item('Mehmonxona — Telegram hisobotlari', 'pi pi-send', '/hotel/reports')
         ];
         const fridge = [
@@ -402,7 +403,7 @@ export class AppTopbar implements OnInit, OnDestroy {
             ? [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')]
             : [
                 cabinet,
-                ...(this.authService.canUseHotel() ? [{ separator: true }, ...hotel.slice(1, 3)] : []),
+                ...(this.authService.canUseHotel() ? [{ separator: true }, ...hotel.slice(1, 4)] : []),
                 ...(this.authService.canUseFridge() ? [{ separator: true }, fridge[0]] : [])
             ];
 

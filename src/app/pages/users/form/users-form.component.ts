@@ -14,7 +14,7 @@ export type UserFormModel = {
     role: 'admin' | 'user' | 'manager' | 'cleaner' | string;
     telegramUsername?: string | null;
     telegramPhone?: string | null;
-    telegramNotifications?: Array<'FRIDGE' | 'HOTEL' | 'HOTEL_BOOKING' | 'HOTEL_REPORT' | 'CLEANING'> | null;
+    telegramNotifications?: Array<'FRIDGE' | 'HOTEL' | 'HOTEL_BOOKING' | 'HOTEL_REPORT' | 'CLEANING' | 'EXPENSE'> | null;
     isActive?: boolean;
     password?: string;
 };
@@ -57,7 +57,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
             hotelBookings: values.includes('HOTEL') || values.includes('HOTEL_BOOKING'),
             hotelReports: values.includes('HOTEL') || values.includes('HOTEL_REPORT'),
             fridgeSales: values.includes('FRIDGE'),
-            cleaningTasks: values.includes('CLEANING')
+            cleaningTasks: values.includes('CLEANING'),
+            expenseNotifications: values.includes('EXPENSE')
         };
     }
 
@@ -153,7 +154,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
         const password = raw.password ?? '';
 
         const isCleaner = raw.role === 'cleaner';
-        const notificationControls = ['hotelBookings', 'hotelReports', 'fridgeSales', 'cleaningTasks'];
+        const notificationControls = ['hotelBookings', 'hotelReports', 'fridgeSales', 'cleaningTasks', 'expenseNotifications'];
         const payload: UserFormModel = {
             _id: this.model._id,
             username: this.isEdit && !this.form.get('username')!.dirty ? this.model.username! : (raw.username ?? '').trim(),
@@ -168,7 +169,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
                         ...(raw.hotelBookings ? ['HOTEL_BOOKING' as const] : []),
                         ...(raw.hotelReports ? ['HOTEL_REPORT' as const] : []),
                         ...(raw.fridgeSales ? ['FRIDGE' as const] : []),
-                        ...(raw.cleaningTasks ? ['CLEANING' as const] : [])
+                        ...(raw.cleaningTasks ? ['CLEANING' as const] : []),
+                        ...(raw.expenseNotifications ? ['EXPENSE' as const] : [])
                     ]
             } : {}),
             ...((!this.isEdit || this.changePassword) && password ? { password } : {})

@@ -1,5 +1,5 @@
-<section class="hotel-page" [class.hotel-page--history]="canSeeHistory" [class.hotel-page--plain]="canSeeHistory || isRoomCatalog">
-    @if (!isRoomCatalog && !canSeeHistory) {
+<section class="hotel-page" [class.hotel-page--history]="canSeeHistory || isExpenseHistory" [class.hotel-page--plain]="canSeeHistory || isExpenseHistory || isRoomCatalog">
+    @if (!isRoomCatalog && !canSeeHistory && !isExpenseHistory) {
     <header class="hotel-header">
         <div>
             <span>Mehmonxona</span>
@@ -37,6 +37,21 @@
         [quickFilterPlaceholder]="'Xona raqami yoki turi bo\'yicha qidiring...'"
             [customActions]="roomActions"
             (onCreate)="openRoom()"
+        ></prime-datatable>
+    } @else if (isExpenseHistory) {
+        <prime-datatable
+            #expenseTable
+            [_defaultService]="expenseTableService"
+            [columnDefs]="expenseColumnDefs"
+            [tableTitle]="'Chiqimlar tarixi'"
+            [amountTotalsTone]="'expense'"
+            [hasAction]="false"
+            [hasRefreshBtn]="true"
+            [hasClearFilterBtn]="true"
+            [showQuickFilterInDrawer]="false"
+            [showDrawerFilters]="true"
+            [drawerFilterComponent]="historyFilterComponent"
+            (onRefresh)="load()"
         ></prime-datatable>
     } @else if (!canSeeHistory) {
         @if (rooms.length) {
@@ -79,7 +94,8 @@
             #historyTable
             [_defaultService]="historyTableService"
             [columnDefs]="historyColumnDefs"
-            [tableTitle]="'Tarix'"
+            [tableTitle]="'Buyurtmalar tarixi'"
+            [amountTotalsTone]="'income'"
             [hasAction]="false"
             [hasRefreshBtn]="true"
             [hasClearFilterBtn]="true"

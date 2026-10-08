@@ -23,6 +23,7 @@ export default [
     { path: 'hotel/bookings', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]), data: { section: 'bookings' } },
     { path: 'hotel/rooms', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard, AdminGuard]), data: { section: 'rooms' } },
     { path: 'hotel/history', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]), data: { section: 'history' } },
+    { path: 'hotel/expenses', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]), data: { section: 'expenses' } },
     { path: 'hotel/reports', component: HotelReportsComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard, AdminGuard]) },
     { path: 'users', component: UsersComponent, canActivate: mapToCanActivate([AuthGuard, AdminGuard]) },
     { path: '**', redirectTo: 'cabinet' }

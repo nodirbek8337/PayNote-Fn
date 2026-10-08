@@ -175,7 +175,8 @@ export class AppTopMenu implements OnInit {
             items: [
                 { label: 'Xonalar', icon: 'pi pi-building', routerLink: ['/hotel/rooms'], exact: true },
                 { label: 'Buyurtmalar', icon: 'pi pi-calendar-plus', routerLink: ['/hotel/bookings'], exact: true },
-                { label: 'Hisob-kitob tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true },
+                { label: 'Buyurtmalar tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true },
+                { label: 'Chiqimlar tarixi', icon: 'pi pi-wallet', routerLink: ['/hotel/expenses'], exact: true },
                 { label: 'Telegram hisobotlari', icon: 'pi pi-send', routerLink: ['/hotel/reports'], exact: true }
             ]
         };
@@ -187,7 +188,7 @@ export class AppTopMenu implements OnInit {
         }
         this.items = [cabinet];
         this.groups = [
-            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 3) }] : []),
+            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 4) }] : []),
             ...(this.authService.canUseFridge() ? [{ ...fridge, items: fridge.items.slice(0, 1) }] : [])
         ];
     }

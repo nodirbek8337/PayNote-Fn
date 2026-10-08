@@ -12,7 +12,7 @@
                         }
                     </div>
                     @if (amountTotals; as t) {
-                        <div class="totals-chips">
+                        <div class="totals-chips" [class.totals-chips--income]="amountTotalsTone === 'income'" [class.totals-chips--expense]="amountTotalsTone === 'expense'">
                             <span class="chip" [ngClass]="t.UZS | signClass">{{ t.UZS | money: 'UZS' }}</span>
                             <span class="chip" [ngClass]="t.USD | signClass">{{ t.USD | money: 'USD' }}</span>
                         </div>
