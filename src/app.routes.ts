@@ -35,6 +35,7 @@ export const appRoutes: Routes = [
       { path: 'hotel/bookings', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'bookings' } },
       { path: 'hotel/rooms', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]), data: { section: 'rooms' } },
       { path: 'hotel/history', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'history' } },
+      { path: 'hotel/expenses', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'expenses' } },
       { path: 'hotel/reports', component: HotelReportsComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]) },
       { path: 'users', component: UsersComponent, canActivate: mapToCanActivate([AdminGuard]) },
     ]

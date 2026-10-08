@@ -51,6 +51,7 @@
             [showQuickFilterInDrawer]="false"
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
+            [customActions]="canManageBookings ? expenseActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
     } @else if (!canSeeHistory) {
@@ -108,6 +109,30 @@
         ></prime-datatable>
     }
 </section>
+
+<p-dialog [(visible)]="expenseDialog" [modal]="true" [closable]="!expenseBusy" [closeOnEscape]="!expenseBusy" [draggable]="false" [resizable]="false" [focusOnShow]="false" header="Chiqimni tahrirlash" [style]="{ width: '520px', maxWidth: '95vw' }">
+    <form class="hotel-form one-column" (ngSubmit)="saveExpense()">
+        <label>UZS<app-input [(ngModel)]="expenseForm.UZS" name="expenseUZS" type="number" [allowMathExpression]="true" placeholder="Masalan: 500000"></app-input></label>
+        <label>USD<app-input [(ngModel)]="expenseForm.USD" name="expenseUSD" type="number" [decimalPlaces]="2" [allowMathExpression]="true" placeholder="Masalan: 45 yoki 12.50"></app-input></label>
+        <label><span class="field-label">O‘zgartirish sababi <span class="required-mark">*</span></span>
+            <app-textarea [(ngModel)]="expenseForm.changeNote" name="expenseChangeNote" [maxlength]="500" [disabled]="expenseBusy" placeholder="Nima uchun o‘zgartirilayotganini yozing"></app-textarea>
+        </label>
+        <footer><button pButton type="button" class="p-button-outlined" [disabled]="expenseBusy" (click)="expenseDialog = false">Bekor qilish</button>
+            <button pButton type="submit" [disabled]="expenseBusy || !expenseForm.changeNote.trim()">{{ expenseBusy ? 'Saqlanmoqda...' : 'Saqlash' }}</button></footer>
+    </form>
+</p-dialog>
+
+<p-dialog [visible]="!!deletingExpense" (visibleChange)="!$event && !expenseDeleteBusy && (deletingExpense = null)" header="Chiqimni o‘chirish"
+    [modal]="true" [closable]="!expenseDeleteBusy" [closeOnEscape]="!expenseDeleteBusy" [draggable]="false" [resizable]="false" [focusOnShow]="false" [style]="{ width: '520px', maxWidth: '95vw' }">
+    <form class="hotel-form one-column" (ngSubmit)="deleteExpenseWithReason()">
+        <p>Chiqim tarixdan butunlay o‘chiriladi. Telegramga o‘chirish haqida xabar yuboriladi.</p>
+        <label><span class="field-label">O‘chirish sababi <span class="required-mark">*</span></span>
+            <app-textarea [(ngModel)]="expenseDeleteReason" name="expenseDeleteReason" [maxlength]="500" [disabled]="expenseDeleteBusy" placeholder="Nima uchun o‘chirilayotganini yozing"></app-textarea>
+        </label>
+        <footer><button pButton type="button" class="p-button-outlined" [disabled]="expenseDeleteBusy" (click)="deletingExpense = null">Bekor qilish</button>
+            <button pButton type="submit" severity="danger" [disabled]="expenseDeleteBusy || !expenseDeleteReason.trim()">{{ expenseDeleteBusy ? 'O‘chirilmoqda...' : 'O‘chirish' }}</button></footer>
+    </form>
+</p-dialog>
 
 <p-dialog [visible]="bookingDialog" (visibleChange)="onBookingVisibleChange($event)" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [style]="{ width: '820px', maxWidth: '96vw' }" [header]="editingBooking ? 'Buyurtmani tahrirlash' : 'Buyurtma olish'">
     <form class="hotel-form" (ngSubmit)="saveBooking()">

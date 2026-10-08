@@ -10,4 +10,12 @@ export class ExpenseTableService extends DefaultService {
   }
 
   getUrl(): string { return 'api/expenses'; }
+
+  updateExpense(id: string, body: unknown) {
+    return this._http.put<any>(`${this.getTableUrl()}/${id}`, body);
+  }
+
+  deleteExpense(id: string, body: unknown) {
+    return this._http.delete<any>(`${this.getTableUrl()}/${id}`, { body });
+  }
 }

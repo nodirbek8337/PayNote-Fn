@@ -51,6 +51,13 @@ export class HotelComponent implements OnInit, OnDestroy {
   deleteReason = '';
   deleteBusy = false;
   savingBooking = false;
+  expenseDialog = false;
+  editingExpense: any | null = null;
+  expenseForm = { UZS: null as number | null, USD: null as number | null, changeNote: '' };
+  expenseBusy = false;
+  deletingExpense: any | null = null;
+  expenseDeleteReason = '';
+  expenseDeleteBusy = false;
   private paymentSnapshot = '';
   private createdAtSnapshot = '';
   private checkInSnapshot = '';
@@ -108,6 +115,10 @@ export class HotelComponent implements OnInit, OnDestroy {
     { field: 'receiptCount', header: 'Cheklar', widthClass: 'w-15p', sortable: false, searchable: false, cellRendererFn: (expense: any) => `${Number(expense.receiptCount) || 0} ta` },
     { field: 'totals', header: 'Jami chiqim', widthClass: 'w-30p', sortable: false, searchable: false, cellRendererFn: (expense: any) => this.expenseTotalText(expense) },
     { field: 'createdAt', header: 'Chiqim vaqti', widthClass: 'w-30p', sortable: false, filterType: 'date-range', placeholder: 'Vaqt oraligini tanlang', cellRendererComponent: CustomDateRendererComponent },
+  ];
+  readonly expenseActions: ICustomAction[] = [
+    { icon: 'pi pi-pencil', tooltip: 'Chiqimni tahrirlash', color: 'secondary', action: (expense) => this.openExpense(expense) },
+    { icon: 'pi pi-trash', tooltip: 'Chiqimni o‘chirish', color: 'danger', action: (expense) => this.confirmDeleteExpense(expense) },
   ];
 
   ngOnInit() {
@@ -358,16 +369,59 @@ export class HotelComponent implements OnInit, OnDestroy {
         this.load();
       } });
   }
+  openExpense(expense: any) {
+    this.editingExpense = expense;
+    this.expenseForm = { UZS: Number(expense.totals?.UZS ?? 0) || null, USD: Number(expense.totals?.USD ?? 0) || null, changeNote: '' };
+    this.expenseDialog = true;
+  }
+  saveExpense() {
+    if (!this.editingExpense || this.expenseBusy) return;
+    const UZS = Number(this.expenseForm.UZS ?? 0);
+    const USD = Number(this.expenseForm.USD ?? 0);
+    const changeNote = this.expenseForm.changeNote.trim();
+    if ((!UZS && !USD) || UZS < 0 || USD < 0) { this.toast.error('UZS yoki USD chiqim summasini kiriting.'); return; }
+    if (!changeNote) { this.toast.error('O‘zgartirish sababini yozing.'); return; }
+    this.expenseBusy = true;
+    this.expenseTableService.updateExpense(this.editingExpense._id, { totals: { UZS, USD }, changeNote })
+      .pipe(finalize(() => this.expenseBusy = false), this.viewUpdates()).subscribe({ next: (response) => {
+        this.expenseDialog = false;
+        this.editingExpense = null;
+        if (response.warning) this.toast.warn(response.warning, 'Telegram xabarlari', 'global', 8000);
+        else this.toast.success('Chiqim yangilandi');
+        this.expenseTable?.reload();
+      } });
+  }
+  confirmDeleteExpense(expense: any) {
+    this.deletingExpense = expense;
+    this.expenseDeleteReason = '';
+  }
+  deleteExpenseWithReason() {
+    if (!this.deletingExpense || this.expenseDeleteBusy || !this.expenseDeleteReason.trim()) return;
+    this.expenseDeleteBusy = true;
+    this.expenseTableService.deleteExpense(this.deletingExpense._id, { confirmation: 'DELETE', note: this.expenseDeleteReason.trim() })
+      .pipe(finalize(() => this.expenseDeleteBusy = false), this.viewUpdates()).subscribe({ next: (response) => {
+        this.deletingExpense = null;
+        if (response.warning) this.toast.warn(response.warning, 'Telegram xabarlari', 'global', 8000);
+        else this.toast.success('Chiqim o‘chirildi');
+        this.expenseTable?.reload();
+      } });
+  }
   historyTotalText(booking: any) {
     const total = this.paymentTotals(booking);
-    const uzs = Math.round(total.UZS).toLocaleString('uz-UZ');
-    const usd = Number(total.USD).toLocaleString('en-US', { maximumFractionDigits: 2 });
-    return `<span class="history-income">UZS ${uzs} · USD ${usd}</span>`;
+    const values = [
+      ...(total.UZS ? [`UZS ${Math.round(total.UZS).toLocaleString('uz-UZ')}`] : []),
+      ...(total.USD ? [`USD ${Number(total.USD).toLocaleString('en-US', { maximumFractionDigits: 2 })}`] : []),
+    ];
+    return `<span class="history-income">${values.join(' · ') || '—'}</span>`;
   }
   expenseTotalText(expense: any) {
-    const uzs = Math.round(Number(expense.totals?.UZS ?? 0)).toLocaleString('uz-UZ');
-    const usd = Number(expense.totals?.USD ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
-    return `<span class="history-expense">UZS ${uzs} · USD ${usd}</span>`;
+    const UZS = Number(expense.totals?.UZS ?? 0);
+    const USD = Number(expense.totals?.USD ?? 0);
+    const values = [
+      ...(UZS ? [`UZS ${Math.round(UZS).toLocaleString('uz-UZ')}`] : []),
+      ...(USD ? [`USD ${USD.toLocaleString('en-US', { maximumFractionDigits: 2 })}`] : []),
+    ];
+    return `<span class="history-expense">${values.join(' · ') || '—'}</span>`;
   }
   historyPaymentMethodsText(booking: any) {
     const methods = [...new Set((booking.payments ?? []).map((payment: any) => String(payment.method ?? '').trim()).filter(Boolean))];
