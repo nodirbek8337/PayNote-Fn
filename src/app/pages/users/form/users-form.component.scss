@@ -26,9 +26,9 @@
 }
 
 .form-field label {
-  color: #b8c7df;
+  color: var(--text-color-secondary);
   font-size: 0.98rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0;
   padding-left: 0.15rem;
 }
@@ -36,7 +36,7 @@
 .form-field label small,
 .field-heading span,
 .field-help {
-  color: #91a4c2;
+  color: var(--text-color-secondary);
   font-size: 0.76rem;
   font-weight: 500;
 }

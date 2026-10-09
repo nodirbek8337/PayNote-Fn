@@ -1239,6 +1239,45 @@ svg {
   }
 }
 
+/* EsEsUc tipografik shkalasi: matnlar yengil, urg'u esa faqat kerakli joylarda. */
+body p,
+body span,
+body small,
+body td,
+body input,
+body textarea,
+body select {
+  font-weight: 400 !important;
+}
+
+body label,
+body legend,
+body th,
+body button,
+body nav a,
+body strong,
+body b,
+body .p-button,
+body .p-button .p-button-label,
+body .topmenu-link,
+body .topmenu-dropdown__item,
+body .status-badge,
+body .currency-label {
+  font-weight: 600 !important;
+}
+
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body .header-title,
+body .p-dialog .p-dialog-title,
+body .p-drawer-title {
+  font-weight: 650 !important;
+}
+
 @media (max-width: 420px) {
   prime-datatable .header-right {
     grid-template-columns: 1fr;
