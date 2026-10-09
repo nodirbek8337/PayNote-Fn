@@ -104,7 +104,7 @@
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
             [quickFilterPlaceholder]="'Xona bo‘yicha qidiring...'"
-            [customActions]="canManageBookings ? historyActions : []"
+            [customActions]="canManageHistory ? historyActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
     }

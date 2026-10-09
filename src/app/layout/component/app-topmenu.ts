@@ -243,7 +243,7 @@ export class AppTopMenu implements OnInit {
         }
         this.items = [cabinet];
         this.groups = [
-            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 4) }] : []),
+            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 4).filter((item) => item.routerLink[0] !== '/hotel/history' || this.authService.canManageHotelHistory()) }] : []),
             ...(this.authService.canUseFridge() ? [{ ...fridge, items: fridge.items.slice(0, 1) }] : [])
         ];
         this.openedGroup = this.router.url.startsWith('/hotel') ? 'hotel' : this.router.url.startsWith('/sales') || this.router.url.startsWith('/inventory') || this.router.url.startsWith('/products') ? 'fridge' : null;

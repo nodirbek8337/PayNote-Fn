@@ -73,6 +73,7 @@ export class HotelComponent implements OnInit, OnDestroy {
   get isAdmin() { return this.auth.isAdmin(); }
   readonly reasonRequired = true;
   get canManageBookings() { return this.auth.canUseHotel(); }
+  get canManageHistory() { return this.auth.canManageHotelHistory(); }
   get canManageRooms() { return this.auth.isAdmin(); }
   get isRoomCatalog() { return this.section === 'rooms'; }
   get canSeeHistory() { return this.section === 'history'; }

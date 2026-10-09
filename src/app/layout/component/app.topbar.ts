@@ -445,7 +445,7 @@ export class AppTopbar implements OnInit, OnDestroy {
             ? [cabinet, { separator: true }, ...hotel, { separator: true }, ...fridge, { separator: true }, item('Foydalanuvchilar', 'pi pi-users', '/users')]
             : [
                 cabinet,
-                ...(this.authService.canUseHotel() ? [{ separator: true }, ...hotel.slice(1, 4)] : []),
+                ...(this.authService.canUseHotel() ? [{ separator: true }, ...hotel.slice(1, 4).filter((_entry, index) => index !== 1 || this.authService.canManageHotelHistory())] : []),
                 ...(this.authService.canUseFridge() ? [{ separator: true }, fridge[0]] : [])
             ];
 
