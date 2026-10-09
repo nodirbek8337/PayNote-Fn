@@ -51,7 +51,7 @@
             [showQuickFilterInDrawer]="false"
             [showDrawerFilters]="true"
             [drawerFilterComponent]="historyFilterComponent"
-            [customActions]="canManageBookings ? expenseActions : []"
+            [customActions]="canManageHistory ? expenseActions : []"
             (onRefresh)="load()"
         ></prime-datatable>
     } @else if (!canSeeHistory) {
