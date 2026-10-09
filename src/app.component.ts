@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from './app/shared/services/auth.service';
+import { LayoutService } from './app/layout/service/layout.service';
 
 @Component({
     selector: 'app-root',
@@ -35,4 +36,9 @@ import { AuthService } from './app/shared/services/auth.service';
 })
 export class AppComponent {
     readonly auth = inject(AuthService);
+    private readonly layoutService = inject(LayoutService);
+
+    constructor() {
+        this.layoutService.toggleDarkMode();
+    }
 }

@@ -689,6 +689,22 @@ input[type='checkbox'] {
 .hotel-section-loading .pi-spinner,
 .login-status .pi-spinner { color: var(--action-primary-from) !important; }
 
+/* Root session loader component encapsulationidan tashqarida turadi; dark tema uchun global override zarur. */
+html.app-dark .session-loading {
+  background: radial-gradient(circle at 50% 42%, #102642, #091728 58%, #050b14) !important;
+  color: #dceaff !important;
+}
+
+html.app-dark .session-loading__card {
+  border-color: #294c7c !important;
+  background: linear-gradient(180deg, #122a4a, #0b1c31) !important;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, .42) !important;
+}
+
+html.app-dark .session-loading__card .pi { color: #75a6ff !important; }
+html.app-dark .session-loading__card strong { color: #e8f1ff !important; }
+html.app-dark .session-loading__card span { color: #9db4d4 !important; }
+
 html.app-dark .layout-topbar,
 html.app-dark .layout-sidebar-shell { background: rgba(10, 22, 39, .94) !important; }
 html.app-dark .esesuc-brand__copy b { color: #e7f0ff; }
