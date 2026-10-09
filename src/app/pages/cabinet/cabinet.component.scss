@@ -321,3 +321,143 @@
         align-items: flex-start;
     }
 }
+
+/* EsEsUc — Ninety Boutique Personal light dashboard */
+.cabinet-page {
+    min-height: calc(100dvh - 7.25rem);
+    padding: clamp(1rem, 2vw, 1.6rem);
+    border-color: #dce7f4;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: 0 18px 48px rgba(42, 79, 126, .10);
+}
+
+.cabinet-header {
+    padding: 1.2rem 1.35rem;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(115deg, #f7fbff, #edf5ff);
+
+    h1 { color: #14284b; font-size: clamp(1.45rem, 2.2vw, 1.9rem); letter-spacing: -.035em; }
+    p { color: #6a7f9f; }
+}
+
+.cabinet-eyebrow {
+    display: inline-flex;
+    padding: .28rem .58rem;
+    border-radius: 999px;
+    background: #e3f0ff;
+    color: #116bdc;
+    letter-spacing: .02em;
+}
+
+.period-grid,
+:host .admin-cabinet .admin-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+    margin-top: 1.15rem;
+}
+
+.period-card,
+:host .admin-cabinet .admin-panel {
+    border: 1px solid #dce7f4;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(48, 83, 128, .07);
+}
+
+.period-card { padding: 1.15rem; }
+.period-title { border-color: #e4edf7; }
+.period-title h2,
+:host .admin-cabinet .admin-panel h2 { color: #193155; }
+.period-title p,
+:host .admin-cabinet .admin-panel p { color: #7184a1; }
+
+.period-icon,
+:host .admin-cabinet .admin-panel__icon {
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #e9f4ff, #dceeff);
+    color: #1677ee;
+    box-shadow: inset 0 0 0 1px #d2e6fb;
+}
+
+:host .admin-cabinet .admin-panel--hotel .admin-panel__icon {
+    border: 0;
+    background: linear-gradient(145deg, #e6faf3, #d6f4e9);
+    color: #22a675;
+}
+
+:host .admin-cabinet .admin-panel > header {
+    padding: 1.15rem;
+    border-color: #e2ebf5;
+    background: linear-gradient(115deg, #eef6ff, #fbfdff);
+}
+
+:host .admin-cabinet .admin-panel--hotel > header {
+    background: linear-gradient(115deg, #ecfbf6, #fbfefd);
+}
+
+.metric,
+.sold-product,
+:host .admin-cabinet .admin-period {
+    border-color: #e2ebf5;
+    border-radius: 12px;
+    background: #f8fbff;
+}
+
+.metric strong,
+.sold-product-name strong,
+:host .admin-cabinet .admin-period b { color: #1d365b; }
+.metric span,
+.sold-product-name span,
+:host .admin-cabinet .admin-period span,
+:host .admin-cabinet .admin-period em { color: #7184a1; }
+.metric strong,
+.sold-product-total,
+.period-total,
+:host .admin-cabinet .admin-period strong { color: #1677ee; }
+.primary-metric { background: linear-gradient(125deg, #e9f4ff, #f7fbff); }
+.products-empty { border-color: #cfdeef; color: #7184a1; background: #fbfdff; }
+
+@media (max-width: 900px) {
+    .period-grid,
+    :host .admin-cabinet .admin-overview { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+    .cabinet-page { padding: .7rem; border-radius: 14px; }
+    .cabinet-header { padding: 1rem; }
+}
+
+:host-context(html.app-dark) {
+    .cabinet-page { border-color: #29496c; background: rgba(11, 25, 44, .97); box-shadow: 0 18px 48px rgba(0,0,0,.3); }
+    .cabinet-header { background: linear-gradient(115deg, #132946, #0f2139); }
+    .cabinet-header h1,
+    .period-title h2,
+    .metric strong,
+    .sold-product-name strong { color: #e8f1ff; }
+    .cabinet-header p,
+    .period-title p,
+    .metric span,
+    .sold-product-name span { color: #9fb0cc; }
+    .cabinet-eyebrow { background: rgba(79,140,255,.14); color: #83adf7; }
+    .period-card,
+    .admin-cabinet .admin-panel { border-color: #28486c; background: #0d1d33; box-shadow: 0 10px 28px rgba(0,0,0,.22); }
+    .admin-cabinet .admin-panel > header { border-color: #315779 !important; background: linear-gradient(115deg, #142f50, #102640) !important; }
+    .admin-cabinet .admin-panel--hotel > header { background: linear-gradient(115deg, #11383a, #102640 78%) !important; }
+    .admin-cabinet .admin-panel h2 { color: #e8f1ff !important; }
+    .admin-cabinet .admin-panel p { color: #9fb0cc !important; }
+    .admin-cabinet .admin-period b { color: #e8f1ff !important; }
+    .admin-cabinet .admin-period span,
+    .admin-cabinet .admin-period em { color: #9fb0cc !important; }
+    .admin-cabinet .admin-period strong { color: #73b0ff !important; }
+    .period-icon,
+    .admin-cabinet .admin-panel__icon { border: 1px solid #315779 !important; background: linear-gradient(145deg, #16385e, #112946) !important; color: #8fc0ff !important; box-shadow: none !important; }
+    .admin-cabinet .admin-panel--hotel .admin-panel__icon { border-color: #2c6c66 !important; background: linear-gradient(145deg, #143d3d, #102e35) !important; color: #70ddc1 !important; }
+    .metric,
+    .sold-product,
+    .admin-cabinet .admin-period { border-color: #294b70; background: #0a192d; }
+    .primary-metric { background: linear-gradient(125deg, #132946, #0f2139); }
+    .products-empty { border-color: #29466f; color: #9fb0cc; background: #0a1627; }
+}

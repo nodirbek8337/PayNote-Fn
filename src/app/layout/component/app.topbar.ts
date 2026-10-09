@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 
-import { AppTopMenu } from './app-topmenu';
 import { LayoutService } from '../service/layout.service';
 
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -13,18 +12,24 @@ import { AuthService } from '../../shared/services/auth.service';
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, AppTopMenu, ConfirmDialog, MenuModule],
+    imports: [RouterModule, ConfirmDialog, MenuModule],
     providers: [ConfirmationService],
     template: `
         <div class="layout-topbar">
             <div class="layout-topbar-container">
-                <div>
-                    <a class="layout-topbar-logo" routerLink="/cabinet">
-                        <img src="assets/images/logo.png" alt="Pay Note" class="logo-content" width="77" height="40" />
+                <div class="layout-brand-controls">
+                    <a class="layout-topbar-logo esesuc-brand" routerLink="/cabinet" aria-label="EsEsUc bosh sahifa">
+                        <span class="esesuc-brand__mark"><img src="/assets/images/esesuc-mark.svg" alt="" /></span>
+                        <span class="esesuc-brand__copy"><b>EsEsUc</b><small>Ninety Boutique Personal</small></span>
                     </a>
+                    <button type="button" class="sidebar-toggle" [class.is-collapsed]="layoutService.sidebarCollapsed()" (click)="layoutService.toggleSidebar()" [attr.aria-label]="layoutService.sidebarCollapsed() ? 'Sidebarni ochish' : 'Sidebarni yopish'" [title]="layoutService.sidebarCollapsed() ? 'Sidebarni ochish' : 'Sidebarni yopish'">
+                        <i class="pi pi-angle-double-left"></i>
+                    </button>
                 </div>
 
-                <app-topmenu class="desktop-topmenu"></app-topmenu>
+                <button type="button" class="mobile-theme-toggle" (click)="layoutService.toggleTheme()" [attr.aria-label]="layoutService.isDarkTheme() ? 'Light rejimga o\u2018tish' : 'Dark rejimga o\u2018tish'">
+                    <i [class]="layoutService.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+                </button>
 
                 <div class="mobile-navigation">
                     <button type="button" class="mobile-navigation__trigger" aria-label="Asosiy menyuni ochish" aria-haspopup="menu" (click)="mobileMenu.toggle($event)">
@@ -34,6 +39,9 @@ import { AuthService } from '../../shared/services/auth.service';
                 </div>
 
                 <div class="layout-topbar-actions">
+                    <button type="button" class="theme-toggle" (click)="layoutService.toggleTheme()" [attr.aria-label]="layoutService.isDarkTheme() ? 'Light rejimga o‘tish' : 'Dark rejimga o‘tish'" [title]="layoutService.isDarkTheme() ? 'Light rejim' : 'Dark rejim'">
+                        <i [class]="layoutService.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon'"></i>
+                    </button>
                     <div class="layout-topbar-menu">
                         <div class="layout-topbar-menu-content">
                             <button type="button" class="user-menu-trigger" aria-label="Foydalanuvchi menyusini ochish" aria-haspopup="menu" (click)="userMenu.toggle($event)">
@@ -222,6 +230,36 @@ import { AuthService } from '../../shared/services/auth.service';
             .mobile-navigation {
                 display: none;
             }
+            .layout-brand-controls { display: flex; align-items: center; gap: .65rem; }
+            .sidebar-toggle {
+                width: 38px;
+                height: 38px;
+                display: grid;
+                place-items: center;
+                margin-left: .6rem;
+                padding: 0;
+                border: 1px solid var(--surface-border);
+                border-radius: 12px;
+                background: color-mix(in srgb, var(--action-primary-soft) 66%, var(--field-bg));
+                color: var(--action-primary-from);
+                cursor: pointer;
+                transition: border-color .18s ease, background-color .18s ease, color .18s ease;
+            }
+            .sidebar-toggle:hover { border-color: var(--action-primary); background: var(--action-primary-soft); }
+            .sidebar-toggle .pi { font-size: .96rem; transition: transform .26s cubic-bezier(.2, .8, .2, 1); }
+            .sidebar-toggle.is-collapsed .pi { transform: rotate(-180deg); }
+            .mobile-theme-toggle {
+                display: none;
+                width: 40px;
+                height: 40px;
+                margin-left: auto;
+                place-items: center;
+                border: 1px solid color-mix(in srgb, var(--action-primary) 38%, var(--surface-border));
+                border-radius: 9px;
+                background: var(--table-head-from);
+                color: var(--action-primary-from);
+                cursor: pointer;
+            }
             .mobile-navigation__trigger {
                 display: inline-flex;
                 align-items: center;
@@ -283,6 +321,7 @@ import { AuthService } from '../../shared/services/auth.service';
                 font-weight: 800;
             }
             @media (max-width: 991px) {
+                .sidebar-toggle { display: none; }
                 ::ng-deep .mobile-navigation__panel {
                     position: fixed !important;
                     inset: 4.5rem 0.5rem auto !important;
@@ -295,7 +334,10 @@ import { AuthService } from '../../shared/services/auth.service';
                 }
                 .mobile-navigation {
                     display: block;
-                    margin-left: auto;
+                    margin-left: 0.45rem;
+                }
+                .mobile-theme-toggle {
+                    display: grid;
                 }
                 .layout-topbar-actions {
                     display: none;

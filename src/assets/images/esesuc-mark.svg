@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">EsEsUc</title>
+  <defs>
+    <linearGradient id="brand" x1="16" y1="10" x2="82" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4DA3FF"/>
+      <stop offset="0.55" stop-color="#1478F2"/>
+      <stop offset="1" stop-color="#0752C2"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-25%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#0752C2" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="80" height="80" rx="24" fill="url(#brand)" filter="url(#shadow)"/>
+  <path d="M31 66V33.5L48 25l17 8.5V66" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 39h5m6 0h5M40 49h5m6 0h5M40 59h5" stroke="#DDEEFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="m51 61 5.5 5.5L69 52.5" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

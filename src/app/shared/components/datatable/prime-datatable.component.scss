@@ -604,3 +604,90 @@
         padding: 0.75rem 1rem;
     }
 }
+
+/* Final light-theme layer stays last so legacy table rules cannot override it. */
+:host ::ng-deep .datatable-card.card {
+    padding: clamp(1rem, 2vw, 1.4rem);
+    border: 1px solid #dce7f4;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 18px 48px rgba(42, 79, 126, .10);
+}
+.header-title { color: #193155; font-size: 1.45rem; letter-spacing: -.035em; }
+.totals-chips .chip { border: 1px solid #dce8f5; background: #f1f7ff; }
+.totals-chips--income .chip { color: #16825a !important; background: #eaf9f2; border-color: #ccecdf; }
+.totals-chips--expense .chip { color: #d85861 !important; background: #fff1f2; border-color: #f5d4d7; }
+
+::ng-deep .datatable-content .p-datatable {
+    border-color: #dce7f4 !important;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(48, 83, 128, .06);
+}
+::ng-deep .datatable-content .p-datatable-table-container,
+::ng-deep .datatable-content .p-datatable-tbody > tr,
+.body-contents,
+.body-contents:nth-child(even),
+.body-contents:hover { background: #fff !important; }
+::ng-deep .sort-headers .sort-header,
+::ng-deep .filter-headers .filter-header,
+::ng-deep .datatable-content .p-datatable-thead > tr > th,
+::ng-deep .datatable-content .p-datatable-thead > tr > th:hover,
+::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:hover,
+::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:not(.p-highlight):hover {
+    height: 48px !important;
+    border-color: #dce7f4 !important;
+    background: #eef5fd !important;
+    color: #345071 !important;
+}
+::ng-deep .datatable-content .p-datatable-tbody > tr > td { height: 46px; border-color: #e4edf7 !important; color: #263f63; }
+::ng-deep .datatable-content .p-datatable-tbody > tr:hover > td { background: #f7fbff !important; }
+:host ::ng-deep .p-paginator { border-color: #dce7f4 !important; background: #f9fbfe; }
+::ng-deep .datatable-drawer.p-drawer,
+::ng-deep .datatable-dialog.p-dialog { border-color: #dce7f4 !important; background: #fff !important; box-shadow: 0 26px 64px rgba(35, 67, 108, .18) !important; }
+::ng-deep .datatable-dialog .p-dialog-header,
+::ng-deep .datatable-dialog .p-dialog-footer { background: #f8fbff; }
+
+@media (max-width: 760px) {
+    :host ::ng-deep .datatable-card.card { padding: .75rem !important; border-radius: 14px; }
+    .header-title { font-size: 1.25rem; }
+}
+
+:host-context(html.app-dark) {
+    ::ng-deep .datatable-card.card {
+        border-color: #294668;
+        background: #0f2239;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, .24);
+    }
+
+    .header-title { color: #e8f1ff; }
+    .totals-chips .chip { border-color: #294668; background: #142c49; }
+    .totals-chips--income .chip { color: #62d6a8 !important; background: #12382f; border-color: #245748; }
+    .totals-chips--expense .chip { color: #ff949b !important; background: #3b222c; border-color: #673846; }
+
+    ::ng-deep .datatable-content .p-datatable,
+    ::ng-deep .datatable-content .p-datatable-table-container,
+    ::ng-deep .datatable-content .p-datatable-tbody > tr,
+    .body-contents,
+    .body-contents:nth-child(even),
+    .body-contents:hover { border-color: #294668 !important; background: #0f2239 !important; }
+
+    ::ng-deep .sort-headers .sort-header,
+    ::ng-deep .filter-headers .filter-header,
+    ::ng-deep .datatable-content .p-datatable-thead > tr > th,
+    ::ng-deep .datatable-content .p-datatable-thead > tr > th:hover,
+    ::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:hover,
+    ::ng-deep .datatable-content .p-datatable-thead > tr > th.p-sortable-column:not(.p-highlight):hover {
+        border-color: #294668 !important;
+        background: #17304e !important;
+        color: #c8d9f1 !important;
+    }
+
+    ::ng-deep .datatable-content .p-datatable-tbody > tr > td { border-color: #294668 !important; color: #e0eaff; }
+    ::ng-deep .datatable-content .p-datatable-tbody > tr:hover > td { background: #142a45 !important; }
+    ::ng-deep .p-paginator,
+    ::ng-deep .datatable-dialog .p-dialog-header,
+    ::ng-deep .datatable-dialog .p-dialog-footer { border-color: #294668 !important; background: #122943 !important; }
+    ::ng-deep .datatable-drawer.p-drawer,
+    ::ng-deep .datatable-dialog.p-dialog { border-color: #294668 !important; background: #0f2239 !important; }
+}

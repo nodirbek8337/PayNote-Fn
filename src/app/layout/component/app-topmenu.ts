@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
+import { LayoutService } from '../service/layout.service';
 
 type MenuItem = { label: string; icon: string; routerLink: any[]; exact: boolean };
 type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] };
@@ -13,7 +14,7 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
         <ul class="topmenu flex items-center gap-2 list-none p-0 m-0">
             @for (item of items; track item) {
                 <li>
-                    <a [routerLink]="item.routerLink" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: item.exact }" [class.topmenu-active]="rla.isActive" class="topmenu-link flex items-center gap-2 px-3 py-2 rounded-md">
+                    <a [routerLink]="item.routerLink" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: item.exact }" [class.topmenu-active]="rla.isActive" [attr.title]="item.label" class="topmenu-link flex items-center gap-2 px-3 py-2 rounded-md">
                         <i [class]="item.icon"></i><span>{{ item.label }}</span>
                     </a>
                 </li>
@@ -27,33 +28,32 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
                         [class.topmenu-active]="groupIsActive(group)"
                         (click)="toggleGroup(group.key)"
                         [attr.aria-expanded]="openedGroup === group.key"
+                        [attr.title]="group.label"
                     >
                         <i [class]="group.icon"></i><span>{{ group.label }}</span
                         ><i class="pi pi-chevron-down group-chevron"></i>
                     </button>
-                    @if (openedGroup === group.key) {
-                        <div class="topmenu-dropdown">
-                            @for (item of group.items; track item) {
-                                <a
-                                    [routerLink]="item.routerLink"
-                                    routerLinkActive
-                                    #rla="routerLinkActive"
-                                    [routerLinkActiveOptions]="{ exact: item.exact }"
-                                    [class.topmenu-dropdown__active]="rla.isActive"
-                                    class="topmenu-dropdown__item"
-                                    (click)="closeGroups()"
-                                >
-                                    <i [class]="item.icon"></i><span>{{ item.label }}</span>
-                                </a>
-                            }
-                        </div>
-                    }
+                    <div class="topmenu-dropdown" [class.is-visible]="openedGroup === group.key" [attr.aria-hidden]="openedGroup !== group.key">
+                        @for (item of group.items; track item) {
+                            <a
+                                [routerLink]="item.routerLink"
+                                routerLinkActive
+                                #rla="routerLinkActive"
+                                [routerLinkActiveOptions]="{ exact: item.exact }"
+                                [class.topmenu-dropdown__active]="rla.isActive"
+                                [attr.title]="item.label"
+                                class="topmenu-dropdown__item"
+                            >
+                                <i [class]="item.icon"></i><span>{{ item.label }}</span>
+                            </a>
+                        }
+                    </div>
                 </li>
             }
 
             @for (item of endItems; track item) {
                 <li>
-                    <a [routerLink]="item.routerLink" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: item.exact }" [class.topmenu-active]="rla.isActive" class="topmenu-link flex items-center gap-2 px-3 py-2 rounded-md">
+                    <a [routerLink]="item.routerLink" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{ exact: item.exact }" [class.topmenu-active]="rla.isActive" [attr.title]="item.label" class="topmenu-link flex items-center gap-2 px-3 py-2 rounded-md">
                         <i [class]="item.icon"></i><span>{{ item.label }}</span>
                     </a>
                 </li>
@@ -63,14 +63,14 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
     styles: [
         `
             .topmenu {
-                background: linear-gradient(180deg, color-mix(in srgb, var(--table-head-from) 70%, #0d1b2f 30%) 0%, color-mix(in srgb, #0d1b2f 88%, var(--action-primary) 12%) 100%);
-                border: 1px solid color-mix(in srgb, var(--surface-border), transparent 8%);
-                border-radius: 8px;
+                background: #f4f8fd;
+                border: 1px solid #dce7f4;
+                border-radius: 11px;
                 padding: 0.25rem !important;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+                box-shadow: 0 7px 20px rgba(42, 79, 126, 0.06);
             }
             .topmenu-link {
-                color: var(--text-color-secondary);
+                color: #607695;
                 text-decoration: none;
                 border-radius: 8px;
                 font-weight: 700;
@@ -84,15 +84,15 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
             }
             .topmenu-link:hover,
             .topmenu-group.is-open .topmenu-group__button {
-                color: #b8c7df;
-                background-color: rgba(79, 140, 255, 0.1);
-                border-color: rgba(117, 166, 255, 0.26);
+                color: #116bdc;
+                background-color: #e8f2ff;
+                border-color: #c8ddf8;
             }
             .topmenu-active {
-                color: #b8c7df !important;
-                background: rgba(79, 140, 255, 0.14);
-                border-color: rgba(117, 166, 255, 0.44);
-                box-shadow: inset 0 0 0 1px rgba(117, 166, 255, 0.12);
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #2585ff, #116bdc);
+                border-color: #116bdc;
+                box-shadow: 0 7px 16px rgba(17, 107, 220, .2);
                 font-weight: 800;
             }
             .topmenu-group {
@@ -113,10 +113,10 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
                 left: 0;
                 min-width: 190px;
                 padding: 0.35rem;
-                border: 1px solid #294c7c;
-                border-radius: 9px;
-                background: #0d2039;
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+                border: 1px solid #d9e5f3;
+                border-radius: 11px;
+                background: #ffffff;
+                box-shadow: 0 18px 38px rgba(39, 73, 116, 0.16);
             }
             .topmenu-dropdown__item {
                 display: flex;
@@ -124,7 +124,7 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
                 gap: 0.65rem;
                 padding: 0.65rem 0.75rem;
                 border-radius: 6px;
-                color: #b8c7df;
+                color: #526a8d;
                 font-weight: 650;
                 font-size: 0.9rem;
                 text-decoration: none;
@@ -132,23 +132,78 @@ type MenuGroup = { key: string; label: string; icon: string; items: MenuItem[] }
             }
             .topmenu-dropdown__item:hover,
             .topmenu-dropdown__active {
-                color: #e6f0ff;
-                background: rgba(79, 140, 255, 0.18);
+                color: #116bdc;
+                background: #edf5ff;
             }
             .topmenu-dropdown__item i {
-                color: #83adf7;
+                color: #2585ff;
                 width: 1rem;
             }
             .topmenu-link:focus-visible {
                 outline: 2px solid color-mix(in srgb, var(--primary-color), transparent 60%);
                 outline-offset: 2px;
             }
+
+            :host { display: block; min-width: 0; }
+            .topmenu {
+                width: 100%;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: .35rem !important;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+            .topmenu > li { width: 100%; }
+            .topmenu-link {
+                width: 100%;
+                min-height: 44px;
+                justify-content: flex-start;
+                box-sizing: border-box;
+                padding: .7rem .8rem !important;
+                border-radius: 10px;
+            }
+            .topmenu-link > i:first-child { width: 22px; height: 22px; display: grid; flex: 0 0 22px; place-items: center; text-align: center; color: #3987e9; font-size: .9rem; }
+            .topmenu-active > i:first-child { color: #fff; }
+            .topmenu-group__button .group-chevron { margin-left: auto; }
+            .topmenu-dropdown {
+                position: static;
+                min-width: 0;
+                max-height: 0;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+                overflow: hidden;
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-5px);
+                transition: max-height .26s ease, margin .26s ease, padding .26s ease, opacity .18s ease, transform .26s ease;
+            }
+            .topmenu-dropdown.is-visible { max-height: 320px; margin: .28rem 0 .28rem .4rem; padding: .1rem .15rem .1rem .5rem; opacity: 1; pointer-events: auto; transform: translateY(0); }
+            .topmenu-dropdown__item { min-height: 38px; margin: .18rem 0; padding: .55rem .7rem; border: 1px solid transparent; border-radius: 9px; }
+            .topmenu-dropdown__item:hover,
+            .topmenu-dropdown__active { border-color: #d6e6f7; background: #eef6ff; }
+
+            :host-context(html.app-dark) .topmenu-link { color: #aebed5; }
+            :host-context(html.app-dark) .topmenu-link > i:first-child { color: #79adff; }
+            :host-context(html.app-dark) .topmenu-link:hover,
+            :host-context(html.app-dark) .topmenu-group.is-open .topmenu-group__button { color: #e5efff; background: #172d4d; border-color: #29466f; }
+            :host-context(html.app-dark) .topmenu-active { color: #fff !important; background: linear-gradient(135deg, #397fe9, #245fc3); border-color: #4c8df0; }
+            :host-context(html.app-dark) .topmenu-dropdown__item { color: #aebed5; }
+            :host-context(html.app-dark) .topmenu-dropdown__item:hover,
+            :host-context(html.app-dark) .topmenu-dropdown__active { color: #eef5ff; border-color: #294e78; background: #152f50; }
         `
     ]
 })
 export class AppTopMenu implements OnInit {
     private authService = inject(AuthService);
     private router = inject(Router);
+    private layoutService = inject(LayoutService);
     private host = inject(ElementRef<HTMLElement>);
     items: MenuItem[] = [];
     groups: MenuGroup[] = [];
@@ -184,6 +239,7 @@ export class AppTopMenu implements OnInit {
             this.items = [cabinet];
             this.groups = [hotel, fridge];
             this.endItems = [{ label: 'Foydalanuvchilar', icon: 'pi pi-users', routerLink: ['/users'], exact: true }];
+            this.openedGroup = this.router.url.startsWith('/hotel') ? 'hotel' : this.router.url.startsWith('/sales') || this.router.url.startsWith('/inventory') || this.router.url.startsWith('/products') ? 'fridge' : null;
             return;
         }
         this.items = [cabinet];
@@ -191,9 +247,15 @@ export class AppTopMenu implements OnInit {
             ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 4) }] : []),
             ...(this.authService.canUseFridge() ? [{ ...fridge, items: fridge.items.slice(0, 1) }] : [])
         ];
+        this.openedGroup = this.router.url.startsWith('/hotel') ? 'hotel' : this.router.url.startsWith('/sales') || this.router.url.startsWith('/inventory') || this.router.url.startsWith('/products') ? 'fridge' : null;
     }
 
     toggleGroup(key: string) {
+        if (this.layoutService.sidebarCollapsed()) {
+            this.layoutService.setSidebarCollapsed(false);
+            this.openedGroup = key;
+            return;
+        }
         this.openedGroup = this.openedGroup === key ? null : key;
     }
     closeGroups() {

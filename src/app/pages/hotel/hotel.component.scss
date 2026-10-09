@@ -111,9 +111,9 @@
 }
 
 :host .hotel-form .required-mark {
-  color: var(--text-color);
+  color: var(--action-primary-from);
   font-size: .95rem;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -141,6 +141,17 @@
 
 :host .hotel-form .validation-invalid {
   border-color: var(--error-border) !important;
+}
+
+/* Forma matnlari ko'zga yengil: asosiy urg'u sarlavhada, maydonlarda emas. */
+:host .hotel-form label {
+  color: var(--text-color-secondary);
+  font-weight: 600;
+}
+
+:host .hotel-form .agreed legend {
+  color: var(--text-color);
+  font-weight: 700;
 }
 
 :host ::ng-deep .hotel-form .field-invalid :is(.p-inputtext, .p-inputtextarea, .p-select) {

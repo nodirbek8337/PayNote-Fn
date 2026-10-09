@@ -202,10 +202,10 @@
 <p-dialog [(visible)]="roomDialog" [modal]="true" [focusOnShow]="false" [draggable]="false" [resizable]="false" [header]="editingRoom ? 'Xonani tahrirlash' : 'Xona qo‘shish'" [style]="{ width: '520px', maxWidth: '96vw' }">
     <form class="hotel-form one-column room-form" (ngSubmit)="saveRoom()">
         <label>Xona raqami<app-input [(ngModel)]="roomForm.number" name="number" placeholder="Masalan: 101" [required]="true"></app-input></label>
-        <label>Nomi<app-input [(ngModel)]="roomForm.name" name="name" placeholder="Masalan: Lyuks"></app-input></label>
+        <label>Xona turi<app-input [(ngModel)]="roomForm.name" name="name" placeholder="Masalan: Double yoki Twin"></app-input></label>
         <label>Sig'imi<app-input [(ngModel)]="roomForm.capacity" name="capacity" type="number" placeholder="Masalan: 2" [required]="true"></app-input></label>
         @if (editingRoom) {
-            <label>Tahrirlash izohi <small>(ixtiyoriy)</small><app-input [(ngModel)]="roomForm.note" name="roomnote" placeholder="Masalan: xona nomi yangilandi"></app-input></label>
+            <label>Tahrirlash izohi <small>(ixtiyoriy)</small><app-input [(ngModel)]="roomForm.note" name="roomnote" placeholder="Masalan: xona turi yangilandi"></app-input></label>
         }
         <footer><button pButton type="button" class="p-button-outlined" (click)="roomDialog = false"><span>Bekor qilish</span></button><button pButton type="submit"><span>Saqlash</span></button></footer>
     </form>
