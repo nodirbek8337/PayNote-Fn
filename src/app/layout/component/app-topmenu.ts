@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { LayoutService } from '../service/layout.service';
@@ -204,7 +204,6 @@ export class AppTopMenu implements OnInit {
     private authService = inject(AuthService);
     private router = inject(Router);
     private layoutService = inject(LayoutService);
-    private host = inject(ElementRef<HTMLElement>);
     items: MenuItem[] = [];
     groups: MenuGroup[] = [];
     endItems: MenuItem[] = [];
@@ -263,9 +262,6 @@ export class AppTopMenu implements OnInit {
     }
     groupIsActive(group: MenuGroup) {
         return group.items.some((item) => this.router.url === item.routerLink.join('/'));
-    }
-    @HostListener('document:click', ['$event']) onDocumentClick(event: MouseEvent) {
-        if (!this.host.nativeElement.contains(event.target as Node)) this.closeGroups();
     }
     @HostListener('document:keydown.escape') onEscape() {
         this.closeGroups();

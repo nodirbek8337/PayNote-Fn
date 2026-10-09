@@ -767,17 +767,33 @@ html.app-dark .layout-wrapper.layout-sidebar-collapsed .layout-sidebar-shell .to
 }
 
 .p-dialog .p-dialog-header-icon,
-.p-dialog .p-dialog-close-button {
+.p-dialog .p-dialog-close-button,
+.p-dialog .p-dialog-maximize-button {
+  position: relative !important;
   width: 38px !important;
   height: 38px !important;
-  display: inline-grid !important;
-  place-items: center;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   padding: 0 !important;
   border: 1px solid transparent !important;
   border-radius: 8px !important;
   background: transparent !important;
   color: var(--action-primary-from) !important;
   box-shadow: none !important;
+}
+
+.p-dialog .p-dialog-header-icon > :is(svg, span, i),
+.p-dialog .p-dialog-close-button > :is(svg, span, i),
+.p-dialog .p-dialog-maximize-button > :is(svg, span, i) {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 14px;
+  height: 14px;
+  margin: 0 !important;
+  line-height: 1 !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .p-dialog .p-dialog-header-icon:hover,
@@ -1198,7 +1214,8 @@ svg {
   }
 
   .p-dialog .p-dialog-header-icon,
-  .p-dialog .p-dialog-close-button {
+  .p-dialog .p-dialog-close-button,
+  .p-dialog .p-dialog-maximize-button {
     width: 42px !important;
     height: 42px !important;
   }
