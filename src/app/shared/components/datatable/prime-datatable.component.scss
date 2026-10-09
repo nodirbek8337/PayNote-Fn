@@ -540,7 +540,7 @@
     :host ::ng-deep td.actions-merged {
         display: block !important;
         border-top: 1px solid var(--surface-border);
-        padding: 0.5rem 0.75rem;
+        padding: 0.65rem 0.75rem 0.8rem;
     }
 
     :host ::ng-deep td.actions-merged .action-buttons {
@@ -549,6 +549,43 @@
         justify-content: flex-end;
         gap: 0.5rem;
         flex-wrap: wrap;
+    }
+
+    :host ::ng-deep .p-datatable-table-container:has(.empty-table-row) {
+        height: calc(clamp(16rem, 48dvh, 22rem) + 0.65rem) !important;
+        min-height: calc(clamp(16rem, 48dvh, 22rem) + 0.65rem) !important;
+        max-height: calc(clamp(16rem, 48dvh, 22rem) + 0.65rem) !important;
+        overflow: hidden !important;
+    }
+
+    :host ::ng-deep .p-datatable-tbody > tr.empty-table-row {
+        margin: 0.65rem 0 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        overflow: visible;
+    }
+
+    :host ::ng-deep .empty-table-row > td.empty-table-cell {
+        padding: 0 !important;
+        border: 0 !important;
+    }
+
+    :host ::ng-deep .empty-table-row > td.empty-table-cell::before {
+        display: none !important;
+    }
+
+    :host ::ng-deep .empty-table-state {
+        min-height: clamp(16rem, 48dvh, 22rem) !important;
+        box-sizing: border-box;
+        padding: 1.25rem !important;
+        border: 1px dashed color-mix(in srgb, var(--action-primary) 34%, var(--surface-border));
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--action-primary-soft) 48%, var(--table-bg)) !important;
+        color: var(--text-color-secondary) !important;
+    }
+
+    :host ::ng-deep .empty-table-state .pi {
+        color: var(--action-primary-from);
     }
 
     :host ::ng-deep .p-datatable-tbody > tr > td[class*='w-'],
