@@ -175,6 +175,7 @@
 </p-dialog>
 
 <p-confirmdialog key="hotel-additional-payment" styleClass="paynote-confirm-dialog" [baseZIndex]="1300"></p-confirmdialog>
+<p-confirmdialog key="hotel-delete-room" styleClass="paynote-confirm-dialog" [baseZIndex]="1300"></p-confirmdialog>
 <p-dialog [visible]="!!deletingBooking" (visibleChange)="!$event && !deleteBusy && (deletingBooking = null)" header="Buyurtmani o‘chirish"
     [modal]="true" [closable]="!deleteBusy" [closeOnEscape]="!deleteBusy" [draggable]="false" [resizable]="false" [focusOnShow]="false" [style]="{ width: '520px', maxWidth: '95vw' }">
     <form class="hotel-form one-column" (ngSubmit)="deleteBookingWithReason()">

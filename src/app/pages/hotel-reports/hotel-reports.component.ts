@@ -1,5 +1,7 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 import { PrimeDatatableComponent } from '../../shared/components/datatable/prime-datatable.component';
 import { CustomActiveBadgeComponent } from '../../shared/components/badge/custom-active-renderer.component';
 import { UsersFilterComponent } from '../users/filter/users-filter.component';
@@ -12,7 +14,8 @@ import { injectViewUpdates } from '../../shared/utils/view-updates';
 @Component({
     selector: 'app-hotel-reports',
     standalone: true,
-    imports: [PrimeDatatableComponent, DialogModule, HotelReportFormComponent],
+    imports: [PrimeDatatableComponent, DialogModule, ConfirmDialog, HotelReportFormComponent],
+    providers: [ConfirmationService],
     templateUrl: './hotel-reports.component.html',
     styleUrl: './hotel-reports.component.scss'
 })
@@ -20,6 +23,7 @@ export class HotelReportsComponent {
     private readonly viewUpdates = injectViewUpdates();
     readonly _defaultService = inject(HotelReportSchedulesService);
     private readonly toast = inject(ToastService);
+    private readonly confirmation = inject(ConfirmationService);
     readonly FilterComponent = UsersFilterComponent;
     @ViewChild('reportsTable') private reportsTable?: PrimeDatatableComponent;
 
@@ -83,12 +87,21 @@ export class HotelReportsComponent {
     }
 
     deleteReport(report: any): void {
-        if (!confirm(`“${report.name}” hisobotini o‘chirasizmi?`)) return;
-        this._defaultService.delete(report._id).pipe(this.viewUpdates()).subscribe({
-            next: () => {
-                this.toast.success("Hisobot o'chirildi");
-                this.reportsTable?.reload();
-            }
+        this.confirmation.confirm({
+            key: 'hotel-report-delete',
+            header: 'Hisobotni o‘chirish',
+            message: `“${report.name}” hisoboti o‘chiriladi. Davom etasizmi?`,
+            icon: 'pi pi-trash',
+            acceptLabel: 'O‘chirish',
+            rejectLabel: 'Bekor qilish',
+            acceptButtonStyleClass: 'confirm-accept-btn',
+            rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
+            accept: () => this._defaultService.delete(report._id).pipe(this.viewUpdates()).subscribe({
+                next: () => {
+                    this.toast.success("Hisobot o'chirildi");
+                    this.reportsTable?.reload();
+                }
+            })
         });
     }
 

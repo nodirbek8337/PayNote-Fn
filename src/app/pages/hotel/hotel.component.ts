@@ -354,7 +354,21 @@ export class HotelComponent implements OnInit, OnDestroy {
   savePayment() { if (!this.editingBooking || !this.payment.method || !Number(this.payment.amount)) { this.toast.error('To‘lov turini tanlang va narxni kiriting.'); return; } if (Number(this.payment.amount) < 0 && !this.payment.note.trim()) { this.toast.error('Minus to‘lov uchun izoh majburiy.'); return; } this.hotel.addPayment(this.editingBooking._id, this.payment).pipe(this.viewUpdates()).subscribe({ next: () => { this.paymentDialog = false; this.toast.success('To‘lov tarixi saqlandi'); this.load(); } }); }
   openRoom(room?: any) { this.editingRoom = room ?? null; this.roomForm = room ? { ...room, note: '' } : this.blankRoom(); this.roomDialog = true; }
   saveRoom() { if (!this.roomForm.number || Number(this.roomForm.capacity) < 1) { this.toast.error('Xona raqami va sig\'imini kiriting.'); return; } const request = this.editingRoom ? this.hotel.updateRoom(this.editingRoom._id, this.roomForm) : this.hotel.createRoom(this.roomForm); request.pipe(this.viewUpdates()).subscribe({ next: () => { this.roomDialog=false; this.toast.success('Xona saqlandi'); this.load(); } }); }
-  deleteRoom(room: any) { if (!confirm(`${room.number} xonasini butunlay o‘chirasizmi? Bu amalni qaytarib bo‘lmaydi.`)) return; this.hotel.deleteRoom(room._id).pipe(this.viewUpdates()).subscribe({ next: () => { this.toast.success("Xona o'chirildi"); this.load(); } }); }
+  deleteRoom(room: any) {
+    this.confirmation.confirm({
+      key: 'hotel-delete-room',
+      header: 'Xonani o‘chirish',
+      message: `${room.number} xonasi butunlay o‘chiriladi. Bu amalni qaytarib bo‘lmaydi. Davom etasizmi?`,
+      icon: 'pi pi-trash',
+      acceptLabel: 'O‘chirish',
+      rejectLabel: 'Bekor qilish',
+      acceptButtonStyleClass: 'confirm-accept-btn',
+      rejectButtonStyleClass: 'p-button-outlined confirm-reject-btn',
+      accept: () => this.hotel.deleteRoom(room._id).pipe(this.viewUpdates()).subscribe({
+        next: () => { this.toast.success("Xona o'chirildi"); this.load(); }
+      })
+    });
+  }
   confirmDeleteBooking(booking: any) {
     this.deletingBooking = booking;
     this.deleteReason = '';
