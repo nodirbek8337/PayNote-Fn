@@ -13,6 +13,7 @@
         [disabled]="isDisabled || disabled"
         [dataKey]="dataKey"
         [ngModel]="value"
+        [ngModelOptions]="{ standalone: true }"
         (ngModelChange)="onModelChange($event)"
         (onBlur)="onBlur()"
         [ngClass]="{ 'is-invalid': shouldShowErrors() }"

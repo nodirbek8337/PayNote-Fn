@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, forwardRef, Input, OnInit, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +22,7 @@ import { SELECT_ERROR_MESSAGES } from '../../constants/control-error-messages';
 })
 export class SelectComponent implements ControlValueAccessor, OnInit {
     private controlContainer = inject(ControlContainer, { optional: true });
+    private changeDetector = inject(ChangeDetectorRef);
 
     @Input() formControlName!: string;
 
@@ -53,6 +54,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
 
     writeValue(val: any): void {
         this.value = val;
+        this.changeDetector.markForCheck();
     }
     registerOnChange(fn: any): void {
         this.onChangeCb = fn;
@@ -62,6 +64,7 @@ export class SelectComponent implements ControlValueAccessor, OnInit {
     }
     setDisabledState(disabled: boolean): void {
         this.isDisabled = disabled;
+        this.changeDetector.markForCheck();
     }
 
     get control() {
