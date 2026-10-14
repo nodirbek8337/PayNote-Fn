@@ -16,6 +16,7 @@ type EmptyRoomSnapshot = {
   dateKey: string;
   roomCount?: number;
   roomNumbers?: string[];
+  createdByUsername?: string;
   updatedByUsername: string;
   updatedAt: string;
 };
@@ -55,9 +56,9 @@ export class EmptyRoomsComponent {
   ];
   readonly FilterComponent = UsersFilterComponent;
   readonly columnDefs = [
-    { field: 'dateKey', header: 'Sana', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (row: EmptyRoomSnapshot) => this.formatDate(row.dateKey) },
-    { field: 'roomCount', header: "Bo'sh xonalar soni", widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (row: EmptyRoomSnapshot) => String(this.count(row)) },
-    { field: 'updatedByUsername', header: 'Yangilagan', widthClass: 'w-25p', sortable: false, searchable: false }
+    { field: 'roomCount', header: 'Xonalar', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (row: EmptyRoomSnapshot) => String(this.count(row)) },
+    { field: 'createdByUsername', header: 'Yuborgan', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (row: EmptyRoomSnapshot) => row.createdByUsername || row.updatedByUsername || '-' },
+    { field: 'dateKey', header: 'Sana', widthClass: 'w-25p', sortable: false, searchable: false, cellRendererFn: (row: EmptyRoomSnapshot) => this.formatDate(row.dateKey) }
   ];
 
   save(): void {
