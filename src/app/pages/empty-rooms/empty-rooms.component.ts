@@ -84,13 +84,12 @@ export class EmptyRoomsComponent {
 
   openForm(row?: EmptyRoomSnapshot): void {
     this.editingId = row?._id ?? null;
-    const values = {
+    this.form.reset({
       roomCount: row ? this.count(row) : null,
       date: row ? this.dateFromKey(row.dateKey) : this.today(),
       changeNote: ''
-    };
+    });
     this.formDialog = true;
-    setTimeout(() => this.form.reset(values));
   }
 
   openDelete(row: EmptyRoomSnapshot): void {

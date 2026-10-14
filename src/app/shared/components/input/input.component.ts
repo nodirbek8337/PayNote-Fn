@@ -1,8 +1,7 @@
-import { Component, forwardRef, Input, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, forwardRef, Input, OnInit, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
 import { ControlErrorComponent } from '../control-error/control-error.component';
 import { INPUT_ERROR_MESSAGES } from '../../constants/control-error-messages';
 import { NoAutofillDirective } from '../../directives/no-autofill.directive';
@@ -12,7 +11,7 @@ let nextInputId = 0;
 @Component({
     selector: 'app-input',
     standalone: true,
-    imports: [NgClass, InputTextModule, FormsModule, ControlErrorComponent, NoAutofillDirective],
+    imports: [NgClass, InputTextModule, ControlErrorComponent, NoAutofillDirective],
     templateUrl: './input.component.html',
     styleUrls: ['./input.component.scss'],
     providers: [
@@ -25,6 +24,7 @@ let nextInputId = 0;
 })
 export class InputComponent implements ControlValueAccessor, OnInit {
     private controlContainer = inject(ControlContainer, { optional: true });
+    private changeDetector = inject(ChangeDetectorRef);
 
     @Input() type: 'text' | 'password' | 'email' | 'number' | 'datetime-local' = 'text';
     @Input() placeholder = '';
@@ -59,15 +59,18 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     writeValue(val: any): void {
         if (this.type !== 'number') {
             this.value = val;
+            this.changeDetector.markForCheck();
             return;
         }
 
         if (this.decimalPlaces > 0) {
             this.value = this.sanitizeDecimalExpression(val);
+            this.changeDetector.markForCheck();
             return;
         }
 
         this.value = this.allowMathExpression ? this.formatNumberExpressionValue(val) : this.formatNumberValue(val);
+        this.changeDetector.markForCheck();
     }
     registerOnChange(fn: any): void {
         this.onChange = fn;
@@ -77,6 +80,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     }
     setDisabledState(disabled: boolean): void {
         this.isDisabled = disabled;
+        this.changeDetector.markForCheck();
     }
 
     get control() {
