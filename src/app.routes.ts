@@ -14,6 +14,7 @@ import { HotelGuard } from './app/shared/guards/hotel.guard';
 import { CabinetComponent } from './app/pages/cabinet/cabinet.component';
 import { HotelComponent } from './app/pages/hotel/hotel.component';
 import { HotelReportsComponent } from './app/pages/hotel-reports/hotel-reports.component';
+import { EmptyRoomsComponent } from './app/pages/empty-rooms/empty-rooms.component';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponenet, canMatch: mapToCanMatch([GuestGuard]) },
@@ -36,6 +37,7 @@ export const appRoutes: Routes = [
       { path: 'hotel/rooms', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]), data: { section: 'rooms' } },
       { path: 'hotel/history', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'history' } },
       { path: 'hotel/expenses', component: HotelComponent, canActivate: mapToCanActivate([HotelGuard]), data: { section: 'expenses' } },
+      { path: 'hotel/empty-rooms', component: EmptyRoomsComponent, canActivate: mapToCanActivate([HotelGuard]) },
       { path: 'hotel/reports', component: HotelReportsComponent, canActivate: mapToCanActivate([HotelGuard, AdminGuard]) },
       { path: 'users', component: UsersComponent, canActivate: mapToCanActivate([AdminGuard]) },
     ]

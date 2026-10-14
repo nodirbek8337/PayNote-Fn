@@ -36,40 +36,59 @@
         </div>
     </div>
 
-    <div class="notification-switches">
-        @if (!isCleanerRole) {
-        <app-switch-toggle formControlName="hotelBookings" label="Mehmonxona buyurtmalari"
-            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
-            activeDescription="Har bir yangi buyurtma Telegramga keladi"
-            inactiveDescription="Yangi buyurtma xabarlari kelmaydi"></app-switch-toggle>
-        <app-switch-toggle formControlName="expenseNotifications" label="Mehmonxona chiqimlari"
-            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
-            activeDescription="Yangi chiqim cheklari va summasi Telegramga keladi"
-            inactiveDescription="Chiqim xabarlari kelmaydi"></app-switch-toggle>
-        <app-switch-toggle formControlName="hotelReports" label="Davriy hisobotlar"
-            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
-            activeDescription="Kunlik, haftalik va oylik hisobotlar keladi"
-            inactiveDescription="Kunlik, haftalik va oylik hisobotlar kelmaydi"></app-switch-toggle>
-        <app-switch-toggle formControlName="fridgeSales" label="Muzlatgich sotuvlari"
-            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
-            activeDescription="Har bir yangi sotuv Telegramga keladi"
-            inactiveDescription="Yangi sotuv xabarlari kelmaydi"></app-switch-toggle>
-        }
-        <app-switch-toggle formControlName="cleaningTasks" label="Tozalash topshiriqlari"
-            trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
-            activeDescription="Yangi tozalash topshiriqlari Telegramga keladi"
-            inactiveDescription="Tozalash topshiriqlari Telegramga kelmaydi"></app-switch-toggle>
+    <section class="notification-section">
+        <div class="notification-heading">
+            <div><i class="pi pi-send"></i><strong>Telegram bildirishnomalari</strong></div>
+            <span>Kerakli xabar turlarini yoqing</span>
+        </div>
+        <div class="notification-switches">
+            @if (!isCleanerRole) {
+                <app-switch-toggle formControlName="hotelBookings" label="Mehmonxona buyurtmalari"
+                    [showStateText]="false"
+                    trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                    activeDescription="Har bir yangi buyurtma Telegramga keladi"
+                    inactiveDescription="Yangi buyurtma xabarlari kelmaydi"></app-switch-toggle>
+                <app-switch-toggle formControlName="expenseNotifications" label="Mehmonxona chiqimlari"
+                    [showStateText]="false"
+                    trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                    activeDescription="Yangi chiqim cheklari va summasi Telegramga keladi"
+                    inactiveDescription="Chiqim xabarlari kelmaydi"></app-switch-toggle>
+                @if (canUseEmptyRoomsRole) {
+                    <app-switch-toggle formControlName="emptyRoomNotifications" label="Bo'sh xonalar"
+                        [showStateText]="false"
+                        trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                        activeDescription="Bo'sh xonalar xabari va davriy hisoboti keladi"
+                        inactiveDescription="Bo'sh xonalar xabari va davriy hisoboti kelmaydi"></app-switch-toggle>
+                }
+                <app-switch-toggle formControlName="hotelReports" label="Davriy hisobotlar"
+                    [showStateText]="false"
+                    trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                    activeDescription="Kunlik, haftalik va oylik hisobotlar keladi"
+                    inactiveDescription="Kunlik, haftalik va oylik hisobotlar kelmaydi"></app-switch-toggle>
+                <app-switch-toggle formControlName="fridgeSales" label="Muzlatgich sotuvlari"
+                    [showStateText]="false"
+                    trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                    activeDescription="Har bir yangi sotuv Telegramga keladi"
+                    inactiveDescription="Yangi sotuv xabarlari kelmaydi"></app-switch-toggle>
+            }
+            <app-switch-toggle formControlName="cleaningTasks" label="Tozalash topshiriqlari"
+                [showStateText]="false"
+                trueLabel="Ruxsat" falseLabel="Ruxsat berilmagan"
+                activeDescription="Yangi tozalash topshiriqlari Telegramga keladi"
+                inactiveDescription="Tozalash topshiriqlari Telegramga kelmaydi"></app-switch-toggle>
+        </div>
+    </section>
 
-    <app-switch-toggle
-        formControlName="isActive"
-        label="Foydalanuvchi holati"
-        [trueLabel]="'Faol'"
-        [falseLabel]="'Faol emas'"
-        [activeDescription]="'Foydalanuvchi tizimga kira oladi'"
-        [inactiveDescription]="'Foydalanuvchi tizimga kira olmaydi'"
-        [showStateText]="true"
-    >
-    </app-switch-toggle>
+    <div class="account-status">
+        <app-switch-toggle
+            formControlName="isActive"
+            label="Foydalanuvchi holati"
+            [trueLabel]="'Faol'"
+            [falseLabel]="'Faol emas'"
+            [activeDescription]="'Foydalanuvchi tizimga kira oladi'"
+            [inactiveDescription]="'Foydalanuvchi tizimga kira olmaydi'"
+            [showStateText]="true"
+        ></app-switch-toggle>
     </div>
 
     <div class="flex justify-end gap-2 mt-3">

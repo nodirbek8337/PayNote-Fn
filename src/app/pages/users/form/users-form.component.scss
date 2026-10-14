@@ -11,13 +11,42 @@
 
 .notification-switches {
   display: grid;
-  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
 }
+
+.notification-section {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--field-bg) 72%, transparent);
+}
+
+.notification-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.notification-heading div { display: flex; align-items: center; gap: 0.5rem; color: var(--text-color); }
+.notification-heading i { color: var(--action-primary-from); font-size: 0.9rem; }
+.notification-heading strong { font-size: 0.9rem; font-weight: 700; }
+.notification-heading > span { color: var(--text-color-secondary); font-size: 0.72rem; }
+.account-status { display: grid; }
+
+:host ::ng-deep .notification-switches .switch-toggle {
+  min-height: 72px;
+  padding: 0.55rem 0.65rem;
+  gap: 0.55rem;
+}
+:host ::ng-deep .notification-switches .switch-toggle__heading { gap: 0.28rem; }
+:host ::ng-deep .notification-switches .switch-toggle label { font-size: 0.86rem; font-weight: 700; line-height: 1.2; }
+:host ::ng-deep .notification-switches .switch-toggle__text > span { font-size: 0.74rem; line-height: 1.3; }
 
 .form-field { min-width: 0; }
 
 @media (max-width: 480px) {
   .form-row { grid-template-columns: 1fr; }
+  .notification-switches { grid-template-columns: 1fr; }
+  .notification-heading { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+  :host ::ng-deep .notification-switches .switch-toggle { min-height: 62px; }
 }
 
 .form-field {

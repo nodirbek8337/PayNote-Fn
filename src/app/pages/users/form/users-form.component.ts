@@ -14,7 +14,7 @@ export type UserFormModel = {
     role: 'admin' | 'user' | 'manager' | 'cleaner' | string;
     telegramUsername?: string | null;
     telegramPhone?: string | null;
-    telegramNotifications?: Array<'FRIDGE' | 'HOTEL' | 'HOTEL_BOOKING' | 'HOTEL_REPORT' | 'CLEANING' | 'EXPENSE'> | null;
+    telegramNotifications?: Array<'FRIDGE' | 'HOTEL' | 'HOTEL_BOOKING' | 'HOTEL_REPORT' | 'CLEANING' | 'EXPENSE' | 'EMPTY_ROOMS'> | null;
     isActive?: boolean;
     password?: string;
 };
@@ -49,6 +49,9 @@ export class UsersFormComponent implements OnInit, OnChanges {
     get isCleanerRole(): boolean {
         return this.form?.get('role')?.value === 'cleaner';
     }
+    get canUseEmptyRoomsRole(): boolean {
+        return ['admin', 'manager', 'user'].includes(this.form?.get('role')?.value ?? '');
+    }
     private notificationValues() {
         const values = this.model.telegramNotifications === undefined
             ? (this.model._id ? ['FRIDGE'] : [])
@@ -58,7 +61,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
             hotelReports: values.includes('HOTEL') || values.includes('HOTEL_REPORT'),
             fridgeSales: values.includes('FRIDGE'),
             cleaningTasks: values.includes('CLEANING'),
-            expenseNotifications: values.includes('EXPENSE')
+            expenseNotifications: values.includes('EXPENSE'),
+            emptyRoomNotifications: values.includes('EMPTY_ROOMS')
         };
     }
 
@@ -154,7 +158,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
         const password = raw.password ?? '';
 
         const isCleaner = raw.role === 'cleaner';
-        const notificationControls = ['hotelBookings', 'hotelReports', 'fridgeSales', 'cleaningTasks', 'expenseNotifications'];
+        const notificationControls = ['hotelBookings', 'hotelReports', 'fridgeSales', 'cleaningTasks', 'expenseNotifications', 'emptyRoomNotifications'];
         const payload: UserFormModel = {
             _id: this.model._id,
             username: this.isEdit && !this.form.get('username')!.dirty ? this.model.username! : (raw.username ?? '').trim(),
@@ -162,7 +166,7 @@ export class UsersFormComponent implements OnInit, OnChanges {
             ...(!this.isEdit || this.form.get('isActive')!.dirty ? { isActive: !!raw.isActive } : {}),
             ...(!this.isEdit || this.form.get('telegramUsername')!.dirty ? { telegramUsername: String(raw.telegramUsername ?? '').trim() } : {}),
             ...(!this.isEdit || this.form.get('telegramPhone')!.dirty ? { telegramPhone: String(raw.telegramPhone ?? '').trim() } : {}),
-            ...(!this.isEdit || isCleaner || notificationControls.some((key) => this.form.get(key)!.dirty) ? {
+            ...(!this.isEdit || isCleaner || this.form.get('role')!.dirty || notificationControls.some((key) => this.form.get(key)!.dirty) ? {
                 telegramNotifications: isCleaner
                     ? [...(raw.cleaningTasks ? ['CLEANING' as const] : [])]
                     : [
@@ -170,7 +174,8 @@ export class UsersFormComponent implements OnInit, OnChanges {
                         ...(raw.hotelReports ? ['HOTEL_REPORT' as const] : []),
                         ...(raw.fridgeSales ? ['FRIDGE' as const] : []),
                         ...(raw.cleaningTasks ? ['CLEANING' as const] : []),
-                        ...(raw.expenseNotifications ? ['EXPENSE' as const] : [])
+                        ...(raw.expenseNotifications ? ['EXPENSE' as const] : []),
+                        ...(['admin', 'manager', 'user'].includes(raw.role) && raw.emptyRoomNotifications ? ['EMPTY_ROOMS' as const] : [])
                     ]
             } : {}),
             ...((!this.isEdit || this.changePassword) && password ? { password } : {})

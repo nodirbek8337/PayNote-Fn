@@ -1,0 +1,80 @@
+<section class="empty-rooms-page">
+  <prime-datatable
+    #emptyRoomsTable
+    [_defaultService]="emptyRoomsService"
+    [columnDefs]="columnDefs"
+    [tableTitle]="'Bo\'sh xonalar'"
+    [hasCreate]="true"
+    [hasAction]="false"
+    [hasRefreshBtn]="true"
+    [hasClearFilterBtn]="true"
+    [showColumnFilterRow]="false"
+    [showDrawerFilters]="true"
+    [drawerFilterComponent]="FilterComponent"
+    [quickFilterPlaceholder]="'Sana yoki foydalanuvchi bo\'yicha qidiring...'"
+    [customActions]="rowActions"
+    (onCreate)="openForm()"
+  ></prime-datatable>
+</section>
+
+<p-dialog
+  [(visible)]="formDialog"
+  [modal]="true"
+  [focusOnShow]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="!saving"
+  [closeOnEscape]="!saving"
+  [header]="editingId ? 'Bo\'sh xonalarni tahrirlash' : 'Bo\'sh xonalarni qo\'shish'"
+  [style]="{ width: '520px', maxWidth: '96vw' }"
+  (onHide)="reset()"
+>
+  <form class="empty-room-dialog-form" [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      <span>Bo'sh xonalar soni</span>
+      <app-input type="number" formControlName="roomCount" placeholder="Masalan: 5"></app-input>
+    </label>
+    <label>
+      <span>Sana</span>
+      <app-date-input formControlName="date" ariaLabel="Bo'sh xonalar sanasi"></app-date-input>
+    </label>
+    @if (editingId) {
+      <label class="reason-field">
+        <span>O'zgartirish sababi *</span>
+        <app-input formControlName="changeNote" placeholder="Masalan: ma'lumot aniqlashtirildi"></app-input>
+      </label>
+    }
+    <footer>
+      <button pButton type="button" class="p-button-outlined" [disabled]="saving" (click)="formDialog = false">Bekor qilish</button>
+      <button pButton type="submit" [disabled]="saving || form.invalid">
+        <i class="pi" [class.pi-spin]="saving" [class.pi-spinner]="saving" [class.pi-check]="!saving"></i>
+        <span>{{ editingId ? 'Yangilash' : 'Saqlash' }}</span>
+      </button>
+    </footer>
+  </form>
+</p-dialog>
+
+<p-dialog
+  [visible]="deleteDialog"
+  (visibleChange)="closeDelete()"
+  [modal]="true"
+  [focusOnShow]="false"
+  [draggable]="false"
+  [resizable]="false"
+  header="O'chirish sababini kiriting"
+  [style]="{ width: '480px', maxWidth: '96vw' }"
+>
+  <form class="delete-form" [formGroup]="deleteForm" (ngSubmit)="remove()">
+    <label>
+      <span>Sabab *</span>
+      <app-input formControlName="note" placeholder="Masalan: noto'g'ri ma'lumot kiritilgan"></app-input>
+    </label>
+    <div class="dialog-actions">
+      <button pButton type="button" class="p-button-outlined" [disabled]="deleting" (click)="closeDelete()">Bekor qilish</button>
+      <button pButton type="submit" class="p-button-danger" [disabled]="deleting || deleteForm.invalid">
+        <i class="pi" [class.pi-spin]="deleting" [class.pi-spinner]="deleting" [class.pi-trash]="!deleting"></i>
+        <span>O'chirish</span>
+      </button>
+    </div>
+  </form>
+</p-dialog>

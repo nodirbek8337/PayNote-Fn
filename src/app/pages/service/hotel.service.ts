@@ -17,4 +17,8 @@ export class HotelService {
   summary() { return this.http.get<any>(`${this.url}/me/summary`); }
   history() { return this.http.get<any>(`${this.url}/history`); }
   deleteBooking(id: string, body: any) { return this.http.delete<any>(`${this.url}/bookings/${id}`, { body }); }
+  emptyRooms() { return this.http.get<any>(`${this.url}/empty-rooms`); }
+  saveEmptyRooms(body: any) { return this.http.post<any>(`${this.url}/empty-rooms`, body); }
+  updateEmptyRooms(id: string, body: any) { return this.http.put<any>(`${this.url}/empty-rooms/${id}`, body); }
+  deleteEmptyRooms(id: string, body: any) { return this.http.delete<any>(`${this.url}/empty-rooms/${id}`, { body }); }
 }

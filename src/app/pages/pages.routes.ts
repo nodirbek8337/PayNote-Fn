@@ -11,6 +11,7 @@ import { FridgeGuard } from '../shared/guards/fridge.guard';
 import { HotelGuard } from '../shared/guards/hotel.guard';
 import { HotelComponent } from './hotel/hotel.component';
 import { HotelReportsComponent } from './hotel-reports/hotel-reports.component';
+import { EmptyRoomsComponent } from './empty-rooms/empty-rooms.component';
 
 export default [
     { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
@@ -24,6 +25,7 @@ export default [
     { path: 'hotel/rooms', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard, AdminGuard]), data: { section: 'rooms' } },
     { path: 'hotel/history', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]), data: { section: 'history', hotelHistory: true } },
     { path: 'hotel/expenses', component: HotelComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]), data: { section: 'expenses', hotelHistory: true } },
+    { path: 'hotel/empty-rooms', component: EmptyRoomsComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard]) },
     { path: 'hotel/reports', component: HotelReportsComponent, canActivate: mapToCanActivate([AuthGuard, HotelGuard, AdminGuard]) },
     { path: 'users', component: UsersComponent, canActivate: mapToCanActivate([AuthGuard, AdminGuard]) },
     { path: '**', redirectTo: 'cabinet' }

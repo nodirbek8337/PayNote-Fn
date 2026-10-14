@@ -231,6 +231,7 @@ export class AppTopMenu implements OnInit {
                 { label: 'Buyurtmalar', icon: 'pi pi-calendar-plus', routerLink: ['/hotel/bookings'], exact: true },
                 { label: 'Buyurtmalar tarixi', icon: 'pi pi-history', routerLink: ['/hotel/history'], exact: true },
                 { label: 'Chiqimlar tarixi', icon: 'pi pi-wallet', routerLink: ['/hotel/expenses'], exact: true },
+                { label: "Bo'sh xonalar", icon: 'pi pi-home', routerLink: ['/hotel/empty-rooms'], exact: true },
                 { label: 'Telegram hisobotlari', icon: 'pi pi-send', routerLink: ['/hotel/reports'], exact: true }
             ]
         };
@@ -241,8 +242,9 @@ export class AppTopMenu implements OnInit {
             this.openedGroup = this.router.url.startsWith('/hotel') ? 'hotel' : this.router.url.startsWith('/sales') || this.router.url.startsWith('/inventory') || this.router.url.startsWith('/products') ? 'fridge' : null;
             return;
         }
+        const staffHotelItems = [hotel.items[1], ...(this.authService.canManageHotelHistory() ? hotel.items.slice(2, 4) : []), hotel.items[4]];
         const availableGroups: MenuGroup[] = [
-            ...(this.authService.canUseHotel() ? [{ ...hotel, items: hotel.items.slice(1, 4).filter((item) => !['/hotel/history', '/hotel/expenses'].includes(item.routerLink[0]) || this.authService.canManageHotelHistory()) }] : []),
+            ...(this.authService.canUseHotel() ? [{ ...hotel, items: staffHotelItems }] : []),
             ...(this.authService.canUseFridge() ? [{ ...fridge, items: fridge.items.slice(0, 1) }] : [])
         ];
         this.items = [
